@@ -48,8 +48,8 @@ public class Company extends BaseEntity {
 
     private String address;
 
-    private Double lat;
-    private Double lng;
+    private String lat;
+    private String lng;
 
     @Enumerated(EnumType.STRING)
     private VerificationStatus verificationStatus = VerificationStatus.DRAFT;

@@ -23,12 +23,18 @@ public class CompanyRequestDTO {
     private String phoneSecondary;
     private String website;
 
-    @NotNull
+    @NotNull(message = "regionId required")
     private Long regionId;
 
-    @NotNull
+    @NotNull(message = "districtId required")
     private Long districtId;
 
-    @NotBlank
+    @NotBlank(message = "address required")
     private String address;
+
+    @NotBlank(message = "lng required")
+    private String lng;
+
+    @NotBlank(message = "lat required")
+    private String lat;
 }
