@@ -11,6 +11,7 @@ import org.example.dto.auth.LoginDTO;
 import org.example.dto.auth.ProfileDTO;
 import org.example.dto.auth.ResetPasswordDTO;
 import org.example.dto.auth.UpdatePasswordDTO;
+import org.example.dto.kafka.SendCompanyNameEvent;
 import org.example.dto.kafka.UserRegisteredEvent;
 import org.example.entity.Users;
 import org.example.enums.AppLanguage;
@@ -46,12 +47,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResponse<String> registration(RegistrationDTO dto, RegistrationSelectRoles roles, AppLanguage language) {
-        if (roles==RegistrationSelectRoles.SELLER){
-            if (dto.getCompanyName()==null){
-                throw new AppBadException("companyName required");
-            }
-            kafkaProducerService.sendCompanyName(dto.getCompanyName());
-        }
 
         Optional<Users> optional = userRepository.findByUsernameAndDeletedFalse(dto.getUsername());
         if (optional.isPresent()) {
@@ -62,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
                 throw new AppBadException(messageService.getMessage("email.phone.exists", language));
             }
         }
+
         String keycloakId = keycloakService.createUser(
                 dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword(), mapToRole(roles)
         );
@@ -76,7 +72,12 @@ public class AuthServiceImpl implements AuthService {
         entity.setKeycloakId(keycloakId);
         Users save = userRepository.save(entity);
 
-
+        if (roles==RegistrationSelectRoles.SELLER){
+            if (dto.getCompanyName()==null){
+                throw new AppBadException("companyName required");
+            }
+            kafkaProducerService.sendCompanyName(new SendCompanyNameEvent(save.getId(),dto.getCompanyName()));
+        }
         keycloakService.addProfileIdAttribute(keycloakId, save.getId(), dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword());
         kafkaProducerService.sendUserRegistered(UserRegisteredEvent.builder()
                 .userId(entity.getId())

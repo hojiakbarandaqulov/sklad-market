@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.dto.kafka.SendCompanyNameEvent;
 import org.example.entity.Company;
 import org.example.repository.CompanyRepository;
 import org.example.service.KafkaConsumerService;
@@ -18,10 +19,11 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
             groupId = "company-service-group"
     )
     @Override
-    public void sendCompanyName(String companyName) {
+    public void sendCompanyName(SendCompanyNameEvent event) {
         Company company = new Company();
-        company.setName(companyName);
-        log.info("Sending company name {}", companyName);
+        company.setOwnerUserId(event.getSellerId());
+        company.setName(event.getCompanyName());
+        log.info("Sending company name {}", event.getCompanyName());
         companyRepository.save(company);
     }
 }

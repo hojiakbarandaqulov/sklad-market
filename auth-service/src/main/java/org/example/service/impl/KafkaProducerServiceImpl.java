@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.dto.kafka.SendCompanyNameEvent;
 import org.example.dto.kafka.SuperAdminSendKeycloakId;
 import org.example.dto.kafka.UserRegisteredEvent;
 import org.example.dto.kafka.UserVerifiedEvent;
@@ -41,8 +42,8 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     }
 
     @Override
-    public void sendCompanyName(String companyName) {
-        kafkaTemplate.send(SEND_COMPANY_NAME, companyName, companyName);
-        log.info("Company name bodybuilder: {}",companyName);
+    public void sendCompanyName(SendCompanyNameEvent event) {
+        kafkaTemplate.send(SEND_COMPANY_NAME, event.getSellerId().toString(), event);
+        log.info("Company name bodybuilder: {}",event);
     }
 }
