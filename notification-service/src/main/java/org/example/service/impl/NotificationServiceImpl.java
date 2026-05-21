@@ -139,7 +139,7 @@ public class NotificationServiceImpl implements NotificationService {
                 list.add(notification);
                 UserNotification userNotification = new UserNotification();
                 userNotification.setUserId(requireCurrentUserId());
-                userNotification.setNotification(list);
+                userNotification.setNotifications(list);
             }else {
                 throw new AppBadException("notification_id.is.already.in.use");
             }

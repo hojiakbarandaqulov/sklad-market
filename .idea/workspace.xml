@@ -5,18 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="config starting">
-      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/client/dto/CompanyMapSummaryRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/client/dto/CompanyMapSummaryResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/enums/VerificationStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/controller/AdminDashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanySlugMapResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanySlugMapResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/client/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/CatalogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/FavoriteController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/favorite/FavoriteCountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Favorite.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CompanyDocumentRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/FavoriteRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/FavoriteService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/FavoriteServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/CartService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogMapItemResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CategoryCountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/favorite/FavoriteCountResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/internal/ProductInternalSummaryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/internal/ProductInternalSummaryResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/entity/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/entity/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +186,7 @@
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/report-service&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hojia/Documents/Downloads/Telegram Desktop/frontend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -435,6 +440,7 @@
       <workItem from="1778645692612" duration="594000" />
       <workItem from="1778659205727" duration="3784000" />
       <workItem from="1778827328165" duration="676000" />
+      <workItem from="1779290664650" duration="7615000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote changes">
       <option name="closed" value="true" />

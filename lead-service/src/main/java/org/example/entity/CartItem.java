@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.entity.base.BaseEntity;
+import org.example.enums.Currency;
 
 import java.math.BigDecimal;
 
@@ -19,7 +20,7 @@ public class CartItem extends BaseEntity {
     private String productSlugSnapshot;
     private String primaryImageSnapshot;
     private BigDecimal priceSnapshot;
-    private String currencySnapshot;
+    private Currency currencySnapshot;
     private String companyNameSnapshot;
     private String companySlugSnapshot;
     private String companyLogoPathSnapshot;

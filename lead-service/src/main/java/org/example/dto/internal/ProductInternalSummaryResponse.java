@@ -2,6 +2,7 @@ package org.example.dto.internal;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.example.enums.Currency;
 
 import java.math.BigDecimal;
 
@@ -14,6 +15,6 @@ public class ProductInternalSummaryResponse {
     private String name;
     private String slug;
     private BigDecimal price;
-    private String currency;
+    private Currency currency;
     private String primaryImage;
 }

@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.entity.Product;
 import org.example.enums.ProductModerationStatus;
 import org.example.enums.SaleType;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,6 +44,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     List<Product> findTop8ByModerationStatusAndIsActiveTrueAndIsPromotedTrueAndDeletedAtIsNullOrderByCreatedAtDesc(ProductModerationStatus moderationStatus);
 
 
+    @NotNull
     Page<Product> findAll(Specification<Product> specification, Pageable pageable);
 
     Optional<Product> findByIdAndIsActiveTrue(Long productId);

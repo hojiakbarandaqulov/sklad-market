@@ -1,6 +1,8 @@
 package org.example.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.entity.base.BaseEntity;
@@ -14,5 +16,7 @@ public class UserNotification extends BaseEntity {
 
     private Long userId;
 
-    private List<Notification> notification;
+    @OneToMany
+    @JoinColumn(name = "user_notification_id")
+    private List<Notification> notifications;
 }
