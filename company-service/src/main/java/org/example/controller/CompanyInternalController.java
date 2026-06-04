@@ -12,6 +12,7 @@ import org.example.enums.VerificationStatus;
 import org.example.exp.AppBadException;
 import org.example.repository.CompanyRepository;
 import org.example.service.AdminCompanyService;
+import org.example.service.CompanyService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
@@ -23,13 +24,13 @@ import java.util.Map;
 @RequestMapping("/internal/companies")
 public class CompanyInternalController {
 
-    private final CompanyRepository companyRepository;
+    private final CompanyService companyService;
     private final AdminCompanyService adminCompanyService;
 
 
     @GetMapping("/{companyId}/ownership-check")
     public CompanyInternalOwnershipResponse ownershipCheck(@PathVariable Long companyId, @RequestParam Long buyerId) {
-        Company company = companyRepository.findByIdAndDeletedAtIsNull(companyId).orElse(null);
+        Company company = companyService.findByIdAndDeletedAtIsNull(companyId).orElse(null);
         if (company == null) {
             return CompanyInternalOwnershipResponse.builder()
                     .companyId(companyId)
@@ -53,15 +54,14 @@ public class CompanyInternalController {
 
     @GetMapping("/owned")
     public List<Long> ownedCompanies(@RequestParam Long sellerId) {
-        return companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId)
-                .stream()
+       return companyService.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId).stream()
                 .map(Company::getId)
                 .toList();
     }
 
     @GetMapping("/{companyId}/summary")
     public CompanyInternalSummaryResponse summary(@PathVariable Long companyId) {
-        Company company = companyRepository.findByIdAndDeletedAtIsNull(companyId)
+        Company company = companyService.findByIdAndDeletedAtIsNull(companyId)
                 .orElseThrow(() -> new AppBadException("company.not.found"));
 
         return CompanyInternalSummaryResponse.builder()
@@ -75,7 +75,7 @@ public class CompanyInternalController {
 
     @GetMapping("/stats/pending-count")
     public Map<String, Long> pendingCount() {
-        return Map.of("count", companyRepository.countByVerificationStatusAndDeletedAtIsNull(VerificationStatus.PENDING_VERIFICATION));
+        return Map.of("count", companyService.countByVerificationStatusAndDeletedAtIsNull(VerificationStatus.PENDING_VERIFICATION));
     }
 
     @PutMapping("/{companyId}/block")
@@ -85,20 +85,6 @@ public class CompanyInternalController {
 
     @PostMapping("/map-summary")
     public List<CompanyMapResponse> mapSummary(@RequestBody CompanyIds request) {
-        List<Company> allById = companyRepository.findAllByIdInAndDeletedAtIsNullAndIsBlockedFalseAndLatNotNullAndLngNotNull(request.getCompanyIds());
-        List<CompanyMapResponse> companyMapResponses = new LinkedList<>();
-        allById.forEach(company -> {
-            CompanyMapResponse companyMapResponse = new CompanyMapResponse();
-            companyMapResponse.setCompanyName(company.getName());
-            companyMapResponse.setSlug(company.getSlug());
-            companyMapResponse.setLogoUrl(company.getLogoPath());
-            companyMapResponse.setCompanyAddress(company.getAddress());
-            companyMapResponse.setCompanyId(company.getId());
-            companyMapResponse.setLng(company.getLng());
-            companyMapResponse.setLat(company.getLat());
-            companyMapResponse.setVerificationStatus(company.getVerificationStatus());
-            companyMapResponses.add(companyMapResponse);
-        });
-        return companyMapResponses;
+        return companyService.findAllByIdInAndDeletedAtIsNullAndIsBlockedFalseAndLatNotNullAndLngNotNull(request.getCompanyIds());
     }
 }

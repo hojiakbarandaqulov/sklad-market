@@ -50,6 +50,7 @@ public class UsersServiceImpl implements UsersService {
     protected final KeycloakService keycloakService;
     private final KafkaProducerService kafkaProducerService;
     private final RestTemplate restTemplate;
+    private final UsersRepository usersRepository;
 
     @Value("${aws.url}")
     private String awsUrl;
@@ -236,6 +237,21 @@ public class UsersServiceImpl implements UsersService {
         Profile profile = getByUserId(userId, language);
         keycloakService.revokeUserSessions(profile.getKeycloakId());
         return ApiResponse.successResponse("user sessions revoked");
+    }
+
+    @Override
+    public Profile findByUserIdAndDeletedFalse(Long userId) {
+        return usersRepository.findByUserIdAndDeletedFalse(userId);
+    }
+
+    @Override
+    public Long countByStatusAndDeletedFalse(GeneralStatus generalStatus) {
+        return usersRepository.countByStatusAndDeletedFalse(generalStatus);
+    }
+
+    @Override
+    public void save(Profile profile) {
+        usersRepository.save(profile);
     }
 
     private UsersResponse toResponse(Profile profile) {

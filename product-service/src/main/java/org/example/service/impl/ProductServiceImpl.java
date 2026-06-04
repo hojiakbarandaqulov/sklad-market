@@ -92,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
                 .productId(saved.getId())
                 .companyId(saved.getCompanyId())
                 .categoryId(saved.getCategoryId())
+                .sellerId(saved.getSellerId())
                 .name(saved.getName())
                 .slug(saved.getSlug())
                 .price(saved.getPrice())
@@ -100,6 +101,7 @@ public class ProductServiceImpl implements ProductService {
                 .createdAt(saved.getCreatedAt())
                 .build());
         productSearchService.index(toDocument(saved));
+
         return toResponse(saved);
     }
 
@@ -169,12 +171,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void setPrimaryImage(Long productId, String imageId, AppLanguage language) {
         getOwnedProduct(productId, language);
-        ProductImage target = productImageRepository.findByIdAndProduct_Id(imageId, productId)
-                .orElseThrow(() -> new AppBadException(messageService.getMessage("product.image.not.found", language)));
-
-        List<ProductImage> images = productImageRepository.findByProduct_IdOrderBySortOrderAscIdAsc(productId);
-        images.forEach(image -> image.setIsPrimary(image.getId().equals(target.getId())));
-        productImageRepository.saveAll(images);
+        productImageRepository.clearPrimaryByProductId(productId);
+        productImageRepository.isPrimary(imageId, productId);
     }
 
     @Transactional
@@ -262,13 +260,13 @@ public class ProductServiceImpl implements ProductService {
                 .viewsCountCache(product.getViewsCountCache())
                 .favoritesCountCache(product.getFavoritesCountCache())
                 .createdAt(product.getCreatedAt())
-                .company(ProductDetailResponse.CompanySummary.builder()
+                .company(CompanySummary.builder()
                         .id(company.getId())
                         .name(company.getName())
                         .slug(company.getSlug())
                         .logoPath(company.getLogoPath())
                         .build())
-                .category(ProductDetailResponse.CategorySummary.builder()
+                .category(CategorySummary.builder()
                         .id(category.getId())
                         .name(category.getName())
                         .slug(category.getSlug())
@@ -361,6 +359,25 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    @Override
+    public Optional<Product> findByIdAndDeletedAtIsNull(Long productId) {
+        return productRepository.findByIdAndDeletedAtIsNull(productId);
+    }
+
+    @Override
+    public Optional<ProductImage> findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(Long productId) {
+        return productImageRepository.findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(productId);
+    }
+
+    @Override
+    public Page<Product> findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, ProductModerationStatus productModerationStatus, PageRequest createdAt) {
+        return productRepository.findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(companyId, productModerationStatus, createdAt);
+    }
+
+    @Override
+    public Long countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus productModerationStatus) {
+        return productRepository.countByModerationStatusAndDeletedAtIsNull(productModerationStatus);
+    }
 
     private ProductDocument toDocument(Product product) {
         String primaryImageUrl = productImageRepository
@@ -384,11 +401,11 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
-    private BigDecimal normalizePrice(PriceType priceType, BigDecimal price, AppLanguage language) {
+    private Double normalizePrice(PriceType priceType, Double price, AppLanguage language) {
         if (priceType == PriceType.NEGOTIABLE) {
             return null;
         }
-        if (price == null || price.signum() <= 0) {
+        if (price <= 0) {
             throw new AppBadException(messageService.getMessage("product.price.required", language));
         }
         return price;
@@ -529,7 +546,7 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
-    private ProductDetailResponse.SimilarProductResponse toSimilarProduct(Product product) {
+    private SimilarProductResponse toSimilarProduct(Product product) {
         List<ProductImage> images = productImageRepository
                 .findByProduct_IdOrderBySortOrderAscIdAsc(product.getId());
 
@@ -540,7 +557,7 @@ public class ProductServiceImpl implements ProductService {
                 break;
             }
         }
-        return ProductDetailResponse.SimilarProductResponse.builder()
+        return SimilarProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .slug(product.getSlug())
@@ -576,6 +593,7 @@ public class ProductServiceImpl implements ProductService {
     private record ImageMeta(int width, int height) {
     }
 
+    @Override
     public ProductResponse toResponse(Product product) {
         ProductResponse response = new ProductResponse();
         response.setId(product.getId());
@@ -607,6 +625,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductModerationStatus resolveStatus(Product product) {
         return product.getModerationStatus() == null ? ProductModerationStatus.PENDING : product.getModerationStatus();
     }
+
 
     /*private void fillProduct(Product product, org.example.dto.CreateProductRequest request) {
         product.setCompanyId(request.getCompanyId());

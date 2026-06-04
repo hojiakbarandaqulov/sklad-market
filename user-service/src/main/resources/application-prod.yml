@@ -1,6 +1,6 @@
 server:
-  address: 0.0.0.0
-  domain: ${SERVER_DOMAIN:http://45.138.159.253}
+  address: 95.217.188.238
+  domain: ${SERVER_DOMAIN:https://skladmarket.uz}
   port: 8082
 
 spring:

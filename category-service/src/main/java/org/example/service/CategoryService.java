@@ -3,6 +3,9 @@ package org.example.service;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
 import org.example.dto.CategoryResponse;
 import org.example.dto.CategoryUpdateRequest;
+import org.example.dto.internal.CategoryInternalSummaryResponse;
+import org.example.dto.internal.CategoryInternalValidationResponse;
+import org.example.entity.Category;
 import org.example.enums.AppLanguage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +23,7 @@ public interface CategoryService {
 
     CategoryResponse getCategoryBySlug(String slug, AppLanguage language);
 
+
+
+    Category findById(Long categoryId);
 }

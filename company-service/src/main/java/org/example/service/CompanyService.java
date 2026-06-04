@@ -3,11 +3,15 @@ package org.example.service;
 import org.example.dto.*;
 import org.example.dto.map.CompanyMapResponse;
 import org.example.dto.map.CompanySlugMapResponse;
+import org.example.entity.Company;
 import org.example.enums.AppLanguage;
+import org.example.enums.VerificationStatus;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface CompanyService {
 
@@ -36,4 +40,12 @@ public interface CompanyService {
     UploadDTO uploadCoverUrl(Long companyId, MultipartFile file, AppLanguage language);
 
     PageImpl<CompanyMapResponse> getMapCompany(Long regionId, String q, Boolean verified, int page, int perPage, AppLanguage language);
+
+    Optional<Company> findByIdAndDeletedAtIsNull(Long companyId);
+
+    List<Company> findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId);
+
+    Long countByVerificationStatusAndDeletedAtIsNull(VerificationStatus verificationStatus);
+
+    List<CompanyMapResponse> findAllByIdInAndDeletedAtIsNullAndIsBlockedFalseAndLatNotNullAndLngNotNull(List<Long> companyIds);
 }

@@ -110,7 +110,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
     public ApiResponse<ProfileDTO> login(LoginDTO dto, AppLanguage language) {
         Optional<Users> optional = userRepository.findByUsernameAndDeletedFalse(dto.getUsername());
         if (optional.isEmpty()) {

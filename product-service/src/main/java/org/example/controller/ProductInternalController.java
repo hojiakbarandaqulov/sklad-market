@@ -13,6 +13,7 @@ import org.example.exp.AppBadException;
 import org.example.repository.ProductImageRepository;
 import org.example.repository.ProductRepository;
 import org.example.service.AdminProductService;
+import org.example.service.ProductService;
 import org.example.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,9 +29,7 @@ import java.util.Map;
 @RequestMapping("/internal/products")
 public class ProductInternalController {
 
-    private final ProductRepository productRepository;
-    private final ProductImageRepository productImageRepository;
-    private final ProductServiceImpl productService;
+    private final ProductService productService;
     private final AdminProductService adminProductService;
 
     @Value("${aws.url}")
@@ -41,10 +40,10 @@ public class ProductInternalController {
 
     @GetMapping("/{productId}/summary")
     public ProductInternalSummaryResponse summary(@PathVariable Long productId) {
-        Product product = productRepository.findByIdAndDeletedAtIsNull(productId)
+        Product product = productService.findByIdAndDeletedAtIsNull(productId)
                 .orElseThrow(() -> new AppBadException("product.not.found"));
 
-        ProductImage primaryImage = productImageRepository
+        ProductImage primaryImage = productService
                 .findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(productId)
                 .orElse(null);
 
@@ -66,7 +65,7 @@ public class ProductInternalController {
     public ProductListResponse getCompanyProducts(@PathVariable Long companyId,
                                                   @RequestParam(defaultValue = "1") int page,
                                                   @RequestParam(value = "per_page", defaultValue = "20") int perPage) {
-        Page<Product> result = productRepository.findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
+        Page<Product> result = productService.findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
                 companyId,
                 ProductModerationStatus.APPROVED,
                 PageRequest.of(Math.max(page - 1, 0), perPage, Sort.by(Sort.Direction.DESC, "createdAt"))
@@ -87,7 +86,7 @@ public class ProductInternalController {
 
     @GetMapping("/stats/pending-count")
     public Map<String, Long> pendingCount() {
-        return Map.of("count", productRepository.countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus.PENDING));
+        return Map.of("count", productService.countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus.PENDING));
     }
 
     @PutMapping("/{productId}/block")

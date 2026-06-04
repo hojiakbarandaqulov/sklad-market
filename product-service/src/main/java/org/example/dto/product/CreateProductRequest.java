@@ -36,7 +36,7 @@ public class CreateProductRequest {
     private SaleType saleType;
 
     @NotNull(message = "price is required")
-    private BigDecimal price;
+    private Double price;
 
     @NotNull(message = "currency is required")
     private Currency currency;

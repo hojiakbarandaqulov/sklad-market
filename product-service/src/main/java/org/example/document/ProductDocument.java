@@ -46,7 +46,7 @@ public class ProductDocument {
     private String priceType;
 
     @Field(type = FieldType.Double)
-    private BigDecimal price;
+    private Double price;
 
     @Field(type = FieldType.Long)
     private Long companyId;

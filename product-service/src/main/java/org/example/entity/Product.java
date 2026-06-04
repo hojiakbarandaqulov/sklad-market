@@ -50,7 +50,7 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private SaleType saleType;
 
-    private BigDecimal price;
+    private Double price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

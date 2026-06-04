@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
 import org.example.dto.CategoryResponse;
 import org.example.dto.CategoryUpdateRequest;
+import org.example.dto.internal.CategoryInternalSummaryResponse;
+import org.example.dto.internal.CategoryInternalValidationResponse;
 import org.example.entity.Category;
 import org.example.enums.AppLanguage;
 import org.example.exp.AppBadException;
@@ -120,6 +122,11 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponse getCategoryBySlug(String slug, AppLanguage language) {
         Category category = categoryRepository.findBySlugAndIsActiveTrue(slug);
         return modelMapper.map(category, CategoryResponse.class);
+    }
+
+    @Override
+    public Category findById(Long categoryId) {
+       return categoryRepository.findByIdAndIsActiveTrue(categoryId);
     }
 
 

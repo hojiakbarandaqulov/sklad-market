@@ -41,6 +41,14 @@ public class AdminProductController {
         return ApiResponse.successResponse(adminProductService.getProducts(status, companyId, q, page, perPage, language));
     }
 
+    @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    public ApiResponse<ProductResponse> getProduct(@PathVariable Long id,
+                                                   @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        ProductResponse byProduct = adminProductService.getByProduct(id, language);
+        return ApiResponse.successResponse(byProduct);
+    }
+
     @GetMapping("/moderation-queue")
     @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ApiResponse<List<ProductResponse>> getModerationQueue() {

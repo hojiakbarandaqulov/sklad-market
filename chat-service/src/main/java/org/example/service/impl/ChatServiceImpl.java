@@ -212,7 +212,6 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    @Transactional
     public void blockThread(Long threadId) {
         ChatThread thread = chatThreadRepository.findByIdAndDeletedFalse(threadId)
                 .orElseThrow(() -> new AppBadException("Thread not found"));

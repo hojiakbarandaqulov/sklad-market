@@ -1,9 +1,12 @@
 package org.example.service.impl;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.clent.CompanyClient;
+import org.example.config.clent.ProductClient;
+import org.example.config.clent.UserClient;
+import org.example.dto.internal.CompanySummaryResponse;
+import org.example.dto.internal.ProductSummaryResponse;
 import org.example.dto.report.*;
 import org.example.entity.Report;
 import org.example.enums.AppLanguage;
@@ -30,14 +33,18 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
     private final ReportRepository repository;
     private final ResourceBundleService messageService;
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
+    private final ProductClient productClient;
+    private final CompanyClient companyClient;
+    private final UserClient userClient;
 
     @Override
     public ReportShortResponse createReport(ReportCreateRequest reportCreateRequest) {
@@ -107,17 +114,18 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public AdminDashboardResponse getDashboard() {
         AdminDashboardResponse response = new AdminDashboardResponse();
-        response.setPendingProducts(fetchCount("http://localhost:8085/internal/products/stats/pending-count"));
-        response.setPendingCompanies(fetchCount("http://localhost:8083/internal/companies/stats/pending-count"));
-        response.setBlockedUsers(fetchCount("http://localhost:8082/internal/profiles/stats/blocked-count"));
+        response.setPendingProducts(productClient.getPendingCount());
+        response.setPendingCompanies(companyClient.getPendingCount());
+        response.setBlockedUsers(userClient.blockedCount());
         response.setOpenReports(repository.countByStatusAndDeletedFalse(ReportStatus.NEW));
         return response;
     }
 
     @Override
     public ReportResolveResponse warnUser(Long id, ReportWarnRequest request, AppLanguage language) {
-        Long targetUserId = resolveTargetUserId(id, language);
-        restTemplate.postForEntity("http://localhost:8082/internal/profiles/{userId}/warning", null, Void.class, targetUserId);
+        Long userId = resolveTargetUserId(id, language);
+//        restTemplate.postForEntity("http://localhost:8082/internal/profiles/{userId}/warning", null, Void.class, targetUserId);
+        userClient.Warning(userId);
 
         Report report = getReportEntity(id, language);
         report.setStatus(ReportStatus.RESOLVED);
@@ -131,24 +139,26 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ReportResolveResponse blockTarget(Long id, ReportBlockRequest request, AppLanguage language) {
         Report report = getReportEntity(id, language);
-        Map<String, String> body = Map.of("reason", request.getReason());
+//        Map<String, String> body = Map.of("reason", request.getReason());
 
         if (report.getTargetType() == TargetType.PRODUCT) {
-            restTemplate.exchange(
+          /*  restTemplate.exchange(
                     "http://localhost:8085/internal/products/{id}/block",
                     HttpMethod.PUT,
                     new HttpEntity<>(body),
                     Void.class,
                     report.getTargetId()
-            );
+            );*/
+            productClient.blockProduct(report.getTargetId(),request);
         } else if (report.getTargetType() == TargetType.COMPANY) {
-            restTemplate.exchange(
+          /*  restTemplate.exchange(
                     "http://localhost:8083/internal/companies/{id}/block",
                     HttpMethod.PUT,
                     new HttpEntity<>(body),
                     Void.class,
                     report.getTargetId()
-            );
+            );*/
+            companyClient.block(report.getTargetId(),request);
         } else if (report.getTargetType() == TargetType.CHAT) {
             restTemplate.exchange(
                     "http://localhost:8087/internal/chats/{id}/block",
@@ -172,22 +182,24 @@ public class ReportServiceImpl implements ReportService {
     private Long resolveTargetUserId(Long reportId, AppLanguage language) {
         Report report = getReportEntity(reportId, language);
         if (report.getTargetType() == TargetType.PRODUCT) {
-            ProductSummaryResponse product = restTemplate.getForObject(
+           /* ProductSummaryResponse product = restTemplate.getForObject(
                     "http://localhost:8085/internal/products/{id}/summary",
                     ProductSummaryResponse.class,
                     report.getTargetId()
-            );
+            );*/
+            ProductSummaryResponse product = productClient.getSummary(report.getTargetId());
             if (product == null || product.getSellerId() == null) {
                 throw new AppBadException("product owner not found");
             }
             return product.getSellerId();
         }
         if (report.getTargetType() == TargetType.COMPANY) {
-            CompanySummaryResponse company = restTemplate.getForObject(
+            CompanySummaryResponse company = companyClient.getSummary(report.getTargetId());
+           /* CompanySummaryResponse company = restTemplate.getForObject(
                     "http://localhost:8083/internal/companies/{id}/summary",
                     CompanySummaryResponse.class,
                     report.getTargetId()
-            );
+            );*/
             if (company == null || company.getOwnerUserId() == null) {
                 throw new AppBadException("company owner not found");
             }
@@ -238,17 +250,5 @@ public class ReportServiceImpl implements ReportService {
         return perPage;
     }
 
-    @Getter
-    @Setter
-    private static class ProductSummaryResponse {
-        private Long id;
-        private Long sellerId;
-    }
-
-    @Getter
-    @Setter
-    private static class CompanySummaryResponse {
-        private Long id;
-        private Long ownerUserId;
-    }
 }
+

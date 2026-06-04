@@ -1,0 +1,55 @@
+server:
+  domain: ${SERVER_DOMAIN:http://45.138.159.253}
+  port: 8085
+
+spring:
+  application:
+    name: product-service
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5435}/${DB_NAME:sklad-market-file}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:1234}
+    driver-class-name: org.postgresql.Driver
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://45.138.159.253:9090/realms/market-realm}
+
+
+  media:
+    base-url: ${MEDIA_BASE_URL:http://45.138.159.253:9000/skalad-market}
+
+aws:
+  url: ${MINIO_URL:http://45.138.159.253:9000}
+  access-key: ${MINIO_ACCESS_KEY:minioadmin}
+  secret-key: ${MINIO_SECRET_KEY:minioadmin}
+  bucket-name: ${MINIO_BUCKET:skalad-market}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://45.138.159.253:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    ip-address: ${SERVER_IP:45.138.159.253}
+    instance-id: ${spring.application.name}:${server.port}

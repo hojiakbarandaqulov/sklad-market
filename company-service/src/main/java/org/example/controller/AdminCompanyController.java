@@ -71,4 +71,5 @@ public class AdminCompanyController {
         adminCompanyService.block(id, request, language);
         return ApiResponse.successResponse(Map.of("message", "Company blocked", "blocked", Boolean.TRUE.toString()));
     }
+    
 }

@@ -6,6 +6,7 @@ import org.example.entity.Profile;
 import org.example.enums.GeneralStatus;
 import org.example.exp.AppBadException;
 import org.example.repository.UsersRepository;
+import org.example.service.UsersService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,16 +19,16 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/internal/profiles")
-public class ProfileInternalController {
+public class UserInternalController {
 
-    private final UsersRepository profileRepository;
+    private final UsersService usersService;
 
     @Value("${aws.url}")
     private String awsUrl;
 
     @GetMapping("/{userId}/summary")
     public ProfileInternalSummaryResponse summary(@PathVariable Long userId) {
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(userId);
+        Profile profile = usersService.findByUserIdAndDeletedFalse(userId);
         if (profile == null) {
             throw new AppBadException("profile not found");
         }
@@ -44,16 +45,20 @@ public class ProfileInternalController {
 
     @PostMapping("/{userId}/warning")
     public void increaseWarning(@PathVariable Long userId) {
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(userId);
+        Profile profile = usersService.findByUserIdAndDeletedFalse(userId);
         if (profile == null) {
             throw new AppBadException("profile not found");
         }
-        profile.setWarningCount((profile.getWarningCount() == null ? 0 : profile.getWarningCount()) + 1);
-        profileRepository.save(profile);
+        if (profile.getWarningCount() == null) {
+            profile.setWarningCount(1);
+        } else {
+            profile.setWarningCount(profile.getWarningCount() + 1);
+        }
+        usersService.save(profile);
     }
 
     @GetMapping("/stats/blocked-count")
-    public Map<String, Long> blockedCount() {
-        return Map.of("count", profileRepository.countByStatusAndDeletedFalse(GeneralStatus.BLOCK));
+    public Long blockedCount() {
+        return usersService.countByStatusAndDeletedFalse(GeneralStatus.BLOCK);
     }
 }

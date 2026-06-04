@@ -66,20 +66,81 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public CatalogFilterResponse filters(String category, AppLanguage language) {
+        // 1) category ni bir marta parse qilamiz (noto'g'ri bo'lsa bo'sh javob)
+        Long categoryId = null;
+        if (category != null && !category.isBlank()) {
+            try {
+                categoryId = Long.valueOf(category);
+            } catch (NumberFormatException e) {
+                return CatalogFilterResponse.builder()
+                        .minPrice(0.0)
+                        .maxPrice(0.0)
+                        .regionIds(List.of())
+                        .attributes(Map.of())
+                        .build();
+            }
+        }
+
+        // 2) visible productlar + category filtri
+        Long finalCategoryId = categoryId;
         List<Product> products = productRepository.findAll().stream()
                 .filter(this::isVisible)
-                .filter(product -> category == null || category.isBlank() || category.equals(String.valueOf(product.getCategoryId())))
+                .filter(p -> finalCategoryId == null || finalCategoryId.equals(p.getCategoryId()))
                 .toList();
 
-        BigDecimal minPrice = products.stream().map(Product::getPrice).filter(Objects::nonNull).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
-        BigDecimal maxPrice = products.stream().map(Product::getPrice).filter(Objects::nonNull).max(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
-        List<Long> regionIds = products.stream().map(Product::getRegionId).filter(Objects::nonNull).distinct().toList();
+        // 3) min/max price (sizda price Double)
+        Double minPrice = products.stream()
+                .map(Product::getPrice)
+                .filter(Objects::nonNull)
+                .min(Double::compareTo)
+                .orElse(0.0);
+
+        Double maxPrice = products.stream()
+                .map(Product::getPrice)
+                .filter(Objects::nonNull)
+                .max(Double::compareTo)
+                .orElse(0.0);
+
+        // 4) regionlar
+        List<Long> regionIds = products.stream()
+                .map(Product::getRegionId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+
+        // 5) attributes yig'ish (toString() parse qilmaymiz, mapning o'zini ishlatamiz)
         Map<String, List<String>> attributes = new LinkedHashMap<>();
+
         for (Product product : products) {
-            ServiceHelper.readAttributes(product.getAttributesJsonb().toString()).forEach((key, value) -> attributes.computeIfAbsent(key, k -> new ArrayList<>()).add((String) value));
+            Map<String, Object> attrs = product.getAttributesJsonb();
+            if (attrs == null || attrs.isEmpty()) continue;
+
+            attrs.forEach((key, value) -> {
+                if (value == null) return;
+
+                if (value instanceof Collection<?> collection) {
+                    for (Object item : collection) {
+                        if (item != null) {
+                            attributes.computeIfAbsent(key, k -> new ArrayList<>())
+                                    .add(String.valueOf(item));
+                        }
+                    }
+                } else {
+                    attributes.computeIfAbsent(key, k -> new ArrayList<>())
+                            .add(String.valueOf(value));
+                }
+            });
         }
-        attributes.replaceAll((key, values) -> values.stream().distinct().toList());
-        return CatalogFilterResponse.builder().minPrice(minPrice).maxPrice(maxPrice).regionIds(regionIds).attributes(attributes).build();
+
+        // 6) attribute value larni unique qilamiz
+        attributes.replaceAll((k, v) -> v.stream().distinct().toList());
+
+        return CatalogFilterResponse.builder()
+                .minPrice(minPrice)
+                .maxPrice(maxPrice)
+                .regionIds(regionIds)
+                .attributes(attributes)
+                .build();
     }
 
     @Override

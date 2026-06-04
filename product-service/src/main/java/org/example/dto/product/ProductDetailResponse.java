@@ -26,7 +26,7 @@ public class ProductDetailResponse {
     @JsonProperty("price_type")
     private PriceType priceType;
 
-    private BigDecimal price;
+    private Double price;
     private Currency currency;
     private List<ProductImageResponse> images;
     private Map<String, Object> attributes;
@@ -56,38 +56,4 @@ public class ProductDetailResponse {
     @JsonProperty("similar_products")
     private List<SimilarProductResponse> similarProducts;
 
-    @Getter
-    @Builder
-    public static class CompanySummary {
-        private Long id;
-        private String name;
-        private String slug;
-
-        @JsonProperty("logo_path")
-        private String logoPath;
-    }
-
-    @Getter
-    @Builder
-    public static class CategorySummary {
-        private Long id;
-        private String name;
-        private String slug;
-    }
-
-    @Getter
-    @Builder
-    public static class SimilarProductResponse {
-        private Long id;
-        private String name;
-        private String slug;
-        private BigDecimal price;
-        private Currency currency;
-
-        @JsonProperty("is_promoted")
-        private Boolean isPromoted;
-
-        @JsonProperty("primary_image")
-        private String primaryImage;
-    }
 }

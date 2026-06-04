@@ -43,17 +43,17 @@ spring:
         - id: company-service
           uri: lb://company-service
           predicates:
-            - Path=/api/v1/companies,/api/v1/companies/**,/api/v1/admin/companies/**
+            - Path=/api/v1/companies,/api/v1/companies/**,/api/v1/admin/companies/**,/api/v1/company-favorites,/api/v1/company-favorites/**
         #Category
         - id: category-service
           uri: lb://category-service
           predicates:
-            - Path=/api/v1/category,/api/v1/category/**,/api/v1/admin/categories/**
+            - Path=/api/v1/admin/categories,/api/v1/admin/categories/**
         #Product
         - id: product-service
           uri: lb://product-service
           predicates:
-            - Path=/api/v1/products,/api/v1/products/**,/api/v1/favorites,/api/v1/favorites/**,/api/v1/catalog,/api/v1/catalog/**,/api/v1/admin/products,/api/v1/admin/products/**,/api/v1/banners,/api/v1/banners/**
+            - Path=/api/v1/products,/api/v1/products/**,/api/v1/product-favorites,/api/v1/product-favorites/**,/api/v1/catalog,/api/v1/catalog/**,/api/v1/admin/products,/api/v1/admin/products/**,/api/v1/admin/banners,/api/v1/admin/banners/**
         #Lead
         - id: lead-service
           uri: lb://lead-service
@@ -63,7 +63,7 @@ spring:
         - id: chat-service
           uri: lb://chat-service
           predicates:
-            - Path=/api/v1/chats/**
+            - Path=/api/v1/chats,/api/v1/chats/**
         # Chat WebSocket
         - id: chat-service-ws
           uri: lb:ws://chat-service
@@ -73,12 +73,12 @@ spring:
         - id: notification-service
           uri: lb://notification-service
           predicates:
-            - Path=/api/v1/notifications/**
+            - Path=/api/v1/notifications,/api/v1/notifications/**
         # Report
         - id: report-service
           uri: lb://report-service
           predicates:
-            - Path=/api/v1/reports/**,/api/v1/admin/reports/**,/api/v1/admin/dashboard
+            - Path=/api/v1/reports,/api/v1/reports/**,/api/v1/admin/reports/**,/api/v1/admin/dashboard
 
 eureka:
   client:

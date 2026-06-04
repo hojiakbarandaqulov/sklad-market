@@ -35,7 +35,7 @@ public class UpdateProductRequest {
     @JsonProperty("price_type")
     private PriceType priceType;
 
-    private BigDecimal price;
+    private Double price;
 
     @NotNull(message = "currency is required")
     private Currency currency;

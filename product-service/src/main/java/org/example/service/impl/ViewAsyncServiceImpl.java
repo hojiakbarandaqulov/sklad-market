@@ -18,8 +18,6 @@ public class ViewAsyncServiceImpl implements ViewAsyncService {
     private final ProductRepository productRepository;
     private final ProductViewRepository productViewRepository;
 
-    @Async
-    @Transactional
     @Override
     public void logView(Long productId, Long userId, String sessionId) {
         ProductView view = new ProductView();

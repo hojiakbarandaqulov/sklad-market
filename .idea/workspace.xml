@@ -5,23 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="config starting">
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/FavoriteController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/favorite/FavoriteCountResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Favorite.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CompanyDocumentRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/FavoriteRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/FavoriteService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/FavoriteServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/CartService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogMapItemResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CategoryCountResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/favorite/FavoriteCountResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/internal/ProductInternalSummaryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/internal/ProductInternalSummaryResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/entity/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/entity/CartItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/FileServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/AttachController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/dto/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/dto/AttachDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/entity/Attach.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/entity/base/BaseEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/repository/AttachRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/service/AttachService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/service/impl/AttachServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/resources/application-local.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/resources/application-prod..yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ChatClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/internal/CompanySummaryResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/internal/ProductSummaryResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/report/AdminDashboardResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/report/ReportBlockRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/report/ReportWarnRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/AdminCompanyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/AdminCompanyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/FavoriteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/FavoriteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/AdminCompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/AdminCompanyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/BannerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/BannerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/FavoriteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/FavoriteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/CompanyClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/ReportServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +111,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTTP Request" />
+        <option value="Enum" />
         <option value="Interface" />
+        <option value="Record" />
         <option value="Class" />
       </list>
     </option>
@@ -143,6 +162,7 @@
     &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build auth-service.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build category-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build chat-service.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build company-servcie.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build company-service.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build discovery-service.executor&quot;: &quot;Run&quot;,
@@ -177,9 +197,13 @@
     &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.CategoryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ChatServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.CompanyServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.DiscoveryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LeadServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ReportServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -233,7 +257,7 @@
       <recent name="org.example.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Spring Boot.ApiGatewayApplication">
+  <component name="RunManager" selected="Spring Boot.CompanyServiceApplication">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
@@ -394,9 +418,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="HTTP Request.attach | #2" />
         <item itemvalue="Spring Boot.CategoryServiceApplication" />
         <item itemvalue="Spring Boot.ProductServiceApplication" />
+        <item itemvalue="HTTP Request.attach | #2" />
         <item itemvalue="Gradle.product-service [build]" />
         <item itemvalue="HTTP Request.generated-requests | #49" />
       </list>
@@ -441,6 +465,12 @@
       <workItem from="1778659205727" duration="3784000" />
       <workItem from="1778827328165" duration="676000" />
       <workItem from="1779290664650" duration="7615000" />
+      <workItem from="1779545831415" duration="25282000" />
+      <workItem from="1780298671020" duration="7853000" />
+      <workItem from="1780832210788" duration="611000" />
+      <workItem from="1781245219302" duration="577000" />
+      <workItem from="1781510736813" duration="106000" />
+      <workItem from="1781621344920" duration="172000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote changes">
       <option name="closed" value="true" />
@@ -546,7 +576,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775155970014</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="config starting">
+      <option name="closed" value="true" />
+      <created>1779603794326</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1779603794326</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

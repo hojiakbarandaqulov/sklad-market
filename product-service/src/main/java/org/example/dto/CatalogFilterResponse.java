@@ -12,8 +12,8 @@ import java.util.Map;
 @Setter
 @Builder
 public class CatalogFilterResponse {
-    private BigDecimal minPrice;
-    private BigDecimal maxPrice;
+    private Double minPrice;
+    private Double maxPrice;
     private List<Long> regionIds;
     private Map<String, List<String>> attributes;
 }

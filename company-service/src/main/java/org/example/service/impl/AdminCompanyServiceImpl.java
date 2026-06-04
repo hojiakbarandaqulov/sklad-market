@@ -90,7 +90,6 @@ public class AdminCompanyServiceImpl implements AdminCompanyService {
     }
 
     @Override
-    @Transactional
     public void block(Long id, ReasonRequest request, AppLanguage language) {
         Company company = getCompany(id, language);
         company.setIsBlocked(Boolean.TRUE);

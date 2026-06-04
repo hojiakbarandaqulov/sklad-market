@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.*;
+import org.example.dto.kafka.CompanyCreateEvent;
 import org.example.dto.map.CompanyMapResponse;
 import org.example.dto.map.CompanySlugMapResponse;
 import org.example.entity.Company;
@@ -34,14 +35,16 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyDocumentRepository companyDocumentRepository;
-//    private final KafkaProducerService kafkaProducerService;
+    private final KafkaProducerService kafkaProducerService;
     private final ModelMapper modelMapper;
     private final RestTemplate restTemplate;
     private final ResourceBundleService messageService;
@@ -62,6 +65,14 @@ public class CompanyServiceImpl implements CompanyService {
         companyMap.setVerificationStatus(VerificationStatus.DRAFT);
         companyMap.setIsBlocked(false);
         Company saved = companyRepository.save(companyMap);
+        CompanyCreateEvent companyCreateEvent = new CompanyCreateEvent();
+        companyCreateEvent.setCompanyId(companyMap.getId());
+        companyCreateEvent.setCompanyName(companyMap.getName());
+        companyCreateEvent.setCompanySlug(companyMap.getSlug());
+        companyCreateEvent.setOwnerUserId(companyMap.getOwnerUserId());
+        companyCreateEvent.setVerificationStatus(companyMap.getVerificationStatus());
+        companyCreateEvent.setCreatedDate(companyMap.getCreatedDate());
+        kafkaProducerService.onCompanyCreated(companyCreateEvent);
         return ApiResponse.successResponse(toResponse(saved));
     }
 
@@ -208,6 +219,40 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public PageImpl<CompanyMapResponse> getMapCompany(Long regionId, String q, Boolean verified, int page, int perPage, AppLanguage language) {
         return getPublicCompanyMapPage(regionId,q,verified,page,perPage,language);
+    }
+
+    @Override
+    public Optional<Company> findByIdAndDeletedAtIsNull(Long companyId) {
+        return companyRepository.findByIdAndDeletedAtIsNull(companyId);
+    }
+
+    @Override
+    public List<Company> findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId) {
+       return companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
+    }
+
+    @Override
+    public Long countByVerificationStatusAndDeletedAtIsNull(VerificationStatus verificationStatus) {
+        return companyRepository.countByVerificationStatusAndDeletedAtIsNull(verificationStatus);
+    }
+
+    @Override
+    public List<CompanyMapResponse> findAllByIdInAndDeletedAtIsNullAndIsBlockedFalseAndLatNotNullAndLngNotNull(List<Long> companyIds) {
+        List<Company> result = companyRepository.findAllByIdInAndDeletedAtIsNullAndIsBlockedFalseAndLatNotNullAndLngNotNull(companyIds);
+        List<CompanyMapResponse> companyMapResponses = new LinkedList<>();
+        result.forEach(company -> {
+            CompanyMapResponse companyMapResponse = new CompanyMapResponse();
+            companyMapResponse.setCompanyName(company.getName());
+            companyMapResponse.setSlug(company.getSlug());
+            companyMapResponse.setLogoUrl(company.getLogoPath());
+            companyMapResponse.setCompanyAddress(company.getAddress());
+            companyMapResponse.setCompanyId(company.getId());
+            companyMapResponse.setLng(company.getLng());
+            companyMapResponse.setLat(company.getLat());
+            companyMapResponse.setVerificationStatus(company.getVerificationStatus());
+            companyMapResponses.add(companyMapResponse);
+        });
+        return companyMapResponses;
     }
 
     private PageImpl<CompanyShortDTO> getPublicCompanyPage(String q, Boolean verified, Long regionId, int page, int perPage, AppLanguage language) {
