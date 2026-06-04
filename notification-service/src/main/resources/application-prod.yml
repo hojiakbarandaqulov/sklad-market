@@ -27,6 +27,20 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://45.138.159.253:9090/realms/market-realm}
+  kafka:
+    consumer:
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring.json.trusted.packages: "*"
+
+app:
+    kafka:
+      topic:
+        product-created: product-created-topic
 
 eureka:
   client:
@@ -35,4 +49,5 @@ eureka:
   instance:
     prefer-ip-address: true
     ip-address: ${SERVER_IP:45.138.159.253}
-    instance-id: ${spring.application.name}:${server.port}
+    instance-id: ${spring.application.name}:${server.port}    # Kafka Consumer config
+

@@ -1,12 +1,12 @@
-package org.example.dto.internal;
+package org.example.dto.product;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class CategoryInternalSummaryResponse {
-    private Long categoryId;
+public  class CategorySummary {
+    private Long id;
     private String name;
     private String slug;
 }

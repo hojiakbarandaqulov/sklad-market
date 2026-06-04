@@ -15,14 +15,6 @@ spring:
     password: 1234
     driver-class-name: org.postgresql.Driver
 
-  kafka:
-    bootstrap-servers: localhost:9092
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        spring.json.add.type.headers: false
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -38,6 +30,14 @@ spring:
         jwt:
           issuer-uri: http://localhost:9090/realms/market-realm
 
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+        
 app:
   kafka:
     topic:

@@ -30,6 +30,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -133,6 +134,15 @@ public class AdminProductServiceImpl implements AdminProductService {
         product.setPromotedUntil(request == null ? null : request.getEndsAt());
         productRepository.save(product);
         productSearchService.update(toDocument(product));
+    }
+
+    @Override
+    public ProductResponse getByProduct(Long id, AppLanguage language) {
+        Optional<Product> result = productRepository.findByIdAndDeletedAtIsNull(id);
+        if (result.isEmpty()) {
+            throw new AppBadException(messageService.getMessage("product.not.found", language));
+        }
+        return toResponse(result.get());
     }
 
     private Product getProduct(Long id, AppLanguage language) {

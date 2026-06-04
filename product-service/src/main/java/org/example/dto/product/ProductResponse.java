@@ -24,7 +24,7 @@ public class ProductResponse {
     private String shortDescription;
     private String description;
     private PriceType priceType;
-    private BigDecimal price;
+    private Double price;
     private Currency currency;
     private Long regionId;
     private Long districtId;

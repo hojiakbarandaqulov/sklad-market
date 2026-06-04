@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.dto.ApiResponse;
 import org.example.dto.admin.ModerationDecisionRequest;
 import org.example.dto.admin.PromotionRequest;
 import org.example.dto.admin.ReasonRequest;
@@ -23,4 +24,6 @@ public interface AdminProductService {
     void block(Long id, ReasonRequest request, AppLanguage language);
 
     void promote(Long id, PromotionRequest request, AppLanguage language);
+
+    ProductResponse getByProduct(Long id, AppLanguage language);
 }

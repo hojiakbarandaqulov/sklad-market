@@ -6,12 +6,17 @@ import org.example.dto.product.ProductImageResponse;
 import org.example.dto.product.ProductListResponse;
 import org.example.dto.product.ProductResponse;
 import org.example.dto.product.UpdateProductRequest;
+import org.example.entity.Product;
+import org.example.entity.ProductImage;
 import org.example.enums.AppLanguage;
 import org.example.enums.ProductModerationStatus;
 import org.example.enums.SaleType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
     ProductResponse create(CreateProductRequest request, AppLanguage language);
@@ -35,5 +40,15 @@ public interface ProductService {
     void delete(Long id, AppLanguage language);
 
     ProductListResponse getAllProducts(int page, int perPage, AppLanguage language);
+
+    Optional<Product> findByIdAndDeletedAtIsNull(Long productId);
+
+    Optional<ProductImage> findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(Long productId);
+
+    Page<Product> findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, ProductModerationStatus productModerationStatus, PageRequest createdAt);
+
+    Long countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus productModerationStatus);
+
+    ProductResponse toResponse(Product product);
 
 }

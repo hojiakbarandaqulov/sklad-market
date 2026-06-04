@@ -9,12 +9,10 @@ import org.example.dto.notification.*;
 import org.example.entity.Notification;
 import org.example.entity.NotificationPreference;
 import org.example.entity.PushToken;
-import org.example.entity.UserNotification;
 import org.example.exp.AppBadException;
 import org.example.repository.NotificationPreferenceRepository;
 import org.example.repository.NotificationRepository;
 import org.example.repository.PushTokenRepository;
-import org.example.repository.UserNotificationRepository;
 import org.example.service.NotificationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +31,7 @@ import static org.example.utils.SpringSecurityUtil.getProfileId;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final UserNotificationRepository userNotificationRepository;
+//    private final UserNotificationRepository userNotificationRepository;
     private final NotificationPreferenceRepository preferenceRepository;
     private final PushTokenRepository pushTokenRepository;
     private final ObjectMapper objectMapper;
@@ -125,7 +122,6 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    @Transactional
     public NotificationResponse createInternal(CreateNotificationRequest request) {
         try {
             Notification notification = new Notification();
@@ -133,19 +129,20 @@ public class NotificationServiceImpl implements NotificationService {
             notification.setType(request.getType());
             notification.setPayloadJson(objectMapper.writeValueAsString(request.getPayload()));
             notification.setSentAt(LocalDateTime.now());
-            UserNotification userNotificationResult = userNotificationRepository.findByUserIdAndDeletedFalse(requireCurrentUserId());
+            Notification save = notificationRepository.save(notification);
+           /* UserNotification userNotificationResult = userNotificationRepository.findByUserIdAndDeletedFalse(request.getUserId());
             List<Notification> list = new LinkedList<>();
             if (userNotificationResult==null) {
                 list.add(notification);
                 UserNotification userNotification = new UserNotification();
-                userNotification.setUserId(requireCurrentUserId());
+                userNotification.setUserId(request.getUserId());
                 userNotification.setNotifications(list);
                 userNotificationRepository.save(userNotification);
             }else {
                 userNotificationResult.getNotifications().add(notification);
                 userNotificationRepository.save(userNotificationResult);
-            }
-            return toResponse(notificationRepository.save(notification));
+            }*/
+            return toResponse(save);
         } catch (Exception e) {
             throw new AppBadException("Failed to create notification");
         }

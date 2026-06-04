@@ -1,12 +1,10 @@
 package org.example.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.entity.base.BaseEntity;
+import org.example.enums.NotificationCreateType;
 
 import java.time.LocalDateTime;
 
@@ -18,11 +16,11 @@ public class Notification extends BaseEntity {
     @Column(nullable = false)
     private Long userId;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type;
+    private NotificationCreateType type;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String payloadJson;
 
     @Column(nullable = false)
