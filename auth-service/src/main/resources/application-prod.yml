@@ -1,6 +1,6 @@
 server:
-  address: 0.0.0.0
-  domain: ${SERVER_DOMAIN:http://45.138.159.253}
+  address: 127.0.0.1
+  domain: ${SERVER_DOMAIN:https://skladmarket.uz}
   port: 8081
 
 spring:
@@ -10,14 +10,14 @@ spring:
 
   # DATABASE
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:skalad-market-auth-db}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:1234}
+    url: jdbc:postgresql://${DB_HOST:127.0.0.1}:${DB_PORT:5432}/${DB_NAME:skalad_market_auth}
+    username: ${DB_USERNAME:sklad_user}
+    password: ${DB_PASSWORD:sklad-market}
     driver-class-name: org.postgresql.Driver
 
   # Kafka Producer config
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:127.0.0.1:9092}
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
@@ -44,22 +44,22 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://45.138.159.253:9090/realms/market-realm}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
 
 keycloak:
-  token-url: ${KEYCLOAK_TOKEN_URL:http://45.138.159.253:9090/realms/market-realm/protocol/openid-connect/token}
+  token-url: ${KEYCLOAK_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
   client-id: ${KEYCLOAK_CLIENT_ID:market-backend}
   client-secret: ${KEYCLOAK_CLIENT_SECRET:Pi5lwDJnYn9TWcc1iLQzJsUGaHeEx8FK}
-  admin-url: ${KEYCLOAK_ADMIN_URL:http://45.138.159.253:9090/admin/realms/market-realm}
+  admin-url: ${KEYCLOAK_ADMIN_URL:http://127.0.0.1:9090/admin/realms/market-realm}
   admin-username: ${KEYCLOAK_ADMIN_USERNAME:admin}
   admin-password: ${KEYCLOAK_ADMIN_PASSWORD:admin}
 
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_DEFAULT_ZONE:http://45.138.159.253:8761/eureka/}
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://127.0.0.1:8761/eureka/}
   instance:
     prefer-ip-address: true
-    ip-address: ${SERVER_IP:45.138.159.253}
+    ip-address: ${SERVER_IP:127.0.0.1}
     instance-id: ${spring.application.name}:${server.port}
 

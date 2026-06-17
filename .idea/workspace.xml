@@ -5,40 +5,59 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="config starting">
-      <change afterPath="$PROJECT_DIR$/file-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/FileServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/AttachController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/dto/ApiResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/dto/AttachDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/entity/Attach.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/entity/base/BaseEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/repository/AttachRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/service/AttachService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/service/impl/AttachServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/resources/application-local.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/resources/application-prod..yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ChatClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/internal/CompanySummaryResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/internal/ProductSummaryResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/report/AdminDashboardResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/report/ReportBlockRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/report/ReportWarnRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/kafka/CompanyCreateEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/dto/event/CompanyCreateEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/dto/event/ProductCreatedEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/enums/NotificationCreateType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/enums/VerificationStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/KafkaConsumerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658/storage_v2/_src_/database/skalad-market-user-db.9nXwyg/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658/storage_v2/_src_/database/skalad-market-user-db.9nXwyg/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/AdminCompanyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/AdminCompanyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/FavoriteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/FavoriteController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/AdminCompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/AdminCompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/BannerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/BannerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/FavoriteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/FavoriteController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/CompanyClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ProductClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/ReportServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/KeycloakServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/KeycloakServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application-local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryInternalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/internal/CategoryInternalSummaryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/internal/CategoryInternalSummaryResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/KafkaProducerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/KafkaProducerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/KafkaProducerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/KafkaProducerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/controller/NotificationInternalController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/dto/notification/CreateNotificationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/dto/notification/CreateNotificationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/dto/notification/NotificationResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/dto/notification/NotificationResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/entity/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/entity/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/entity/UserNotification.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/entity/UserNotification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/repository/UserNotificationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/repository/UserNotificationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/impl/NotificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/impl/NotificationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application-local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/document/ProductDocument.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/document/ProductDocument.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogFilterResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogFilterResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogMapItemResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogMapItemResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/internal/ProductInternalSummaryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/internal/ProductInternalSummaryResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/CreateProductRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/CreateProductRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDetailResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDetailResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductSearchResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductSearchResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/event/ProductCreatedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/event/ProductCreatedEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/resources/application-local.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -467,10 +486,6 @@
       <workItem from="1779290664650" duration="7615000" />
       <workItem from="1779545831415" duration="25282000" />
       <workItem from="1780298671020" duration="7853000" />
-      <workItem from="1780832210788" duration="611000" />
-      <workItem from="1781245219302" duration="577000" />
-      <workItem from="1781510736813" duration="106000" />
-      <workItem from="1781621344920" duration="172000" />
     </task>
     <task id="LOCAL-00001" summary="Merge remote changes">
       <option name="closed" value="true" />
