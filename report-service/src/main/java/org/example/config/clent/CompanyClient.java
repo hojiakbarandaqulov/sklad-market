@@ -18,5 +18,4 @@ public interface CompanyClient {
 
     @GetMapping("/internal/companies/{id}/summary")
     CompanySummaryResponse getSummary(@PathVariable Long id);
-
 }

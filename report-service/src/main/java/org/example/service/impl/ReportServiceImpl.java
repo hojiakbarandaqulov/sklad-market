@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.clent.ChatClient;
 import org.example.config.clent.CompanyClient;
 import org.example.config.clent.ProductClient;
 import org.example.config.clent.UserClient;
@@ -45,6 +46,7 @@ public class ReportServiceImpl implements ReportService {
     private final ProductClient productClient;
     private final CompanyClient companyClient;
     private final UserClient userClient;
+    private final ChatClient chatClient;
 
     @Override
     public ReportShortResponse createReport(ReportCreateRequest reportCreateRequest) {
@@ -160,13 +162,14 @@ public class ReportServiceImpl implements ReportService {
             );*/
             companyClient.block(report.getTargetId(),request);
         } else if (report.getTargetType() == TargetType.CHAT) {
-            restTemplate.exchange(
+          /*  restTemplate.exchange(
                     "http://localhost:8087/internal/chats/{id}/block",
                     HttpMethod.PUT,
                     HttpEntity.EMPTY,
                     Void.class,
                     report.getTargetId()
-            );
+            );*/
+            chatClient.blockThread(report.getTargetId());
         } else {
             throw new AppBadException("Unsupported target type");
         }
@@ -187,19 +190,19 @@ public class ReportServiceImpl implements ReportService {
                     ProductSummaryResponse.class,
                     report.getTargetId()
             );*/
-            ProductSummaryResponse product = productClient.getSummary(report.getTargetId());
+            ProductSummaryResponse product = productClient.getProductSummary(report.getTargetId());
             if (product == null || product.getSellerId() == null) {
                 throw new AppBadException("product owner not found");
             }
             return product.getSellerId();
         }
         if (report.getTargetType() == TargetType.COMPANY) {
-            CompanySummaryResponse company = companyClient.getSummary(report.getTargetId());
            /* CompanySummaryResponse company = restTemplate.getForObject(
                     "http://localhost:8083/internal/companies/{id}/summary",
                     CompanySummaryResponse.class,
                     report.getTargetId()
             );*/
+            CompanySummaryResponse company = companyClient.getSummary(report.getTargetId());
             if (company == null || company.getOwnerUserId() == null) {
                 throw new AppBadException("company owner not found");
             }
