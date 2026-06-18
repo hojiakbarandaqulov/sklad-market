@@ -16,6 +16,6 @@ public interface ProductClient {
     @PutMapping("/internal/products/{id}/block")
     void blockProduct(@PathVariable Long id, @RequestBody ReportBlockRequest blockRequest);
 
-    @GetMapping("http://localhost:8085/internal/products/{id}/summary")
+    @GetMapping("/internal/products/{id}/summary")
     ProductSummaryResponse getProductSummary(@PathVariable Long id);
 }
