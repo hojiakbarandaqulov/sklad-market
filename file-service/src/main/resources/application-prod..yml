@@ -42,10 +42,10 @@ spring:
     base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/skalad-market}
 
 aws:
-  url: ${MINIO_URL:http://127.0.0.1:9000}
-  access-key: ${MINIO_ACCESS_KEY:minioadmin}
-  secret-key: ${MINIO_SECRET_KEY:minioadmin}
-  bucket-name: ${MINIO_BUCKET:skalad-market}
+  url: http://127.0.0.1:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: skalad-market
 
 eureka:
   client:
