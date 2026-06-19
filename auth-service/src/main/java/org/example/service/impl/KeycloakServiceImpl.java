@@ -43,6 +43,9 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Value("${keycloak.admin-password}")
     private String adminPassword;
 
+    @Value("${keycloak.master-token-url}")
+    private String masterTokenUrl;
+
     private final RestTemplate restTemplate;
 
     @Override
@@ -300,7 +303,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         try {
             log.info("Token request body: {}", body);  // DEBUG
             ResponseEntity<TokenResponseDTO> response = restTemplate.postForEntity(
-                    "http://localhost:9090/realms/master/protocol/openid-connect/token",
+                    masterTokenUrl,
                     request, TokenResponseDTO.class);  // TokenResponse DTO yarating
 
             if (response.getStatusCode().is2xxSuccessful()) {

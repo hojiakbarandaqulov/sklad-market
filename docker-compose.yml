@@ -17,10 +17,11 @@ x-common-env: &common-env
   KEYCLOAK_ISSUER_URI: ${KEYCLOAK_ISSUER_URI:-http://localhost:9090/realms/market-realm}
   KEYCLOAK_TOKEN_URL: ${KEYCLOAK_TOKEN_URL:-http://localhost:9090/realms/market-realm/protocol/openid-connect/token}
   KEYCLOAK_ADMIN_URL: ${KEYCLOAK_ADMIN_URL:-http://localhost:9090/admin/realms/market-realm}
+  KEYCLOAK_MASTER_TOKEN_URL: http://localhost:9090/realms/master/protocol/openid-connect/token
   KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-market-backend}
-  KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-change-me}
+  KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-agazVSCHc4wJNLYXZtPWSHDm3PAT3VJ6}
   KEYCLOAK_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME:-admin}
-  KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-change-me}
+  KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${KEYCLOAK_ISSUER_URI:-http://localhost:9090/realms/market-realm}
 
   AWS_URL: ${MINIO_URL:-http://localhost:9000}
