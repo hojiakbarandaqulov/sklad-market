@@ -2,6 +2,7 @@ server:
   address: ${SERVER_ADDRESS:127.0.0.1}
   domain: ${SERVER_DOMAIN:https://skladmarket.uz}
   port: ${SERVER_PORT:8090}
+  url: ${SWAGGER_SERVER_URL:https://skladmarket.uz}
 
 
 spring:
