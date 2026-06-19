@@ -46,3 +46,7 @@ eureka:
     ip-address: ${SERVER_IP:127.0.0.1}
     instance-id: ${spring.application.name}:${server.port}
 
+springdoc:
+  swagger-ui:
+    config-url: /swagger/company/v3/api-docs/swagger-config
+    url: /swagger/company/v3/api-docs

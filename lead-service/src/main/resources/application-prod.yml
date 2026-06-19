@@ -50,3 +50,8 @@ services:
     url: ${PRODUCT_SERVICE_URL:http://127.0.0.1:8085}
   company-service:
     url: ${COMPANY_SERVICE_URL:http://127.0.0.1:8083}
+
+springdoc:
+  swagger-ui:
+    config-url: /swagger/lead/v3/api-docs/swagger-config
+    url: /swagger/lead/v3/api-docs
