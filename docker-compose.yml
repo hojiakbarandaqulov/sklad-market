@@ -17,7 +17,7 @@
     KEYCLOAK_ISSUER_URI: ${KEYCLOAK_ISSUER_URI:-http://localhost:9090/realms/market-realm}
     KEYCLOAK_TOKEN_URL: ${KEYCLOAK_TOKEN_URL:-http://localhost:9090/realms/market-realm/protocol/openid-connect/token}
     KEYCLOAK_ADMIN_URL: ${KEYCLOAK_ADMIN_URL:-http://localhost:9090/admin/realms/market-realm}
-    KEYCLOAK_MASTER_TOKEN_URL: http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token
+    KEYCLOAK_MASTER_TOKEN_URL: ${KEYCLOAK_MASTER_TOKEN_URL:-http://127.0.0.1:9090/realms/master/protocol/openid-connect/token}
     KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-market-backend}
     KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET:-agazVSCHc4wJNLYXZtPWSHDm3PAT3VJ6}
     KEYCLOAK_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME:-admin}
@@ -27,14 +27,14 @@
     AWS_URL: ${MINIO_URL:-http://localhost:9000}
     MINIO_URL: ${MINIO_URL:-http://localhost:9000}
     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
-    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-change-me}
+    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
     MINIO_BUCKET: ${MINIO_BUCKET:-skalad-market}
     MEDIA_BASE_URL: ${MEDIA_BASE_URL:-https://media.skladmarket.uz/skalad-market}
 
     DB_USERNAME: ${DB_USERNAME:-sklad_user}
-    DB_PASSWORD: ${DB_PASSWORD:-StrongPassword_2026}
+    DB_PASSWORD: ${DB_PASSWORD:-sklad-market}
     SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-sklad_user}
-    SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-StrongPassword_2026}
+    SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-sklad-market}
 
   x-internal-service: &internal-service
     network_mode: host
@@ -79,7 +79,7 @@
         - "127.0.0.1:9001:9001"
       environment:
         MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
-        MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-change-me}
+        MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
         TZ: ${TZ:-Asia/Tashkent}
       volumes:
         - minio-data:/data
@@ -93,7 +93,7 @@
       entrypoint: >
         /bin/sh -c "
         sleep 8;
-        mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY:-minioadmin} ${MINIO_SECRET_KEY:-change-me};
+        mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY:-minioadmin} ${MINIO_SECRET_KEY:-minioadmin};
         mc mb --ignore-existing local/${MINIO_BUCKET:-skalad-market};
         mc anonymous set public local/${MINIO_BUCKET:-skalad-market};
         exit 0;
