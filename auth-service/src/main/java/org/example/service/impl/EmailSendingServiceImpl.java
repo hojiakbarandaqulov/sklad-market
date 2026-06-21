@@ -14,9 +14,7 @@ import org.example.service.ResourceBundleService;
 import org.example.utils.JwtUtil;
 import org.example.utils.RandomUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -50,7 +48,7 @@ public class EmailSendingServiceImpl implements EmailSendingService {
 
         String verificationToken = JwtUtil.encode(profileId);
 
-        String verificationUrl = serverDomain +":"+ serverPort + "/api/v1/auth/verification/" + verificationToken;
+        String verificationUrl = serverDomain + "/api/v1/auth/verification/" + verificationToken;
 
         String body = """
                 <!DOCTYPE html>

@@ -15,21 +15,21 @@ spring:
     locations: classpath:db/migration
 
   mail:
-      host: smtp.mail.ru
-      port: 465
-      username: xandaqulov@mail.ru
-      password: 6uTQvoY6HldZxhFLVYoW
-      protocol: smtps
+    host: smtp.mail.ru
+    port: 465
+    username: xandaqulov@mail.ru
+    password: 6uTQvoY6HldZxhFLVYoW
+    protocol: smtps
 
-      properties:
-        mail:
-          smtp:
-            auth: true
-            ssl:
-              enable: true
-            connectiontimeout: 50000
-            timeout: 50000
-            writetimeout: 50000
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          connectiontimeout: 50000
+          timeout: 50000
+          writetimeout: 50000
 
 
   # Eureka Client

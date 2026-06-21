@@ -36,6 +36,11 @@
     SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-sklad_user}
     SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-sklad-market}
 
+    MAIL_HOST: ${MAIL_HOST:-smtp.mail.ru}
+    MAIL_PORT: ${MAIL_PORT:-465}
+    MAIL_USERNAME: ${MAIL_USERNAME:-xandaqulov@mail.ru}
+    MAIL_PASSWORD: ${MAIL_PASSWORD:-6uTQvoY6HldZxhFLVYoW}
+
   x-internal-service: &internal-service
     network_mode: host
     restart: unless-stopped

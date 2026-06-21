@@ -16,6 +16,22 @@ spring:
     password: ${DB_PASSWORD:sklad-market}
     driver-class-name: org.postgresql.Driver
 
+  mail:
+    host: ${MAIL_HOST:smtp.mail.ru}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:xandaqulov@mail.ru}
+    password: ${MAIL_PASSWORD:6uTQvoY6HldZxhFLVYoW}
+    protocol: smtps
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          connectiontimeout: 50000
+          timeout: 50000
+          writetimeout: 50000
   # Kafka Producer config
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:127.0.0.1:9092}
