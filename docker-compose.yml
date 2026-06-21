@@ -37,7 +37,7 @@
     SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-sklad-market}
 
     MAIL_HOST: ${MAIL_HOST:-smtp.mail.ru}
-    MAIL_PORT: ${MAIL_PORT:-465}
+    MAIL_PORT: ${MAIL_PORT:-587}
     MAIL_USERNAME: ${MAIL_USERNAME:-xandaqulov@mail.ru}
     MAIL_PASSWORD: ${MAIL_PASSWORD:-6uTQvoY6HldZxhFLVYoW}
 

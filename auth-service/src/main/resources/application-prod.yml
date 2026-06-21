@@ -18,7 +18,7 @@ spring:
 
   mail:
     host: ${MAIL_HOST:smtp.mail.ru}
-    port: ${MAIL_PORT:465}
+    port: ${MAIL_PORT:587}
     username: ${MAIL_USERNAME:xandaqulov@mail.ru}
     password: ${MAIL_PASSWORD:6uTQvoY6HldZxhFLVYoW}
     protocol: smtps
