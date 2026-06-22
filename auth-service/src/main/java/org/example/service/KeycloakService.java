@@ -23,4 +23,6 @@ public interface KeycloakService {
     //    void verifyUserEmail(String username);
     void removeRole(String keycloakId, Roles role);
 
+    void updatePassword(String keycloakId, String newPassword);
+
 }

@@ -176,6 +176,7 @@ public class AuthServiceImpl implements AuthService {
         if (!profile.getStatus().equals(GeneralStatus.ACTIVE)) {
             throw new AppBadException(messageService.getMessage("wrong.status", language));
         }
+        keycloakService.updatePassword(profile.getKeycloakId(), dto.getNewPassword());
         userRepository.updatePassword(profile.getId(), bCryptPasswordEncoder.encode(dto.getNewPassword()));
         return new ApiResponse<>(messageService.getMessage("reset.password.success", language));
     }

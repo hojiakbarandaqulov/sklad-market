@@ -91,6 +91,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 
         log.info("Keycloak da role yangilandi: keycloakId={}, role={}", keycloakId, roleName);
     }
+
     @Override
     public String createUser(String firstName, String lastName, String username,
                              String password, Roles roleName) {
@@ -149,6 +150,24 @@ public class KeycloakServiceImpl implements KeycloakService {
         removeRoleFromUser(keycloakId, role, adminToken, headers);
 
         log.info("Role {} o'chirildi: keycloakId={}", role, keycloakId);
+    }
+
+    @Override
+    public void updatePassword(String keycloakId, String newPassword) {
+        String adminToken = getAdminToken();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(adminToken);
+
+        Map<String, Object> credential = new HashMap<>();
+        credential.put("type", "password");
+        credential.put("value", newPassword);
+        credential.put("temporary", false);
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(credential, headers);
+        restTemplate.exchange(adminUrl + "/users/" + keycloakId + "/reset-password",
+                HttpMethod.PUT, request, Void.class);
+
     }
 
     private void createRoleIfNotExists(Roles roleName, String adminToken) {
