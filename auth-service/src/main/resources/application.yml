@@ -15,18 +15,22 @@ spring:
     locations: classpath:db/migration
 
   mail:
-    host: smtp.mail.ru
-    port: 587
-    username: xandaqulov@mail.ru
-    password: 6uTQvoY6HldZxhFLVYoW
-    protocol: smtps
+    host: ${MAIL_HOST:smtp.mail.ru}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:xandaqulov@mail.ru}
+    password: ${MAIL_PASSWORD:6uTQvoY6HldZxhFLVYoW}
+    protocol: ${MAIL_PROTOCOL:smtp}
 
     properties:
       mail:
         smtp:
-          auth: true
+          auth: ${MAIL_SMTP_AUTH:true}
           ssl:
-            enable: true
+            enable: ${MAIL_SMTP_SSL_ENABLE:false}
+            trust: ${MAIL_SMTP_SSL_TRUST:smtp.mail.ru}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS_ENABLE:true}
+            required: ${MAIL_SMTP_STARTTLS_REQUIRED:true}
           connectiontimeout: 50000
           timeout: 50000
           writetimeout: 50000
