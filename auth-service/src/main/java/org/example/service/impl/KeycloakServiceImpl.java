@@ -306,7 +306,6 @@ public class KeycloakServiceImpl implements KeycloakService {
 //        }
 //    }
 
-    @Cacheable("adminToken")
     public String getAdminToken() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

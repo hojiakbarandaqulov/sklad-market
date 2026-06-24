@@ -43,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailSendingService emailSendingService;
     private final LoginAttemptService loginAttemptService;
     private final KeycloakService keycloakService;
+    private final EmailHistoryService emailHistoryService;
 
 
     @Override
@@ -176,6 +177,11 @@ public class AuthServiceImpl implements AuthService {
         if (!profile.getStatus().equals(GeneralStatus.ACTIVE)) {
             throw new AppBadException(messageService.getMessage("wrong.status", language));
         }
+        
+        if (profile.getKeycloakId() == null || profile.getKeycloakId().isBlank()) {
+            throw new AppBadException(messageService.getMessage("keycloak.id.null", language));
+        }
+        emailHistoryService.check(dto.getUsername(), dto.getConfirmCode());
         keycloakService.updatePassword(profile.getKeycloakId(), dto.getNewPassword());
         userRepository.updatePassword(profile.getId(), bCryptPasswordEncoder.encode(dto.getNewPassword()));
         return new ApiResponse<>(messageService.getMessage("reset.password.success", language));

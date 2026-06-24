@@ -36,7 +36,7 @@ public class EmailHistoryServiceImpl implements EmailHistoryService {
     }
 
     public void check(String email, String code){
-        Optional<EmailHistory> optional = emailHistoryRepository.findTop1ByEmailOrderByCreatedDateDesc(email);
+        Optional<EmailHistory> optional = emailHistoryRepository.findTop1ByEmailAndEmailTypeOrderByCreatedDateDesc(email, EmailType.RESET_PASSWORD);
         if(optional.isEmpty()){
            throw new AppBadException("verification failed");
         }
@@ -49,7 +49,7 @@ public class EmailHistoryServiceImpl implements EmailHistoryService {
             throw new AppBadException("verification failed");
         }
 
-        LocalDateTime expDate=entity.getCreatedDate().plusMinutes(2);
+        LocalDateTime expDate=entity.getCreatedDate().plusMinutes(15);
         if (LocalDateTime.now().isAfter(expDate)){
             throw new AppBadException("verification.failed");
         }
