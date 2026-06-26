@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @RequiredArgsConstructor
 public class ChatWebSocketHandler extends TextWebSocketHandler {
-
     private final ObjectMapper objectMapper;
     private final ChatService chatService;
     private final ChatWebSocketTokenService chatWebSocketTokenService;
@@ -196,7 +195,6 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 return pair[1];
             }
         }
-
         throw new AppBadException("Missing websocket token");
     }
 }

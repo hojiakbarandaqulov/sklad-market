@@ -257,7 +257,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setBearerAuth(adminToken);
 
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("profileId", List.of(String.valueOf(profileId)));
+        attributes.put("profileId", profileId);
 
         // Password credential ni ham qo'shing
         Map<String, Object> credential = new HashMap<>();
@@ -332,11 +332,11 @@ public class KeycloakServiceImpl implements KeycloakService {
         try {
             log.info("Token request body: {}", body);  // DEBUG
             ResponseEntity<TokenResponseDTO> response = restTemplate.postForEntity(
-                    "http://localhost:9090/realms/master/protocol/openid-connect/token",
+                    tokenUrl,
                     request, TokenResponseDTO.class);  // TokenResponse DTO yarating
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                String token = response.getBody().getAccessToken();
+                String token = Objects.requireNonNull(response.getBody()).getAccessToken();
                 log.info("Admin token muvaffaqiyatli olindi");
                 return token;
             } else {

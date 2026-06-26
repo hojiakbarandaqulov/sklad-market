@@ -25,4 +25,6 @@ public interface KeycloakService {
 
     void updatePassword(String keycloakId, String newPassword);
 
+    void revokeUserSessions(String keycloakId);
+
 }

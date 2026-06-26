@@ -170,6 +170,21 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     }
 
+    @Override
+    public void revokeUserSessions(String keycloakId) {
+        String adminToken = getAdminToken();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(adminToken);
+
+        restTemplate.exchange(
+                adminUrl + "/users/" + keycloakId + "/logout",
+                HttpMethod.POST,
+                new HttpEntity<>(headers),
+                Void.class
+        );
+    }
+
     private void createRoleIfNotExists(Roles roleName, String adminToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(adminToken);
@@ -246,7 +261,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setBearerAuth(adminToken);
 
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("profileId", List.of(String.valueOf(profileId)));
+        attributes.put("profileId", profileId);
 
         // Password credential ni ham qo'shing
         Map<String, Object> credential = new HashMap<>();
