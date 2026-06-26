@@ -4,7 +4,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.clent.CompanyClient;
 import org.example.dto.ApiResponse;
+import org.example.dto.internal.CompanyInternalSummaryResponse;
+import org.example.dto.internal.CompanySummary;
 import org.example.dto.kafka.UserUpdateRole;
 import org.example.dto.kafka.UserUpdateStatus;
 import org.example.dto.users.AdminUserDetailResponse;
@@ -51,9 +54,11 @@ public class UsersServiceImpl implements UsersService {
     private final KafkaProducerService kafkaProducerService;
     private final RestTemplate restTemplate;
     private final UsersRepository usersRepository;
+    private final CompanyClient companyClient;
 
     @Value("${aws.url}")
     private String awsUrl;
+
     @Override
     public ApiResponse<UsersDTO> getProfile(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
@@ -85,17 +90,19 @@ public class UsersServiceImpl implements UsersService {
 
         if (profile.getRoles() == Roles.SELLER) {
             try {
-                Long[] companyIds = restTemplate.getForObject(
+             /*   Long[] companyIds = restTemplate.getForObject(
                         "http://localhost:8083/internal/companies/owned?sellerId={sellerId}",
                         Long[].class,
                         profileId
-                );
-                if (companyIds != null && companyIds.length > 0) {
-                    CompanySummary companySummary = restTemplate.getForObject(
+                );*/
+                List<Long> companyIds=companyClient.ownedCompany(profileId);
+                if (companyIds != null) {
+                 /*   CompanySummary companySummary = restTemplate.getForObject(
                             "http://localhost:8083/internal/companies/{companyId}/summary",
                             CompanySummary.class,
                             companyIds[0]
-                    );
+                    );*/
+                    CompanyInternalSummaryResponse companySummary=companyClient.summary(companyIds.get(0));
                     if (companySummary != null) {
                         response.setCompanyId(companySummary.getId());
                         response.setCompanyName(companySummary.getName());
@@ -298,11 +305,4 @@ public class UsersServiceImpl implements UsersService {
         return (firstName + " " + lastName).trim();
     }
 
-    @Getter
-    @Setter
-    private static class CompanySummary {
-        private Long id;
-        private String name;
-        private String logoPath;
-    }
 }
