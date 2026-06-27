@@ -6,5 +6,6 @@ import org.example.dto.kafka.UserUpdateStatus;
 
 public interface KafkaProducerService {
     void sendUserRoleUpdate(UserUpdateRole event);
+
     void sendUserStatusUpdate(UserUpdateStatus event);
 }

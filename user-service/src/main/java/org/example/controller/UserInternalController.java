@@ -2,7 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.internal.UserProfileSummaryResponse;
-import org.example.entity.UserProfile;
+import org.example.entity.UsersProfile;
 import org.example.enums.GeneralStatus;
 import org.example.exp.AppBadException;
 import org.example.service.UsersService;
@@ -25,7 +25,7 @@ public class UserInternalController {
 
     @GetMapping("/{userId}/summary")
     public UserProfileSummaryResponse summary(@PathVariable Long userId) {
-        UserProfile profile = usersService.findByUserIdAndDeletedFalse(userId);
+        UsersProfile profile = usersService.findByUserIdAndDeletedFalse(userId);
         if (profile == null) {
             throw new AppBadException("profile not found");
         }
@@ -42,7 +42,7 @@ public class UserInternalController {
 
     @PostMapping("/{userId}/warning")
     public void increaseWarning(@PathVariable Long userId) {
-        UserProfile profile = usersService.findByUserIdAndDeletedFalse(userId);
+        UsersProfile profile = usersService.findByUserIdAndDeletedFalse(userId);
         if (profile == null) {
             throw new AppBadException("profile not found");
         }

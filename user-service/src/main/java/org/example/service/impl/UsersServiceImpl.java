@@ -14,7 +14,7 @@ import org.example.dto.users.UsersResponse;
 import org.example.dto.users.UsersUpdatePhoto;
 import org.example.dto.users.UsersUpdateRequestDTO;
 import org.example.entity.Attach;
-import org.example.entity.UserProfile;
+import org.example.entity.UsersProfile;
 import org.example.enums.AppLanguage;
 import org.example.enums.GeneralStatus;
 import org.example.enums.Roles;
@@ -59,7 +59,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UsersDTO> getProfile(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UsersProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -70,7 +70,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UserContextResponse> getContext(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UsersProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -117,7 +117,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UsersUpdateRequestDTO> updateProfile(UsersUpdateRequestDTO profileDTO, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UsersProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -130,7 +130,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<String> updatePhoto(UsersUpdatePhoto photoId, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UsersProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -145,7 +145,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UsersUpdatePhoto> getProfilePhoto(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UsersProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -160,7 +160,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public PageImpl<UsersResponse> getUsers(String q, GeneralStatus status, Roles roles, int page, int perPage, AppLanguage language) {
         PageRequest pageRequest = PageRequest.of(normalizePage(page, language) - 1, normalizePerPage(perPage, language), Sort.Direction.DESC, "createdDate");
-        Specification<UserProfile> spec = Specification.where(notDeleted());
+        Specification<UsersProfile> spec = Specification.where(notDeleted());
         if (q != null && !q.isBlank()) {
             spec = spec.and((root, query, cb) -> cb.or(
                     cb.like(cb.lower(root.get("firstName")), "%" + q.toLowerCase() + "%"),
@@ -174,7 +174,7 @@ public class UsersServiceImpl implements UsersService {
         if (roles != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("roles"), roles));
         }
-        Page<UserProfile> result = profileRepository.findAll(spec, pageRequest);
+        Page<UsersProfile> result = profileRepository.findAll(spec, pageRequest);
         List<UsersResponse> items = result.getContent()
                 .stream()
                 .map(this::toResponse)
@@ -184,7 +184,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> setAdmin(Long userId, Roles role, AppLanguage language) {
-        UserProfile profile = getByUserId(userId, language);
+        UsersProfile profile = getByUserId(userId, language);
         keycloakService.removeRole(profile.getKeycloakId(), profile.getRoles());
         profile.setRoles(role);
         profileRepository.save(profile);
@@ -196,7 +196,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<AdminUserDetailResponse> getUserById(Long userId, AppLanguage language) {
-        UserProfile profile = getByUserId(userId, language);
+        UsersProfile profile = getByUserId(userId, language);
         AdminUserDetailResponse response = new AdminUserDetailResponse();
         response.setId(profile.getUserId());
         response.setFirstName(profile.getFirstName());
@@ -216,7 +216,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> blockUser(Long userId, String reason, AppLanguage language) {
-        UserProfile profile = getByUserId(userId, language);
+        UsersProfile profile = getByUserId(userId, language);
         profile.setStatus(GeneralStatus.BLOCK);
         profileRepository.save(profile);
         kafkaProducerService.sendUserStatusUpdate(new UserUpdateStatus(profile.getUserId(), profile.getStatus()));
@@ -228,7 +228,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> unblockUser(Long userId, AppLanguage language) {
-        UserProfile profile = getByUserId(userId, language);
+        UsersProfile profile = getByUserId(userId, language);
         profile.setStatus(GeneralStatus.ACTIVE);
         profileRepository.save(profile);
         kafkaProducerService.sendUserStatusUpdate(new UserUpdateStatus(profile.getUserId(), profile.getStatus()));
@@ -238,13 +238,13 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> revokeUserSessions(Long userId, AppLanguage language) {
-        UserProfile profile = getByUserId(userId, language);
+        UsersProfile profile = getByUserId(userId, language);
         keycloakService.revokeUserSessions(profile.getKeycloakId());
         return ApiResponse.successResponse("user sessions revoked");
     }
 
     @Override
-    public UserProfile findByUserIdAndDeletedFalse(Long userId) {
+    public UsersProfile findByUserIdAndDeletedFalse(Long userId) {
         return usersRepository.findByUserIdAndDeletedFalse(userId);
     }
 
@@ -254,11 +254,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void save(UserProfile profile) {
+    public void save(UsersProfile profile) {
         usersRepository.save(profile);
     }
 
-    private UsersResponse toResponse(UserProfile profile) {
+    private UsersResponse toResponse(UsersProfile profile) {
         UsersResponse usersResponse = new UsersResponse();
         usersResponse.setId(profile.getUserId());
         usersResponse.setName(buildFullName(profile));
@@ -270,12 +270,12 @@ public class UsersServiceImpl implements UsersService {
         return usersResponse;
     }
 
-    private Specification<UserProfile> notDeleted() {
+    private Specification<UsersProfile> notDeleted() {
         return (root, query, cb) -> cb.isFalse(root.get("deleted"));
     }
 
-    private UserProfile getByUserId(Long userId, AppLanguage language) {
-        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(userId);
+    private UsersProfile getByUserId(Long userId, AppLanguage language) {
+        UsersProfile profile = profileRepository.findByUserIdAndDeletedFalse(userId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -296,7 +296,7 @@ public class UsersServiceImpl implements UsersService {
         return perPage;
     }
 
-    private String buildFullName(UserProfile profile) {
+    private String buildFullName(UsersProfile profile) {
         String firstName = profile.getFirstName() == null ? "" : profile.getFirstName().trim();
         String lastName = profile.getLastName() == null ? "" : profile.getLastName().trim();
         return (firstName + " " + lastName).trim();

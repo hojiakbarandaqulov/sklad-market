@@ -152,7 +152,6 @@ public class AuthServiceImpl implements AuthService {
         return new ApiResponse<>(response);
     }
 
-
     @Override
     public ApiResponse<String> resetPassword(ResetPasswordDTO dto, AppLanguage language) {
         Optional<Users> optional = userRepository.findByUsernameAndDeletedFalse(dto.getUsername());
@@ -177,7 +176,7 @@ public class AuthServiceImpl implements AuthService {
         if (!profile.getStatus().equals(GeneralStatus.ACTIVE)) {
             throw new AppBadException(messageService.getMessage("wrong.status", language));
         }
-        
+
         if (profile.getKeycloakId() == null || profile.getKeycloakId().isBlank()) {
             throw new AppBadException(messageService.getMessage("keycloak.id.null", language));
         }
