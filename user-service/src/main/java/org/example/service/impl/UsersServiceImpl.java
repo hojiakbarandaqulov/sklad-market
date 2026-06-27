@@ -1,13 +1,10 @@
 package org.example.service.impl;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.clent.CompanyClient;
 import org.example.dto.ApiResponse;
 import org.example.dto.internal.CompanyInternalSummaryResponse;
-import org.example.dto.internal.CompanySummary;
 import org.example.dto.kafka.UserUpdateRole;
 import org.example.dto.kafka.UserUpdateStatus;
 import org.example.dto.users.AdminUserDetailResponse;
@@ -17,12 +14,12 @@ import org.example.dto.users.UsersResponse;
 import org.example.dto.users.UsersUpdatePhoto;
 import org.example.dto.users.UsersUpdateRequestDTO;
 import org.example.entity.Attach;
-import org.example.entity.Profile;
+import org.example.entity.UserProfile;
 import org.example.enums.AppLanguage;
 import org.example.enums.GeneralStatus;
 import org.example.enums.Roles;
 import org.example.exp.AppBadException;
-import org.example.repository.UsersRepository;
+import org.example.repository.UserProfileRepository;
 import org.example.service.AttachService;
 import org.example.service.KafkaProducerService;
 import org.example.service.KeycloakService;
@@ -46,14 +43,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersServiceImpl implements UsersService {
 
-    private final UsersRepository profileRepository;
+    private final UserProfileRepository profileRepository;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
     private final AttachService attachService;
     protected final KeycloakService keycloakService;
     private final KafkaProducerService kafkaProducerService;
     private final RestTemplate restTemplate;
-    private final UsersRepository usersRepository;
+    private final UserProfileRepository usersRepository;
     private final CompanyClient companyClient;
 
     @Value("${aws.url}")
@@ -62,7 +59,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UsersDTO> getProfile(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -73,7 +70,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UserContextResponse> getContext(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -120,7 +117,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UsersUpdateRequestDTO> updateProfile(UsersUpdateRequestDTO profileDTO, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -133,7 +130,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<String> updatePhoto(UsersUpdatePhoto photoId, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -148,7 +145,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<UsersUpdatePhoto> getProfilePhoto(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
+        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -163,7 +160,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public PageImpl<UsersResponse> getUsers(String q, GeneralStatus status, Roles roles, int page, int perPage, AppLanguage language) {
         PageRequest pageRequest = PageRequest.of(normalizePage(page, language) - 1, normalizePerPage(perPage, language), Sort.Direction.DESC, "createdDate");
-        Specification<Profile> spec = Specification.where(notDeleted());
+        Specification<UserProfile> spec = Specification.where(notDeleted());
         if (q != null && !q.isBlank()) {
             spec = spec.and((root, query, cb) -> cb.or(
                     cb.like(cb.lower(root.get("firstName")), "%" + q.toLowerCase() + "%"),
@@ -177,7 +174,7 @@ public class UsersServiceImpl implements UsersService {
         if (roles != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("roles"), roles));
         }
-        Page<Profile> result = profileRepository.findAll(spec, pageRequest);
+        Page<UserProfile> result = profileRepository.findAll(spec, pageRequest);
         List<UsersResponse> items = result.getContent()
                 .stream()
                 .map(this::toResponse)
@@ -187,7 +184,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> setAdmin(Long userId, Roles role, AppLanguage language) {
-        Profile profile = getByUserId(userId, language);
+        UserProfile profile = getByUserId(userId, language);
         keycloakService.removeRole(profile.getKeycloakId(), profile.getRoles());
         profile.setRoles(role);
         profileRepository.save(profile);
@@ -199,7 +196,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<AdminUserDetailResponse> getUserById(Long userId, AppLanguage language) {
-        Profile profile = getByUserId(userId, language);
+        UserProfile profile = getByUserId(userId, language);
         AdminUserDetailResponse response = new AdminUserDetailResponse();
         response.setId(profile.getUserId());
         response.setFirstName(profile.getFirstName());
@@ -219,7 +216,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> blockUser(Long userId, String reason, AppLanguage language) {
-        Profile profile = getByUserId(userId, language);
+        UserProfile profile = getByUserId(userId, language);
         profile.setStatus(GeneralStatus.BLOCK);
         profileRepository.save(profile);
         kafkaProducerService.sendUserStatusUpdate(new UserUpdateStatus(profile.getUserId(), profile.getStatus()));
@@ -231,7 +228,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> unblockUser(Long userId, AppLanguage language) {
-        Profile profile = getByUserId(userId, language);
+        UserProfile profile = getByUserId(userId, language);
         profile.setStatus(GeneralStatus.ACTIVE);
         profileRepository.save(profile);
         kafkaProducerService.sendUserStatusUpdate(new UserUpdateStatus(profile.getUserId(), profile.getStatus()));
@@ -241,13 +238,13 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<String> revokeUserSessions(Long userId, AppLanguage language) {
-        Profile profile = getByUserId(userId, language);
+        UserProfile profile = getByUserId(userId, language);
         keycloakService.revokeUserSessions(profile.getKeycloakId());
         return ApiResponse.successResponse("user sessions revoked");
     }
 
     @Override
-    public Profile findByUserIdAndDeletedFalse(Long userId) {
+    public UserProfile findByUserIdAndDeletedFalse(Long userId) {
         return usersRepository.findByUserIdAndDeletedFalse(userId);
     }
 
@@ -257,11 +254,11 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void save(Profile profile) {
+    public void save(UserProfile profile) {
         usersRepository.save(profile);
     }
 
-    private UsersResponse toResponse(Profile profile) {
+    private UsersResponse toResponse(UserProfile profile) {
         UsersResponse usersResponse = new UsersResponse();
         usersResponse.setId(profile.getUserId());
         usersResponse.setName(buildFullName(profile));
@@ -273,12 +270,12 @@ public class UsersServiceImpl implements UsersService {
         return usersResponse;
     }
 
-    private Specification<Profile> notDeleted() {
+    private Specification<UserProfile> notDeleted() {
         return (root, query, cb) -> cb.isFalse(root.get("deleted"));
     }
 
-    private Profile getByUserId(Long userId, AppLanguage language) {
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(userId);
+    private UserProfile getByUserId(Long userId, AppLanguage language) {
+        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(userId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
@@ -299,7 +296,7 @@ public class UsersServiceImpl implements UsersService {
         return perPage;
     }
 
-    private String buildFullName(Profile profile) {
+    private String buildFullName(UserProfile profile) {
         String firstName = profile.getFirstName() == null ? "" : profile.getFirstName().trim();
         String lastName = profile.getLastName() == null ? "" : profile.getLastName().trim();
         return (firstName + " " + lastName).trim();

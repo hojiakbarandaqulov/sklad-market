@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ProfileInternalSummaryResponse {
+public class UserProfileSummaryResponse {
     private Long id;
     private String firstName;
     private String lastName;

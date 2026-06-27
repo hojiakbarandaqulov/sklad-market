@@ -261,7 +261,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setBearerAuth(adminToken);
 
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("profileId", profileId);
+        attributes.put("profileId", String.valueOf(profileId));
 
         // Password credential ni ham qo'shing
         Map<String, Object> credential = new HashMap<>();

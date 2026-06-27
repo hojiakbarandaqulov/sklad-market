@@ -6,16 +6,15 @@ import org.example.dto.kafka.SuperAdminSendKeycloakId;
 import org.example.dto.kafka.UserRegisteredEvent;
 import org.example.dto.kafka.UserRoleUpdateEvent;
 import org.example.dto.kafka.UserVerifiedEvent;
-import org.example.entity.Profile;
+import org.example.entity.UserProfile;
 import org.example.enums.GeneralStatus;
 import org.example.enums.Roles;
-import org.example.repository.UsersRepository;
+import org.example.repository.UserProfileRepository;
 import org.example.service.KafkaConsumerService;
 import org.example.service.KeycloakService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,7 +22,7 @@ import java.util.Optional;
 @Slf4j
 public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
-    private final UsersRepository profileRepository;
+    private final UserProfileRepository profileRepository;
     private final KeycloakService keycloakService;
 
     @KafkaListener(
@@ -40,10 +39,10 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
             log.warn("Profil allaqachon bor: {}", event.getUserId());
             return;
         }
-        Optional<Profile> profile = profileRepository.findByUsernameAndDeletedFalse(event.getUsername());
+        Optional<UserProfile> profile = profileRepository.findByUsernameAndDeletedFalse(event.getUsername());
         profile.ifPresent(profileRepository::delete);
 
-        Profile profileMap = Profile.builder()
+        UserProfile profileMap = UserProfile.builder()
                 .userId(event.getUserId())
                 .username(event.getUsername())
                 .firstName(event.getFirstName())
@@ -66,9 +65,9 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
     public void onUserVerified(UserVerifiedEvent event) {
         log.info("Kafka ← user.verified keldi, userId={}",
                 event.getUserId());
-        Optional<Profile> profile = profileRepository.findByUserId(event.getUserId());
+        Optional<UserProfile> profile = profileRepository.findByUserId(event.getUserId());
         if (profile.isPresent()) {
-            Profile verifiedProfile = profile.get();
+            UserProfile verifiedProfile = profile.get();
             verifiedProfile.setStatus(GeneralStatus.ACTIVE);
             profileRepository.save(verifiedProfile);
         }
@@ -83,9 +82,9 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
     public void onUserRoleUpdate(UserRoleUpdateEvent event) {
         log.info("Kafka ← user.role.update keldi, userId={}", event.getUserId());
 
-        Optional<Profile> profile = profileRepository.findByUserId(event.getUserId());
+        Optional<UserProfile> profile = profileRepository.findByUserId(event.getUserId());
         if (profile.isPresent()) {
-            Profile verifiedProfile = profile.get();
+            UserProfile verifiedProfile = profile.get();
 
             String keycloakId = verifiedProfile.getKeycloakId();
 
@@ -111,7 +110,7 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
     )
     @Override
     public void onKeycloakId(SuperAdminSendKeycloakId event) {
-        Profile profile = profileRepository.findByUserIdAndDeletedFalse(event.getUserId());
+        UserProfile profile = profileRepository.findByUserIdAndDeletedFalse(event.getUserId());
         if (profile == null) {
             log.warn("Profile topilmadi: userId={}", event.getUserId());
             return;

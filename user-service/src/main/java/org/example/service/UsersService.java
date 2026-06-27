@@ -7,7 +7,7 @@ import org.example.dto.users.UsersDTO;
 import org.example.dto.users.UsersResponse;
 import org.example.dto.users.UsersUpdatePhoto;
 import org.example.dto.users.UsersUpdateRequestDTO;
-import org.example.entity.Profile;
+import org.example.entity.UserProfile;
 import org.example.enums.AppLanguage;
 import org.example.enums.GeneralStatus;
 import org.example.enums.Roles;
@@ -36,9 +36,9 @@ public interface UsersService {
 
     ApiResponse<String> revokeUserSessions(Long userId, AppLanguage language);
 
-    Profile findByUserIdAndDeletedFalse(Long userId);
+    UserProfile findByUserIdAndDeletedFalse(Long userId);
 
     Long countByStatusAndDeletedFalse(GeneralStatus generalStatus);
 
-    void save(Profile profile);
+    void save(UserProfile profile);
 }

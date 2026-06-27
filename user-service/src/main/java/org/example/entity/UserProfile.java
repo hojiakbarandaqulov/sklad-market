@@ -11,7 +11,7 @@ import org.example.enums.Roles;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Profile extends BaseEntity {
+public class UserProfile extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private Long userId;
