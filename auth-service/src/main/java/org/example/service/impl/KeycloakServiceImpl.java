@@ -261,7 +261,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setBearerAuth(adminToken);
 
         Map<String, Object> attributes = new HashMap<>();
-        attributes.put("profileId", String.valueOf(profileId));
+        attributes.put("profileId", List.of(String.valueOf(profileId)));
 
         // Password credential ni ham qo'shing
         Map<String, Object> credential = new HashMap<>();
@@ -270,6 +270,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         credential.put("temporary", false);
 
         Map<String, Object> userUpdate = new HashMap<>();
+
         userUpdate.put("firstName", firstName);
         userUpdate.put("lastName", lastName);
         userUpdate.put("email", email);
