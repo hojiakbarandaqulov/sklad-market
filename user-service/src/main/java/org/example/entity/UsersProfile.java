@@ -36,6 +36,6 @@ public class UsersProfile extends BaseEntity {
 
     private Integer warningCount=0;
 
-    @ManyToOne
-    private Attach photo;
+    private String photoId;
+
 }

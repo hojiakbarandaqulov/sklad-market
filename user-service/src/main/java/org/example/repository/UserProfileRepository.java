@@ -1,7 +1,6 @@
 package org.example.repository;
 
 import jakarta.transaction.Transactional;
-import org.example.entity.Attach;
 import org.example.entity.UsersProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -26,8 +25,8 @@ public interface UserProfileRepository extends JpaRepository<UsersProfile, Long>
 
     @Transactional(rollbackOn = Exception.class)
     @Modifying
-    @Query("update UsersProfile p set p.photo = :photo where p.id = ?1")
-    void updatePhoto(Long id, @Param("photo") Attach photo);
+    @Query("update UsersProfile p set p.photoId = :photo where p.id = ?1")
+    void updatePhoto(Long id, @Param("photoId") String photoId);
 
     long countByStatusAndDeletedFalse(org.example.enums.GeneralStatus status);
 

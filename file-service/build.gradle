@@ -39,6 +39,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 //	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 //	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.apache.tika:tika-core:3.0.0'
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	implementation 'io.minio:minio:8.6.0'
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
@@ -47,8 +48,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+/*	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'*/
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

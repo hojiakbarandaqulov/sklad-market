@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dto.ApiResponse;
+import org.example.dto.AttachDto;
 import org.example.dto.users.AdminUserDetailResponse;
 import org.example.dto.users.UserContextResponse;
 import org.example.dto.users.UsersDTO;
@@ -12,6 +13,7 @@ import org.example.enums.AppLanguage;
 import org.example.enums.GeneralStatus;
 import org.example.enums.Roles;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UsersService {
     ApiResponse<UsersDTO> getProfile(AppLanguage language);
@@ -41,4 +43,6 @@ public interface UsersService {
     Long countByStatusAndDeletedFalse(GeneralStatus generalStatus);
 
     void save(UsersProfile profile);
+
+    ApiResponse<AttachDto> uploadFile(MultipartFile file, AppLanguage language);
 }

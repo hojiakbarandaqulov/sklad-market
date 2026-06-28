@@ -3,18 +3,16 @@ package org.example.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
+import org.example.dto.AttachDto;
 import org.example.dto.users.UserContextResponse;
 import org.example.dto.users.UsersDTO;
 import org.example.dto.users.UsersUpdatePhoto;
 import org.example.dto.users.UsersUpdateRequestDTO;
 import org.example.enums.AppLanguage;
 import org.example.service.UsersService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +34,12 @@ public class UsersController {
     public ApiResponse<UsersUpdateRequestDTO> updateProfile(@RequestBody @Valid UsersUpdateRequestDTO profileDTO,
                                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return userService.updateProfile(profileDTO, language);
+    }
+
+    @PostMapping(value = "/upload/photo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<AttachDto> upload(@RequestParam("file") MultipartFile file,
+                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return userService.uploadFile(file, language);
     }
 
     @PutMapping("/update/photo")

@@ -1,6 +1,7 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.config.internal.FileClient;
 import org.example.dto.*;
 import org.example.dto.kafka.CompanyCreateEvent;
 import org.example.dto.map.CompanyMapResponse;
@@ -46,6 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyDocumentRepository companyDocumentRepository;
     private final KafkaProducerService kafkaProducerService;
     private final ModelMapper modelMapper;
+    private final FileClient fileClient;
     private final RestTemplate restTemplate;
     private final ResourceBundleService messageService;
 
@@ -188,7 +190,7 @@ public class CompanyServiceImpl implements CompanyService {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8082/api/v1/attach/upload", requestEntity, UploadDTO.class);
+        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);
         UploadDTO uploadDTO = response.getBody();
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));
@@ -206,7 +208,7 @@ public class CompanyServiceImpl implements CompanyService {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8082/api/v1/attach/upload", requestEntity, UploadDTO.class);
+        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);
         UploadDTO uploadDTO = response.getBody();
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));

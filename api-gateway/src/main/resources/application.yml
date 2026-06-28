@@ -37,7 +37,7 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/api/v1/users/**,/api/v1/attach/**,/api/v1/location/**,/api/v1/admin/users,/api/v1/admin/users/**,/api/v1/location
+            - Path=/api/v1/users/**,/api/v1/location/**,/api/v1/admin/users,/api/v1/admin/users/**,/api/v1/location
 
         # Company Service
         - id: company-service
@@ -79,7 +79,11 @@ spring:
           uri: lb://report-service
           predicates:
             - Path=/api/v1/reports,/api/v1/reports/**,/api/v1/admin/reports,/api/v1/admin/reports/**,/api/v1/admin/dashboard
-
+        # File
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/api/v1/attach/**
 eureka:
   client:
     service-url:

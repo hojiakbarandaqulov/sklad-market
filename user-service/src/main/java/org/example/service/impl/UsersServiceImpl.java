@@ -3,7 +3,10 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.clent.CompanyClient;
+import org.example.config.clent.FileClient;
 import org.example.dto.ApiResponse;
+import org.example.dto.AttachDto;
+import org.example.dto.internal.AttachInfoDto;
 import org.example.dto.internal.CompanyInternalSummaryResponse;
 import org.example.dto.kafka.UserUpdateRole;
 import org.example.dto.kafka.UserUpdateStatus;
@@ -13,14 +16,12 @@ import org.example.dto.users.UsersDTO;
 import org.example.dto.users.UsersResponse;
 import org.example.dto.users.UsersUpdatePhoto;
 import org.example.dto.users.UsersUpdateRequestDTO;
-import org.example.entity.Attach;
 import org.example.entity.UsersProfile;
 import org.example.enums.AppLanguage;
 import org.example.enums.GeneralStatus;
 import org.example.enums.Roles;
 import org.example.exp.AppBadException;
 import org.example.repository.UserProfileRepository;
-import org.example.service.AttachService;
 import org.example.service.KafkaProducerService;
 import org.example.service.KeycloakService;
 import org.example.service.ResourceBundleService;
@@ -35,6 +36,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -46,10 +48,9 @@ public class UsersServiceImpl implements UsersService {
     private final UserProfileRepository profileRepository;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
-    private final AttachService attachService;
+    private final FileClient fileClient;
     protected final KeycloakService keycloakService;
     private final KafkaProducerService kafkaProducerService;
-    private final RestTemplate restTemplate;
     private final UserProfileRepository usersRepository;
     private final CompanyClient companyClient;
 
@@ -75,31 +76,22 @@ public class UsersServiceImpl implements UsersService {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
 
+        AttachInfoDto attachInfoDto = fileClient.getById(profile.getPhotoId());
         UserContextResponse response = new UserContextResponse();
         response.setId(profile.getUserId());
         response.setFirstName(profile.getFirstName());
         response.setLastName(profile.getLastName());
         response.setUsername(profile.getUsername());
         response.setRole(profile.getRoles());
-        response.setPhotoUrl(profile.getPhoto() == null ? null : awsUrl + profile.getPhoto().getPath());
+        response.setPhotoUrl(profile.getPhotoId() == null ? null : awsUrl + attachInfoDto.getPath());
         response.setSellerPanel(profile.getRoles() == Roles.SELLER);
         response.setModeratorPanel(profile.getRoles() == Roles.ADMIN || profile.getRoles() == Roles.SUPER_ADMIN);
 
         if (profile.getRoles() == Roles.SELLER) {
             try {
-             /*   Long[] companyIds = restTemplate.getForObject(
-                        "http://localhost:8083/internal/companies/owned?sellerId={sellerId}",
-                        Long[].class,
-                        profileId
-                );*/
-                List<Long> companyIds=companyClient.ownedCompany(profileId);
+                List<Long> companyIds = companyClient.ownedCompany(profileId);
                 if (companyIds != null) {
-                 /*   CompanySummary companySummary = restTemplate.getForObject(
-                            "http://localhost:8083/internal/companies/{companyId}/summary",
-                            CompanySummary.class,
-                            companyIds[0]
-                    );*/
-                    CompanyInternalSummaryResponse companySummary=companyClient.summary(companyIds.get(0));
+                    CompanyInternalSummaryResponse companySummary = companyClient.summary(companyIds.get(0));
                     if (companySummary != null) {
                         response.setCompanyId(companySummary.getId());
                         response.setCompanyName(companySummary.getName());
@@ -128,17 +120,18 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public ApiResponse<String> updatePhoto(UsersUpdatePhoto photoId, AppLanguage language) {
+    public ApiResponse<String> updatePhoto(UsersUpdatePhoto photo, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
         UsersProfile profile = profileRepository.findByUserIdAndDeletedFalse(profileId);
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
-        if (profile.getPhoto() != null && profile.getPhoto().getId().equals(photoId.getPhotoId())) {
-            attachService.delete(profile.getPhoto().getId(), language);
+
+        if (profile.getPhotoId() != null && profile.getPhotoId().equals(photo.getPhotoId())) {
+            fileClient.delete(profile.getPhotoId(), language.name());
         }
-        Attach attach = attachService.get(photoId.getPhotoId(), language);
-        profileRepository.updatePhoto(profile.getId(), attach);
+        AttachInfoDto attach = fileClient.getById(photo.getPhotoId());
+        profileRepository.updatePhoto(profile.getId(), attach.getId());
         return ApiResponse.successResponse(messageService.getMessage("photo.photo.update.success", language));
     }
 
@@ -149,11 +142,11 @@ public class UsersServiceImpl implements UsersService {
         if (profile == null) {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
-        if (profile.getPhoto() == null) {
+        if (profile.getPhotoId() == null) {
             throw new AppBadException(messageService.getMessage("user.photo.not.found", language));
         }
         UsersUpdatePhoto photoUpdatePhoto = new UsersUpdatePhoto();
-        photoUpdatePhoto.setPhotoId(String.valueOf(profile.getPhoto().getId()));
+        photoUpdatePhoto.setPhotoId(String.valueOf(profile.getPhotoId()));
         return ApiResponse.successResponse(photoUpdatePhoto);
     }
 
@@ -256,6 +249,15 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public void save(UsersProfile profile) {
         usersRepository.save(profile);
+    }
+
+    @Override
+    public ApiResponse<AttachDto> uploadFile(MultipartFile file, AppLanguage language) {
+        ApiResponse<AttachDto> upload = fileClient.upload(file);
+        UsersProfile profile = new UsersProfile();
+        profile.setPhotoId(upload.getData().getId());
+        usersRepository.save(profile);
+        return ApiResponse.successResponse(upload.getData());
     }
 
     private UsersResponse toResponse(UsersProfile profile) {
