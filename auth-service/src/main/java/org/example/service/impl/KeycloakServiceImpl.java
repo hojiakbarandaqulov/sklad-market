@@ -260,7 +260,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(adminToken);
 
-        HttpEntity<Void> getRequest = new HttpEntity<>(headers);
+/*        HttpEntity<Void> getRequest = new HttpEntity<>(headers);
         ResponseEntity<Map> getResponse = restTemplate.exchange(
                 adminUrl + "/users/" + keycloakId,
                 HttpMethod.GET,
@@ -271,11 +271,12 @@ public class KeycloakServiceImpl implements KeycloakService {
         if (user==null){
             throw new AppBadException("Keycloak user topilmadi: "+keycloakId);
         }
-        Map<String, Object> attributes = (Map<String, Object>) user.getOrDefault("attributes",new HashMap<>());
         attributes.put("profileId", List.of(String.valueOf(profileId)));
-        user.put("attributes",attributes);
+        user.put("attributes",attributes);*/
 
-/*
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("profileId", List.of(String.valueOf(profileId)));
+
         // Password credential ni ham qo'shing
         Map<String, Object> credential = new HashMap<>();
         credential.put("type", "password");
@@ -283,7 +284,6 @@ public class KeycloakServiceImpl implements KeycloakService {
         credential.put("temporary", false);
 
         Map<String, Object> userUpdate = new HashMap<>();
-
         userUpdate.put("firstName", firstName);
         userUpdate.put("lastName", lastName);
         userUpdate.put("email", email);
@@ -291,15 +291,15 @@ public class KeycloakServiceImpl implements KeycloakService {
         userUpdate.put("enabled", true);
         userUpdate.put("credentials", List.of(credential)); // ← qo'shing
         userUpdate.put("attributes", attributes);
-*/
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(user, headers);
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(userUpdate, headers);
         restTemplate.exchange(
                 adminUrl + "/users/" + keycloakId,
                 HttpMethod.PUT,
                 request,
                 Void.class
         );
+
     }
 //    @Override
 //    public void verifyUserEmail(String username) {
