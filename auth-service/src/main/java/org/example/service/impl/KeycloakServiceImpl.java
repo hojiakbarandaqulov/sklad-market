@@ -260,46 +260,56 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(adminToken);
 
-/*        HttpEntity<Void> getRequest = new HttpEntity<>(headers);
+        HttpEntity<Void> getRequest = new HttpEntity<>(headers);
         ResponseEntity<Map> getResponse = restTemplate.exchange(
                 adminUrl + "/users/" + keycloakId,
                 HttpMethod.GET,
                 getRequest,
                 Map.class
         );
-        Map<String,Object> user = getResponse.getBody();
-        if (user==null){
-            throw new AppBadException("Keycloak user topilmadi: "+keycloakId);
+
+        Map<String, Object> user = getResponse.getBody();
+        if (user == null) {
+            throw new AppBadException("Keycloak user topilmadi: " + keycloakId);
         }
-        attributes.put("profileId", List.of(String.valueOf(profileId)));
-        user.put("attributes",attributes);*/
 
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("profileId", List.of(String.valueOf(profileId)));
+        Map<String, Object> attributes;
+        Object rawAttributes = user.get("attributes");
 
-        // Password credential ni ham qo'shing
-        Map<String, Object> credential = new HashMap<>();
-        credential.put("type", "password");
-        credential.put("value", password);
-        credential.put("temporary", false);
+        if (rawAttributes instanceof Map<?, ?> rawMap) {
+            attributes = new HashMap<>();
+            rawMap.forEach((k, v) -> attributes.put(String.valueOf(k), v));
+        } else {
+            attributes = new HashMap<>();
+        }
+
+        attributes.put("profileId", List.of(String.valueOf(profileId)));
 
         Map<String, Object> userUpdate = new HashMap<>();
-        userUpdate.put("firstName", firstName);
-        userUpdate.put("lastName", lastName);
-        userUpdate.put("email", email);
-        userUpdate.put("emailVerified", true);
-        userUpdate.put("enabled", true);
-        userUpdate.put("credentials", List.of(credential)); // ← qo'shing
+        userUpdate.put("username", user.get("username"));
+        userUpdate.put("email", user.get("email"));
+        userUpdate.put("firstName", user.get("firstName"));
+        userUpdate.put("lastName", user.get("lastName"));
+        userUpdate.put("enabled", user.get("enabled"));
+        userUpdate.put("emailVerified", user.get("emailVerified"));
         userUpdate.put("attributes", attributes);
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(userUpdate, headers);
+        HttpEntity<Map<String, Object>> putRequest = new HttpEntity<>(userUpdate, headers);
         restTemplate.exchange(
                 adminUrl + "/users/" + keycloakId,
                 HttpMethod.PUT,
-                request,
+                putRequest,
                 Void.class
         );
 
+        ResponseEntity<Map> verifyResponse = restTemplate.exchange(
+                adminUrl + "/users/" + keycloakId,
+                HttpMethod.GET,
+                getRequest,
+                Map.class
+        );
+
+        log.info("Keycloak user attributes after update: {}", verifyResponse.getBody().get("attributes"));
     }
 //    @Override
 //    public void verifyUserEmail(String username) {
