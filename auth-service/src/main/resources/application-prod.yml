@@ -68,9 +68,9 @@ spring:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
 
 keycloak:
-  token-url: ${KEYCLOAK_TOKEN_URL:http://localhost:9090/realms/market-realm/protocol/openid-connect/token}
-  master-token-url: ${KEYCLOAK_MASTER_TOKEN_URL:http://localhost:9090/realms/master/protocol/openid-connect/token}
-  admin-url: ${KEYCLOAK_ADMIN_URL:http://localhost:9090/admin/realms/market-realm}
+  token-url: ${KEYCLOAK_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
+  master-token-url: ${KEYCLOAK_MASTER_TOKEN_URL:http://127.0.0.1:9090/realms/master/protocol/openid-connect/token}
+  admin-url: ${KEYCLOAK_ADMIN_URL:http://127.0.0.1:9090/admin/realms/market-realm}
   client-id: ${KEYCLOAK_CLIENT_ID:market-backend}
   client-secret: ${KEYCLOAK_CLIENT_SECRET:agazVSCHc4wJNLYXZtPWSHDm3PAT3VJ6}
   admin-username: ${KEYCLOAK_ADMIN_USERNAME:admin}
