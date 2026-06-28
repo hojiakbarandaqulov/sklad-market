@@ -260,9 +260,22 @@ public class KeycloakServiceImpl implements KeycloakService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(adminToken);
 
-        Map<String, Object> attributes = new HashMap<>();
+        HttpEntity<Void> getRequest = new HttpEntity<>(headers);
+        ResponseEntity<Map> getResponse = restTemplate.exchange(
+                adminUrl + "/users/" + keycloakId,
+                HttpMethod.GET,
+                getRequest,
+                Map.class
+        );
+        Map<String,Object> user = getResponse.getBody();
+        if (user==null){
+            throw new AppBadException("Keycloak user topilmadi: "+keycloakId);
+        }
+        Map<String, Object> attributes = (Map<String, Object>) user.getOrDefault("atributes",new HashMap<>());
         attributes.put("profileId", List.of(String.valueOf(profileId)));
+        user.put("atributes",attributes);
 
+/*
         // Password credential ni ham qo'shing
         Map<String, Object> credential = new HashMap<>();
         credential.put("type", "password");
@@ -278,8 +291,9 @@ public class KeycloakServiceImpl implements KeycloakService {
         userUpdate.put("enabled", true);
         userUpdate.put("credentials", List.of(credential)); // ← qo'shing
         userUpdate.put("attributes", attributes);
+*/
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(userUpdate, headers);
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(user, headers);
         restTemplate.exchange(
                 adminUrl + "/users/" + keycloakId,
                 HttpMethod.PUT,
