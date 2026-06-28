@@ -271,9 +271,9 @@ public class KeycloakServiceImpl implements KeycloakService {
         if (user==null){
             throw new AppBadException("Keycloak user topilmadi: "+keycloakId);
         }
-        Map<String, Object> attributes = (Map<String, Object>) user.getOrDefault("atributes",new HashMap<>());
+        Map<String, Object> attributes = (Map<String, Object>) user.getOrDefault("attributes",new HashMap<>());
         attributes.put("profileId", List.of(String.valueOf(profileId)));
-        user.put("atributes",attributes);
+        user.put("attributes",attributes);
 
 /*
         // Password credential ni ham qo'shing
