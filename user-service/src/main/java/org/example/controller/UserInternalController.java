@@ -1,6 +1,8 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.config.clent.FileClient;
+import org.example.dto.internal.AttachInfoDto;
 import org.example.dto.internal.UserProfileSummaryResponse;
 import org.example.entity.UsersProfile;
 import org.example.enums.GeneralStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserInternalController {
 
     private final UsersService usersService;
+    private final FileClient fileClient;
 
     @Value("${aws.url}")
     private String awsUrl;
@@ -30,7 +33,9 @@ public class UserInternalController {
             throw new AppBadException("profile not found");
         }
 
-        String photoUrl = profile.getPhoto() == null ? null : awsUrl + "/" + profile.getPhoto().getPath();
+        AttachInfoDto attachInfoDto = fileClient.getById(profile.getPhotoId());
+
+        String photoUrl = attachInfoDto.getId() == null ? null : awsUrl + "/" + attachInfoDto.getPath();
         return UserProfileSummaryResponse.builder()
                 .id(profile.getUserId())
                 .firstName(profile.getFirstName())
