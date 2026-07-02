@@ -126,7 +126,7 @@ public class UsersServiceImpl implements UsersService {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
 
-        if (profile.getPhotoId() != null && profile.getPhotoId().equals(photo.getPhotoId())) {
+        if (profile.getPhotoId() != null && !profile.getPhotoId().equals(photo.getPhotoId())) {
             fileClient.delete(profile.getPhotoId(), language.name());
         }
         AttachInfoDto attach = fileClient.getById(photo.getPhotoId());
@@ -252,8 +252,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<AttachDto> uploadFile(MultipartFile file, AppLanguage language) {
+        Long profileId = SpringSecurityUtil.getProfileId();
         ApiResponse<AttachDto> upload = fileClient.upload(file,language.name());
-        UsersProfile profile = new UsersProfile();
+        UsersProfile profile = getByUserId(profileId, language);
         profile.setPhotoId(upload.getData().getId());
         usersRepository.save(profile);
         return upload;
