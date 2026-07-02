@@ -34,8 +34,8 @@ public class AttachServiceImpl implements AttachService {
     @Value("${aws.bucket-name}")
     private String bucketName;
 
-    @Value("${aws.url}")
-    private String url;
+    @Value("${spring.media.base-url}")
+    private String baseUrl;
 
     @Override
     public AttachDto uploadFile(MultipartFile file, AppLanguage language) {
@@ -67,7 +67,7 @@ public class AttachServiceImpl implements AttachService {
 
             AttachDto dto = new AttachDto();
             dto.setId(entity.getId());
-            dto.setUrl(url + "/" + bucketName + "/" + key);
+            dto.setUrl(baseUrl + "/" + key);
             return dto;
         } catch (Exception e) {
             throw new AppBadException(messageService.getMessage("file.upload.failed", language));

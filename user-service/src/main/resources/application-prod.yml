@@ -41,6 +41,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
+  media:
+    base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/skalad-market}
 
 keycloak:
   token-url: ${KEYCLOAK_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
@@ -49,6 +51,7 @@ keycloak:
   admin-url: ${KEYCLOAK_ADMIN_URL:http://127.0.0.1:9090/admin/realms/market-realm}
   admin-username: ${KEYCLOAK_ADMIN_USERNAME:admin}
   admin-password: ${KEYCLOAK_ADMIN_PASSWORD:admin}
+
 
 aws:
   url: ${MINIO_URL:http://127.0.0.1:9000}

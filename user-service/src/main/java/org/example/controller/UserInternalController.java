@@ -22,8 +22,8 @@ public class UserInternalController {
     private final UsersService usersService;
     private final FileClient fileClient;
 
-    @Value("${aws.url}")
-    private String awsUrl;
+    @Value("${spring.media.base-url}")
+    private String baseUrl;
 
     @GetMapping("/{userId}/summary")
     public UserProfileSummaryResponse summary(@PathVariable Long userId) {
@@ -34,7 +34,7 @@ public class UserInternalController {
 
         AttachInfoDto attachInfoDto = fileClient.getById(profile.getPhotoId());
 
-        String photoUrl = attachInfoDto.getId() == null ? null : awsUrl + "/" + attachInfoDto.getPath();
+        String photoUrl = attachInfoDto.getId() == null ? null : baseUrl + "/" + attachInfoDto.getPath();
         return UserProfileSummaryResponse.builder()
                 .id(profile.getUserId())
                 .firstName(profile.getFirstName())

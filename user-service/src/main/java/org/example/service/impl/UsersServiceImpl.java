@@ -53,8 +53,8 @@ public class UsersServiceImpl implements UsersService {
     private final UserProfileRepository usersRepository;
     private final CompanyClient companyClient;
 
-    @Value("${aws.url}")
-    private String awsUrl;
+    @Value("${spring.media.base-url}")
+    private String baseUrl;
 
     @Override
     public ApiResponse<UsersDTO> getProfile(AppLanguage language) {
@@ -82,7 +82,7 @@ public class UsersServiceImpl implements UsersService {
         response.setLastName(profile.getLastName());
         response.setUsername(profile.getUsername());
         response.setRole(profile.getRoles());
-        response.setPhotoUrl(profile.getPhotoId() == null ? null : awsUrl + attachInfoDto.getPath());
+        response.setPhotoUrl(profile.getPhotoId() == null ? null : baseUrl + attachInfoDto.getPath());
         response.setSellerPanel(profile.getRoles() == Roles.SELLER);
         response.setModeratorPanel(profile.getRoles() == Roles.ADMIN || profile.getRoles() == Roles.SUPER_ADMIN);
 
@@ -126,7 +126,7 @@ public class UsersServiceImpl implements UsersService {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
 
-        if (profile.getPhotoId() != null && profile.getPhotoId().equals(photo.getPhotoId())) {
+        if (profile.getPhotoId() != null && !profile.getPhotoId().equals(photo.getPhotoId())) {
             fileClient.delete(profile.getPhotoId(), language.name());
         }
         AttachInfoDto attach = fileClient.getById(photo.getPhotoId());
@@ -252,8 +252,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<AttachDto> uploadFile(MultipartFile file, AppLanguage language) {
+        Long profileId = SpringSecurityUtil.getProfileId();
         ApiResponse<AttachDto> upload = fileClient.upload(file,language.name());
-        UsersProfile profile = new UsersProfile();
+        UsersProfile profile = getByUserId(profileId, language);
         profile.setPhotoId(upload.getData().getId());
         usersRepository.save(profile);
         return upload;
