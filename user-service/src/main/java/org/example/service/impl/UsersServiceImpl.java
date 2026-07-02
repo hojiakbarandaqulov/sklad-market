@@ -256,7 +256,7 @@ public class UsersServiceImpl implements UsersService {
         UsersProfile profile = new UsersProfile();
         profile.setPhotoId(upload.getData().getId());
         usersRepository.save(profile);
-        return ApiResponse.successResponse(upload.getData());
+        return upload;
     }
 
     private UsersResponse toResponse(UsersProfile profile) {

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/internal/profiles")
 public class UserInternalController {
-
     private final UsersService usersService;
     private final FileClient fileClient;
 
