@@ -252,7 +252,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public ApiResponse<AttachDto> uploadFile(MultipartFile file, AppLanguage language) {
-        ApiResponse<AttachDto> upload = fileClient.upload(file);
+        ApiResponse<AttachDto> upload = fileClient.upload(file,language.name());
         UsersProfile profile = new UsersProfile();
         profile.setPhotoId(upload.getData().getId());
         usersRepository.save(profile);

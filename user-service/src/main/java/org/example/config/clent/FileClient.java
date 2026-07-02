@@ -21,5 +21,6 @@ public interface FileClient {
     @PostMapping(
             value = "/api/v1/attach/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ApiResponse<AttachDto> upload(@RequestPart(value = "file") MultipartFile file);
+    ApiResponse<AttachDto> upload(@RequestPart(value = "file") MultipartFile file,
+                                  @RequestHeader("Accept-Language") String language);
 }
