@@ -40,7 +40,7 @@ spring:
 
 
   media:
-    base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/skalad-market}
+    base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/}
 
 aws:
   url: http://127.0.0.1:9000

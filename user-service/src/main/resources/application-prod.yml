@@ -42,7 +42,7 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
   media:
-    base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/skalad-market}
+    base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/}
 
 keycloak:
   token-url: ${KEYCLOAK_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
