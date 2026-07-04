@@ -75,17 +75,23 @@ public class UsersServiceImpl implements UsersService {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
 
-        AttachInfoDto attachInfoDto = fileClient.getById(profile.getPhotoId());
         UserContextResponse response = new UserContextResponse();
         response.setId(profile.getUserId());
         response.setFirstName(profile.getFirstName());
         response.setLastName(profile.getLastName());
         response.setUsername(profile.getUsername());
         response.setRole(profile.getRoles());
-        response.setPhotoUrl(profile.getPhotoId() == null ? null : baseUrl + attachInfoDto.getPath());
         response.setSellerPanel(profile.getRoles() == Roles.SELLER);
         response.setModeratorPanel(profile.getRoles() == Roles.ADMIN || profile.getRoles() == Roles.SUPER_ADMIN);
-
+        if (profile.getPhotoId() != null) {
+            try {
+                AttachInfoDto attachInfoDto = fileClient.getById(profile.getPhotoId());
+                response.setPhotoUrl(attachInfoDto != null ? baseUrl + attachInfoDto.getPath() : null);
+            } catch (Exception e) {
+                log.warn("Photo olinmadi profileId={}", profileId);
+                response.setPhotoUrl(null);
+            }
+        }
         if (profile.getRoles() == Roles.SELLER) {
             try {
                 List<Long> companyIds = companyClient.ownedCompany(profileId);
@@ -253,7 +259,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public ApiResponse<AttachDto> uploadFile(MultipartFile file, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        ApiResponse<AttachDto> upload = fileClient.upload(file,language.name());
+        ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
         UsersProfile profile = getByUserId(profileId, language);
         profile.setPhotoId(upload.getData().getId());
         usersRepository.save(profile);
