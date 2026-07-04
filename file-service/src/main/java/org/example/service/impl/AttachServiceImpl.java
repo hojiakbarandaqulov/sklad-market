@@ -67,7 +67,7 @@ public class AttachServiceImpl implements AttachService {
 
             AttachDto dto = new AttachDto();
             dto.setId(entity.getId());
-            dto.setUrl(baseUrl + "/" + key);
+            dto.setUrl(baseUrl + key);
             return dto;
         } catch (Exception e) {
             throw new AppBadException(messageService.getMessage("file.upload.failed", language));

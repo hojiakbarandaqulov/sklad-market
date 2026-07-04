@@ -252,11 +252,6 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public void save(UsersProfile profile) {
-        usersRepository.save(profile);
-    }
-
-    @Override
     public ApiResponse<AttachDto> uploadFile(MultipartFile file, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
         ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
@@ -264,6 +259,11 @@ public class UsersServiceImpl implements UsersService {
         profile.setPhotoId(upload.getData().getId());
         usersRepository.save(profile);
         return upload;
+    }
+
+    @Override
+    public void save(UsersProfile profile) {
+        usersRepository.save(profile);
     }
 
     private UsersResponse toResponse(UsersProfile profile) {
