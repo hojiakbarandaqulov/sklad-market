@@ -60,7 +60,7 @@ public class AttachServiceImpl implements AttachService {
             entity.setOriginalName(originalName);
             entity.setExtension(extension);
             entity.setSize(file.getSize());
-            entity.setPath(bucketName + "/" + key);
+            entity.setPath(bucketName + "/" + key + "/" + extension);
             entity.setMimeType(mimeType);
             entity.setCreatedDate(LocalDateTime.now());
             attachRepository.save(entity);
@@ -105,7 +105,7 @@ public class AttachServiceImpl implements AttachService {
         Attach attachResult = attachRepository.findById(id)
                 .orElseThrow(() -> new AppBadException("attach not found"));
         AttachInfoDto dto = new AttachInfoDto();
-        if (attachResult!=null){
+        if (attachResult != null) {
             dto.setId(attachResult.getId());
             dto.setOriginalName(attachResult.getOriginalName());
             dto.setSize(attachResult.getSize());

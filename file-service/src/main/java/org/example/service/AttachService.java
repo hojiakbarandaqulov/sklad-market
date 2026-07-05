@@ -11,7 +11,6 @@ public interface AttachService {
 
     AttachDto uploadFile(MultipartFile file, AppLanguage language);
 
-
     boolean delete(String id, AppLanguage language);
 
     Attach get(String id, AppLanguage language);

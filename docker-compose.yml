@@ -101,12 +101,13 @@
       image: minio/mc
       depends_on:
         - minio
+      network_mode: host
       entrypoint: >
         /bin/sh -c "
-        sleep 8;
-        mc alias set local http://minio:9000 ${MINIO_ACCESS_KEY:-minioadmin} ${MINIO_SECRET_KEY:-minioadmin};
-        mc mb --ignore-existing local/${MINIO_BUCKET:-skalad-market};
-        mc anonymous set public local/${MINIO_BUCKET:-skalad-market};
+        sleep 10;
+        mc alias set local http://127.0.0.1:9000 minioadmin minioadmin;
+        mc mb --ignore-existing local/skalad-market;
+        mc anonymous set public local/skalad-market;
         exit 0;
         "
 
