@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.config.clent.CompanyClient;
 import org.example.config.clent.FileClient;
 import org.example.dto.ApiResponse;
-import org.example.dto.AttachDto;
+import org.example.dto.internal.AttachDto;
 import org.example.dto.internal.AttachInfoDto;
 import org.example.dto.internal.CompanyInternalSummaryResponse;
 import org.example.dto.kafka.UserUpdateRole;

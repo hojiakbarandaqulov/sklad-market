@@ -32,8 +32,8 @@ public class ProductInternalController {
     private final ProductService productService;
     private final AdminProductService adminProductService;
 
-    @Value("${aws.url}")
-    private String awsUrl;
+    @Value("${app.media.base-url}")
+    private String mediaBaseUrl;
 
     @Value("${aws.bucket-name}")
     private String bucketName;
@@ -47,7 +47,7 @@ public class ProductInternalController {
                 .findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(productId)
                 .orElse(null);
 
-        String primaryImageUrl = primaryImage == null ? null : awsUrl + "/" + bucketName + "/" + primaryImage.getStorageKey();
+        String primaryImageUrl = primaryImage == null ? null : mediaBaseUrl + "/" + primaryImage.getStorageKey();
 
         return ProductInternalSummaryResponse.builder()
                 .id(product.getId())

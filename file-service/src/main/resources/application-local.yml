@@ -1,10 +1,10 @@
 server:
   domain: http://localhost
-  port: 9090
+  port: 8090
 
 spring:
   application:
-    name: product-service
+    name: file-service
 
   datasource:
     url: jdbc:postgresql://localhost:5432/skalad-market-file-db

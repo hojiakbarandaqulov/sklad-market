@@ -7,11 +7,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.client.CategoryClient;
 import org.example.client.CompanyClient;
-import org.example.client.dto.CategorySummaryResponse;
-import org.example.client.dto.CategoryValidationResponse;
-import org.example.client.dto.CompanyOwnershipResponse;
-import org.example.client.dto.CompanySummaryResponse;
+import org.example.client.FileClient;
+import org.example.client.dto.*;
 import org.example.document.ProductDocument;
+import org.example.dto.ApiResponse;
 import org.example.dto.product.*;
 import org.example.entity.Product;
 import org.example.entity.ProductImage;
@@ -29,6 +28,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    private static final Set<String> ALLOWED_IMAGE_TYPES = Set.of("image/jpeg", "image/png", "image/webp");
+    private static final Set<String> ALLOWED_IMAGE_TYPES = Set.of("image/jpeg", "image/png", "image/webp", "image/jpg");
     private static final long MAX_FILE_SIZE = 5L * 1024 * 1024;
     private static final int MAX_IMAGES = 12;
 
@@ -59,8 +60,7 @@ public class ProductServiceImpl implements ProductService {
     private final KafkaProducerService kafkaProducerService;
     private final ViewAsyncService viewAsyncService;
     private final ResourceBundleService messageService;
-
-    private final MinioClient minioClient;
+    private final FileClient fileClient;
 
     @Value("${aws.bucket-name}")
     private String bucketName;
@@ -130,31 +130,15 @@ public class ProductServiceImpl implements ProductService {
         for (MultipartFile file : files) {
             ImageMeta imageMeta = validateAndReadImage(file, language);
 
-            // 2. MinIO ga yuklash
-            String originalName = file.getOriginalFilename();
-            assert originalName != null;
-            String extension = originalName.substring(originalName.lastIndexOf('.') + 1);
-
-            String storageKey = UUID.randomUUID().toString();
-            /* productId + "/" +*/
-
-            try (InputStream inputStream = file.getInputStream()) {
-                minioClient.putObject(
-                        PutObjectArgs.builder()
-                                .bucket(bucketName)
-                                .object(storageKey)
-                                .stream(inputStream, file.getSize(), -1)
-                                .contentType(file.getContentType())
-                                .build()
-                );
-            } catch (Exception e) {
-                throw new AppBadException(messageService.getMessage("product.image.upload.failed", language));
+            ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
+            AttachInfoDto attachInfo = fileClient.getById(upload.getData().getId());
+            if (attachInfo == null) {
+                throw new AppBadException(messageService.getMessage("product.image.not.found", language));
             }
-
             ProductImage image = new ProductImage();
-            image.setId(storageKey + "." + extension);
+            image.setId(upload.getData().getId());
             image.setProduct(product);
-            image.setStorageKey(storageKey);
+            image.setStorageKey(attachInfo.getId());
             image.setSortOrder(nextSortOrder++);
             image.setIsPrimary(!hasPrimary);
             image.setMimeType(file.getContentType());
@@ -167,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
         return getImages(productId);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public void setPrimaryImage(Long productId, String imageId, AppLanguage language) {
         getOwnedProduct(productId, language);
@@ -175,21 +159,22 @@ public class ProductServiceImpl implements ProductService {
         productImageRepository.isPrimary(imageId, productId);
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     @Override
-    public boolean deleteImage(Long productId, String imageId, AppLanguage language) {
+    public ApiResponse<Boolean> deleteImage(Long productId, String imageId, AppLanguage language) {
         getOwnedProduct(productId, language);
         ProductImage image = productImageRepository.findByIdAndProduct_Id(imageId, productId)
                 .orElseThrow(() -> new AppBadException(messageService.getMessage("product.image.not.found", language)));
         try {
-            minioClient.removeObject(
+          /*  minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(bucketName)
                             .object(imageId)
                             .build()
-            );
+            );*/
+            ApiResponse<Boolean> delete = fileClient.delete(imageId, language.name());
             productImageRepository.delete(image);
-            return true;
+            return delete;
         } catch (Exception e) {
             throw new AppBadException(messageService.getMessage("file.delete.failed", language));
         }
@@ -519,11 +504,16 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
+    private record ImageMeta(int width, int height) {
+
+    }
+
+/*
     private String generateStorageKey(Long productId, String originalFilename) {
         String cleanName = StringUtils.hasText(originalFilename) ? originalFilename.replaceAll("\\s+", "-") : "image";
         return "products/" + productId + "/" + UUID.randomUUID() + "-" + cleanName;
     }
-
+*/
 
     private List<ProductImageResponse> getImages(Long productId) {
         return productImageRepository.findByProduct_IdOrderBySortOrderAscIdAsc(productId)
@@ -533,7 +523,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductImageResponse toImageResponse(ProductImage image) {
-        String originalUrl = url + "/" + bucketName + "/" + image.getStorageKey();
+//        ResponseEntity<byte[]> byAttachIOpen = fileClient.getByAttachIOpen(image.getId());
+        String originalUrl = mediaBaseUrl + "/api/v1/attach/open/" + image.getStorageKey();
         return ProductImageResponse.builder()
                 .id(image.getId())
                 .url(originalUrl)
@@ -588,9 +579,6 @@ public class ProductServiceImpl implements ProductService {
             throw new AppBadException(messageService.getMessage("per.page.invalid", language));
         }
         return perPage;
-    }
-
-    private record ImageMeta(int width, int height) {
     }
 
     @Override

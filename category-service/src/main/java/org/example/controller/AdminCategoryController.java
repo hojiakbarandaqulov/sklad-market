@@ -79,10 +79,10 @@ public class AdminCategoryController {
 
     @DeleteMapping("/{id}/attributes/{attrId}")
     @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
-    public ApiResponse<Map<String, String>> deleteAttribute(@PathVariable Long id,
+    public ApiResponse<Boolean> deleteAttribute(@PathVariable Long id,
                                                             @PathVariable Long attrId,
                                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         adminCategoryService.deleteAttribute(id, attrId, language);
-        return ApiResponse.successResponse(Map.of("message", "Category attribute deleted", "deleted", Boolean.TRUE.toString()));
+        return ApiResponse.successResponse(Boolean.TRUE);
     }
 }

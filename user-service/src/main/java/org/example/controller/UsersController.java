@@ -3,7 +3,7 @@ package org.example.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
-import org.example.dto.AttachDto;
+import org.example.dto.internal.AttachDto;
 import org.example.dto.users.UserContextResponse;
 import org.example.dto.users.UsersDTO;
 import org.example.dto.users.UsersUpdatePhoto;

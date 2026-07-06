@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.dto.ApiResponse;
-import org.example.dto.AttachDto;
+import org.example.dto.internal.AttachDto;
 import org.example.dto.users.AdminUserDetailResponse;
 import org.example.dto.users.UserContextResponse;
 import org.example.dto.users.UsersDTO;

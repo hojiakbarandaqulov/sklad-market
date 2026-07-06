@@ -16,5 +16,6 @@ public interface AttachService {
     Attach get(String id, AppLanguage language);
 
     AttachInfoDto getInfoAttach(String id);
+
     byte[] open(String fileId, AppLanguage language);
 }

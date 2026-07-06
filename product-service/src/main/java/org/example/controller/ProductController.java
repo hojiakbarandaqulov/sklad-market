@@ -60,11 +60,10 @@ public class ProductController {
 
     @DeleteMapping("/{id}/images/{imageId}")
     @PreAuthorize("hasRole('SELLER')")
-    public ApiResponse<Map<String, String>> deleteImage(@PathVariable Long id,
+    public ApiResponse<Boolean> deleteImage(@PathVariable Long id,
                                                         @PathVariable String imageId,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        productService.deleteImage(id, imageId, language);
-        return ApiResponse.successResponse(Map.of("message", "Image deleted"));
+        return productService.deleteImage(id, imageId, language);
     }
 
     @GetMapping("/my")

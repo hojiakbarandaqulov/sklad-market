@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.dto.ApiResponse;
 import org.example.dto.product.CreateProductRequest;
 import org.example.dto.product.ProductDetailResponse;
 import org.example.dto.product.ProductImageResponse;
@@ -25,7 +26,7 @@ public interface ProductService {
 
     void setPrimaryImage(Long productId, String imageId, AppLanguage language);
 
-    boolean deleteImage(Long productId, String imageId, AppLanguage language);
+    ApiResponse<Boolean> deleteImage(Long productId, String imageId, AppLanguage language);
 
     ProductListResponse getMyProducts(Long companyId, ProductModerationStatus status, int page, int perPage, AppLanguage language);
 
