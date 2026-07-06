@@ -2,6 +2,7 @@ package org.example.repository;
 
 import jakarta.transaction.Transactional;
 import org.example.entity.UsersProfile;
+import org.example.enums.GeneralStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,6 +29,6 @@ public interface UserProfileRepository extends JpaRepository<UsersProfile, Long>
     @Query("update UsersProfile p set p.photoId = :photo where p.id = ?1")
     void updatePhoto(Long id, @Param("photoId") String photoId);
 
-    long countByStatusAndDeletedFalse(org.example.enums.GeneralStatus status);
+    long countByStatusAndDeletedFalse(GeneralStatus status);
 
 }

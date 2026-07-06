@@ -60,7 +60,7 @@ public class AttachServiceImpl implements AttachService {
             entity.setOriginalName(originalName);
             entity.setExtension(extension);
             entity.setSize(file.getSize());
-            entity.setPath(bucketName + "/" + key + "/" + extension);
+            entity.setPath(bucketName + "/" + key);
             entity.setMimeType(mimeType);
             entity.setCreatedDate(LocalDateTime.now());
             attachRepository.save(entity);
