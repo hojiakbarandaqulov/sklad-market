@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Slf4j
@@ -78,11 +79,12 @@ public class AttachServiceImpl implements AttachService {
     public boolean delete(String id, AppLanguage language) {
         Attach attach = get(id, language);
 
+        String[] changeId = new String[]{id.split("\\.")[0]};
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(id)
+                            .object(Arrays.toString(changeId))
                             .build()
             );
 
