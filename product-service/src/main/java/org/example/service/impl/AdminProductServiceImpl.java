@@ -41,11 +41,8 @@ public class AdminProductServiceImpl implements AdminProductService {
     private final ResourceBundleService messageService;
     private final ProductSearchService productSearchService;
 
-    @Value("${aws.url}")
-    private String awsUrl;
-
-    @Value("${aws.bucket-name}")
-    private String bucketName;
+    @Value("${app.media.base-url}")
+    private String mediaBaseUrl;
 
     @Override
     public ProductListResponse getProducts(ProductModerationStatus status, Long companyId, String q, int page, int perPage, AppLanguage language) {
@@ -156,7 +153,7 @@ public class AdminProductServiceImpl implements AdminProductService {
                 .stream()
                 .filter(img -> Boolean.TRUE.equals(img.getIsPrimary()))
                 .findFirst()
-                .map(img -> awsUrl + "/" + bucketName + "/" + img.getStorageKey())
+                .map(img -> mediaBaseUrl + img.getStorageKey())
                 .orElse(null);
 
         return ProductDocument.builder()
@@ -209,7 +206,7 @@ public class AdminProductServiceImpl implements AdminProductService {
     }
 
     private ProductImageResponse toImageResponse(ProductImage image) {
-        String originalUrl = awsUrl + "/" + bucketName + "/" + image.getStorageKey();
+        String originalUrl = mediaBaseUrl + image.getStorageKey();
         return ProductImageResponse.builder()
                 .id(image.getId())
                 .url(originalUrl)
