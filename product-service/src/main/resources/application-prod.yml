@@ -44,7 +44,7 @@ app:
     topic:
       product-created: product-created-topic
   media:
-    base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/skalad-market}
+    base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/skalad-market/}
 
 feign:
   client:

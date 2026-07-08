@@ -62,14 +62,9 @@ public class ProductServiceImpl implements ProductService {
     private final ResourceBundleService messageService;
     private final FileClient fileClient;
 
-    @Value("${aws.bucket-name}")
-    private String bucketName;
-
     @Value("${app.media.base-url}")
     private String mediaBaseUrl;
 
-    @Value("${aws.url}")
-    private String url;
 
     @Transactional
     @Override
@@ -370,7 +365,7 @@ public class ProductServiceImpl implements ProductService {
                 .stream()
                 .filter(img -> Boolean.TRUE.equals(img.getIsPrimary()))
                 .findFirst()
-                .map(img -> url + "/" + bucketName + "/" + img.getStorageKey())
+                .map(img -> mediaBaseUrl + img.getStorageKey())
                 .orElse(null);
 
         return ProductDocument.builder()
@@ -544,7 +539,7 @@ public class ProductServiceImpl implements ProductService {
         String primaryImage = null;
         for (ProductImage image : images) {
             if (Boolean.TRUE.equals(image.getIsPrimary())) {
-                primaryImage = url + "/" + bucketName + "/" + image.getStorageKey();
+                primaryImage = mediaBaseUrl + image.getStorageKey();
                 break;
             }
         }
