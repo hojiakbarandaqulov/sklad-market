@@ -47,7 +47,7 @@ public class ProductInternalController {
                 .findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(productId)
                 .orElse(null);
 
-        String primaryImageUrl = primaryImage == null ? null : mediaBaseUrl + "/" + primaryImage.getStorageKey();
+        String primaryImageUrl = primaryImage == null ? null : mediaBaseUrl  + primaryImage.getStorageKey();
 
         return ProductInternalSummaryResponse.builder()
                 .id(product.getId())

@@ -4,6 +4,9 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import lombok.RequiredArgsConstructor;
+import org.example.client.FileClient;
+import org.example.client.dto.AttachDto;
+import org.example.dto.ApiResponse;
 import org.example.dto.banner.BannerCreate;
 import org.example.dto.banner.BannerCreateResponse;
 import org.example.dto.banner.BannerResponse;
@@ -29,14 +32,11 @@ import java.util.UUID;
 @Service
 public class BannerServiceImpl implements BannerService {
 
-    @Value("${aws.bucket-name}")
-    private String bucketName;
-
-    @Value("${aws.url}")
-    private String url;
+    @Value("${app.media.base-url}")
+    private String mediaBaseUrl;
 
     private final BannerRepository bannerRepository;
-    private final MinioClient minioClient;
+    private final FileClient fileClient;
     private final ResourceBundleService messageService;
 
 
@@ -67,14 +67,15 @@ public class BannerServiceImpl implements BannerService {
 //        String extension = originalName.substring(originalName.lastIndexOf('.') + 1);
         String storageKey = UUID.randomUUID().toString();
         try (InputStream inputStream = file.getInputStream()) {
-            minioClient.putObject(
+          /*  minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
                             .object(storageKey)
                             .stream(inputStream, file.getSize(), -1)
                             .contentType(file.getContentType())
                             .build()
-            );
+            );*/
+            ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
         } catch (Exception e) {
             throw new AppBadException(messageService.getMessage("banner.image.upload.failed", language));
         }
@@ -88,7 +89,7 @@ public class BannerServiceImpl implements BannerService {
         BannerResponse bannerResponse = new BannerResponse();
         bannerResponse.setId(bannerEntity.getId());
         bannerResponse.setTargetUrl(bannerEntity.getTargetUrl());
-        bannerResponse.setImageUrl(url + "/" + bucketName + "/" + storageKey);
+        bannerResponse.setImageUrl(mediaBaseUrl + storageKey);
         return bannerResponse;
     }
 
@@ -114,12 +115,13 @@ public class BannerServiceImpl implements BannerService {
         }
         Banners bannerEntity = byId.get();
         try {
-            minioClient.removeObject(
+          /*  minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(bucketName)
                             .object(bannerEntity.getImageKey())
                             .build()
-            );
+            );*/
+            fileClient.delete(bannerEntity.getImageKey(),language.name());
         } catch (Exception e) {
             throw new AppBadException(messageService.getMessage("banner.delete.failed", language));
         }
@@ -146,7 +148,7 @@ public class BannerServiceImpl implements BannerService {
         BannerResponse dto = new BannerResponse();
         dto.setId(banners.getId());
         dto.setTargetUrl(banners.getTargetUrl());
-        dto.setImageUrl(url + "/" + bucketName + "/" + banners.getImageKey());
+        dto.setImageUrl(mediaBaseUrl + banners.getImageKey());
         return dto;
     }
 }
