@@ -127,13 +127,16 @@ public class ProductServiceImpl implements ProductService {
 
             ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
             AttachInfoDto attachInfo = fileClient.getById(upload.getData().getId());
-            if (attachInfo == null) {
+            if (attachInfo == null || !StringUtils.hasText(attachInfo.getPath())) {
                 throw new AppBadException(messageService.getMessage("product.image.not.found", language));
             }
+            String path = attachInfo.getPath().trim();
+            String objectKey= path.substring(path.lastIndexOf('/') + 1);
+
             ProductImage image = new ProductImage();
             image.setId(upload.getData().getId());
             image.setProduct(product);
-            image.setStorageKey(attachInfo.getId());
+            image.setStorageKey(objectKey);
             image.setSortOrder(nextSortOrder++);
             image.setIsPrimary(!hasPrimary);
             image.setMimeType(file.getContentType());
