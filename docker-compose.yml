@@ -29,7 +29,7 @@
     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
     MINIO_BUCKET: ${MINIO_BUCKET:-skalad-market}
-    MEDIA_BASE_URL: ${MEDIA_BASE_URL:-https://skladmarket.uz/skalad-market/}
+    MEDIA_BASE_URL: ${MEDIA_BASE_URL:-https://media.skladmarket.uz/skalad-market/}
 
     DB_USERNAME: ${DB_USERNAME:-sklad_user}
     DB_PASSWORD: ${DB_PASSWORD:-sklad-market}

@@ -6,6 +6,7 @@ import io.minio.RemoveObjectArgs;
 import lombok.RequiredArgsConstructor;
 import org.example.client.FileClient;
 import org.example.client.dto.AttachDto;
+import org.example.client.dto.AttachInfoDto;
 import org.example.dto.ApiResponse;
 import org.example.dto.banner.BannerCreate;
 import org.example.dto.banner.BannerCreateResponse;
@@ -39,7 +40,6 @@ public class BannerServiceImpl implements BannerService {
     private final FileClient fileClient;
     private final ResourceBundleService messageService;
 
-
     @Override
     public BannerCreateResponse createBanner(BannerCreate banner) {
         Banners bannerEntity = new Banners();
@@ -62,11 +62,7 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public BannerResponse upload(Long id, MultipartFile file, AppLanguage language) {
 
-        String originalName = file.getOriginalFilename();
-        assert originalName != null;
 //        String extension = originalName.substring(originalName.lastIndexOf('.') + 1);
-        String storageKey = UUID.randomUUID().toString();
-        try (InputStream inputStream = file.getInputStream()) {
           /*  minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
@@ -75,21 +71,22 @@ public class BannerServiceImpl implements BannerService {
                             .contentType(file.getContentType())
                             .build()
             );*/
-            ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
-        } catch (Exception e) {
-            throw new AppBadException(messageService.getMessage("banner.image.upload.failed", language));
-        }
+        ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
+        AttachInfoDto bannerInfo = fileClient.getById(upload.getData().getId());
         Optional<Banners> banners = bannerRepository.findById(id);
         if (banners.isEmpty()) {
             throw new AppBadException(messageService.getMessage("banner.not.found", language));
         }
+        String path = bannerInfo.getPath().trim();
+        String imageKey = path.substring(path.lastIndexOf('/') + 1);
         Banners bannerEntity = banners.get();
-        bannerEntity.setImageKey(storageKey);
+        bannerEntity.setImageKey(imageKey);
+        bannerEntity.setAttachId(bannerInfo.getId());
         bannerRepository.save(bannerEntity);
         BannerResponse bannerResponse = new BannerResponse();
         bannerResponse.setId(bannerEntity.getId());
         bannerResponse.setTargetUrl(bannerEntity.getTargetUrl());
-        bannerResponse.setImageUrl(mediaBaseUrl + storageKey);
+        bannerResponse.setImageUrl(mediaBaseUrl + imageKey);
         return bannerResponse;
     }
 
@@ -121,7 +118,7 @@ public class BannerServiceImpl implements BannerService {
                             .object(bannerEntity.getImageKey())
                             .build()
             );*/
-            fileClient.delete(bannerEntity.getImageKey(),language.name());
+            fileClient.delete(bannerEntity.getAttachId(), language.name());
         } catch (Exception e) {
             throw new AppBadException(messageService.getMessage("banner.delete.failed", language));
         }

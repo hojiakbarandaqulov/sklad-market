@@ -18,6 +18,7 @@ public class Banners extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PlacementCode placementCode;
     private String imageKey;
+    private String attachId;
     private String targetUrl;
     private LocalDateTime startsAt;
     private LocalDateTime endsAt;

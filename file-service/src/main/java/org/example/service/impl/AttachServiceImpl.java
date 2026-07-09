@@ -79,15 +79,15 @@ public class AttachServiceImpl implements AttachService {
     public boolean delete(String id, AppLanguage language) {
         Attach attach = get(id, language);
 
-        String[] changeId = new String[]{id.split("\\.")[0]};
+        String changeId = attach.getPath().substring(attach.getPath().lastIndexOf('/') + 1);
+
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(Arrays.toString(changeId))
+                            .object(changeId)
                             .build()
             );
-
             attachRepository.delete(attach);
             return true;
         } catch (Exception e) {
