@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="user internal controller bug fix" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="mediaBaseurl url bug fix" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,6 +76,10 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="company-service" type="f1a62948:ProjectNode" />
               </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="user-service" type="f1a62948:ProjectNode" />
+              </path>
             </expand>
             <select />
           </tree_state>
@@ -90,8 +94,8 @@
         <option value="Enum" />
         <option value="Record" />
         <option value="Dockerfile" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -229,11 +233,11 @@
       <recent name="D:\JavaProject\Microservice\Skalad-market\product-service\src\main\resources\db" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.client.dto" />
       <recent name="org.example.dto.attach" />
       <recent name="org.example.dto.internal" />
       <recent name="org.example.service.impl" />
       <recent name="org.example.service" />
-      <recent name="org.example.config" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.FileServiceApplication">
@@ -457,15 +461,7 @@
       <workItem from="1779545831415" duration="25282000" />
       <workItem from="1780298671020" duration="7853000" />
       <workItem from="1782403111319" duration="48371000" />
-      <workItem from="1783013341060" duration="726000" />
-    </task>
-    <task id="LOCAL-00001" summary="Merge remote changes">
-      <option name="closed" value="true" />
-      <created>1772973608063</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1772973608063</updated>
+      <workItem from="1783013341060" duration="39417000" />
     </task>
     <task id="LOCAL-00002" summary="kafka connection successfully">
       <option name="closed" value="true" />
@@ -731,7 +727,135 @@
       <option name="project" value="LOCAL" />
       <updated>1783014201646</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="user internal controller bug fix">
+      <option name="closed" value="true" />
+      <created>1783014610830</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1783014610830</updated>
+    </task>
+    <task id="LOCAL-00036" summary="user internal controller bug fix">
+      <option name="closed" value="true" />
+      <created>1783016315250</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1783016315250</updated>
+    </task>
+    <task id="LOCAL-00037" summary="user internal controller bug fix">
+      <option name="closed" value="true" />
+      <created>1783016334469</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1783016334469</updated>
+    </task>
+    <task id="LOCAL-00038" summary="user internal controller bug fix">
+      <option name="closed" value="true" />
+      <created>1783179697939</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1783179697939</updated>
+    </task>
+    <task id="LOCAL-00039" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783180592012</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1783180592012</updated>
+    </task>
+    <task id="LOCAL-00040" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783182559128</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1783182559128</updated>
+    </task>
+    <task id="LOCAL-00041" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783185736313</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1783185736313</updated>
+    </task>
+    <task id="LOCAL-00042" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783272060484</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1783272060484</updated>
+    </task>
+    <task id="LOCAL-00043" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783349586259</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1783349586259</updated>
+    </task>
+    <task id="LOCAL-00044" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783354828928</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1783354828928</updated>
+    </task>
+    <task id="LOCAL-00045" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783512317154</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1783512317154</updated>
+    </task>
+    <task id="LOCAL-00046" summary="bucket url bug fix">
+      <option name="closed" value="true" />
+      <created>1783526607544</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1783526607544</updated>
+    </task>
+    <task id="LOCAL-00047" summary="delete file bug fix">
+      <option name="closed" value="true" />
+      <created>1783527027555</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1783527027555</updated>
+    </task>
+    <task id="LOCAL-00048" summary="delete file bug fix">
+      <option name="closed" value="true" />
+      <created>1783531207161</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1783531207161</updated>
+    </task>
+    <task id="LOCAL-00049" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783569422167</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1783569422167</updated>
+    </task>
+    <task id="LOCAL-00050" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783570041569</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1783570041569</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -749,10 +873,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="kafka connection successfully" />
-    <MESSAGE value="MinIO connection successfully" />
-    <MESSAGE value="Keycloack config successfully" />
-    <MESSAGE value="category  service successfully" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;data/.minio.sys/buckets/.bloomcycle.bin/xl.meta&#10;#&#9;data/.minio.sys/buckets/.usage-cache.bin.bkp/xl.meta&#10;#&#9;data/.minio.sys/buckets/.usage-cache.bin/xl.meta&#10;#&#9;data/.minio.sys/buckets/.usage.json/xl.meta&#10;#&#9;data/.minio.sys/buckets/skalad-market/.usage-cache.bin.bkp/xl.meta&#10;#&#9;data/.minio.sys/buckets/skalad-market/.usage-cache.bin/xl.meta" />
     <MESSAGE value="product-service added" />
     <MESSAGE value="lead-service added" />
@@ -772,9 +892,13 @@
     <MESSAGE value="keyklock add profileId bug fix" />
     <MESSAGE value="prod yml file bug fix" />
     <MESSAGE value="file service create" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="user internal controller bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="user internal controller bug fix" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658.xml&#10;#&#9;.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658/storage_v2/_src_/database/skalad-market-user-db.9nXwyg/schema/public.abK9xQ.meta" />
+    <MESSAGE value="bucket url bug fix" />
+    <MESSAGE value="delete file bug fix" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
+    <MESSAGE value="mediaBaseurl url bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="mediaBaseurl url bug fix" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

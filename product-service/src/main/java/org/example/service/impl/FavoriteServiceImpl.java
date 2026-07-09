@@ -38,14 +38,9 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final ProductService productService;
     private final ResourceBundleService messageService;
 
-    @Value("${aws.bucket-name}")
-    private String bucketName;
-
     @Value("${app.media.base-url}")
     private String mediaBaseUrl;
 
-    @Value("${aws.url}")
-    private String url;
 
     @Override
     public PageImpl<ProductResponse> getFavorites(int page, int perPage, AppLanguage language) {
@@ -137,7 +132,7 @@ public class FavoriteServiceImpl implements FavoriteService {
                 .collect(Collectors.toList());
     }
     private ProductImageResponse toImageResponse(ProductImage image) {
-        String originalUrl = url + "/" + bucketName + "/" + image.getStorageKey();
+        String originalUrl =mediaBaseUrl + image.getStorageKey();
         return ProductImageResponse.builder()
                 .id(image.getId())
                 .url(originalUrl)

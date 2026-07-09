@@ -35,9 +35,6 @@ public class ProductInternalController {
     @Value("${app.media.base-url}")
     private String mediaBaseUrl;
 
-    @Value("${aws.bucket-name}")
-    private String bucketName;
-
     @GetMapping("/{productId}/summary")
     public ProductInternalSummaryResponse summary(@PathVariable Long productId) {
         Product product = productService.findByIdAndDeletedAtIsNull(productId)
