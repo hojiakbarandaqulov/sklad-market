@@ -518,8 +518,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private ProductImageResponse toImageResponse(ProductImage image) {
-//        ResponseEntity<byte[]> byAttachIOpen = fileClient.getByAttachIOpen(image.getId());
-        String originalUrl = mediaBaseUrl + "/api/v1/attach/open/" + image.getStorageKey();
+        String originalUrl = mediaBaseUrl + image.getStorageKey();
         return ProductImageResponse.builder()
                 .id(image.getId())
                 .url(originalUrl)
