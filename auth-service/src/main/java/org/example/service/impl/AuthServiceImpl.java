@@ -48,45 +48,58 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ApiResponse<String> registration(RegistrationDTO dto, RegistrationSelectRoles roles, AppLanguage language) {
-
+        String keycloakId = "";
+        Users users;
         Optional<Users> optional = userRepository.findByUsernameAndDeletedFalse(dto.getUsername());
         if (optional.isPresent()) {
-            Users users = optional.get();
-            if (users.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
-                userRepository.delete(users);
-            } else {
+            users = optional.get();
+            if (!users.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
                 throw new AppBadException(messageService.getMessage("email.phone.exists", language));
             }
+            users.setFirstName(dto.getFirstName());
+            users.setLastName(dto.getLastName());
+            users.setUsername(dto.getUsername());
+            users.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+            users.setRole(mapToRole(roles));
+            users.setStatus(GeneralStatus.IN_REGISTRATION);
+
+            if (users.getKeycloakId() == null || users.getKeycloakId().isBlank()) {
+                keycloakId = keycloakService.createUser(
+                        dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword(), mapToRole(roles)
+                );
+                users.setKeycloakId(keycloakId);
+            } else {
+                keycloakService.updatePassword(users.getKeycloakId(), dto.getPassword());
+            }
+        } else {
+            keycloakId = keycloakService.createUser(
+                    dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword(), mapToRole(roles)
+            );
+            users = new Users();
+            users.setFirstName(dto.getFirstName());
+            users.setLastName(dto.getLastName());
+            users.setUsername(dto.getUsername());
+            users.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
+            users.setRole(mapToRole(roles));
+            users.setStatus(GeneralStatus.IN_REGISTRATION);
+            users.setKeycloakId(keycloakId);
         }
+        Users user = userRepository.save(users);
 
-        String keycloakId = keycloakService.createUser(
-                dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword(), mapToRole(roles)
-        );
-
-        Users entity = new Users();
-        entity.setFirstName(dto.getFirstName());
-        entity.setLastName(dto.getLastName());
-        entity.setUsername(dto.getUsername());
-        entity.setPassword(bCryptPasswordEncoder.encode(dto.getPassword()));
-        entity.setStatus(GeneralStatus.IN_REGISTRATION);
-        entity.setRole(mapToRole(roles));
-        entity.setKeycloakId(keycloakId);
-        Users save = userRepository.save(entity);
-
-        keycloakService.addProfileIdAttribute(keycloakId, save.getId(), dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword());
+        keycloakService.addProfileIdAttribute(user.getKeycloakId(), user.getId(), dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword());
         kafkaProducerService.sendUserRegistered(UserRegisteredEvent.builder()
-                .userId(entity.getId())
-                .username(entity.getUsername())
-                .firstName(entity.getFirstName())
-                .lastName(entity.getLastName())
-                .password(entity.getPassword())
-                .roles(entity.getRole())
-                .status(entity.getStatus())
-                .keycloakId(keycloakId)
+                .userId(user.getId())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .password(user.getPassword())
+                .roles(user.getRole())
+                .status(user.getStatus())
+                .keycloakId(user.getKeycloakId())
                 .build());
 
         if (EmailUtil.isEmail(dto.getUsername())) {
-            emailSendingService.sendRegistrationEmail(dto.getUsername(), entity.getId());
+            emailSendingService.sendRegistrationEmail(dto.getUsername(), users.getId());
         } else if (PhoneUtil.isPhone(dto.getUsername())) {
             // phone sending sms
         }
@@ -97,7 +110,8 @@ public class AuthServiceImpl implements AuthService {
     public ApiResponse<String> regVerification(String token, AppLanguage lang) {
         try {
             Long profileId = JwtUtil.decodeVerRegToken(token);
-            Users profile = userRepository.getReferenceById(profileId);
+            Users profile = userRepository.findById(profileId)
+                    .orElseThrow(() -> new AppBadException(messageService.getMessage("verification.wrong", lang)));
             if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
                 userRepository.changeStatus(profileId, GeneralStatus.ACTIVE);
                 kafkaProducerService.sendUserVerified(profileId);
@@ -105,7 +119,7 @@ public class AuthServiceImpl implements AuthService {
                 return new ApiResponse<>(messageService.getMessage("verification.successful", lang));
             }
         } catch (JwtException e) {
-            throw new RuntimeException(e);
+            throw new AppBadException(messageService.getMessage("verification.wrong", lang));
         }
         throw new AppBadException(messageService.getMessage("verification.wrong", lang));
     }
