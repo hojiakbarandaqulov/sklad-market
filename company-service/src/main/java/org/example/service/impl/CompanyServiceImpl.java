@@ -190,7 +190,7 @@ public class CompanyServiceImpl implements CompanyService {
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);*/
-        ApiResponse<AttachDto> uploadDTO = fileClient.uploadFile(file);
+        ApiResponse<AttachDto> uploadDTO = fileClient.upload(file,language.name());
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));
         }
@@ -208,7 +208,7 @@ public class CompanyServiceImpl implements CompanyService {
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);*/
-        ApiResponse<AttachDto> uploadDTO = fileClient.uploadFile(file);
+        ApiResponse<AttachDto> uploadDTO = fileClient.upload(file,language.name());
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));
         }

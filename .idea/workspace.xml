@@ -461,103 +461,7 @@
       <workItem from="1779545831415" duration="25282000" />
       <workItem from="1780298671020" duration="7853000" />
       <workItem from="1782403111319" duration="48371000" />
-      <workItem from="1783013341060" duration="39417000" />
-    </task>
-    <task id="LOCAL-00002" summary="kafka connection successfully">
-      <option name="closed" value="true" />
-      <created>1773118268756</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1773118268756</updated>
-    </task>
-    <task id="LOCAL-00003" summary="MinIO connection successfully">
-      <option name="closed" value="true" />
-      <created>1773243768629</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1773243768629</updated>
-    </task>
-    <task id="LOCAL-00004" summary="MinIO connection successfully">
-      <option name="closed" value="true" />
-      <created>1773243799639</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1773243799639</updated>
-    </task>
-    <task id="LOCAL-00005" summary="MinIO connection successfully">
-      <option name="closed" value="true" />
-      <created>1773243840675</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1773243840675</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Keycloack config successfully">
-      <option name="closed" value="true" />
-      <created>1773491558233</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1773491558233</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Keycloack config successfully">
-      <option name="closed" value="true" />
-      <created>1773491649593</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1773491649593</updated>
-    </task>
-    <task id="LOCAL-00008" summary="product-service added">
-      <option name="closed" value="true" />
-      <created>1773839653157</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1773839653157</updated>
-    </task>
-    <task id="LOCAL-00009" summary="lead-service added">
-      <option name="closed" value="true" />
-      <created>1774507300417</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1774507300417</updated>
-    </task>
-    <task id="LOCAL-00010" summary="config starting">
-      <option name="closed" value="true" />
-      <created>1775152326000</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1775152326000</updated>
-    </task>
-    <task id="LOCAL-00011" summary="config starting">
-      <option name="closed" value="true" />
-      <created>1775152346915</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1775152346915</updated>
-    </task>
-    <task id="LOCAL-00012" summary="config starting">
-      <option name="closed" value="true" />
-      <created>1775152381588</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1775152381588</updated>
-    </task>
-    <task id="LOCAL-00013" summary="config starting">
-      <option name="closed" value="true" />
-      <created>1775155970014</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1775155970014</updated>
+      <workItem from="1783013341060" duration="56538000" />
     </task>
     <task id="LOCAL-00014" summary="config starting">
       <option name="closed" value="true" />
@@ -855,7 +759,103 @@
       <option name="project" value="LOCAL" />
       <updated>1783570041569</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783606366023</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1783606366023</updated>
+    </task>
+    <task id="LOCAL-00052" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783606390249</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1783606390249</updated>
+    </task>
+    <task id="LOCAL-00053" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783606405286</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1783606405286</updated>
+    </task>
+    <task id="LOCAL-00054" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783607093738</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1783607093738</updated>
+    </task>
+    <task id="LOCAL-00055" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783607099591</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1783607099592</updated>
+    </task>
+    <task id="LOCAL-00056" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783616253733</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1783616253734</updated>
+    </task>
+    <task id="LOCAL-00057" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783616948213</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1783616948213</updated>
+    </task>
+    <task id="LOCAL-00058" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783700734302</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1783700734302</updated>
+    </task>
+    <task id="LOCAL-00059" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783706651696</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1783706651696</updated>
+    </task>
+    <task id="LOCAL-00060" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783706672221</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1783706672221</updated>
+    </task>
+    <task id="LOCAL-00061" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783706730598</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1783706730598</updated>
+    </task>
+    <task id="LOCAL-00062" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783707130812</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1783707130812</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

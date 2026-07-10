@@ -16,13 +16,13 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="skalad-market-user-db@localhost" uuid="171270fc-6cdd-4829-bbf4-404bc155a658">
-      <database-info product="PostgreSQL" version="16.9" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="16.9" exact-driver-version="42.7">
+    <data-source name="skalad_market_auth@127.0.0.1" uuid="171270fc-6cdd-4829-bbf4-404bc155a658">
+      <database-info product="PostgreSQL" version="18.4 (Ubuntu 18.4-0ubuntu0.26.04.1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="18.4" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
       </database-info>
       <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
-      <user-name>postgres</user-name>
+      <user-name>sklad_user</user-name>
       <schema-mapping>
         <introspection-scope>
           <node kind="database" qname="@">
@@ -30,6 +30,10 @@
           </node>
         </introspection-scope>
       </schema-mapping>
+      <ssh-properties>
+        <enabled>true</enabled>
+        <ssh-config-id>be5a648d-3dab-40a1-a185-3f467aa00909</ssh-config-id>
+      </ssh-properties>
     </data-source>
     <data-source name="skalad-market-company-db@localhost" uuid="827e3549-8d53-47c8-9056-8d3cf08e8704">
       <database-info product="PostgreSQL" version="16.9" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="16.9" exact-driver-version="42.7">
