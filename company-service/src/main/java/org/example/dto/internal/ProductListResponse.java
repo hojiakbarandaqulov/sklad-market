@@ -1,3 +1,4 @@
+/*
 package org.example.dto.internal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,3 +22,4 @@ public class ProductListResponse {
     @JsonProperty("total_pages")
     private Integer totalPages;
 }
+*/
