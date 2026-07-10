@@ -20,8 +20,6 @@ public class CompanyResponseDTO {
     private String phonePrimary;
     private String phoneSecondary;
     private String website;
-    private Long regionId;
-    private Long districtId;
     private String address;
     private VerificationStatus verificationStatus;
     private LocalDateTime verifiedAt;

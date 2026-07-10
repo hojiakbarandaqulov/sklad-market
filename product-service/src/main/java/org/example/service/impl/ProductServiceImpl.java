@@ -607,6 +607,15 @@ public class ProductServiceImpl implements ProductService {
         return response;
     }
 
+    @Override
+    public ProductResponse getById(Long id,AppLanguage language) {
+        Optional<Product> byId = productRepository.findById(id);
+        if (byId.isEmpty()) {
+            throw new AppBadException(messageService.getMessage("product.notFound", language));
+        }
+        return toResponse(byId.get());
+    }
+
     private ProductModerationStatus resolveStatus(Product product) {
         return product.getModerationStatus() == null ? ProductModerationStatus.PENDING : product.getModerationStatus();
     }

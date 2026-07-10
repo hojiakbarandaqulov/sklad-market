@@ -3,6 +3,7 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.config.internal.FileClient;
 import org.example.dto.*;
+import org.example.dto.attach.AttachDto;
 import org.example.dto.kafka.CompanyCreateEvent;
 import org.example.dto.map.CompanyMapResponse;
 import org.example.dto.map.CompanySlugMapResponse;
@@ -135,8 +136,6 @@ public class CompanyServiceImpl implements CompanyService {
         company.setPhonePrimary(dto.getPhonePrimary());
         company.setPhoneSecondary(dto.getPhoneSecondary());
         company.setWebsite(dto.getWebsite());
-        company.setRegionId(dto.getRegionId());
-        company.setDistrictId(dto.getDistrictId());
         company.setAddress(dto.getAddress());
         Company saved = companyRepository.save(company);
         return ApiResponse.successResponse(toResponse(saved));
@@ -185,37 +184,37 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public UploadDTO uploadLogo(Long id, MultipartFile file, AppLanguage language) {
         Company company = findOwnedCompany(id, language);
-        HttpHeaders headers = new HttpHeaders();
+       /* HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);
-        UploadDTO uploadDTO = response.getBody();
+        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);*/
+        ApiResponse<AttachDto> uploadDTO = fileClient.uploadFile(file);
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));
         }
-        company.setLogoPath(uploadDTO.getUrl());
+        company.setLogoPath(uploadDTO.getData().getUrl());
         companyRepository.save(company);
-        return new UploadDTO(uploadDTO.getId(), company.getLogoPath());
+        return new UploadDTO(uploadDTO.getData().getId(), company.getLogoPath());
     }
 
     @Override
     public UploadDTO uploadCoverUrl(Long companyId, MultipartFile file, AppLanguage language) {
         Company company = findOwnedCompany(companyId, language);
-        HttpHeaders headers = new HttpHeaders();
+       /* HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);
-        UploadDTO uploadDTO = response.getBody();
+        ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);*/
+        ApiResponse<AttachDto> uploadDTO = fileClient.uploadFile(file);
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));
         }
-        company.setCoverUrl(uploadDTO.getUrl());
+        company.setCoverUrl(uploadDTO.getData().getUrl());
         companyRepository.save(company);
-        return new UploadDTO(uploadDTO.getId(), company.getCoverUrl());
+        return new UploadDTO(uploadDTO.getData().getId(), company.getCoverUrl());
     }
 
     @Override
@@ -342,8 +341,6 @@ public class CompanyServiceImpl implements CompanyService {
         response.setSlug(company.getSlug());
         response.setStatus(company.getVerificationStatus());
         response.setAddress(company.getAddress());
-        response.setDistrictId(company.getDistrictId());
-        response.setRegionId(company.getRegionId());
         response.setLng(company.getLng());
         response.setLat(company.getLat());
         return response;
@@ -362,8 +359,6 @@ public class CompanyServiceImpl implements CompanyService {
         response.setPhonePrimary(company.getPhonePrimary());
         response.setPhoneSecondary(company.getPhoneSecondary());
         response.setWebsite(company.getWebsite());
-        response.setRegionId(company.getRegionId());
-        response.setDistrictId(company.getDistrictId());
         response.setAddress(company.getAddress());
         response.setVerificationStatus(company.getVerificationStatus());
         response.setVerifiedAt(company.getVerifiedAt());

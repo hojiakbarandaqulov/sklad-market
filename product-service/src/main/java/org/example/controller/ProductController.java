@@ -49,6 +49,7 @@ public class ProductController {
         return ApiResponse.successResponse(productService.uploadImages(id, files, language));
     }
 
+
     @PutMapping("/{id}/images/{imageId}/set-primary")
     @PreAuthorize("hasRole('SELLER')")
     public ApiResponse<Map<String, String>> setPrimary(@PathVariable Long id,
@@ -61,8 +62,8 @@ public class ProductController {
     @DeleteMapping("/{id}/images/{imageId}")
     @PreAuthorize("hasRole('SELLER')")
     public ApiResponse<Boolean> deleteImage(@PathVariable Long id,
-                                                        @PathVariable String imageId,
-                                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+                                            @PathVariable String imageId,
+                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return productService.deleteImage(id, imageId, language);
     }
 
@@ -75,6 +76,13 @@ public class ProductController {
             @RequestParam(value = "per_page", defaultValue = "20") int perPage,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(productService.getMyProducts(companyId, status, page, perPage, language));
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('SELLER')")
+    public ApiResponse<ProductResponse> getById(@PathVariable Long id,
+                                                    @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(productService.getById(id,language));
     }
 
     @GetMapping("/{slug}")
@@ -130,7 +138,7 @@ public class ProductController {
             @RequestParam String query,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "per_page", defaultValue = "20") int perPage) {
-        return ApiResponse.successResponse(productSearchService.search(query,page, perPage));
+        return ApiResponse.successResponse(productSearchService.search(query, page, perPage));
     }
 
 }

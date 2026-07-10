@@ -116,8 +116,6 @@ public class AdminCompanyServiceImpl implements AdminCompanyService {
         response.setPhonePrimary(company.getPhonePrimary());
         response.setPhoneSecondary(company.getPhoneSecondary());
         response.setWebsite(company.getWebsite());
-        response.setRegionId(company.getRegionId());
-        response.setDistrictId(company.getDistrictId());
         response.setAddress(company.getAddress());
         response.setVerificationStatus(company.getVerificationStatus());
         response.setVerifiedAt(company.getVerifiedAt());
