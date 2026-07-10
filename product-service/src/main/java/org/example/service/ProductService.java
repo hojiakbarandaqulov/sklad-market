@@ -52,4 +52,5 @@ public interface ProductService {
 
     ProductResponse toResponse(Product product);
 
+    ProductResponse getById(Long id, AppLanguage language);
 }
