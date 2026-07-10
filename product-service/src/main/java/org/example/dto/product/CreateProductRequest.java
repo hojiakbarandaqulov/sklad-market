@@ -41,7 +41,6 @@ public class CreateProductRequest {
     @NotNull(message = "currency is required")
     private Currency currency;
 
-    @NotNull(message = "region_id is required")
     private Long regionId;
 
     private Long districtId;
