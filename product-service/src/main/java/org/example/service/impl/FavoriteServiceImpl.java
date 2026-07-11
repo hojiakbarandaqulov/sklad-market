@@ -128,8 +128,6 @@ public class FavoriteServiceImpl implements FavoriteService {
         response.setPriceType(product.getPriceType());
         response.setPrice(product.getPrice());
         response.setCurrency(product.getCurrency());
-        response.setRegionId(product.getRegionId());
-        response.setDistrictId(product.getDistrictId());
         response.setAttributes(product.getAttributesJsonb());
         response.setStatus(product.getModerationStatus());
         response.setIsActive(product.getIsActive());

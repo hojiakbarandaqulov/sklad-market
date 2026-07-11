@@ -40,12 +40,5 @@ public class UpdateProductRequest {
     @NotNull(message = "currency is required")
     private Currency currency;
 
-    @NotNull(message = "region_id is required")
-    @JsonProperty("region_id")
-    private Long regionId;
-
-    @JsonProperty("district_id")
-    private Long districtId;
-
     private Map<String, Object> attributes;
 }

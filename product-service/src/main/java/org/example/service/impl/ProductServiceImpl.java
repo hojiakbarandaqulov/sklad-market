@@ -254,8 +254,6 @@ public class ProductServiceImpl implements ProductService {
                         .name(category.getName())
                         .slug(category.getSlug())
                         .build())
-                .regionId(product.getRegionId())
-                .districtId(product.getDistrictId())
                 .similarProducts(productRepository
                         .findTop8ByCategoryIdAndIdNotAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
                                 product.getCategoryId(),
@@ -454,8 +452,6 @@ public class ProductServiceImpl implements ProductService {
         product.setPriceType(request.getPriceType());
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice(), language));
         product.setCurrency(request.getCurrency());
-        product.setRegionId(request.getRegionId());
-        product.setDistrictId(request.getDistrictId());
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
     }
 
@@ -590,8 +586,6 @@ public class ProductServiceImpl implements ProductService {
         response.setPriceType(product.getPriceType());
         response.setPrice(product.getPrice());
         response.setCurrency(product.getCurrency());
-        response.setRegionId(product.getRegionId());
-        response.setDistrictId(product.getDistrictId());
         response.setStatus(resolveStatus(product));
         response.setAttributes(product.getAttributesJsonb());
         response.setIsActive(product.getIsActive());
