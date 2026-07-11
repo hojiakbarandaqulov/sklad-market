@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="mediaBaseurl url bug fix">
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogFilterResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogFilterResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -463,31 +464,7 @@
       <workItem from="1780298671020" duration="7853000" />
       <workItem from="1782403111319" duration="48371000" />
       <workItem from="1783013341060" duration="56538000" />
-      <workItem from="1783787434620" duration="5327000" />
-    </task>
-    <task id="LOCAL-00015" summary="report service bug fix">
-      <option name="closed" value="true" />
-      <created>1781718555113</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1781718555113</updated>
-    </task>
-    <task id="LOCAL-00016" summary="server deploy config">
-      <option name="closed" value="true" />
-      <created>1781792233617</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1781792233617</updated>
-    </task>
-    <task id="LOCAL-00017" summary="file service commit">
-      <option name="closed" value="true" />
-      <created>1781799431459</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1781799431459</updated>
+      <workItem from="1783787434620" duration="5671000" />
     </task>
     <task id="LOCAL-00018" summary="file service gradle file commit">
       <option name="closed" value="true" />
@@ -857,7 +834,31 @@
       <option name="project" value="LOCAL" />
       <updated>1783793420689</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783793732457</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1783793732457</updated>
+    </task>
+    <task id="LOCAL-00065" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783793752743</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1783793752743</updated>
+    </task>
+    <task id="LOCAL-00066" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783793978190</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1783793978190</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -75,7 +75,6 @@ public class CatalogServiceImpl implements CatalogService {
                 return CatalogFilterResponse.builder()
                         .minPrice(0.0)
                         .maxPrice(0.0)
-                        .regionIds(List.of())
                         .attributes(Map.of())
                         .build();
             }
@@ -101,12 +100,12 @@ public class CatalogServiceImpl implements CatalogService {
                 .max(Double::compareTo)
                 .orElse(0.0);
 
-        // 4) regionlar
+/*        // 4) regionlar
         List<Long> regionIds = products.stream()
                 .map(Product::getRegionId)
                 .filter(Objects::nonNull)
                 .distinct()
-                .toList();
+                .toList();*/
 
         // 5) attributes yig'ish (toString() parse qilmaymiz, mapning o'zini ishlatamiz)
         Map<String, List<String>> attributes = new LinkedHashMap<>();
@@ -138,7 +137,6 @@ public class CatalogServiceImpl implements CatalogService {
         return CatalogFilterResponse.builder()
                 .minPrice(minPrice)
                 .maxPrice(maxPrice)
-                .regionIds(regionIds)
                 .attributes(attributes)
                 .build();
     }
@@ -298,8 +296,6 @@ public class CatalogServiceImpl implements CatalogService {
         res.setPriceType(p.getPriceType());
         res.setPrice(p.getPrice());
         res.setCurrency(p.getCurrency());
-        res.setRegionId(p.getRegionId());
-        res.setDistrictId(p.getDistrictId());
         res.setAttributes(p.getAttributesJsonb());
         res.setStatus(p.getModerationStatus());           // PENDING
         res.setIsActive(p.getIsActive());

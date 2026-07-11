@@ -14,6 +14,5 @@ import java.util.Map;
 public class CatalogFilterResponse {
     private Double minPrice;
     private Double maxPrice;
-    private List<Long> regionIds;
     private Map<String, List<String>> attributes;
 }
