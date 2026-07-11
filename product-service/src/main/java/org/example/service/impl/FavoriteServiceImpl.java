@@ -19,6 +19,7 @@ import org.example.service.ProductService;
 import org.example.service.ResourceBundleService;
 import org.example.utils.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -46,15 +47,22 @@ public class FavoriteServiceImpl implements FavoriteService {
     public PageImpl<ProductResponse> getFavorites(int page, int perPage, AppLanguage language) {
         Long userId = requireProfileId(language);
 
+        if (page < 1) {
+            throw new AppBadException(messageService.getMessage("page.invalid", language));
+        }
+        if (perPage < 1 || perPage > 100) {
+            throw new AppBadException(messageService.getMessage("per.page.invalid", language));
+        }
+
         Page<Product> productPage = productRepository
-                .findActiveFavoriteProducts(userId, PageRequest.of(page-1, perPage));
+                .findActiveFavoriteProducts(userId, PageRequest.of(page - 1, perPage));
 
         List<ProductResponse> items = productPage.getContent()
                 .stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(items,PageRequest.of(page-1, perPage), productPage.getTotalElements());
+        return new PageImpl<>(items, PageRequest.of(page - 1, perPage), productPage.getTotalElements());
     }
     @Override
     public FavoriteCountResponse getCount(AppLanguage language) {
@@ -67,13 +75,25 @@ public class FavoriteServiceImpl implements FavoriteService {
         Long userId = requireProfileId(language);
         productRepository.findByIdAndIsActiveTrue(productId)
                 .orElseThrow(() -> new AppBadException(messageService.getMessage("product.not.found", language)));
-        if (favoriteRepository.findByUserIdAndProductIdAndIsActiveTrue(userId, productId).isPresent()) {
+
+        Favorite favorite = favoriteRepository.findByUserIdAndProductId(userId, productId)
+                .orElseGet(() -> {
+                    Favorite entity = new Favorite();
+                    entity.setUserId(userId);
+                    entity.setProductId(productId);
+                    return entity;
+                });
+
+        if (Boolean.TRUE.equals(favorite.getIsActive())) {
             throw new AppBadException(messageService.getMessage("favorite.exists", language));
         }
-        Favorite favorite = new Favorite();
-        favorite.setUserId(userId);
-        favorite.setProductId(productId);
-        favoriteRepository.save(favorite);
+
+        favorite.setIsActive(Boolean.TRUE);
+        try {
+            favoriteRepository.save(favorite);
+        } catch (DataIntegrityViolationException exception) {
+            throw new AppBadException(messageService.getMessage("favorite.exists", language));
+        }
         return new FavoriteResponse(true);
     }
 

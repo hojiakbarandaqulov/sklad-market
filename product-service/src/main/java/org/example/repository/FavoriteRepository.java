@@ -17,4 +17,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     long countByProductIdAndIsActiveTrue(Long productId);
 
     long countByUserIdAndIsActiveTrue(Long userId);
+
+    Optional<Favorite> findByUserIdAndProductId(Long userId, Long productId);
 }
