@@ -47,6 +47,12 @@ public class ProductDetailResponse {
     private CompanySummary company;
     private CategorySummary category;
 
+    @JsonProperty("region_id")
+    private Long regionId;
+
+    @JsonProperty("district_id")
+    private Long districtId;
+
     @JsonProperty("similar_products")
     private List<SimilarProductResponse> similarProducts;
 

@@ -26,6 +26,8 @@ public class ProductResponse {
     private PriceType priceType;
     private Double price;
     private Currency currency;
+    private Long regionId;
+    private Long districtId;
 
     private Map<String, Object> attributes;
     private ProductModerationStatus status;
