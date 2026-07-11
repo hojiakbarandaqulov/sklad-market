@@ -442,8 +442,6 @@ public class ProductServiceImpl implements ProductService {
         product.setPriceType(request.getPriceType());
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice(), language));
         product.setCurrency(request.getCurrency());
-        product.setRegionId(request.getRegionId());
-        product.setDistrictId(request.getDistrictId());
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
     }
 
