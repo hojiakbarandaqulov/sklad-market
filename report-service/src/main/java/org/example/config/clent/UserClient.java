@@ -3,7 +3,7 @@ package org.example.config.clent;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(name = "user-service")
 public interface UserClient {
@@ -11,7 +11,7 @@ public interface UserClient {
     Long blockedCount();
 
 
-    @PutMapping("/internal/profiles/{userId}/warning")
-    void Warning(@PathVariable("userId") Long userId);
+    @PostMapping("/internal/profiles/{userId}/warning")
+    void warnUser(@PathVariable("userId") Long userId);
 
 }

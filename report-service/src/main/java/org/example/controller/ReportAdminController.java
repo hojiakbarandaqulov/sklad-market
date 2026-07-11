@@ -7,10 +7,13 @@ import org.example.dto.report.*;
 import org.example.enums.AppLanguage;
 import org.example.enums.ReportStatus;
 import org.example.enums.TargetType;
+import org.example.exp.AppBadException;
 import org.example.service.ReportService;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,13 +24,13 @@ public class ReportAdminController {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     @GetMapping
     public ApiResponse<PageImpl<ReportResponse>> getReport(
-            @RequestParam(required = false) ReportStatus status,
+            @RequestParam(required = false) String status,
             @RequestParam(required = false) TargetType targetType,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
-        return ApiResponse.successResponse(reportService.getReport(status, targetType, page, size, language));
+        return ApiResponse.successResponse(reportService.getReport(parseStatus(status), targetType, page, size, language));
     }
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
@@ -77,5 +80,22 @@ public class ReportAdminController {
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
         return ApiResponse.successResponse(reportService.blockTarget(id, request, language));
+    }
+
+    private ReportStatus parseStatus(String rawStatus) {
+        if (rawStatus == null || rawStatus.isBlank()) {
+            return null;
+        }
+
+        String normalized = rawStatus.trim().toUpperCase(Locale.ROOT);
+        if ("PENDING".equals(normalized)) {
+            return ReportStatus.NEW;
+        }
+
+        try {
+            return ReportStatus.valueOf(normalized);
+        } catch (IllegalArgumentException exception) {
+            throw new AppBadException("Invalid report status: " + rawStatus);
+        }
     }
 }

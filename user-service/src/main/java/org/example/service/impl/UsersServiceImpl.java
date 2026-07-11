@@ -291,10 +291,10 @@ public class UsersServiceImpl implements UsersService {
     }
 
     private int normalizePage(int page, AppLanguage language) {
-        if (page < 1) {
+        if (page < 0) {
             throw new AppBadException(messageService.getMessage("page.invalid", language));
         }
-        return page;
+        return page == 0 ? 1 : page;
     }
 
     private int normalizePerPage(int perPage, AppLanguage language) {

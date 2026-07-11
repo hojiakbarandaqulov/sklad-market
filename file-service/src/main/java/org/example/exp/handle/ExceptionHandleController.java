@@ -4,6 +4,9 @@ import org.example.exp.AppBadException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -42,6 +45,16 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AppBadException.class)
     public ResponseEntity<String> handleException(AppBadException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})
+    public ResponseEntity<String> handleAccessDenied(Exception e) {
+        return ResponseEntity.status(403).body(e.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> handleAuthentication(AuthenticationException e) {
+        return ResponseEntity.status(401).body(e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)

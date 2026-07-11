@@ -24,11 +24,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -42,7 +38,6 @@ public class ReportServiceImpl implements ReportService {
     private final ReportRepository repository;
     private final ResourceBundleService messageService;
     private final ModelMapper modelMapper;
-    private final RestTemplate restTemplate;
     private final ProductClient productClient;
     private final CompanyClient companyClient;
     private final UserClient userClient;
@@ -116,8 +111,8 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public AdminDashboardResponse getDashboard() {
         AdminDashboardResponse response = new AdminDashboardResponse();
-        response.setPendingProducts(productClient.getPendingCount());
-        response.setPendingCompanies(companyClient.getPendingCount());
+        response.setPendingProducts(extractCount(productClient.getPendingCount()));
+        response.setPendingCompanies(extractCount(companyClient.getPendingCount()));
         response.setBlockedUsers(userClient.blockedCount());
         response.setOpenReports(repository.countByStatusAndDeletedFalse(ReportStatus.NEW));
         return response;
@@ -126,8 +121,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ReportResolveResponse warnUser(Long id, ReportWarnRequest request, AppLanguage language) {
         Long userId = resolveTargetUserId(id, language);
-//        restTemplate.postForEntity("http://localhost:8082/internal/profiles/{userId}/warning", null, Void.class, targetUserId);
-        userClient.Warning(userId);
+        userClient.warnUser(userId);
 
         Report report = getReportEntity(id, language);
         report.setStatus(ReportStatus.RESOLVED);
@@ -211,9 +205,8 @@ public class ReportServiceImpl implements ReportService {
         throw new AppBadException("Warn user action is not supported for this target type");
     }
 
-    private Long fetchCount(String url) {
-        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
-        Object count = response.getBody() == null ? null : response.getBody().get("count");
+    private Long extractCount(Map<String, ?> payload) {
+        Object count = payload == null ? null : payload.get("count");
         if (count instanceof Number number) {
             return number.longValue();
         }
@@ -240,10 +233,10 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private int normalizePage(int page, AppLanguage language) {
-        if (page < 1) {
+        if (page < 0) {
             throw new AppBadException(messageService.getMessage("page.invalid", language));
         }
-        return page;
+        return page == 0 ? 1 : page;
     }
 
     private int normalizePerPage(int perPage, AppLanguage language) {

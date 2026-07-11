@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Map;
+
 @FeignClient(name = "company-service")
 public interface CompanyClient {
     @GetMapping("/internal/companies/stats/pending-count")
-    Long getPendingCount();
+    Map<String, Long> getPendingCount();
 
     @PutMapping("/internal/companies/{id}/block")
     void block(@PathVariable Long id, @RequestBody ReportBlockRequest request);
