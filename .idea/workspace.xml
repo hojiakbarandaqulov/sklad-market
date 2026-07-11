@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="mediaBaseurl url bug fix">
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogFilterResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/CatalogFilterResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -464,23 +463,7 @@
       <workItem from="1780298671020" duration="7853000" />
       <workItem from="1782403111319" duration="48371000" />
       <workItem from="1783013341060" duration="56538000" />
-      <workItem from="1783787434620" duration="5671000" />
-    </task>
-    <task id="LOCAL-00018" summary="file service gradle file commit">
-      <option name="closed" value="true" />
-      <created>1781799683867</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1781799683867</updated>
-    </task>
-    <task id="LOCAL-00019" summary="keyclok bug fix">
-      <option name="closed" value="true" />
-      <created>1782454360389</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1782454360389</updated>
+      <workItem from="1783787434620" duration="6659000" />
     </task>
     <task id="LOCAL-00020" summary="profile get api bug fix">
       <option name="closed" value="true" />
@@ -858,7 +841,23 @@
       <option name="project" value="LOCAL" />
       <updated>1783793978190</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783794108005</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1783794108005</updated>
+    </task>
+    <task id="LOCAL-00068" summary="mediaBaseurl url bug fix">
+      <option name="closed" value="true" />
+      <created>1783794251577</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1783794251578</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -81,11 +81,11 @@ public class ProductController {
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('SELLER')")
     public ApiResponse<ProductResponse> getById(@PathVariable Long id,
-                                                    @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(productService.getById(id,language));
+                                                @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(productService.getById(id, language));
     }
 
-    @GetMapping("/{slug}")
+    @GetMapping("slug/{slug}")
     public ApiResponse<ProductDetailResponse> getBySlug(
             @PathVariable String slug,
             @RequestHeader(value = "X-SESSION-ID", required = false) String sessionId,
