@@ -23,6 +23,10 @@ public class CompanyRequestDTO {
     private String phoneSecondary;
     private String website;
 
+    private Long regionId;
+
+    private Long districtId;
+
     @NotBlank(message = "address required")
     private String address;
 
