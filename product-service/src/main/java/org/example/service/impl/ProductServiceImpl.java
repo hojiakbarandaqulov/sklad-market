@@ -123,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
         boolean hasPrimary = existingCount > 0;
 
         for (MultipartFile file : files) {
-            ImageMeta imageMeta = validateAndReadImage(file, language);
+//            ImageMeta imageMeta = validateAndReadImage(file, language);
 
             ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
             AttachInfoDto attachInfo = fileClient.getById(upload.getData().getId());
@@ -141,8 +141,8 @@ public class ProductServiceImpl implements ProductService {
             image.setIsPrimary(!hasPrimary);
             image.setMimeType(file.getContentType());
             image.setFileSize(file.getSize());
-            image.setWidth(imageMeta.width());
-            image.setHeight(imageMeta.height());
+//            image.setWidth(imageMeta.width());
+//            image.setHeight(imageMeta.height());
             productImageRepository.save(image);
             hasPrimary = true;
         }
