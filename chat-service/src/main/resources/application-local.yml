@@ -32,3 +32,11 @@ aws:
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: skalad-market
+
+services:
+  company:
+    url: ${COMPANY_SERVICE_URL:http://localhost:8083}
+  user:
+    url: ${USER_SERVICE_URL:http://localhost:8082}
+  product:
+    url: ${PRODUCT_SERVICE_URL:http://localhost:8085}

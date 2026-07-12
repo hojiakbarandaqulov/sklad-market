@@ -38,6 +38,14 @@ aws:
 media:
   base-url: ${MEDIA_BASE_URL:http://127.0.0.1:9000/skalad-market}
 
+services:
+  company:
+    url: ${COMPANY_SERVICE_URL:http://127.0.0.1:8083}
+  user:
+    url: ${USER_SERVICE_URL:http://127.0.0.1:8082}
+  product:
+    url: ${PRODUCT_SERVICE_URL:http://127.0.0.1:8085}
+
 eureka:
   client:
     service-url:

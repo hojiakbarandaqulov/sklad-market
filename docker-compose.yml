@@ -302,12 +302,18 @@
         - discovery-service
         - keycloak
         - minio
+        - company-service
+        - user-service
+        - product-service
       environment:
         <<: *common-env
         SERVER_ADDRESS: 127.0.0.1
         SERVER_PORT: 8087
         SPRING_APPLICATION_NAME: chat-service
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_chat
+        COMPANY_SERVICE_URL: http://127.0.0.1:8083
+        USER_SERVICE_URL: http://127.0.0.1:8082
+        PRODUCT_SERVICE_URL: http://127.0.0.1:8085
 
     notification-service:
       <<: *internal-service

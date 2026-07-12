@@ -85,7 +85,8 @@ public class FavoriteServiceImpl implements FavoriteService {
                 });
 
         if (Boolean.TRUE.equals(favorite.getIsActive())) {
-            throw new AppBadException(messageService.getMessage("favorite.exists", language));
+            /*throw new AppBadException(messageService.getMessage("favorite.exists", language));*/
+            new FavoriteResponse(true);
         }
 
         favorite.setIsActive(Boolean.TRUE);
