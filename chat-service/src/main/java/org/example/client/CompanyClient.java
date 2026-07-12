@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(name = "company-service", configuration = FeignClientConfig.class)
+@FeignClient(
+        name = "company-service",
+        url = "${services.company.url}",
+        configuration = FeignClientConfig.class
+)
 public interface CompanyClient {
 
     @GetMapping("/internal/companies/{companyId}/ownership-check")
