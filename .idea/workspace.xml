@@ -6,15 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="message commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyRequestDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/clent/CompanyClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/clent/ProductClient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/config/AppConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/CartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/CartServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/resources/application-local.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -474,22 +465,6 @@
       <workItem from="1783013341060" duration="56538000" />
       <workItem from="1783787434620" duration="11694000" />
     </task>
-    <task id="LOCAL-00022" summary="profileId String type parsing add">
-      <option name="closed" value="true" />
-      <created>1782592879789</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1782592879789</updated>
-    </task>
-    <task id="LOCAL-00023" summary="profileId String type parsing add">
-      <option name="closed" value="true" />
-      <created>1782592913465</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1782592913465</updated>
-    </task>
     <task id="LOCAL-00024" summary="migrate file table name bug fix">
       <option name="closed" value="true" />
       <created>1782620988490</created>
@@ -866,7 +841,23 @@
       <option name="project" value="LOCAL" />
       <updated>1783874976914</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="message commit">
+      <option name="closed" value="true" />
+      <created>1783923413931</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1783923413931</updated>
+    </task>
+    <task id="LOCAL-00072" summary="message commit">
+      <option name="closed" value="true" />
+      <created>1783923489841</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1783923489841</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -884,7 +875,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="product-service added" />
     <MESSAGE value="lead-service added" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;product-service/src/main/java/org/example/repository/ProductRepository.java" />
     <MESSAGE value="config starting" />
@@ -908,6 +898,7 @@
     <MESSAGE value="delete file bug fix" />
     <MESSAGE value="mediaBaseurl url bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="message commit" />
     <option name="LAST_COMMIT_MESSAGE" value="message commit" />
   </component>
