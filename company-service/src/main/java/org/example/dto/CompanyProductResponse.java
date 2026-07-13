@@ -22,8 +22,8 @@ public class CompanyProductResponse {
     private String priceType;
     private BigDecimal price;
     private String currency;
-    private Long regionId;
-    private Long districtId;
+/*    private Long regionId;
+    private Long districtId;*/
     private Map<String, Object> attributes;
     private String status;
     private Boolean isActive;

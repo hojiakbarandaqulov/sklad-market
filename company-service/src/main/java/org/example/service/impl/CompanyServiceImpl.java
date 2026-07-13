@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.config.internal.FileClient;
+import org.example.config.internal.ProductClient;
 import org.example.dto.*;
 import org.example.dto.attach.AttachDto;
 import org.example.dto.kafka.CompanyCreateEvent;
@@ -33,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -49,7 +49,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final KafkaProducerService kafkaProducerService;
     private final ModelMapper modelMapper;
     private final FileClient fileClient;
-    private final RestTemplate restTemplate;
+    private final ProductClient productClient;
     private final ResourceBundleService messageService;
 
     private static final int MAX_COMPANIES_PER_SELLER = 5;
@@ -115,7 +115,7 @@ public class CompanyServiceImpl implements CompanyService {
             throw new AppBadException(messageService.getMessage("company.not.found", language));
         }
 
-        CompanyProductListResponse productList = restTemplate.getForObject("http://localhost:8085/internal/products/company/{companyId}?page={page}&per_page={perPage}", CompanyProductListResponse.class, company.getId(), resolvedPage, resolvedPerPage);
+        CompanyProductListResponse productList = productClient.getCompanyProducts(company.getId(), resolvedPage, resolvedPerPage);
 
         if (productList == null) {
             return ApiResponse.successResponse(new PageImpl<>(List.of(), PageRequest.of(resolvedPage - 1, resolvedPerPage), 0));
