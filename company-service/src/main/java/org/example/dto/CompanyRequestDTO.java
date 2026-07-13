@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class CompanyRequestDTO {
@@ -22,6 +24,8 @@ public class CompanyRequestDTO {
 
     private String phoneSecondary;
     private String website;
+
+    private LocalDate companyCreatedDate;
 
     private Long regionId;
 

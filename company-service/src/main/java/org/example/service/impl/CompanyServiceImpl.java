@@ -66,6 +66,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyMap.setOwnerUserId(userId);
         companyMap.setSlug(generateSlug(requestDTO.getName()));
         companyMap.setVerificationStatus(VerificationStatus.DRAFT);
+
         companyMap.setIsBlocked(false);
         Company saved = companyRepository.save(companyMap);
         CompanyCreateEvent companyCreateEvent = new CompanyCreateEvent();

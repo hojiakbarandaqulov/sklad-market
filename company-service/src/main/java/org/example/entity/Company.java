@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.example.entity.base.BaseEntity;
 import org.example.enums.VerificationStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -47,6 +48,8 @@ public class Company extends BaseEntity {
     private Long districtId;
 
     private String address;
+
+    private LocalDate companyCreatedDate;
 
     private String lat;
     private String lng;

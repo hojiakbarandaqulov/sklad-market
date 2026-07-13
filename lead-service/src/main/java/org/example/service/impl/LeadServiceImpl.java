@@ -1,7 +1,6 @@
 package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.clent.ProductClient;
 import org.example.dto.*;
 import org.example.dto.internal.ProductInternalSummaryResponse;
 import org.example.entity.Lead;

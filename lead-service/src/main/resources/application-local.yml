@@ -35,3 +35,8 @@ spring:
         jwt:
           issuer-uri: http://localhost:9090/realms/market-realm
 
+services:
+  product-service:
+    url: ${PRODUCT_SERVICE_URL:http://localhost:8085}
+  company-service:
+    url: ${COMPANY_SERVICE_URL:http://localhost:8083}
