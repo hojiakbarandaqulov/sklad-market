@@ -16,6 +16,7 @@
       <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/config/FeignClientConfig.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,82 +148,82 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.docker-compose.yml.minio: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml: Compose Deployment.executor": "Run",
-    "Gradle.Build api-gateway.executor": "Run",
-    "Gradle.Build auth-service.executor": "Run",
-    "Gradle.Build category-service.executor": "Run",
-    "Gradle.Build chat-service.executor": "Run",
-    "Gradle.Build company-servcie.executor": "Run",
-    "Gradle.Build company-service.executor": "Run",
-    "Gradle.Build discovery-service.executor": "Run",
-    "Gradle.Build file-service.executor": "Run",
-    "Gradle.Build lead-service.executor": "Run",
-    "Gradle.Build notification-service.executor": "Run",
-    "Gradle.Build product-service.executor": "Run",
-    "Gradle.Build report-service.executor": "Run",
-    "Gradle.Build reposrt-service.executor": "Run",
-    "Gradle.Build user-service.executor": "Run",
-    "Gradle.auth-service [build].executor": "Run",
-    "Gradle.company-service [build].executor": "Run",
-    "Gradle.company-service [clean].executor": "Run",
-    "Gradle.product-service [build].executor": "Run",
-    "Gradle.user-service [buildDependents].executor": "Run",
-    "Gradle.user-service [build].executor": "Run",
-    "HTTP Request.attach | #2.executor": "Run",
-    "HTTP Request.attach | attach upload.executor": "Run",
-    "HTTP Request.auth | #1.executor": "Run",
-    "HTTP Request.auth | #2.executor": "Run",
-    "HTTP Request.auth | #3.executor": "Run",
-    "HTTP Request.generated-requests | #47.executor": "Run",
-    "HTTP Request.generated-requests | #48.executor": "Run",
-    "HTTP Request.generated-requests | #49.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "Spring Boot.ApiGatewayApplication.executor": "Run",
-    "Spring Boot.AuthServiceApplication.executor": "Run",
-    "Spring Boot.CategoryServiceApplication.executor": "Run",
-    "Spring Boot.ChatServiceApplication.executor": "Run",
-    "Spring Boot.CompanyServiceApplication.executor": "Run",
-    "Spring Boot.DiscoveryServiceApplication.executor": "Run",
-    "Spring Boot.FileServiceApplication.executor": "Run",
-    "Spring Boot.LeadServiceApplication.executor": "Run",
-    "Spring Boot.NotificationServiceApplication.executor": "Run",
-    "Spring Boot.ProductServiceApplication.executor": "Run",
-    "Spring Boot.ReportServiceApplication.executor": "Run",
-    "Spring Boot.UserServiceApplication.executor": "Run",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "main",
-    "go.import.settings.migrated": "true",
-    "jdk.selected.JAVA_MODULE": "17",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/JavaProject/Microservice/Skalad-market/file-service/src/main/resources",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml.minio: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build auth-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build category-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build chat-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-servcie.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build discovery-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build file-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build lead-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build notification-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build product-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build report-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build reposrt-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build user-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.auth-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.product-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [buildDependents].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | attach upload.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #47.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #48.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #49.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CategoryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ChatServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CompanyServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.DiscoveryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.FileServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LeadServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ReportServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/file-service/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -240,16 +241,15 @@
       <recent name="D:\JavaProject\Microservice\Skalad-market\company-service\src\main\java\org\example\dto" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\JavaProject\Microservice\Skalad-market\company-service\src\main\resources\db\migration" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\user-service\src\test" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\product-service\src\main\resources\db" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.example.service.impl" />
-      <recent name="org.example.service" />
       <recent name="org.example.client.dto" />
       <recent name="org.example.dto.attach" />
       <recent name="org.example.dto.internal" />
+      <recent name="org.example.service.impl" />
+      <recent name="org.example.service" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.FileServiceApplication">
@@ -475,16 +475,6 @@
       <workItem from="1782403111319" duration="48371000" />
       <workItem from="1783013341060" duration="56538000" />
       <workItem from="1783787434620" duration="11694000" />
-      <workItem from="1783787434620" duration="11694000" />
-      <workItem from="1783963928901" duration="2660000" />
-    </task>
-    <task id="LOCAL-00023" summary="profileId String type parsing add">
-      <option name="closed" value="true" />
-      <created>1782592913465</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1782592913465</updated>
     </task>
     <task id="LOCAL-00024" summary="migrate file table name bug fix">
       <option name="closed" value="true" />
@@ -864,13 +854,21 @@
     </task>
     <task id="LOCAL-00071" summary="message commit">
       <option name="closed" value="true" />
-      <created>1783937139798</created>
+      <created>1783923413931</created>
       <option name="number" value="00071" />
       <option name="presentableId" value="LOCAL-00071" />
       <option name="project" value="LOCAL" />
-      <updated>1783937139798</updated>
+      <updated>1783923413931</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="message commit">
+      <option name="closed" value="true" />
+      <created>1783923489841</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1783923489841</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
