@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="message commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/client/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/client/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/client/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/client/UserClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/client/UserClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/resources/application-local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -463,7 +469,15 @@
       <workItem from="1780298671020" duration="7853000" />
       <workItem from="1782403111319" duration="48371000" />
       <workItem from="1783013341060" duration="56538000" />
-      <workItem from="1783787434620" duration="13754000" />
+      <workItem from="1783787434620" duration="11694000" />
+    </task>
+    <task id="LOCAL-00022" summary="profileId String type parsing add">
+      <option name="closed" value="true" />
+      <created>1782592879789</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1782592879789</updated>
     </task>
     <task id="LOCAL-00023" summary="profileId String type parsing add">
       <option name="closed" value="true" />
@@ -849,15 +863,7 @@
       <option name="project" value="LOCAL" />
       <updated>1783874976914</updated>
     </task>
-    <task id="LOCAL-00071" summary="message commit">
-      <option name="closed" value="true" />
-      <created>1783877661081</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1783877661081</updated>
-    </task>
-    <option name="localTasksCounter" value="72" />
+    <option name="localTasksCounter" value="71" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
