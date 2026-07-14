@@ -9,6 +9,18 @@
       <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/FlywayStarterServiceImpl.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/company-service/src/main/resources/db/migration/V1__init.sql" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/company-service/src/main/resources/db/migration/V2__update-table-company.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/db/migration/V1__init.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyProductResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyProductResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/config/FeignClientConfig.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,11 +117,6 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="PREVIOUS_COMMIT_AUTHORS">
-      <list>
-        <option value="“Xojiakbar &lt;“andaqulovxojiakbar@gmail.com&gt;" />
-      </list>
-    </option>
     <option name="PUSH_TAGS">
       <GitPushTagMode>
         <option name="argument" value="--tags" />
@@ -238,15 +245,16 @@
       <recent name="D:\JavaProject\Microservice\Skalad-market\company-service\src\main\java\org\example\dto" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\JavaProject\Microservice\Skalad-market\company-service\src\main\resources\db\migration" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\user-service\src\test" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\product-service\src\main\resources\db" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.service.impl" />
+      <recent name="org.example.service" />
       <recent name="org.example.client.dto" />
       <recent name="org.example.dto.attach" />
       <recent name="org.example.dto.internal" />
-      <recent name="org.example.service.impl" />
-      <recent name="org.example.service" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.FileServiceApplication">
@@ -472,6 +480,14 @@
       <workItem from="1782403111319" duration="48371000" />
       <workItem from="1783013341060" duration="56538000" />
       <workItem from="1783787434620" duration="11694000" />
+    </task>
+    <task id="LOCAL-00024" summary="migrate file table name bug fix">
+      <option name="closed" value="true" />
+      <created>1782620988490</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1782620988490</updated>
     </task>
     <task id="LOCAL-00025" summary="keyklock add profileId bug fix">
       <option name="closed" value="true" />
@@ -848,6 +864,7 @@
       <option name="presentableId" value="LOCAL-00071" />
       <option name="project" value="LOCAL" />
       <updated>1783923413931</updated>
+      <updated>1783923413931</updated>
     </task>
     <task id="LOCAL-00072" summary="message commit">
       <option name="closed" value="true" />
@@ -857,6 +874,15 @@
       <option name="project" value="LOCAL" />
       <updated>1783923489841</updated>
     </task>
+    <task id="LOCAL-00072" summary="message commit">
+      <option name="closed" value="true" />
+      <created>1783923489841</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1783923489841</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <task id="LOCAL-00073" summary="message commit">
       <option name="closed" value="true" />
       <created>1784007430638</created>
