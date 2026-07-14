@@ -15,7 +15,7 @@ public class ProductSearchResponse {
     private Long id;
     private String name;
     private String slug;
-    private Double price;
+    private BigDecimal price;
     private String currency;
     private String primaryImageUrl;
 }
