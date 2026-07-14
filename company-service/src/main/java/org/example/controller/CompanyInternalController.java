@@ -54,9 +54,12 @@ public class CompanyInternalController {
 
     @GetMapping("/owned")
     public List<Long> ownedCompanies(@RequestParam Long sellerId) {
-       return companyService.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId).stream()
-                .map(Company::getId)
-                .toList();
+        Company response = companyService.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
+        List<Long> companyIds = new LinkedList<>();
+        if (response != null) {
+            companyIds.add(response.getId());
+        }
+        return companyIds;
     }
 
     @GetMapping("/{companyId}/summary")

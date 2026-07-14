@@ -28,7 +28,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
 
     Optional<Company> findByIdAndDeletedAtIsNull(Long id);
 
-    List<Company> findAllByOwnerUserIdAndDeletedAtIsNull(Long ownerUserId);
+    Company findAllByOwnerUserIdAndDeletedAtIsNull(Long ownerUserId);
 
     long countByVerificationStatusAndDeletedAtIsNull(VerificationStatus verificationStatus);
 

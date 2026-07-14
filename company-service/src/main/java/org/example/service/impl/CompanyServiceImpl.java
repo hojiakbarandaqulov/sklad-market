@@ -81,10 +81,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public ApiResponse<List<CompanyShortDTO>> getMyCompanies(AppLanguage language) {
+    public ApiResponse<CompanyInfoDTO> getMyCompanies(AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        List<CompanyShortDTO> companyShortDTO = companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(profileId).stream().map(this::toShortResponse).toList();
-        return ApiResponse.successResponse(companyShortDTO);
+        Company companyInfo = companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(profileId);
+        CompanyInfoDTO infoResponse = toInfoResponse(companyInfo);
+        return ApiResponse.successResponse(infoResponse);
     }
 
     @Override
@@ -229,7 +230,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<Company> findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId) {
+    public Company findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId) {
        return companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
     }
 
@@ -390,6 +391,17 @@ public class CompanyServiceImpl implements CompanyService {
         response.setVerificationStatus(company.getVerificationStatus());
         response.setIsBlocked(company.getIsBlocked());
         response.setCreatedAt(company.getCreatedDate());
+        return response;
+    }
+    private CompanyInfoDTO toInfoResponse(Company company) {
+        CompanyInfoDTO response = new CompanyInfoDTO();
+        response.setId(company.getId());
+        response.setName(company.getName());
+        response.setSlug(company.getSlug());
+        response.setLogoUrl(company.getLogoPath());
+        response.setVerificationStatus(company.getVerificationStatus());
+        response.setIsBlocked(company.getIsBlocked());
+        response.setCompanyCreatedDate(company.getCompanyCreatedDate());
         return response;
     }
 

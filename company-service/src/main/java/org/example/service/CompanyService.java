@@ -17,7 +17,7 @@ public interface CompanyService {
 
     ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO company, AppLanguage language);
 
-    ApiResponse<List<CompanyShortDTO>> getMyCompanies(AppLanguage language);
+    ApiResponse<CompanyInfoDTO> getMyCompanies(AppLanguage language);
 
     ApiResponse<PageImpl<CompanyShortDTO>> getPublicCompanies(int page, int perPage, AppLanguage language);
 
@@ -43,7 +43,7 @@ public interface CompanyService {
 
     Optional<Company> findByIdAndDeletedAtIsNull(Long companyId);
 
-    List<Company> findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId);
+    Company findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId);
 
     Long countByVerificationStatusAndDeletedAtIsNull(VerificationStatus verificationStatus);
 

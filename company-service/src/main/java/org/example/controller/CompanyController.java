@@ -33,7 +33,7 @@ public class CompanyController {
 
     @GetMapping
     @PreAuthorize("hasRole('SELLER')")
-    public ApiResponse<List<CompanyShortDTO>> getMyCompanies(@RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+    public ApiResponse<CompanyInfoDTO> getMyCompanies(@RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return companyService.getMyCompanies(language);
     }
 
