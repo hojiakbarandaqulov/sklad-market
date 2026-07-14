@@ -12,7 +12,7 @@ import java.util.Map;
 @Setter
 @Builder
 public class CatalogFilterResponse {
-    private Double minPrice;
-    private Double maxPrice;
+    private BigDecimal minPrice;
+    private BigDecimal maxPrice;
     private Map<String, List<String>> attributes;
 }

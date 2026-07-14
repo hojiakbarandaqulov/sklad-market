@@ -12,7 +12,7 @@ public class ProductDto {
     private Long id;
     private String name;
     private String slug;
-    private Double price;
+    private BigDecimal price;
     private PriceType priceType;
     private SaleType saleType;
     private Currency currency;

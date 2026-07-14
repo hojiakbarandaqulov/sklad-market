@@ -73,8 +73,8 @@ public class CatalogServiceImpl implements CatalogService {
                 categoryId = Long.valueOf(category);
             } catch (NumberFormatException e) {
                 return CatalogFilterResponse.builder()
-                        .minPrice(0.0)
-                        .maxPrice(0.0)
+                        .minPrice(BigDecimal.valueOf(0.0))
+                        .maxPrice(BigDecimal.valueOf(0.0))
                         .attributes(Map.of())
                         .build();
             }
@@ -88,17 +88,17 @@ public class CatalogServiceImpl implements CatalogService {
                 .toList();
 
         // 3) min/max price (sizda price Double)
-        Double minPrice = products.stream()
+        BigDecimal minPrice = products.stream()
                 .map(Product::getPrice)
                 .filter(Objects::nonNull)
-                .min(Double::compareTo)
-                .orElse(0.0);
+                .min(BigDecimal::compareTo)
+                .orElse(BigDecimal.valueOf(0.0));
 
-        Double maxPrice = products.stream()
+        BigDecimal maxPrice = products.stream()
                 .map(Product::getPrice)
                 .filter(Objects::nonNull)
-                .max(Double::compareTo)
-                .orElse(0.0);
+                .max(BigDecimal::compareTo)
+                .orElse(BigDecimal.valueOf(0.0));
 
 /*        // 4) regionlar
         List<Long> regionIds = products.stream()

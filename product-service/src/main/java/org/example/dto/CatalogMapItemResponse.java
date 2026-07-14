@@ -22,7 +22,7 @@ public class CatalogMapItemResponse {
     private String lat;
     private String lng;
 
-    private Double price;
+    private BigDecimal price;
     private Currency currency;
     private VerificationStatus verifiedCompany;
 }
