@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+
 @Setter
 @Getter
 public class ProductResponse {
@@ -23,8 +24,9 @@ public class ProductResponse {
     private String slug;
     private String shortDescription;
     private String description;
+    private String phone;
     private PriceType priceType;
-    private Double price;
+    private BigDecimal price;
     private Currency currency;
     private Long regionId;
     private Long districtId;

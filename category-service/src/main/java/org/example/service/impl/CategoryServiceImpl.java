@@ -2,6 +2,10 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.config.internal.FileClient;
+import org.example.dto.ApiResponse;
+import org.example.dto.attach.AttachDto;
+import org.example.dto.attach.AttachInfoDto;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
 import org.example.dto.CategoryResponse;
 import org.example.dto.CategoryUpdateRequest;
@@ -19,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -28,13 +33,17 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final FileClient fileClient;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
 
     @Override
-    public CategoryResponse create(CategoryCreateRequest request, AppLanguage language) {
+    public CategoryResponse create(CategoryCreateRequest request, MultipartFile file, AppLanguage language) {
         Category category = new Category();
-
+        ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
+        if (upload==null){
+            throw new IllegalArgumentException(messageService.getMessage("file.upload.don't.success",language));
+        }
         if (request.getParentId() != null && request.getParentId() != 0) {
             Category parent = categoryRepository.findById(request.getParentId())
                     .orElseThrow(() -> new AppBadException(messageService.getMessage("category.not.found", language)));
@@ -47,7 +56,8 @@ public class CategoryServiceImpl implements CategoryService {
         category.setNameRu(request.getNameRu());
         category.setNameEn(request.getNameEn());
         category.setSlug(request.getSlug()); // unique tekshiruv ham kerak
-        category.setIcon(request.getIcon());
+        category.setIconId(upload.getData().getId());
+        category.setIconUrl(upload.getData().getUrl());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
         Category save = categoryRepository.save(category);
@@ -78,7 +88,6 @@ public class CategoryServiceImpl implements CategoryService {
         category.setNameRu(request.getNameRu());
         category.setNameEn(request.getNameEn());
         category.setSlug(request.getSlug());
-        category.setIcon(request.getIcon());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
 
@@ -90,6 +99,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Boolean delete(Long id, AppLanguage language) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new AppBadException(messageService.getMessage("category.not.found", language)));
         category.setIsActive(false);
+        fileClient.delete(category.getIconId(), language.name());
         categoryRepository.save(category);
         return true;
     }
@@ -106,9 +116,11 @@ public class CategoryServiceImpl implements CategoryService {
             CategoryResponse response = new CategoryResponse();
             response.setId(category.getId());
             response.setSlug(category.getSlug());
-            response.setIcon(category.getIcon());
             response.setSortOrder(category.getSortOrder());
             response.setIsActive(category.getIsActive());
+            response.setIconId(category.getIconId());
+            response.setIconUrl(category.getIconUrl());
+
             switch (language) {
                 case EN -> response.setNameEn(category.getNameEn());
                 case RU -> response.setNameRu(category.getNameRu());

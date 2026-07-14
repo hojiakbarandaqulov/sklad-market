@@ -9,11 +9,12 @@ import org.example.entity.Category;
 import org.example.enums.AppLanguage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface CategoryService {
 
 
-    CategoryResponse create(CategoryCreateRequest request, AppLanguage language);
+    CategoryResponse create(CategoryCreateRequest request, MultipartFile file, AppLanguage language);
 
     CategoryResponse update(Long id, CategoryUpdateRequest request,AppLanguage language);
 

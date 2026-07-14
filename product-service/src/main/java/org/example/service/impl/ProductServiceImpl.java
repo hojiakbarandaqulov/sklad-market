@@ -15,7 +15,6 @@ import org.example.dto.product.*;
 import org.example.entity.Product;
 import org.example.entity.ProductImage;
 import org.example.enums.*;
-import org.example.enums.Currency;
 import org.example.event.ProductCreatedEvent;
 import org.example.exp.AppBadException;
 import org.example.repository.ProductImageRepository;
@@ -28,8 +27,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,6 +77,7 @@ public class ProductServiceImpl implements ProductService {
         product.setModerationStatus(ProductModerationStatus.PENDING);
         product.setMinProduct(request.getMinProduct());
         product.setSaleType(request.getSaleType());
+        product.setPhone(request.getPhone());
 
         Product saved = productRepository.save(product);
 
@@ -89,6 +87,7 @@ public class ProductServiceImpl implements ProductService {
                 .categoryId(saved.getCategoryId())
                 .sellerId(saved.getSellerId())
                 .name(saved.getName())
+
                 .slug(saved.getSlug())
                 .price(saved.getPrice())
                 .currency(saved.getCurrency().name())
@@ -384,12 +383,9 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
-    private Double normalizePrice(PriceType priceType, Double price, AppLanguage language) {
+    private BigDecimal normalizePrice(PriceType priceType, BigDecimal price, AppLanguage language) {
         if (priceType == PriceType.NEGOTIABLE) {
             return null;
-        }
-        if (price <= 0) {
-            throw new AppBadException(messageService.getMessage("product.price.required", language));
         }
         return price;
     }
@@ -587,6 +583,7 @@ public class ProductServiceImpl implements ProductService {
         response.setCategoryId(product.getCategoryId());
         response.setName(product.getName());
         response.setSlug(product.getSlug());
+        response.setPhone(product.getPhone());
         response.setShortDescription(product.getShortDescription());
         response.setDescription(product.getDescription());
         response.setPriceType(product.getPriceType());

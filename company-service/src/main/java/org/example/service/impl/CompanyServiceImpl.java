@@ -61,6 +61,10 @@ public class CompanyServiceImpl implements CompanyService {
         if (count >= MAX_COMPANIES_PER_SELLER) {
             throw new AppBadException(messageService.getMessage("maximum.of.5.companies.can.be.created", language));
         }
+        Optional<Company> bySlug = companyRepository.findBySlug(generateSlug(requestDTO.getName()));
+        if (bySlug.isPresent()) {
+            throw new AppBadException(messageService.getMessage("company.slug.exists", language));
+        }
         Company companyMap = modelMapper.map(requestDTO, Company.class);
 
         companyMap.setOwnerUserId(userId);

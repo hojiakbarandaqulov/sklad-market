@@ -26,7 +26,7 @@ public class ProductDetailResponse {
     @JsonProperty("price_type")
     private PriceType priceType;
 
-    private Double price;
+    private BigDecimal price;
     private Currency currency;
     private List<ProductImageResponse> images;
     private Map<String, Object> attributes;

@@ -21,7 +21,6 @@ public class CategoryCreateRequest {
     @NotBlank
     private String slug;
 
-    private String icon;
     private Integer sortOrder;
     private Boolean isActive = Boolean.TRUE;
 }

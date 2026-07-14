@@ -116,7 +116,6 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         category.setNameRu(request.getNameRu());
         category.setNameEn(request.getNameEn());
         category.setSlug(request.getSlug());
-        category.setIcon(request.getIcon());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
     }
@@ -127,7 +126,6 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         category.setNameRu(request.getNameRu());
         category.setNameEn(request.getNameEn());
         category.setSlug(request.getSlug());
-        category.setIcon(request.getIcon());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
     }
@@ -160,7 +158,6 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         response.setNameRu(category.getNameRu());
         response.setNameEn(category.getNameEn());
         response.setSlug(category.getSlug());
-        response.setIcon(category.getIcon());
         response.setSortOrder(category.getSortOrder());
         response.setIsActive(category.getIsActive());
         return response;
