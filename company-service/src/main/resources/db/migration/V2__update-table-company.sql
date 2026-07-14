@@ -1,0 +1,5 @@
+ALTER TABLE company
+DROP COLUMN IF EXISTS district_id;
+
+ALTER TABLE company
+DROP COLUMN IF EXISTS region_id;
