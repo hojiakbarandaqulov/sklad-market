@@ -13,7 +13,7 @@ public class ProductInternalSummaryResponse {
     private Long sellerId;
     private String name;
     private String slug;
-    private Double price;
+    private BigDecimal price;
     private String currency;
     private String primaryImage;
 }

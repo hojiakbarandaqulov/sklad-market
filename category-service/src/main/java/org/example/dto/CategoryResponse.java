@@ -12,7 +12,8 @@ public class CategoryResponse {
     private String nameRu;
     private String nameEn;
     private String slug;
-    private String icon;
+    private String iconId;
+    private String iconUrl;
     private Integer sortOrder;
     private Boolean isActive = Boolean.TRUE;
 }

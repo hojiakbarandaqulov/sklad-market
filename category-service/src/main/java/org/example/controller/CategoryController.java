@@ -13,8 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -24,10 +26,11 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CategoryResponse> createCategory(@RequestBody @Valid CategoryCreateRequest request,
+                                                        @RequestParam("file") MultipartFile file,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        CategoryResponse categoryResponse = categoryService.create(request, language);
+        CategoryResponse categoryResponse = categoryService.create(request,file, language);
         return ApiResponse.successResponse(categoryResponse);
     }
 

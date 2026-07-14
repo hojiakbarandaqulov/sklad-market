@@ -1,6 +1,9 @@
 package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.dto.internal.SellerProductCardResponse;
+import org.example.dto.internal.SellerProductStatsFilterRequest;
+import org.example.dto.internal.SellerProductStatsResponse;
 import org.example.dto.internal.ProductInternalSummaryResponse;
 import org.example.dto.product.ProductListResponse;
 import org.example.dto.product.ProductResponse;
@@ -13,6 +16,7 @@ import org.example.exp.AppBadException;
 import org.example.repository.ProductImageRepository;
 import org.example.repository.ProductRepository;
 import org.example.service.AdminProductService;
+import org.example.service.InternalProductStatsService;
 import org.example.service.ProductService;
 import org.example.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +35,7 @@ public class ProductInternalController {
 
     private final ProductService productService;
     private final AdminProductService adminProductService;
+    private final InternalProductStatsService internalProductStatsService;
 
     @Value("${app.media.base-url}")
     private String mediaBaseUrl;
@@ -84,6 +89,16 @@ public class ProductInternalController {
     @GetMapping("/stats/pending-count")
     public Map<String, Long> pendingCount() {
         return Map.of("count", productService.countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus.PENDING));
+    }
+
+    @PostMapping("/stats/seller/overview")
+    public SellerProductStatsResponse sellerOverview(@RequestBody SellerProductStatsFilterRequest request) {
+        return internalProductStatsService.getSellerOverview(request);
+    }
+
+    @PostMapping("/stats/seller/recent-products")
+    public List<SellerProductCardResponse> recentProducts(@RequestBody SellerProductStatsFilterRequest request) {
+        return internalProductStatsService.getRecentProducts(request);
     }
 
     @PutMapping("/{productId}/block")

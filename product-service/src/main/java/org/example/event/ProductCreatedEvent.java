@@ -12,8 +12,9 @@ public record ProductCreatedEvent(
         Long categoryId,
         Long sellerId,
         String name,
+        String phone,
         String slug,
-        Double price,
+        BigDecimal price,
         String currency,
         String moderationStatus,
         LocalDateTime createdAt

@@ -34,7 +34,9 @@ public class Category extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String slug;
 
-    private String icon;
+    private String iconId;
+
+    private String iconUrl;
 
     private Integer sortOrder;
 

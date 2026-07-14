@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class Company extends BaseEntity {
+public class    Company extends BaseEntity {
     @Column(nullable = false)
     private Long ownerUserId;
 

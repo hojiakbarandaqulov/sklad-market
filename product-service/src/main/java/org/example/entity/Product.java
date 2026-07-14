@@ -42,6 +42,8 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    private String phone;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PriceType priceType;
@@ -50,7 +52,7 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private SaleType saleType;
 
-    private Double price;
+    private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

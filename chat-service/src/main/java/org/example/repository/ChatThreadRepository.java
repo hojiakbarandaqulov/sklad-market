@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +28,18 @@ public interface ChatThreadRepository extends JpaRepository<ChatThread, Long> {
     List<ChatThread> findBySellerCompanyIdInAndSellerHiddenFalseAndDeletedFalse(List<Long> sellerCompanyIds, Sort sort);
 
     Optional<ChatThread> findByIdAndDeletedFalse(Long id);
+
+    long countBySellerCompanyIdInAndDeletedFalse(List<Long> sellerCompanyIds);
+
+    @Query("""
+            select function('date_trunc', 'month', t.createdDate), count(t.id)
+            from ChatThread t
+            where t.deleted = false
+              and t.sellerCompanyId in :companyIds
+              and t.createdDate >= :from
+            group by function('date_trunc', 'month', t.createdDate)
+            order by function('date_trunc', 'month', t.createdDate)
+            """)
+    List<Object[]> countMonthlyByCompanyIds(@Param("companyIds") List<Long> companyIds,
+                                            @Param("from") LocalDateTime from);
 }

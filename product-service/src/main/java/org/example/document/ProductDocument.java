@@ -37,6 +37,9 @@ public class ProductDocument {
     private String slug;
 
     @Field(type = FieldType.Keyword)
+    private String phone;
+
+    @Field(type = FieldType.Keyword)
     private String moderationStatus;
 
     @Field(type = FieldType.Keyword)
@@ -45,8 +48,11 @@ public class ProductDocument {
     @Field(type = FieldType.Keyword)
     private String priceType;
 
-    @Field(type = FieldType.Double)
-    private Double price;
+    @Field(
+            type = FieldType.Scaled_Float,
+            scalingFactor = 100
+    )
+    private BigDecimal price;
 
     @Field(type = FieldType.Long)
     private Long companyId;

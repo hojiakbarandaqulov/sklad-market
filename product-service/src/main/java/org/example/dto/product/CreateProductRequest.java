@@ -32,11 +32,14 @@ public class CreateProductRequest {
     @NotNull(message = "price_type is required")
     private PriceType priceType;
 
+    @NotBlank(message = "phone required")
+    private String phone;
+
     @NotNull(message = "saleType is required")
     private SaleType saleType;
 
     @NotNull(message = "price is required")
-    private Double price;
+    private BigDecimal price;
 
     @NotNull(message = "currency is required")
     private Currency currency;

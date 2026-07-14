@@ -69,5 +69,38 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             Pageable pageable
     );
 
+    long countByCompanyIdInAndModerationStatusAndIsActiveTrueAndDeletedAtIsNull(
+            List<Long> companyIds,
+            ProductModerationStatus moderationStatus
+    );
+
+    @Query("""
+            select coalesce(sum(p.viewsCountCache), 0)
+            from Product p
+            where p.companyId in :companyIds
+              and p.moderationStatus = :status
+              and p.isActive = true
+              and p.deletedAt is null
+            """)
+    Long sumViewsCountByCompanyIds(@Param("companyIds") List<Long> companyIds,
+                                   @Param("status") ProductModerationStatus status);
+
+    @Query("""
+            select coalesce(sum(p.favoritesCountCache), 0)
+            from Product p
+            where p.companyId in :companyIds
+              and p.moderationStatus = :status
+              and p.isActive = true
+              and p.deletedAt is null
+            """)
+    Long sumFavoritesCountByCompanyIds(@Param("companyIds") List<Long> companyIds,
+                                       @Param("status") ProductModerationStatus status);
+
+    Page<Product> findByCompanyIdInAndModerationStatusAndIsActiveTrueAndDeletedAtIsNull(
+            List<Long> companyIds,
+            ProductModerationStatus moderationStatus,
+            Pageable pageable
+    );
+
 
 }
