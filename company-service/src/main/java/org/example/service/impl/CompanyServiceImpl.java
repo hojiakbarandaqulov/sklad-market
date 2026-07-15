@@ -52,19 +52,24 @@ public class CompanyServiceImpl implements CompanyService {
     private final ProductClient productClient;
     private final ResourceBundleService messageService;
 
-    private static final int MAX_COMPANIES_PER_SELLER = 5;
+    private static final int MAX_COMPANIES_PER_SELLER = 1;
 
     @Override
     public ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO requestDTO, AppLanguage language) {
         Long userId = SpringSecurityUtil.getProfileId();
         long count = companyRepository.countByOwnerUserIdAndDeletedAtIsNull(userId);
         if (count >= MAX_COMPANIES_PER_SELLER) {
-            throw new AppBadException(messageService.getMessage("maximum.of.5.companies.can.be.created", language));
+            throw new AppBadException(messageService.getMessage("maximum.of.1.companies.can.be.created", language));
+        }
+        Optional<Company> company = companyRepository.findByStirAndDeletedFalse(requestDTO.getStir());
+        if (company.isPresent()) {
+            throw new AppBadException(messageService.getMessage("company.str.exists",language));
         }
         Optional<Company> bySlug = companyRepository.findBySlug(generateSlug(requestDTO.getName()));
         if (bySlug.isPresent()) {
             throw new AppBadException(messageService.getMessage("company.slug.exists", language));
         }
+
         Company companyMap = modelMapper.map(requestDTO, Company.class);
 
         companyMap.setOwnerUserId(userId);

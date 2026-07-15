@@ -40,4 +40,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
     Page<Company> findFavoriteCompanyDeletedFalse(@Param("userId") Long userId, Pageable pageable);
 
     Optional<Company> findBySlug(String s);
+
+    Optional<Company> findByStirAndDeletedFalse(String stir);
 }
