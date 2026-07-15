@@ -65,10 +65,6 @@ public class CompanyServiceImpl implements CompanyService {
         if (company.isPresent()) {
             throw new AppBadException(messageService.getMessage("company.str.exists",language));
         }
-        Optional<Company> company = companyRepository.findByStir(requestDTO.getStir());
-        if (company.isPresent()) {
-            throw new AppBadException(messageService.getMessage("company.str.exists",language));
-        }
         Optional<Company> bySlug = companyRepository.findBySlug(generateSlug(requestDTO.getName()));
         if (bySlug.isPresent()) {
             throw new AppBadException(messageService.getMessage("company.slug.exists", language));
