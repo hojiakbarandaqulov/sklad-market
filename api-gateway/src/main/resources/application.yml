@@ -78,7 +78,7 @@ spring:
         - id: report-service
           uri: lb://report-service
           predicates:
-            - Path=/api/v1/reports,/api/v1/reports/**,/api/v1/admin/reports,/api/v1/admin/reports/**,/api/v1/admin/dashboard
+            - Path=/api/v1/reports,/api/v1/reports/**,/api/v1/admin/reports,/api/v1/admin/reports/**,/api/v1/admin/dashboard,/api/v1/seller/dashboard,/api/v1/seller/dashboard/**
         # File
         - id: file-service
           uri: lb://file-service
