@@ -183,7 +183,9 @@ public class ProductServiceImpl implements ProductService {
         int resolvedPage = normalizePage(page, language);
         int resolvedPerPage = normalizePerPage(perPage, language);
         List<Long> ownedCompanyIds = companyClient.getOwnedCompanyIds(sellerId);
-
+        if(companyId==null){
+            throw new AppBadException(messageService.getMessage("company.not.found", language));
+        }
         if (ownedCompanyIds.isEmpty()) {
             return ProductListResponse.builder()
                     .items(List.of())
