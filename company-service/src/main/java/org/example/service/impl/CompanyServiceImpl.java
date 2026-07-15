@@ -94,11 +94,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public ApiResponse<PageImpl<CompanyShortDTO>> getPublicCompanies(int page, int perPage, AppLanguage language) {
-        return ApiResponse.successResponse(getPublicCompanyPage(null, null,null, page, perPage, language));
+        return ApiResponse.successResponse(getPublicCompanyPage(null, null, null, page, perPage, language));
     }
 
     @Override
-    public ApiResponse<PageImpl<CompanyShortDTO>> search(String q, Boolean verified,  Long regionId, int page, int perPage, AppLanguage language) {
+    public ApiResponse<PageImpl<CompanyShortDTO>> search(String q, Boolean verified, Long regionId, int page, int perPage, AppLanguage language) {
         return ApiResponse.successResponse(getPublicCompanyPage(q, verified, regionId, page, perPage, language));
     }
 
@@ -196,7 +196,7 @@ public class CompanyServiceImpl implements CompanyService {
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);*/
-        ApiResponse<AttachDto> uploadDTO = fileClient.upload(file,language.name());
+        ApiResponse<AttachDto> uploadDTO = fileClient.upload(file, language.name());
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));
         }
@@ -214,7 +214,7 @@ public class CompanyServiceImpl implements CompanyService {
         body.add("file", file.getResource());
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<UploadDTO> response = restTemplate.postForEntity("http://localhost:8090/api/v1/attach/upload", requestEntity, UploadDTO.class);*/
-        ApiResponse<AttachDto> uploadDTO = fileClient.upload(file,language.name());
+        ApiResponse<AttachDto> uploadDTO = fileClient.upload(file, language.name());
         if (uploadDTO == null) {
             throw new AppBadException(messageService.getMessage("logo.not.download", language));
         }
@@ -225,7 +225,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public PageImpl<CompanyMapResponse> getMapCompany(Long regionId, String q, Boolean verified, int page, int perPage, AppLanguage language) {
-        return getPublicCompanyMapPage(regionId,q,verified,page,perPage,language);
+        return getPublicCompanyMapPage(regionId, q, verified, page, perPage, language);
     }
 
     @Override
@@ -235,7 +235,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public Company findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId) {
-       return companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
+        return companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
     }
 
     @Override
@@ -301,7 +301,7 @@ public class CompanyServiceImpl implements CompanyService {
         return new PageImpl<>(dtoList, pageable, pageResult.getTotalElements());
     }
 
-    private PageImpl<CompanyMapResponse> getPublicCompanyMapPage(Long regionId,String q, Boolean verified, int page, int perPage, AppLanguage language) {
+    private PageImpl<CompanyMapResponse> getPublicCompanyMapPage(Long regionId, String q, Boolean verified, int page, int perPage, AppLanguage language) {
         int p = normalizePage(page, language);
         int size = normalizePerPage(perPage, language);
 
@@ -340,6 +340,7 @@ public class CompanyServiceImpl implements CompanyService {
         Long profileId = SpringSecurityUtil.getProfileId();
         return companyRepository.findByIdAndOwnerUserIdAndDeletedAtIsNull(id, profileId).orElseThrow(() -> new AppBadException(messageService.getMessage("company.not.found", language)));
     }
+
     private CompanySlugMapResponse toSlugMapResponse(Company company) {
         CompanySlugMapResponse response = new CompanySlugMapResponse();
         response.setId(company.getId());
@@ -347,6 +348,10 @@ public class CompanyServiceImpl implements CompanyService {
         response.setSlug(company.getSlug());
         response.setStatus(company.getVerificationStatus());
         response.setAddress(company.getAddress());
+        response.setPhonePrimary(company.getPhonePrimary());
+        response.setPhoneSecondary(company.getPhoneSecondary());
+        response.setWebsite(company.getWebsite());
+        response.setCompanyCreatedDate(company.getCompanyCreatedDate());
         response.setLng(company.getLng());
         response.setLat(company.getLat());
         return response;
@@ -397,6 +402,7 @@ public class CompanyServiceImpl implements CompanyService {
         response.setCreatedAt(company.getCreatedDate());
         return response;
     }
+
     private CompanyInfoDTO toInfoResponse(Company company) {
         CompanyInfoDTO response = new CompanyInfoDTO();
         response.setId(company.getId());

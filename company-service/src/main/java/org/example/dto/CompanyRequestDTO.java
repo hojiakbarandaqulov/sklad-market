@@ -25,6 +25,7 @@ public class CompanyRequestDTO {
     private String phoneSecondary;
     private String website;
 
+    @NotBlank(message = "companyCreatedDate required")
     private LocalDate companyCreatedDate;
 
    /* private Long regionId;

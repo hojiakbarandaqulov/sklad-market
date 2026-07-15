@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.VerificationStatus;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class CompanyMapResponse {
