@@ -7,10 +7,7 @@ import org.example.dto.ApiResponse;
 import org.example.dto.RefreshTokenDTO;
 import org.example.dto.RegistrationDTO;
 import org.example.dto.TokenResponseDTO;
-import org.example.dto.auth.LoginDTO;
-import org.example.dto.auth.ProfileDTO;
-import org.example.dto.auth.ResetPasswordDTO;
-import org.example.dto.auth.UpdatePasswordDTO;
+import org.example.dto.auth.*;
 import org.example.dto.kafka.SendCompanyNameEvent;
 import org.example.dto.kafka.UserRegisteredEvent;
 import org.example.entity.Users;
@@ -99,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
                 .build());
 
         if (EmailUtil.isEmail(dto.getUsername())) {
-            emailSendingService.sendRegistrationEmail(dto.getUsername(), users.getId());
+            emailSendingService.sendRegistrationEmail(dto.getUsername());
         } else if (PhoneUtil.isPhone(dto.getUsername())) {
             // phone sending sms
         }
@@ -115,6 +112,23 @@ public class AuthServiceImpl implements AuthService {
             if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
                 userRepository.changeStatus(profileId, GeneralStatus.ACTIVE);
                 kafkaProducerService.sendUserVerified(profileId);
+//                keycloakService.verifyUserEmail(profile.getUsername());
+                return new ApiResponse<>(messageService.getMessage("verification.successful", lang));
+            }
+        } catch (JwtException e) {
+            throw new AppBadException(messageService.getMessage("verification.wrong", lang));
+        }
+        throw new AppBadException(messageService.getMessage("verification.wrong", lang));
+    }
+
+    @Override
+    public ApiResponse<String> registrationVerification(RegistrationVerificationDTO dto, AppLanguage lang) {
+        try {
+            Users profile = userRepository.findByUsernameAndDeletedFalse(dto.getUsername())
+                    .orElseThrow(() -> new AppBadException(messageService.getMessage("verification.wrong", lang)));
+            if (profile.getStatus().equals(GeneralStatus.IN_REGISTRATION)) {
+                userRepository.changeStatus(profile.getId(), GeneralStatus.ACTIVE);
+                kafkaProducerService.sendUserVerified(profile.getId());
 //                keycloakService.verifyUserEmail(profile.getUsername());
                 return new ApiResponse<>(messageService.getMessage("verification.successful", lang));
             }
@@ -209,6 +223,7 @@ public class AuthServiceImpl implements AuthService {
             throw new AppBadException(messageService.getMessage("refresh.token.invalid.expired", language));
         }
     }
+
 
     private Roles mapToRole(RegistrationSelectRoles roles) {
         return switch (roles) {

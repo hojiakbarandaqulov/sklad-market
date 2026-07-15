@@ -6,10 +6,7 @@ import org.example.dto.ApiResponse;
 import org.example.dto.RefreshTokenDTO;
 import org.example.dto.RegistrationDTO;
 import org.example.dto.TokenResponseDTO;
-import org.example.dto.auth.LoginDTO;
-import org.example.dto.auth.ProfileDTO;
-import org.example.dto.auth.ResetPasswordDTO;
-import org.example.dto.auth.UpdatePasswordDTO;
+import org.example.dto.auth.*;
 import org.example.enums.AppLanguage;
 import org.example.enums.RegistrationSelectRoles;
 import org.example.service.AuthService;
@@ -30,10 +27,16 @@ public class AuthController {
         return authService.registration(dto, roles, language);
     }
 
-    @GetMapping("/verification/{token}")
+   /* @GetMapping("/verification/{token}")
     public ApiResponse<String> registrationVerification(@PathVariable("token") String token,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage lang) {
         return authService.regVerification(token, lang);
+    }*/
+
+    @PutMapping("verification")
+    public ApiResponse<String> verification(@Valid @RequestBody RegistrationVerificationDTO dto,
+                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage lang){
+        return authService.registrationVerification(dto,lang);
     }
 
     @PostMapping("/registration/login")

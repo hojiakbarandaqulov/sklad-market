@@ -41,50 +41,11 @@ public class EmailSendingServiceImpl implements EmailSendingService {
     private final ResourceBundleService messageService;
 
 
-    @Async
     @Override
-    public void sendRegistrationEmail(String email, Long profileId) {
+    public void sendRegistrationEmail(String email) {
+        String code = RandomUtil.getRandomCode();
         String subject = "Complete registration";
-
-        String verificationToken = JwtUtil.encode(profileId);
-
-        String verificationUrl = serverDomain + "/api/v1/auth/verification/" + verificationToken;
-
-        String body = """
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Complete Registration</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            background-color: #f4f4f4;
-                            padding: 20px;
-                        }
-                        .button {
-                            padding: 10px 30px;
-                            display: inline-block;
-                            text-decoration: none;
-                            color: white;
-                            background-color: indianred;
-                            border-radius: 5px;
-                            margin: 10px 0;
-                        }
-                        .button:hover {
-                            background-color: #dd4444;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>Complete registration verification</h1>
-                    <p>Please click the button to complete registration:</p>
-                    <a class="button" href="%s" target="_blank">Click here</a>
-                </body>
-                </html>
-                """;
-        body = String.format(body, verificationUrl);
-
+        String body = "How are you. This is confirm code registration  send code: " + code;
 
         sendMimeEmail(email, subject, body);
     }

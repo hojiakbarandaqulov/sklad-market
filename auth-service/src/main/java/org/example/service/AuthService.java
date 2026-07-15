@@ -5,10 +5,7 @@ import org.example.dto.ApiResponse;
 import org.example.dto.RefreshTokenDTO;
 import org.example.dto.RegistrationDTO;
 import org.example.dto.TokenResponseDTO;
-import org.example.dto.auth.LoginDTO;
-import org.example.dto.auth.ProfileDTO;
-import org.example.dto.auth.ResetPasswordDTO;
-import org.example.dto.auth.UpdatePasswordDTO;
+import org.example.dto.auth.*;
 import org.example.entity.Users;
 import org.example.enums.AppLanguage;
 import org.example.enums.RegistrationSelectRoles;
@@ -28,4 +25,6 @@ public interface AuthService {
      ApiResponse<String> resetPasswordConfirm(UpdatePasswordDTO dto, AppLanguage language);
 
      ApiResponse<TokenResponseDTO> refresh(RefreshTokenDTO dto,AppLanguage language);
+
+    ApiResponse<String> registrationVerification(RegistrationVerificationDTO dto, AppLanguage lang);
 }
