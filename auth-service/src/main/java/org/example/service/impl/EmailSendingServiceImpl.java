@@ -42,12 +42,13 @@ public class EmailSendingServiceImpl implements EmailSendingService {
 
 
     @Override
-    public void sendRegistrationEmail(String email) {
+    public void sendRegistrationEmail(String email, AppLanguage language) {
         String code = RandomUtil.getRandomCode();
         String subject = "Complete registration";
         String body = "How are you. This is confirm code registration  send code: " + code;
-
         sendMimeEmail(email, subject, body);
+        emailHistoryService.create(email, code, EmailType.RESET_PASSWORD);
+        checkAndSendMineEmail(email,subject,body,code,language);
     }
 
     // We will continue this code in the reset API

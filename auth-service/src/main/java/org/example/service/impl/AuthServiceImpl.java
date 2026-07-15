@@ -96,7 +96,7 @@ public class AuthServiceImpl implements AuthService {
                 .build());
 
         if (EmailUtil.isEmail(dto.getUsername())) {
-            emailSendingService.sendRegistrationEmail(dto.getUsername());
+            emailSendingService.sendRegistrationEmail(dto.getUsername(),language);
         } else if (PhoneUtil.isPhone(dto.getUsername())) {
             // phone sending sms
         }
