@@ -25,6 +25,7 @@ public class    Company extends BaseEntity {
     @Column(unique = true)
     private String slug;
 
+    @Column(columnDefinition = "TEXT")
     private String shortDescription;
 
     @Column(columnDefinition = "TEXT")
