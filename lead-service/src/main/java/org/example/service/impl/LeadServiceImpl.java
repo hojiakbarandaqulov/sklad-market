@@ -101,6 +101,9 @@ public class LeadServiceImpl implements LeadService {
         if (status != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
         }
+        if (source !=null){
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("source"), source));
+        }
         Page<Lead> leads = leadRepository.findAll(spec, PageRequest.of(Math.max(page - 1, 0), perPage));
         return ServiceHelper.toPagedResponse(leads.map(leadMapper::toResponse));
     }
