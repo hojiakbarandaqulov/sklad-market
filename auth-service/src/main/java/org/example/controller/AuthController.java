@@ -39,6 +39,7 @@ public class AuthController {
         return authService.registrationVerification(dto,lang);
     }
 
+
     @PostMapping("/registration/login")
     public ApiResponse<ProfileDTO> login(@Valid @RequestBody LoginDTO dto,
                                          @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

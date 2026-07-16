@@ -78,18 +78,21 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    public PagedResponse<LeadResponse> getBuyerLeads(LeadStatus status, int page, int perPage, AppLanguage language) {
+    public PagedResponse<LeadResponse> getBuyerLeads(LeadStatus status, LeadSource source, int page, int perPage, AppLanguage language) {
         Long buyerId = requireProfileId(language);
         Specification<Lead> spec = (root, query, cb) -> cb.and(cb.equal(root.get("buyerId"), buyerId), cb.isFalse(root.get("deleted")));
         if (status != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
+        }
+        if (source != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("source"), source));
         }
         Page<Lead> leads = leadRepository.findAll(spec, PageRequest.of(Math.max(page - 1, 0), perPage));
         return ServiceHelper.toPagedResponse(leads.map(leadMapper::toResponse));
     }
 
     @Override
-    public PagedResponse<LeadResponse> getSellerLeads(Long companyId, LeadStatus status, int page, int perPage, AppLanguage language) {
+    public PagedResponse<LeadResponse> getSellerLeads(Long companyId, LeadStatus status, LeadSource source, int page, int perPage, AppLanguage language) {
         Long sellerId = requireProfileId(language);
         Specification<Lead> spec = (root, query, cb) -> cb.and(cb.equal(root.get("sellerId"), sellerId), cb.isFalse(root.get("deleted")));
         if (companyId != null) {

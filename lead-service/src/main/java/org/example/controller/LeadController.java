@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.*;
 import org.example.enums.AppLanguage;
+import org.example.enums.LeadSource;
 import org.example.enums.LeadStatus;
 import org.example.service.LeadService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,10 +26,11 @@ public class LeadController {
     @GetMapping
     @PreAuthorize("hasRole('BUYER')")
     public ApiResponse<PagedResponse<LeadResponse>> buyerLeads(@RequestParam(required = false) LeadStatus status,
+                                                               @RequestParam(required = false) LeadSource source,
                                                                @RequestParam(defaultValue = "1") int page,
                                                                @RequestParam(defaultValue = "20") int perPage,
                                                                @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(leadService.getBuyerLeads(status, page, perPage, language));
+        return ApiResponse.successResponse(leadService.getBuyerLeads(status,source, page, perPage, language));
     }
 
     @GetMapping("/{id}")
@@ -49,10 +51,11 @@ public class LeadController {
     @PreAuthorize("hasRole('SELLER')")
     public ApiResponse<PagedResponse<LeadResponse>> sellerLeads(@RequestParam(required = false) Long companyId,
                                                                 @RequestParam(required = false) LeadStatus status,
+                                                                @RequestParam(required = false) LeadSource source,
                                                                 @RequestParam(defaultValue = "1") int page,
                                                                 @RequestParam(defaultValue = "20") int perPage,
                                                                 @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(leadService.getSellerLeads(companyId, status, page, perPage, language));
+        return ApiResponse.successResponse(leadService.getSellerLeads(companyId, status,  source, page, perPage, language));
     }
 
     @PutMapping("/{id}/status")
