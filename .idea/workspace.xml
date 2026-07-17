@@ -4,39 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="getMyCompany api bug fix">
-      <change afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/config/internal/FileClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/attach/AttachDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/controller/LeadInternalController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/InternalLeadStatsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/InternalLeadStatsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/ApiResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/ApiResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/CategoryResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/CategoryResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/categoryAtribute/CategoryCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/categoryAtribute/CategoryCreateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/entity/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/entity/Category.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/CategoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/controller/ChatInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/controller/ChatInternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Company.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CompanyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CompanyRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/repository/LeadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/repository/LeadRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductViewRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductViewRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ChatClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/CompanyClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/ProductClient.java" afterDir="false" />
-    </list>
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -181,84 +149,84 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.docker-compose.yml.minio: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml: Compose Deployment.executor": "Run",
-    "Gradle.Build api-gateway.executor": "Run",
-    "Gradle.Build auth-service.executor": "Run",
-    "Gradle.Build category-service.executor": "Run",
-    "Gradle.Build chat-service.executor": "Run",
-    "Gradle.Build company-servcie.executor": "Run",
-    "Gradle.Build company-service.executor": "Run",
-    "Gradle.Build discovery-service.executor": "Run",
-    "Gradle.Build file-service.executor": "Run",
-    "Gradle.Build lead-service.executor": "Run",
-    "Gradle.Build notification-service.executor": "Run",
-    "Gradle.Build product-service.executor": "Run",
-    "Gradle.Build report-service.executor": "Run",
-    "Gradle.Build reposrt-service.executor": "Run",
-    "Gradle.Build user-service.executor": "Run",
-    "Gradle.auth-service [build].executor": "Run",
-    "Gradle.category-service [build].executor": "Run",
-    "Gradle.category-service [clean].executor": "Run",
-    "Gradle.company-service [build].executor": "Run",
-    "Gradle.company-service [clean].executor": "Run",
-    "Gradle.product-service [build].executor": "Run",
-    "Gradle.user-service [buildDependents].executor": "Run",
-    "Gradle.user-service [build].executor": "Run",
-    "HTTP Request.attach | #2.executor": "Run",
-    "HTTP Request.attach | attach upload.executor": "Run",
-    "HTTP Request.auth | #1.executor": "Run",
-    "HTTP Request.auth | #2.executor": "Run",
-    "HTTP Request.auth | #3.executor": "Run",
-    "HTTP Request.generated-requests | #47.executor": "Run",
-    "HTTP Request.generated-requests | #48.executor": "Run",
-    "HTTP Request.generated-requests | #49.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "Spring Boot.ApiGatewayApplication.executor": "Run",
-    "Spring Boot.AuthServiceApplication.executor": "Run",
-    "Spring Boot.CategoryServiceApplication.executor": "Run",
-    "Spring Boot.ChatServiceApplication.executor": "Run",
-    "Spring Boot.CompanyServiceApplication.executor": "Run",
-    "Spring Boot.DiscoveryServiceApplication.executor": "Run",
-    "Spring Boot.FileServiceApplication.executor": "Run",
-    "Spring Boot.LeadServiceApplication.executor": "Run",
-    "Spring Boot.NotificationServiceApplication.executor": "Run",
-    "Spring Boot.ProductServiceApplication.executor": "Run",
-    "Spring Boot.ReportServiceApplication.executor": "Run",
-    "Spring Boot.UserServiceApplication.executor": "Run",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "main",
-    "go.import.settings.migrated": "true",
-    "jdk.selected.JAVA_MODULE": "17",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/JavaProject/Microservice/Skalad-market/category-service/src/main/java/org/example/dto",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml.minio: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build auth-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build category-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build chat-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-servcie.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build discovery-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build file-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build lead-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build notification-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build product-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build report-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build reposrt-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build user-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.auth-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.product-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [buildDependents].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | attach upload.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #47.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #48.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #49.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CategoryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ChatServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CompanyServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.DiscoveryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.FileServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LeadServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ReportServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/category-service/src/main/java/org/example/dto&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -531,54 +499,7 @@
       <workItem from="1782403111319" duration="48371000" />
       <workItem from="1783013341060" duration="56538000" />
       <workItem from="1783787434620" duration="11694000" />
-    </task>
-    <task id="LOCAL-00026" summary="keyklock add profileId bug fix">
-      <option name="closed" value="true" />
-      <created>1782626682966</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1782626682966</updated>
-    </task>
-    <task id="LOCAL-00027" summary="keyklock add profileId bug fix">
-      <option name="closed" value="true" />
-      <created>1782627750315</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1782627750315</updated>
-    </task>
-    <task id="LOCAL-00028" summary="keyklock add profileId bug fix">
-      <option name="closed" value="true" />
-      <created>1782627770546</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1782627770546</updated>
-    </task>
-    <task id="LOCAL-00029" summary="prod yml file bug fix">
-      <option name="closed" value="true" />
-      <created>1782649014431</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1782649014431</updated>
-    </task>
-    <task id="LOCAL-00030" summary="prod yml file bug fix">
-      <option name="closed" value="true" />
-      <created>1782650509705</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1782650509705</updated>
-    </task>
-    <task id="LOCAL-00031" summary="prod yml file bug fix">
-      <option name="closed" value="true" />
-      <created>1782651215779</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1782651215779</updated>
+      <workItem from="1784255758454" duration="7203000" />
     </task>
     <task id="LOCAL-00032" summary="file service create">
       <option name="closed" value="true" />
@@ -924,7 +845,55 @@
       <option name="project" value="LOCAL" />
       <updated>1784010560915</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="getMyCompany api bug fix">
+      <option name="closed" value="true" />
+      <created>1784257979688</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1784257979688</updated>
+    </task>
+    <task id="LOCAL-00076" summary="getMyCompany api bug fix">
+      <option name="closed" value="true" />
+      <created>1784258820320</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1784258820320</updated>
+    </task>
+    <task id="LOCAL-00077" summary="getMyCompany api bug fix">
+      <option name="closed" value="true" />
+      <created>1784306320884</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1784306320884</updated>
+    </task>
+    <task id="LOCAL-00078" summary="getMyCompany api bug fix">
+      <option name="closed" value="true" />
+      <created>1784309064379</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1784309064379</updated>
+    </task>
+    <task id="LOCAL-00079" summary="getMyCompany api bug fix">
+      <option name="closed" value="true" />
+      <created>1784309776646</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1784309776646</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java">
+      <option name="closed" value="true" />
+      <created>1784310347577</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1784310347577</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -942,7 +911,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;product-service/src/main/java/org/example/repository/ProductRepository.java" />
     <MESSAGE value="config starting" />
     <MESSAGE value="project deploy testing" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/compiler.xml&#10;#&#9;.idea/workspace.xml&#10;#&#9;report-service/src/main/java/org/example/config/clent/CompanyClient.java&#10;#&#9;report-service/src/main/java/org/example/config/clent/ProductClient.java&#10;#&#9;report-service/src/main/java/org/example/service/impl/ReportServiceImpl.java" />
@@ -963,11 +931,12 @@
     <MESSAGE value="bucket url bug fix" />
     <MESSAGE value="delete file bug fix" />
     <MESSAGE value="mediaBaseurl url bug fix" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="message commit" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="getMyCompany api bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="getMyCompany api bug fix" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
