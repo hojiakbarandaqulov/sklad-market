@@ -9,16 +9,16 @@ import lombok.Setter;
 public class CategoryCreateRequest {
     private Long parentId;
 
-    @NotBlank
+    @NotBlank(message = "nameUz required")
     private String nameUz;
 
-    @NotBlank
+    @NotBlank(message = "nameRu required")
     private String nameRu;
 
-    @NotBlank
+    @NotBlank(message = "nameEn required")
     private String nameEn;
 
-    @NotBlank
+    @NotBlank(message = "slug required")
     private String slug;
 
     private Integer sortOrder;

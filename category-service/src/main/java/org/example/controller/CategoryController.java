@@ -28,7 +28,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CategoryResponse> createCategory(
             @Valid @ModelAttribute CategoryCreateRequest request,
@@ -40,7 +40,7 @@ public class CategoryController {
         return ApiResponse.successResponse(response);
     }
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PutMapping("/update/{id}")
     public ApiResponse<CategoryResponse> updateCategory(
             @PathVariable Long id,
@@ -56,7 +56,7 @@ public class CategoryController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        Pageable pageable= PageRequest.of(page,size, Sort.by(Sort.Direction.ASC,"sortOrder"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "sortOrder"));
         return ApiResponse.successResponse(categoryService.getCategory(pageable, language));
     }
 
