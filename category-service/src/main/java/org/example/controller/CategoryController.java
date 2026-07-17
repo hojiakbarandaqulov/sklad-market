@@ -30,8 +30,8 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<CategoryResponse> createCategory(@RequestBody @Valid CategoryCreateRequest request,
-                                                        @RequestParam("file") MultipartFile file,
+    public ApiResponse<CategoryResponse> createCategory(@RequestPart("request") @Valid CategoryCreateRequest request,
+                                                        @RequestPart("file") MultipartFile file,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         CategoryResponse categoryResponse = categoryService.create(request,file, language);
         return ApiResponse.successResponse(categoryResponse);
