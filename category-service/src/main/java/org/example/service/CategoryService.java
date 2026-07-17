@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.dto.CategoryTreeResponse;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
 import org.example.dto.CategoryResponse;
 import org.example.dto.CategoryUpdateRequest;
@@ -10,6 +11,8 @@ import org.example.enums.AppLanguage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface CategoryService {
 
@@ -24,7 +27,7 @@ public interface CategoryService {
 
     CategoryResponse getCategoryBySlug(String slug, AppLanguage language);
 
-
+    List<CategoryTreeResponse> getCategoryTree(AppLanguage language);
 
     Category findById(Long categoryId);
 }

@@ -376,6 +376,7 @@ public class CompanyServiceImpl implements CompanyService {
         response.setPhoneSecondary(company.getPhoneSecondary());
         response.setWebsite(company.getWebsite());
         response.setAddress(company.getAddress());
+        response.setCompanyCreatedDate(company.getCompanyCreatedDate());
         response.setVerificationStatus(company.getVerificationStatus());
         response.setVerifiedAt(company.getVerifiedAt());
         response.setCreatedAt(company.getCreatedDate());

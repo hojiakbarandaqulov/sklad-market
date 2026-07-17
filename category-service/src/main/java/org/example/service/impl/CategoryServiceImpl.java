@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.internal.FileClient;
 import org.example.dto.ApiResponse;
+import org.example.dto.CategoryTreeResponse;
 import org.example.dto.attach.AttachDto;
 import org.example.dto.attach.AttachInfoDto;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -141,4 +144,50 @@ public class CategoryServiceImpl implements CategoryService {
        return categoryRepository.findByIdAndIsActiveTrue(categoryId);
     }
 
+    @Override
+    public List<CategoryTreeResponse> getCategoryTree(AppLanguage language) {
+        List<Category> categories = categoryRepository.findAllByIsActiveTrueOrderBySortOrderAsc();
+
+        Map<Long, List<Category>> byParentId = categories.stream()
+                .collect(Collectors.groupingBy(category ->
+                        category.getParent() == null ? 0L : category.getParent().getId()
+                ));
+
+        return buildTree(0L, byParentId, language);
+    }
+
+    private List<CategoryTreeResponse> buildTree(
+            Long parentId,
+            Map<Long, List<Category>> byParentId,
+            AppLanguage language
+    ) {
+        return byParentId.getOrDefault(parentId, List.of())
+                .stream()
+                .map(category -> {
+                    CategoryTreeResponse response = toTreeResponse(category, language);
+                    response.setChildren(buildTree(category.getId(), byParentId, language));
+                    return response;
+                })
+                .toList();
+    }
+
+    private CategoryTreeResponse toTreeResponse(Category category, AppLanguage language) {
+        CategoryTreeResponse response = new CategoryTreeResponse();
+        response.setId(category.getId());
+        response.setParentId(category.getParent() == null ? null : category.getParent().getId());
+        response.setName(resolveName(category, language));
+        response.setSlug(category.getSlug());
+        response.setIconId(category.getIconId());
+        response.setIconUrl(category.getIconUrl());
+        response.setSortOrder(category.getSortOrder());
+        return response;
+    }
+
+    private String resolveName(Category category, AppLanguage language) {
+        return switch (language) {
+            case EN -> category.getNameEn();
+            case RU -> category.getNameRu();
+            default -> category.getNameUz();
+        };
+    }
 }

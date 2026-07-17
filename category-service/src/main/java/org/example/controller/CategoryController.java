@@ -3,6 +3,7 @@ package org.example.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
+import org.example.dto.CategoryTreeResponse;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
 import org.example.dto.CategoryResponse;
 import org.example.dto.CategoryUpdateRequest;
@@ -17,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -54,6 +57,13 @@ public class CategoryController {
         return ApiResponse.successResponse(categoryService.getCategory(pageable, language));
     }
 
+    @PreAuthorize("permitAll()")
+    @GetMapping("/tree")
+    public ApiResponse<List<CategoryTreeResponse>> getCategoryTree(
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
+    ) {
+        return ApiResponse.successResponse(categoryService.getCategoryTree(language));
+    }
 
     @PreAuthorize("permitAll()")
     @GetMapping("/{slug}")
