@@ -28,19 +28,16 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<CategoryResponse> createCategory(
-            @Valid @ModelAttribute CategoryCreateRequest request,
-            @RequestPart("file") MultipartFile file,
-            @RequestHeader(value = "Accept-Language", defaultValue = "UZ")
-            AppLanguage language
-    ) {
-        CategoryResponse response = categoryService.create(request, file, language);
-        return ApiResponse.successResponse(response);
+    public ApiResponse<CategoryResponse> createCategory(@RequestPart("request") @Valid CategoryCreateRequest request,
+                                                        @RequestPart("file") MultipartFile file,
+                                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        CategoryResponse categoryResponse = categoryService.create(request,file, language);
+        return ApiResponse.successResponse(categoryResponse);
     }
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/update/{id}")
     public ApiResponse<CategoryResponse> updateCategory(
             @PathVariable Long id,
@@ -56,7 +53,7 @@ public class CategoryController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "sortOrder"));
+        Pageable pageable= PageRequest.of(page,size, Sort.by(Sort.Direction.ASC,"sortOrder"));
         return ApiResponse.successResponse(categoryService.getCategory(pageable, language));
     }
 
