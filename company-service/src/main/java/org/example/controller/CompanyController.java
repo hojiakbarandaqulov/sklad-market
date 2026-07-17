@@ -137,7 +137,7 @@ public class CompanyController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ApiResponse<Boolean> delete(@PathVariable Long id,
                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         companyService.delete(id, language);

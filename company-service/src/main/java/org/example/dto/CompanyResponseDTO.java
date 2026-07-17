@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.VerificationStatus;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,6 +22,7 @@ public class CompanyResponseDTO {
     private String phoneSecondary;
     private String website;
     private String address;
+    private LocalDate companyCreatedDate;
     private VerificationStatus verificationStatus;
     private LocalDateTime verifiedAt;
     private LocalDateTime createdAt;
