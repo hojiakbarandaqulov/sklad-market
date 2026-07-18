@@ -37,7 +37,7 @@ public class AdminCategoryController {
         return ApiResponse.successResponse(adminCategoryService.getCategories());
     }
 
-    @PostMapping
+   /* @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     public ApiResponse<CategoryResponse> createCategory(@RequestBody @Valid CategoryCreateRequest request,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
@@ -50,7 +50,7 @@ public class AdminCategoryController {
                                                         @RequestBody @Valid CategoryUpdateRequest request,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(adminCategoryService.updateCategory(id, request, language));
-    }
+    }*/
 
     @PutMapping("/{id}/archive")
     @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
