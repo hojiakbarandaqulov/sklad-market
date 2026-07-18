@@ -333,10 +333,9 @@ public class KeycloakServiceImpl implements KeycloakService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
         try {
-            log.info("Token request body: {}", body);  // DEBUG
             ResponseEntity<TokenResponseDTO> response = restTemplate.postForEntity(
                     masterTokenUrl,
-                    request, TokenResponseDTO.class);  // TokenResponse DTO yarating
+                    request, TokenResponseDTO.class);
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 String token = Objects.requireNonNull(response.getBody()).getAccessToken();
@@ -347,8 +346,9 @@ public class KeycloakServiceImpl implements KeycloakService {
             }
         } catch (HttpClientErrorException e) {
             log.error("Token error: status={}, body={}", e.getStatusCode(), e.getResponseBodyAsString());
+            throw new IllegalStateException("Keycloak admin token olinmadi", e);
         }
-        throw new RuntimeException("Admin token olinmadi");
+        throw new IllegalStateException("Keycloak admin token olinmadi");
     }
 
     private void removeRoleFromUser(String userId, Roles roleName, String adminToken, HttpHeaders headers) {
@@ -375,7 +375,8 @@ public class KeycloakServiceImpl implements KeycloakService {
             );
             log.info("Role {} o'chirildi: userId={}", roleName, userId);
         } catch (Exception e) {
-            log.warn("Role o'chirishda xato: {}", e.getMessage());
+            log.error("Role o'chirishda xato - userId: {}, role: {}: {}", userId, roleName, e.getMessage());
+            throw new IllegalStateException("Role o'chirishda xato: " + e.getMessage(), e);
         }
     }
 

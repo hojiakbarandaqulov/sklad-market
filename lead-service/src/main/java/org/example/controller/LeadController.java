@@ -40,7 +40,7 @@ public class LeadController {
         return ApiResponse.successResponse(leadService.getById(id, language));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("cancel/{id}")
     @PreAuthorize("hasRole('BUYER')")
     public ApiResponse<Boolean> cancel(@PathVariable Long id,
                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

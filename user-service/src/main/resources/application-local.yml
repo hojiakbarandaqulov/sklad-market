@@ -29,6 +29,7 @@ spring:
 
 keycloak:
    token-url: http://localhost:9090/realms/market-realm/protocol/openid-connect/token
+   master-token-url: http://localhost:9090/realms/master/protocol/openid-connect/token
    client-id: market-backend
    client-secret: Pi5lwDJnYn9TWcc1iLQzJsUGaHeEx8FK
    admin-url: http://localhost:9090/admin/realms/market-realm

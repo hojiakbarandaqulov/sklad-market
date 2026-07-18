@@ -28,7 +28,7 @@ public interface UsersService {
 
     PageImpl<UsersResponse> getUsers(String q, GeneralStatus status, Roles roles, int page, int perPage, AppLanguage language);
 
-    ApiResponse<String> setAdmin(Long userId, Roles role, AppLanguage language);
+    ApiResponse<String> setAdmin(Long userId, AppLanguage language);
 
     ApiResponse<AdminUserDetailResponse> getUserById(Long userId, AppLanguage language);
 

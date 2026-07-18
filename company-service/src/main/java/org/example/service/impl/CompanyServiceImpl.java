@@ -6,6 +6,7 @@ import org.example.config.internal.ProductClient;
 import org.example.dto.*;
 import org.example.dto.attach.AttachDto;
 import org.example.dto.kafka.CompanyCreateEvent;
+import org.example.dto.map.CompanyLocationUpdate;
 import org.example.dto.map.CompanyMapResponse;
 import org.example.dto.map.CompanySlugMapResponse;
 import org.example.entity.Company;
@@ -25,14 +26,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,7 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
         }
         Optional<Company> company = companyRepository.findByStirAndDeletedFalse(requestDTO.getStir());
         if (company.isPresent()) {
-            throw new AppBadException(messageService.getMessage("company.str.exists",language));
+            throw new AppBadException(messageService.getMessage("company.str.exists", language));
         }
         Optional<Company> bySlug = companyRepository.findBySlug(generateSlug(requestDTO.getName()));
         if (bySlug.isPresent()) {
@@ -265,6 +260,22 @@ public class CompanyServiceImpl implements CompanyService {
             companyMapResponses.add(companyMapResponse);
         });
         return companyMapResponses;
+    }
+
+    @Override
+    public ApiResponse<CompanyLocationUpdate> companyLocationUpdate(Long companyId, CompanyLocationUpdate companyLocationUpdate, AppLanguage language) {
+        Optional<Company> company = companyRepository.findByIdAndDeletedFalse(companyId);
+        if (company.isEmpty()) {
+            throw new AppBadException(messageService.getMessage("company.not.found", language));
+        }
+        Company companyEntity = company.get();
+        companyEntity.setLat(companyLocationUpdate.getLat());
+        companyEntity.setLng(companyLocationUpdate.getLng());
+        companyRepository.save(companyEntity);
+        CompanyLocationUpdate companyLocation = new CompanyLocationUpdate();
+        companyLocation.setLat(companyLocationUpdate.getLat());
+        companyLocation.setLng(companyLocationUpdate.getLng());
+        return ApiResponse.successResponse(companyLocation);
     }
 
     private PageImpl<CompanyShortDTO> getPublicCompanyPage(String q, Boolean verified, Long regionId, int page, int perPage, AppLanguage language) {

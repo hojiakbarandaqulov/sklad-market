@@ -73,10 +73,9 @@ public class AdminUserController {
 
     @PutMapping("/set-admin/{userId}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ApiResponse<String> setAdmin(@RequestParam(required = false) Roles role,
-                                        @PathVariable Long userId,
+    public ApiResponse<String> setAdmin(@PathVariable Long userId,
                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return usersService.setAdmin(userId, role, language);
+        return usersService.setAdmin(userId, language);
     }
 
 }

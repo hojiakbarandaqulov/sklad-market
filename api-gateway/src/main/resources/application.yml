@@ -58,7 +58,7 @@ spring:
         - id: lead-service
           uri: lb://lead-service
           predicates:
-            - Path=/api/v1/leads,/api/v1/leads/**,/api/v1/cart,/api/v1/cart/**
+            - Path=/api/v1/leads,/api/v1/leads/**,/api/v1/leads/cancel**,/api/v1/cart,/api/v1/cart/**
         # Chat REST
         - id: chat-service
           uri: lb://chat-service
