@@ -4,6 +4,7 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.*;
+import org.example.dto.map.CompanyLocationUpdate;
 import org.example.dto.map.CompanyMapResponse;
 import org.example.dto.map.CompanySlugMapResponse;
 import org.example.enums.AppLanguage;
@@ -35,6 +36,14 @@ public class CompanyController {
     @PreAuthorize("hasRole('SELLER')")
     public ApiResponse<CompanyInfoDTO> getMyCompanies(@RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return companyService.getMyCompanies(language);
+    }
+
+    @PreAuthorize("hasRole('SELLER')")
+    @PutMapping("update/location")
+    public ApiResponse<CompanyLocationUpdate> companyLocationUpdate (@RequestParam Long companyId,
+                                                                     @RequestBody @Valid CompanyLocationUpdate companyLocationUpdate,
+                                                                     @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language){
+       return companyService.companyLocationUpdate(companyId,companyLocationUpdate,language);
     }
 
     @PermitAll

@@ -90,7 +90,7 @@ public class CategoryController {
         return ApiResponse.successResponse(categoryResponse);
     }
 
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ApiResponse<Boolean> deleteCategory(@PathVariable Long id,
                                                @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

@@ -181,14 +181,23 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public ApiResponse<String> setAdmin(Long userId, Roles role, AppLanguage language) {
+    public ApiResponse<String> setAdmin(Long userId, AppLanguage language) {
         UsersProfile profile = getByUserId(userId, language);
-        keycloakService.removeRole(profile.getKeycloakId(), profile.getRoles());
-        profile.setRoles(role);
+        String keycloakId = profile.getKeycloakId();
+        if (keycloakId == null || keycloakId.isBlank()) {
+            throw new AppBadException(messageService.getMessage("keycloak.user.not.linked", language));
+        }
+
+        Roles oldRole = profile.getRoles();
+        keycloakService.assignRoleToUser(keycloakId, Roles.ADMIN);
+        if (oldRole != null && oldRole != Roles.ADMIN) {
+            keycloakService.removeRole(keycloakId, oldRole);
+        }
+
+        profile.setRoles(Roles.ADMIN);
         profileRepository.save(profile);
-        keycloakService.assignRoleToUser(profile.getKeycloakId(), role);
-        log.info("Keycloak da role ADMIN ga yangilandi");
-        kafkaProducerService.sendUserRoleUpdate(new UserUpdateRole(userId, role));
+        kafkaProducerService.sendUserRoleUpdate(new UserUpdateRole(userId, Roles.ADMIN));
+        log.info("User role ADMIN ga yangilandi: userId={}, oldRole={}", userId, oldRole);
         return ApiResponse.successResponse("success");
     }
 
