@@ -28,16 +28,29 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(
+            value = "/create",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ApiResponse<CategoryResponse> createCategory(
-            @Valid @ModelAttribute CategoryCreateRequest request,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            encoding = @io.swagger.v3.oas.annotations.media.Encoding(
+                                    name = "request",
+                                    contentType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    )
+            )
+            @RequestPart("request") @Valid CategoryCreateRequest request,
+
             @RequestPart("file") MultipartFile file,
+
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ")
             AppLanguage language
     ) {
-        CategoryResponse response = categoryService.create(request, file, language);
-        return ApiResponse.successResponse(response);
+        return ApiResponse.successResponse(
+                categoryService.create(request, file, language)
+        );
     }
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
