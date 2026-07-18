@@ -41,32 +41,48 @@ public class CategoryServiceImpl implements CategoryService {
     private final ResourceBundleService messageService;
 
     @Override
-    public CategoryResponse create(CategoryCreateRequest request, MultipartFile file, AppLanguage language) {
+    public CategoryResponse create(CategoryCreateRequest request,
+                                   MultipartFile file,
+                                   AppLanguage language) {
+
         Category category = new Category();
-        ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
-        if (upload==null){
-            throw new IllegalArgumentException(messageService.getMessage("file.upload.don't.success",language));
-        }
+
         if (request.getParentId() != null && request.getParentId() != 0) {
             Category parent = categoryRepository.findById(request.getParentId())
-                    .orElseThrow(() -> new AppBadException(messageService.getMessage("category.not.found", language)));
+                    .orElseThrow(() ->
+                            new AppBadException(messageService.getMessage("category.not.found", language)));
             category.setParent(parent);
         }
+
         if (categoryRepository.existsBySlug(request.getSlug())) {
             throw new AppBadException(messageService.getMessage("category.slug.exists", language));
         }
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
+
+                if (upload != null && upload.getData() != null) {
+                    category.setIconId(upload.getData().getId());
+                    category.setIconUrl(upload.getData().getUrl());
+                }
+
+            } catch (Exception e) {
+                log.error("File upload failed: {}", e.getMessage(), e);
+            }
+        }
+
         category.setNameUz(request.getNameUz());
         category.setNameRu(request.getNameRu());
         category.setNameEn(request.getNameEn());
-        category.setSlug(request.getSlug()); // unique tekshiruv ham kerak
-        category.setIconId(upload.getData().getId());
-        category.setIconUrl(upload.getData().getUrl());
+        category.setSlug(request.getSlug());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
-        Category save = categoryRepository.save(category);
-        return modelMapper.map(save, CategoryResponse.class);
-    }
 
+        Category saved = categoryRepository.save(category);
+
+        return modelMapper.map(saved, CategoryResponse.class);
+    }
     @Override
     public CategoryResponse update(Long id, CategoryUpdateRequest request, AppLanguage language) {
         Category category = categoryRepository.findById(id)

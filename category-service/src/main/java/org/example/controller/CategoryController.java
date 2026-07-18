@@ -41,7 +41,7 @@ public class CategoryController {
                             )
                     )
             )
-            @RequestPart("request") @Valid CategoryCreateRequest request,
+            @RequestPart(value = "request", required = false) @Valid CategoryCreateRequest request,
 
             @RequestPart("file") MultipartFile file,
 
