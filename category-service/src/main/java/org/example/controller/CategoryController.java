@@ -28,6 +28,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     @PostMapping(
             value = "/create",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
