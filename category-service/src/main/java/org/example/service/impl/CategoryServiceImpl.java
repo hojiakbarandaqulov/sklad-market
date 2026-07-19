@@ -57,6 +57,9 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryRepository.existsBySlug(request.getSlug())) {
             throw new AppBadException(messageService.getMessage("category.slug.exists", language));
         }
+        if (categoryRepository.existsBySortOrder(request.getSortOrder())) {
+            throw new AppBadException(messageService.getMessage("category.sort.exists", language));
+        }
 
         if (file != null && !file.isEmpty()) {
             try {

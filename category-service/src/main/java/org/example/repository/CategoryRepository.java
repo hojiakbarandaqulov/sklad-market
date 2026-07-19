@@ -8,6 +8,8 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsBySlug(String slug);
 
+    boolean existsBySortOrder(Integer sortOrder);
+
     Category findBySlugAndIsActiveTrue(String slug);
 
 
