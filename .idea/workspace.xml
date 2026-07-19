@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category create bug fix">
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanyLocationUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanyLocationUpdate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -500,22 +503,7 @@
       <workItem from="1783013341060" duration="56538000" />
       <workItem from="1783787434620" duration="11694000" />
       <workItem from="1784255758454" duration="7203000" />
-    </task>
-    <task id="LOCAL-00032" summary="file service create">
-      <option name="closed" value="true" />
-      <created>1783009453487</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1783009453487</updated>
-    </task>
-    <task id="LOCAL-00033" summary="user internal controller bug fix">
-      <option name="closed" value="true" />
-      <created>1783013414912</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1783013414912</updated>
+      <workItem from="1784463274595" duration="537000" />
     </task>
     <task id="LOCAL-00034" summary="user internal controller bug fix">
       <option name="closed" value="true" />
@@ -893,7 +881,23 @@
       <option name="project" value="LOCAL" />
       <updated>1784310347577</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1784463535484</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1784463535488</updated>
+    </task>
+    <task id="LOCAL-00082" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1784463820561</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1784463820561</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -911,7 +915,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="config starting" />
     <MESSAGE value="project deploy testing" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/compiler.xml&#10;#&#9;.idea/workspace.xml&#10;#&#9;report-service/src/main/java/org/example/config/clent/CompanyClient.java&#10;#&#9;report-service/src/main/java/org/example/config/clent/ProductClient.java&#10;#&#9;report-service/src/main/java/org/example/service/impl/ReportServiceImpl.java" />
     <MESSAGE value="report service bug fix" />
@@ -936,7 +939,8 @@
     <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="getMyCompany api bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
+    <MESSAGE value="category create bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="category create bug fix" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
