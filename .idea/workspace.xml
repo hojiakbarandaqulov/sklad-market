@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category create bug fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/repository/CategoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/repository/CategoryRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyInfoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyInfoDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
