@@ -428,6 +428,7 @@ public class CompanyServiceImpl implements CompanyService {
         response.setName(company.getName());
         response.setSlug(company.getSlug());
         response.setLogoUrl(company.getLogoPath());
+        response.setStr(company.getStir());
         response.setVerificationStatus(company.getVerificationStatus());
         response.setIsBlocked(company.getIsBlocked());
         response.setCompanyCreatedDate(company.getCompanyCreatedDate());
