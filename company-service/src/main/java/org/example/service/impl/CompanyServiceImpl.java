@@ -269,13 +269,15 @@ public class CompanyServiceImpl implements CompanyService {
             throw new AppBadException(messageService.getMessage("company.not.found", language));
         }
         Company companyEntity = company.get();
+        companyEntity.setAddress(companyLocationUpdate.getAddress());
         companyEntity.setLat(companyLocationUpdate.getLat());
         companyEntity.setLng(companyLocationUpdate.getLng());
-        companyRepository.save(companyEntity);
-        CompanyLocationUpdate companyLocation = new CompanyLocationUpdate();
-        companyLocation.setLat(companyLocationUpdate.getLat());
-        companyLocation.setLng(companyLocationUpdate.getLng());
-        return ApiResponse.successResponse(companyLocation);
+        Company companyLocation = companyRepository.save(companyEntity);
+        CompanyLocationUpdate companyLocationResponse = new CompanyLocationUpdate();
+        companyLocationResponse.setAddress(companyLocation.getAddress());
+        companyLocationResponse.setLat(companyLocation.getLat());
+        companyLocationResponse.setLng(companyLocation.getLng());
+        return ApiResponse.successResponse(companyLocationResponse);
     }
 
     private PageImpl<CompanyShortDTO> getPublicCompanyPage(String q, Boolean verified, Long regionId, int page, int perPage, AppLanguage language) {
