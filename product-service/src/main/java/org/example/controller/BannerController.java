@@ -13,6 +13,7 @@ import org.example.service.BannerService;
 import org.springframework.cloud.client.loadbalancer.reactive.RetryableLoadBalancerExchangeFilterFunction;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,8 +58,14 @@ public class BannerController {
     }
 
     @GetMapping("/getAll")
-    public ApiResponse<List<BannerResponse>> getBanners(@RequestParam PlacementCode placementCode,
-                                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+    public ApiResponse<List<BannerResponse>> getBanners(@RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        List<BannerResponse> bannerResponse = bannerService.getAllBanners(language);
+        return ApiResponse.successResponse(bannerResponse);
+    }
+
+    @GetMapping("/getBanner")
+    public ApiResponse<List<BannerResponse>> getBanner(@RequestParam PlacementCode placementCode,
+                                                       @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         List<BannerResponse> bannerResponse = bannerService.getBanners(placementCode, language);
         return ApiResponse.successResponse(bannerResponse);
     }

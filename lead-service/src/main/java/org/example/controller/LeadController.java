@@ -41,7 +41,7 @@ public class LeadController {
     }
 
     @DeleteMapping("cancel/{id}")
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     public ApiResponse<Boolean> cancel(@PathVariable Long id,
                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(leadService.cancel(id, language));
@@ -59,7 +59,7 @@ public class LeadController {
     }
 
     @PutMapping("/{id}/status")
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     public ApiResponse<LeadResponse> updateStatus(@PathVariable Long id,
                                                   @Valid @RequestBody LeadStatusUpdateRequest request,
                                                   @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
