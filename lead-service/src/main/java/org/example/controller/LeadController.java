@@ -24,7 +24,7 @@ public class LeadController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     public ApiResponse<PagedResponse<LeadResponse>> buyerLeads(@RequestParam(required = false) LeadStatus status,
                                                                @RequestParam(required = false) LeadSource source,
                                                                @RequestParam(defaultValue = "1") int page,
