@@ -18,13 +18,13 @@ public class AttachInternalController {
 
     private final AttachService attachService;
 
-    @GetMapping("/getById/{id}")
+    @GetMapping("/getById/{id:.+}")
     public AttachInfoDto getById(@PathVariable String id) {
         return attachService.getInfoAttach(id);
     }
 
     @PermitAll
-    @GetMapping("/open/{id}")
+    @GetMapping("/open/{id:.+}")
     public ResponseEntity<byte[]> open(@PathVariable String id) {
         byte[] fileData = attachService.open(id, AppLanguage.UZ);
         Attach attach = attachService.get(id,AppLanguage.UZ);

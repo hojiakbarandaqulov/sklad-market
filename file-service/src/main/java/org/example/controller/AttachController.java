@@ -27,7 +27,7 @@ public class AttachController {
     }
 
     @PermitAll
-    @GetMapping("/open/{id}")
+    @GetMapping("/open/{id:.+}")
     public ResponseEntity<byte[]> open(@PathVariable String id,
                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         byte[] fileData = attachService.open(id, language);
@@ -39,7 +39,7 @@ public class AttachController {
     }
 
     @PermitAll
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id:.+}")
     public ApiResponse<Boolean> deleteAttach(@PathVariable String id,
                                              @RequestHeader(value = "Accept-Language",defaultValue = "UZ") AppLanguage language){
         boolean delete = attachService.delete(id, language);

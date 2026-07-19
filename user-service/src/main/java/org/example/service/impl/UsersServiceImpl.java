@@ -132,11 +132,19 @@ public class UsersServiceImpl implements UsersService {
             throw new AppBadException(messageService.getMessage("user.not.found", language));
         }
 
-        if (profile.getPhotoId() != null && !profile.getPhotoId().equals(photo.getPhotoId())) {
-            fileClient.delete(profile.getPhotoId(), language.name());
-        }
         AttachInfoDto attach = fileClient.getById(photo.getPhotoId());
-        profileRepository.updatePhoto(profile.getId(), attach.getId());
+        String oldPhotoId = profile.getPhotoId();
+
+        profile.setPhotoId(attach.getId());
+        profileRepository.save(profile);
+
+        if (oldPhotoId != null && !oldPhotoId.equals(attach.getId())) {
+            try {
+                fileClient.delete(oldPhotoId, language.name());
+            } catch (Exception e) {
+                log.warn("Old photo delete bo'lmadi profileId={}, photoId={}", profileId, oldPhotoId);
+            }
+        }
         return ApiResponse.successResponse(messageService.getMessage("photo.photo.update.success", language));
     }
 

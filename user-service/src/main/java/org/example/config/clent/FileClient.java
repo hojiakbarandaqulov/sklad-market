@@ -12,10 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileClient {
 
     @GetMapping("/internal/attach/getById/{id}")
-    AttachInfoDto getById(@PathVariable String id);
+    AttachInfoDto getById(@PathVariable("id") String id);
 
     @DeleteMapping("/api/v1/attach/delete/{id}")
-    ApiResponse<Boolean> delete(@PathVariable String id,
+    ApiResponse<Boolean> delete(@PathVariable("id") String id,
                                 @RequestHeader("Accept-Language") String language);
 
     @PostMapping(

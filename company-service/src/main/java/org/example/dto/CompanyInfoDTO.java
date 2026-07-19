@@ -14,6 +14,7 @@ public class CompanyInfoDTO {
     private String name;
     private String slug;
     private String logoUrl;
+    private String str;
     private VerificationStatus verificationStatus;
     private Boolean isBlocked;
     private LocalDate companyCreatedDate;

@@ -26,7 +26,7 @@ public interface UserProfileRepository extends JpaRepository<UsersProfile, Long>
 
     @Transactional(rollbackOn = Exception.class)
     @Modifying
-    @Query("update UsersProfile p set p.photoId = :photo where p.id = ?1")
+    @Query("update UsersProfile p set p.photoId = :photoId where p.id = ?1")
     void updatePhoto(Long id, @Param("photoId") String photoId);
 
     long countByStatusAndDeletedFalse(GeneralStatus status);

@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category create bug fix">
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanyLocationUpdate.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanyLocationUpdate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/AttachController.java" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/AttachController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/AttachInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/AttachInternalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/config/clent/FileClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/config/clent/FileClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/controller/UserInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/controller/UserInternalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/repository/UserProfileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/repository/UserProfileRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/UsersServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/UsersServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -504,22 +509,7 @@
       <workItem from="1783787434620" duration="11694000" />
       <workItem from="1784255758454" duration="7203000" />
       <workItem from="1784463274595" duration="537000" />
-    </task>
-    <task id="LOCAL-00034" summary="user internal controller bug fix">
-      <option name="closed" value="true" />
-      <created>1783014201646</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1783014201646</updated>
-    </task>
-    <task id="LOCAL-00035" summary="user internal controller bug fix">
-      <option name="closed" value="true" />
-      <created>1783014610830</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1783014610830</updated>
+      <workItem from="1784464185479" duration="2938000" />
     </task>
     <task id="LOCAL-00036" summary="user internal controller bug fix">
       <option name="closed" value="true" />
@@ -897,7 +887,23 @@
       <option name="project" value="LOCAL" />
       <updated>1784463820561</updated>
     </task>
-    <option name="localTasksCounter" value="83" />
+    <task id="LOCAL-00083" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1784464281450</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1784464281450</updated>
+    </task>
+    <task id="LOCAL-00084" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1784465085739</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1784465085739</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
