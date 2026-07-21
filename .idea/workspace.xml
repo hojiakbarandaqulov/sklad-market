@@ -5,28 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category create bug fix">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658/storage_v2/_src_/database/skalad-market-user-db.9nXwyg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/171270fc-6cdd-4829-bbf4-404bc155a658/storage_v2/_src_/database/skalad-market-user-db.9nXwyg/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/827e3549-8d53-47c8-9056-8d3cf08e8704.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/827e3549-8d53-47c8-9056-8d3cf08e8704/storage_v2/_src_/database/skalad-market-company-db.2JME9Q.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/827e3549-8d53-47c8-9056-8d3cf08e8704/storage_v2/_src_/database/skalad-market-company-db.2JME9Q/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/9cff7535-5b13-4f83-9e31-6a15fd6e7cf3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/9cff7535-5b13-4f83-9e31-6a15fd6e7cf3/storage_v2/_src_/database/skalad-market-auth-db.-VosrQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/9cff7535-5b13-4f83-9e31-6a15fd6e7cf3/storage_v2/_src_/database/skalad-market-auth-db.-VosrQ/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fb030a4f-1430-4559-937d-3ba6e0ca2bd5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fb030a4f-1430-4559-937d-3ba6e0ca2bd5/storage_v2/_src_/database/skalad-market-category-db.4yiVJQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/fb030a4f-1430-4559-937d-3ba6e0ca2bd5/storage_v2/_src_/database/skalad-market-category-db.4yiVJQ/schema/public.abK9xQ.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/ProductClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CompanyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CompanyService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/BannerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/BannerRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/BannerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/BannerServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -530,15 +509,7 @@
       <workItem from="1784618820104" duration="311000" />
       <workItem from="1784620655370" duration="2844000" />
       <workItem from="1784650169738" duration="811000" />
-      <workItem from="1784654959303" duration="563000" />
-    </task>
-    <task id="LOCAL-00046" summary="bucket url bug fix">
-      <option name="closed" value="true" />
-      <created>1783526607544</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1783526607544</updated>
+      <workItem from="1784654959303" duration="1331000" />
     </task>
     <task id="LOCAL-00047" summary="delete file bug fix">
       <option name="closed" value="true" />
@@ -924,7 +895,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784621799219</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1784655856011</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1784655856012</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -196,13 +196,13 @@ public class ProductServiceImpl implements ProductService {
                     .build();
         }
 
-        if (companyId != null && !ownedCompanyIds.contains(companyId)) {
+        if (!ownedCompanyIds.contains(companyId)) {
             throw new AppBadException(messageService.getMessage("company.not.owned", language));
         }
 
         Pageable pageable = PageRequest.of(resolvedPage - 1, resolvedPerPage, Sort.by(Sort.Direction.DESC, "createdAt"));
         Specification<Product> specification = notDeleted();
-        specification = specification.and((root, query, cb) -> root.get("companyId").in(companyId != null ? List.of(companyId) : ownedCompanyIds));
+        specification = specification.and((root, query, cb) -> root.get("companyId").in(List.of(companyId)));
 
         if (status != null) {
             specification = specification.and((root, query, cb) -> cb.equal(root.get("moderationStatus"), status));
@@ -354,11 +354,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, ProductModerationStatus productModerationStatus, PageRequest createdAt) {
-        return productRepository.findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(companyId, productModerationStatus, createdAt);
-    }
-
-    @Override
     public Long countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus productModerationStatus) {
         return productRepository.countByModerationStatusAndDeletedAtIsNull(productModerationStatus);
     }
@@ -385,7 +380,7 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
-    private BigDecimal normalizePrice(PriceType priceType, BigDecimal price, AppLanguage language) {
+    private BigDecimal normalizePrice(PriceType priceType, BigDecimal price) {
         if (priceType == PriceType.NEGOTIABLE) {
             return null;
         }
@@ -438,7 +433,7 @@ public class ProductServiceImpl implements ProductService {
         product.setShortDescription(request.getShortDescription());
         product.setDescription(request.getDescription());
         product.setPriceType(request.getPriceType());
-        product.setPrice(normalizePrice(request.getPriceType(), request.getPrice(), language));
+        product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());
         product.setDistrictId(request.getDistrictId());
@@ -452,7 +447,7 @@ public class ProductServiceImpl implements ProductService {
         product.setShortDescription(request.getShortDescription());
         product.setDescription(request.getDescription());
         product.setPriceType(request.getPriceType());
-        product.setPrice(normalizePrice(request.getPriceType(), request.getPrice(), language));
+        product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());
         product.setDistrictId(request.getDistrictId());
@@ -478,7 +473,7 @@ public class ProductServiceImpl implements ProductService {
         return StringUtils.hasText(slug) ? slug : "product";
     }
 
-    private ImageMeta validateAndReadImage(MultipartFile file, AppLanguage language) {
+   /* private ImageMeta validateAndReadImage(MultipartFile file, AppLanguage language) {
         if (file.isEmpty()) {
             throw new AppBadException(messageService.getMessage("file.empty", language));
         }
@@ -498,7 +493,7 @@ public class ProductServiceImpl implements ProductService {
         } catch (IOException e) {
             throw new AppBadException(messageService.getMessage("image.read.failed", language));
         }
-    }
+    }*/
 
     private record ImageMeta(int width, int height) {
 
@@ -613,6 +608,11 @@ public class ProductServiceImpl implements ProductService {
             throw new AppBadException(messageService.getMessage("product.notFound", language));
         }
         return toResponse(byId.get());
+    }
+
+    @Override
+    public Page<Product> findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, Long categoryId, ProductModerationStatus productModerationStatus, PageRequest createdAt) {
+        return productRepository.findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(companyId,categoryId,productModerationStatus,createdAt);
     }
 
     private ProductModerationStatus resolveStatus(Product product) {
