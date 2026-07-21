@@ -135,10 +135,15 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public List<BannerResponse> getAllBanners(AppLanguage language) {
-        List<Banners> all = bannerRepository.findAll();
+       /* List<Banners> all = bannerRepository.findAll();
         return all.stream().map(
                 this::toDTO
-        ).toList();
+        ).toList();*/
+
+        LocalDateTime now = LocalDateTime.now();
+        List<Banners> banners = bannerRepository.findByIsActiveTrueAndStartsAtBeforeAndEndsAtAfter(now, now);
+        return banners.stream().map(
+                this::toDTO).toList();
     }
 
     private BannerResponse toDTO(Banners banners) {

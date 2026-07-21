@@ -112,7 +112,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(String slug, int page, int perPage, AppLanguage language) {
+    public ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(String slug,Long categoryId, int page, int perPage, AppLanguage language) {
         int resolvedPage = normalizePage(page, language);
         int resolvedPerPage = normalizePerPage(perPage, language);
         Company company = companyRepository.findBySlugAndDeletedAtIsNullAndVerificationStatusIn(slug, List.of(VerificationStatus.VERIFIED, VerificationStatus.PENDING_VERIFICATION));
@@ -120,7 +120,7 @@ public class CompanyServiceImpl implements CompanyService {
             throw new AppBadException(messageService.getMessage("company.not.found", language));
         }
 
-        CompanyProductListResponse productList = productClient.getCompanyProducts(company.getId(), resolvedPage, resolvedPerPage);
+        CompanyProductListResponse productList = productClient.getCompanyProducts(company.getId(), categoryId, resolvedPage, resolvedPerPage);
 
         if (productList == null) {
             return ApiResponse.successResponse(new PageImpl<>(List.of(), PageRequest.of(resolvedPage - 1, resolvedPerPage), 0));

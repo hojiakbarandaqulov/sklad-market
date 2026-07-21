@@ -46,11 +46,13 @@ public interface ProductService {
 
     Optional<ProductImage> findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(Long productId);
 
-    Page<Product> findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, ProductModerationStatus productModerationStatus, PageRequest createdAt);
+//    Page<Product> findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, ProductModerationStatus productModerationStatus, PageRequest createdAt);
 
     Long countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus productModerationStatus);
 
     ProductResponse toResponse(Product product);
 
     ProductResponse getById(Long id, AppLanguage language);
+
+    Page<Product> findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, Long categoryId, ProductModerationStatus productModerationStatus, PageRequest createdAt);
 }

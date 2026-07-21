@@ -63,12 +63,14 @@ public class ProductInternalController {
                 .build();
     }
 
-    @GetMapping("/company/{companyId}")
+    @GetMapping("/{companyId}/company/{categoryId}")
     public ProductListResponse getCompanyProducts(@PathVariable Long companyId,
+                                                  @PathVariable Long categoryId,
                                                   @RequestParam(defaultValue = "1") int page,
                                                   @RequestParam(value = "per_page", defaultValue = "20") int perPage) {
-        Page<Product> result = productService.findByCompanyIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
+        Page<Product> result = productService.findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
                 companyId,
+                categoryId,
                 ProductModerationStatus.APPROVED,
                 PageRequest.of(Math.max(page - 1, 0), perPage, Sort.by(Sort.Direction.DESC, "createdAt"))
         );

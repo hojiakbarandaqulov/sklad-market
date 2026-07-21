@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "product-service")
 public interface ProductClient {
 
-    @GetMapping("/internal/products/company/{companyId}")
+    @GetMapping("/internal/products/{companyId}/company/{categoryId}")
     CompanyProductListResponse getCompanyProducts(@PathVariable("companyId") Long companyId,
+                                                  @PathVariable ("categoryId") Long categoryId,
                                                   @RequestParam("page") int page,
                                                   @RequestParam("per_page") int perPage);
 }

@@ -89,13 +89,14 @@ public class CompanyController {
     }
 
     @PermitAll
-    @GetMapping("/{slug}/products")
+    @GetMapping("/{slug}/products/{categoryId}")
     public ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(
+            @PathVariable Long categoryId,
             @PathVariable String slug,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(value = "per_page", defaultValue = "20") int perPage,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return companyService.getCompanyProducts(slug, page, perPage, language);
+        return companyService.getCompanyProducts(slug,categoryId, page, perPage, language);
     }
 
     @PutMapping("/{id}")

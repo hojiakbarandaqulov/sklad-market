@@ -25,7 +25,7 @@ public interface CompanyService {
 
     ApiResponse<CompanySlugMapResponse> getBySlug(String slug, AppLanguage language);
 
-    ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(String slug, int page, int perPage, AppLanguage language);
+    ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(String slug, Long categoryId, int page, int perPage, AppLanguage language);
 
     ApiResponse<CompanyResponseDTO> update(Long id, CompanyRequestDTO dto, AppLanguage language);
 

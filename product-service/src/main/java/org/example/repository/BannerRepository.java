@@ -10,4 +10,6 @@ import java.util.List;
 public interface BannerRepository extends JpaRepository<Banners, Long> {
 
     List<Banners> findByPlacementCodeAndIsActiveTrueAndStartsAtBeforeAndEndsAtAfter(PlacementCode placementCode, LocalDateTime startsAt, LocalDateTime endsAt);
+
+    List<Banners> findByIsActiveTrueAndStartsAtBeforeAndEndsAtAfter(LocalDateTime now, LocalDateTime now1);
 }
