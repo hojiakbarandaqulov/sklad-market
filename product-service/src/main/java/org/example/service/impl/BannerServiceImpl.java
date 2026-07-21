@@ -111,17 +111,18 @@ public class BannerServiceImpl implements BannerService {
             throw new AppBadException(messageService.getMessage("banner.not.found", language));
         }
         Banners bannerEntity = byId.get();
-        try {
-          /*  minioClient.removeObject(
-                    RemoveObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(bannerEntity.getImageKey())
-                            .build()
-            );*/
-            fileClient.delete(bannerEntity.getAttachId(), language.name());
-        } catch (Exception e) {
-            throw new AppBadException(messageService.getMessage("banner.delete.failed", language));
+        String attachId = bannerEntity.getAttachId();
+
+        if (attachId != null && !attachId.isBlank()) {
+            try {
+                fileClient.delete(attachId, language.name());
+            } catch (Exception e) {
+                throw new AppBadException(
+                        messageService.getMessage("banner.delete.failed", language)
+                );
+            }
         }
+
         bannerRepository.deleteById(id);
     }
 
