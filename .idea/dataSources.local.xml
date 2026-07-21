@@ -136,5 +136,60 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="skalad_market_notification@127.0.0.1" uuid="a20847b5-f5ca-4f64-81e5-6152877c6676">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_chat@127.0.0.1" uuid="cccad82c-f1f0-4863-99cc-e66c4820b0e8">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad-market-file-db@localhost" uuid="5a39bfe5-6650-4ec6-999d-c85010949a10">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>postgres</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_lead@127.0.0.1" uuid="6eab0814-ae09-4198-b8f5-bffecdd593c8">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_file@127.0.0.1" uuid="4c415a74-918d-46b3-a5f3-a6aeb99f29d8">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad-market-user-db@localhost" uuid="cb61d183-df66-458c-bbbc-468490a19464">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>postgres</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_user@127.0.0.1" uuid="040c5be2-daf1-4be4-a6df-a56699778a74">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_category@127.0.0.1" uuid="b3c8ae40-44ae-47fa-8d1a-fc51f80e2c5c">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_report@127.0.0.1" uuid="9df9bc67-6967-49fc-bc4f-5864e816253b">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_company@127.0.0.1" uuid="030c45fb-b9a3-46cc-8d31-3274a3759dd0">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
+    <data-source name="skalad_market_product@127.0.0.1" uuid="f43f172c-5f08-4659-badc-bba7d9970b71">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="POSTGRES" />
+      <user-name>sklad_user</user-name>
+      <schema-mapping />
+    </data-source>
   </component>
 </project>

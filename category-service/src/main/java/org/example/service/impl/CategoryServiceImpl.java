@@ -81,16 +81,20 @@ public class CategoryServiceImpl implements CategoryService {
         category.setSlug(request.getSlug());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
-
         Category saved = categoryRepository.save(category);
 
         return modelMapper.map(saved, CategoryResponse.class);
     }
+
     @Override
-    public CategoryResponse update(Long id, CategoryUpdateRequest request, AppLanguage language) {
+    public CategoryResponse update(Long id, CategoryUpdateRequest request, MultipartFile file, AppLanguage language) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new AppBadException(messageService.getMessage("category.not.found", language)));
 
+        ApiResponse<Boolean> delete = fileClient.delete(category.getIconId(), language.name());
+        if (!delete.getData()) {
+            throw new AppBadException(messageService.getMessage("category.not.found", language));
+        }
         if (!category.getSlug().equals(request.getSlug()) &&
                 categoryRepository.existsBySlug(request.getSlug())) {
             throw new AppBadException(messageService.getMessage("category.slug.exists", language));
@@ -112,7 +116,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setSlug(request.getSlug());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
-
+        fileClient.upload(file, language.name());
         Category saved = categoryRepository.save(category);
         return modelMapper.map(saved, CategoryResponse.class);  // ← null emas!
     }
@@ -128,7 +132,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryResponse> getCategory(Pageable pageable, AppLanguage language) {
-        Pageable sortedPagable= PageRequest.of(
+        Pageable sortedPagable = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.ASC, "sortOrder")
@@ -160,7 +164,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findById(Long categoryId) {
-       return categoryRepository.findByIdAndIsActiveTrue(categoryId);
+        return categoryRepository.findByIdAndIsActiveTrue(categoryId);
     }
 
     @Override

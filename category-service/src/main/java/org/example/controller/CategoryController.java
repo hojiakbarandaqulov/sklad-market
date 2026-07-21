@@ -55,12 +55,14 @@ public class CategoryController {
     }
 
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
-    @PutMapping("/update/{id}")
+    @PutMapping(value = "/update/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CategoryResponse> updateCategory(
             @PathVariable Long id,
             @RequestBody @Valid CategoryUpdateRequest request,
+            @RequestPart("file") MultipartFile file,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        CategoryResponse categoryResponse = categoryService.update(id, request, language);
+        CategoryResponse categoryResponse = categoryService.update(id, request, file, language);
         return ApiResponse.successResponse(categoryResponse);
     }
 

@@ -19,7 +19,7 @@ public interface CategoryService {
 
     CategoryResponse create(CategoryCreateRequest request, MultipartFile file, AppLanguage language);
 
-    CategoryResponse update(Long id, CategoryUpdateRequest request,AppLanguage language);
+    CategoryResponse update(Long id, CategoryUpdateRequest request,MultipartFile file, AppLanguage language);
 
     Boolean delete(Long id,AppLanguage language);
 
