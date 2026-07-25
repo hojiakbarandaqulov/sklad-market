@@ -87,45 +87,84 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponse update(Long id, CategoryUpdateRequest request, MultipartFile file, AppLanguage language) {
+    public CategoryResponse update(Long id,
+                                   CategoryUpdateRequest request,
+                                   MultipartFile file,
+                                   AppLanguage language) {
+
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new AppBadException(messageService.getMessage("category.not.found", language)));
+                .orElseThrow(() -> new AppBadException(
+                        messageService.getMessage("category.not.found", language)
+                ));
 
-        ApiResponse<Boolean> delete = fileClient.delete(category.getIconId(), language.name());
-        if (!delete.getData()) {
-            throw new AppBadException(messageService.getMessage("category.not.found", language));
-        }
-        if (!category.getSlug().equals(request.getSlug()) &&
-                categoryRepository.existsBySlug(request.getSlug())) {
-            throw new AppBadException(messageService.getMessage("category.slug.exists", language));
+        if (!category.getSlug().equals(request.getSlug())
+                && categoryRepository.existsBySlug(request.getSlug())) {
+            throw new AppBadException(
+                    messageService.getMessage("category.slug.exists", language)
+            );
         }
 
-        if (request.getParentId() != null) {
+        if (request.getParentId() != null && request.getParentId() != 0) {
             if (request.getParentId().equals(id)) {
-                throw new AppBadException(messageService.getMessage("category.cannot.be.own.parent", language));
+                throw new AppBadException(
+                        messageService.getMessage("category.cannot.be.own.parent", language)
+                );
             }
+
             Category parent = categoryRepository.findById(request.getParentId())
-                    .orElseThrow(() -> new AppBadException(messageService.getMessage("category.parent.not.found", language)));
+                    .orElseThrow(() -> new AppBadException(
+                            messageService.getMessage("category.parent.not.found", language)
+                    ));
+
             category.setParent(parent);
         } else {
             category.setParent(null);
         }
+
         category.setNameUz(request.getNameUz());
         category.setNameRu(request.getNameRu());
         category.setNameEn(request.getNameEn());
         category.setSlug(request.getSlug());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
-        fileClient.upload(file, language.name());
+
+        // Faqat foydalanuvchi yangi rasm yuborsa ishlaydi
+        if (file != null && !file.isEmpty()) {
+            String oldIconId = category.getIconId();
+
+            ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
+
+            if (upload == null || upload.getData() == null) {
+                throw new AppBadException("Category rasmi yuklanmadi");
+            }
+
+            // Yangi rasmning ma'lumotlarini DB ga saqlash shart
+            category.setIconId(upload.getData().getId());
+            category.setIconUrl(upload.getData().getUrl());
+
+            Category saved = categoryRepository.save(category);
+
+            // Eski rasm bo'lsa, keyin o'chiramiz
+            if (oldIconId != null && !oldIconId.isBlank()) {
+                try {
+                    fileClient.delete(oldIconId, language.name());
+                } catch (Exception e) {
+                    log.warn("Eski category rasmi o'chirilmadi: {}", oldIconId);
+                }
+            }
+
+            return modelMapper.map(saved, CategoryResponse.class);
+        }
+
+        // Rasm yuborilmagan bo'lsa, eskisini saqlab qoladi
         Category saved = categoryRepository.save(category);
-        return modelMapper.map(saved, CategoryResponse.class);  // ← null emas!
+        return modelMapper.map(saved, CategoryResponse.class);
     }
 
     @Override
     public Boolean delete(Long id, AppLanguage language) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new AppBadException(messageService.getMessage("category.not.found", language)));
         category.setIsActive(false);
-        fileClient.delete(category.getIconId(), language.name());
         categoryRepository.save(category);
         return true;
     }
