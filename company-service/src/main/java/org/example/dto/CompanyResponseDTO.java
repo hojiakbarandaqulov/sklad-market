@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class CompanyResponseDTO {
     private Long id;
     private String name;
+    private String fullName;
     private String slug;
     private String shortDescription;
     private String description;

@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.entity.base.BaseEntity;
+import org.example.enums.CompanyType;
 import org.example.enums.VerificationStatus;
 
 import java.time.LocalDate;
@@ -30,6 +31,10 @@ public class    Company extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CompanyType type;
 
     private String logoPath;
 

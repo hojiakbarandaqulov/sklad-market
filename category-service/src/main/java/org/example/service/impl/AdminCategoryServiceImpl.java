@@ -30,7 +30,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
 
     @Override
     public List<CategoryResponse> getCategories() {
-        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "sortOrder"))
+        return categoryRepository.findAllByIsActiveTrueOrderBySortOrderAsc()
                 .stream()
                 .map(this::toCategoryResponse)
                 .toList();

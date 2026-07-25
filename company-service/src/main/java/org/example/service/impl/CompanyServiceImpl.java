@@ -71,12 +71,13 @@ public class CompanyServiceImpl implements CompanyService {
         companyMap.setOwnerUserId(userId);
         companyMap.setSlug(generateSlug(requestDTO.getName()));
         companyMap.setVerificationStatus(VerificationStatus.DRAFT);
+        companyMap.setType(companyType);
 
         companyMap.setIsBlocked(false);
         Company saved = companyRepository.save(companyMap);
         CompanyCreateEvent companyCreateEvent = new CompanyCreateEvent();
         companyCreateEvent.setCompanyId(companyMap.getId());
-        companyCreateEvent.setCompanyName(companyMap.getName() + " " + companyType);
+        companyCreateEvent.setCompanyName(companyMap.getName());
         companyCreateEvent.setCompanySlug(companyMap.getSlug());
         companyCreateEvent.setOwnerUserId(companyMap.getOwnerUserId());
         companyCreateEvent.setVerificationStatus(companyMap.getVerificationStatus());
@@ -134,7 +135,8 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public ApiResponse<CompanyResponseDTO> update(Long id, CompanyRequestDTO dto, CompanyType companyType, AppLanguage language) {
         Company company = findOwnedCompany(id, language);
-        company.setName(dto.getName() + " " + companyType);
+        company.setName(dto.getName());
+        company.setType(companyType);
         company.setShortDescription(dto.getShortDescription());
         company.setDescription(dto.getDescription());
         company.setStir(dto.getStir());
@@ -380,6 +382,7 @@ public class CompanyServiceImpl implements CompanyService {
         CompanyResponseDTO response = new CompanyResponseDTO();
         response.setId(company.getId());
         response.setName(company.getName());
+        response.setFullName(company.getName()+" "+company.getType());
         response.setSlug(company.getSlug());
         response.setShortDescription(company.getShortDescription());
         response.setDescription(company.getDescription());
