@@ -76,7 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company saved = companyRepository.save(companyMap);
         CompanyCreateEvent companyCreateEvent = new CompanyCreateEvent();
         companyCreateEvent.setCompanyId(companyMap.getId());
-        companyCreateEvent.setCompanyName(companyMap.getName() +" "+ companyType);
+        companyCreateEvent.setCompanyName(companyMap.getName() + " " + companyType);
         companyCreateEvent.setCompanySlug(companyMap.getSlug());
         companyCreateEvent.setOwnerUserId(companyMap.getOwnerUserId());
         companyCreateEvent.setVerificationStatus(companyMap.getVerificationStatus());
@@ -132,9 +132,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public ApiResponse<CompanyResponseDTO> update(Long id, CompanyRequestDTO dto, AppLanguage language) {
+    public ApiResponse<CompanyResponseDTO> update(Long id, CompanyRequestDTO dto, CompanyType companyType, AppLanguage language) {
         Company company = findOwnedCompany(id, language);
-        company.setName(dto.getName());
+        company.setName(dto.getName() + " " + companyType);
         company.setShortDescription(dto.getShortDescription());
         company.setDescription(dto.getDescription());
         company.setStir(dto.getStir());

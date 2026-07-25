@@ -28,7 +28,7 @@ public interface CompanyService {
 
     ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(String slug, Long categoryId, int page, int perPage, AppLanguage language);
 
-    ApiResponse<CompanyResponseDTO> update(Long id, CompanyRequestDTO dto, AppLanguage language);
+    ApiResponse<CompanyResponseDTO> update(Long id, CompanyRequestDTO dto, CompanyType companyType, AppLanguage language);
 
     ApiResponse<CompanyDocumentResponse> addDocument(Long id, CompanyDocumentCreateRequest request, AppLanguage language);
 

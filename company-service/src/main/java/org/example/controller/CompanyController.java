@@ -105,9 +105,10 @@ public class CompanyController {
     @PreAuthorize("hasRole('SELLER')")
     public ApiResponse<CompanyResponseDTO> update(
             @PathVariable Long id,
+            @RequestHeader CompanyType companyType,
             @RequestBody @Valid CompanyRequestDTO dto,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return companyService.update(id, dto, language);
+        return companyService.update(id, dto,companyType, language);
     }
 
     @PostMapping("/{id}/documents")
