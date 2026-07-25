@@ -176,7 +176,7 @@ public class CategoryServiceImpl implements CategoryService {
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.ASC, "sortOrder")
         );
-        Page<Category> all = categoryRepository.findAll(sortedPagable);
+        Page<Category> all = categoryRepository.findAllByIsActiveTrue(sortedPagable);
         return all.map(category -> {
             CategoryResponse response = new CategoryResponse();
             response.setId(category.getId());

@@ -8,6 +8,7 @@ import org.example.dto.map.CompanyLocationUpdate;
 import org.example.dto.map.CompanyMapResponse;
 import org.example.dto.map.CompanySlugMapResponse;
 import org.example.enums.AppLanguage;
+import org.example.enums.CompanyType;
 import org.example.service.CompanyService;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
@@ -28,8 +29,9 @@ public class CompanyController {
     @PreAuthorize("hasRole('SELLER')")
     @PostMapping("/create")
     public ApiResponse<CompanyResponseDTO> createCompany(@RequestBody @Valid CompanyRequestDTO company,
+                                                         @RequestHeader CompanyType companyType,
                                                          @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return companyService.create(company, language);
+        return companyService.create(company, companyType, language);
     }
 
     @GetMapping

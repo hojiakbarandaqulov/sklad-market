@@ -12,6 +12,7 @@ import org.example.dto.map.CompanySlugMapResponse;
 import org.example.entity.Company;
 import org.example.entity.CompanyDocument;
 import org.example.enums.AppLanguage;
+import org.example.enums.CompanyType;
 import org.example.enums.VerificationStatus;
 import org.example.exp.AppBadException;
 import org.example.repository.CompanyDocumentRepository;
@@ -50,7 +51,7 @@ public class CompanyServiceImpl implements CompanyService {
     private static final int MAX_COMPANIES_PER_SELLER = 1;
 
     @Override
-    public ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO requestDTO, AppLanguage language) {
+    public ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO requestDTO, CompanyType companyType, AppLanguage language) {
         Long userId = SpringSecurityUtil.getProfileId();
         long count = companyRepository.countByOwnerUserIdAndDeletedAtIsNull(userId);
         if (count >= MAX_COMPANIES_PER_SELLER) {
@@ -75,7 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company saved = companyRepository.save(companyMap);
         CompanyCreateEvent companyCreateEvent = new CompanyCreateEvent();
         companyCreateEvent.setCompanyId(companyMap.getId());
-        companyCreateEvent.setCompanyName(companyMap.getName());
+        companyCreateEvent.setCompanyName(companyMap.getName() +" "+ companyType);
         companyCreateEvent.setCompanySlug(companyMap.getSlug());
         companyCreateEvent.setOwnerUserId(companyMap.getOwnerUserId());
         companyCreateEvent.setVerificationStatus(companyMap.getVerificationStatus());
@@ -112,7 +113,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(String slug,Long categoryId, int page, int perPage, AppLanguage language) {
+    public ApiResponse<PageImpl<CompanyProductResponse>> getCompanyProducts(String slug, Long categoryId, int page, int perPage, AppLanguage language) {
         int resolvedPage = normalizePage(page, language);
         int resolvedPerPage = normalizePerPage(perPage, language);
         Company company = companyRepository.findBySlugAndDeletedAtIsNullAndVerificationStatusIn(slug, List.of(VerificationStatus.VERIFIED, VerificationStatus.PENDING_VERIFICATION));

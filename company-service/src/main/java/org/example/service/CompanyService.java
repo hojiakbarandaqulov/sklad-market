@@ -6,6 +6,7 @@ import org.example.dto.map.CompanyMapResponse;
 import org.example.dto.map.CompanySlugMapResponse;
 import org.example.entity.Company;
 import org.example.enums.AppLanguage;
+import org.example.enums.CompanyType;
 import org.example.enums.VerificationStatus;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 public interface CompanyService {
 
-    ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO company, AppLanguage language);
+    ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO company, CompanyType companyType, AppLanguage language);
 
     ApiResponse<CompanyInfoDTO> getMyCompanies(AppLanguage language);
 
