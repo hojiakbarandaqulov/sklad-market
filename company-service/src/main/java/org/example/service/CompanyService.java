@@ -51,4 +51,6 @@ public interface CompanyService {
     List<CompanyMapResponse> findAllByIdInAndDeletedAtIsNullAndIsBlockedFalseAndLatNotNullAndLngNotNull(List<Long> companyIds);
 
     ApiResponse<CompanyLocationUpdate> companyLocationUpdate(Long companyId, CompanyLocationUpdate companyLocationUpdate, AppLanguage language);
+
+    Company findOwnedCompany(Long companyId, AppLanguage language);
 }
