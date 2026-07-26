@@ -1,8 +1,8 @@
 package org.example.service;
 
 import org.example.dto.internal.dashboard.SellerChatStatsResponse;
-import org.example.dto.internal.dashboard.SellerStatsRequest;
+import org.example.dto.internal.dashboard.SellerStatsFilterRequest;
 
 public interface InternalChatStatsService {
-    SellerChatStatsResponse getSellerOverview(SellerStatsRequest request);
+    SellerChatStatsResponse getSellerOverview(SellerStatsFilterRequest request);
 }
