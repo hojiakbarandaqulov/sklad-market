@@ -3,7 +3,7 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.internal.dashboard.MonthlyCountResponse;
 import org.example.dto.internal.dashboard.SellerChatStatsResponse;
-import org.example.dto.internal.dashboard.SellerStatsFilterRequest;
+import org.example.dto.internal.dashboard.SellerStatsRequest;
 import org.example.exp.AppBadException;
 import org.example.repository.ChatThreadRepository;
 import org.example.service.InternalChatStatsService;
@@ -27,7 +27,7 @@ public class InternalChatStatsServiceImpl implements InternalChatStatsService {
     private final ChatThreadRepository chatThreadRepository;
 
     @Override
-    public SellerChatStatsResponse getSellerOverview(SellerStatsFilterRequest request) {
+    public SellerChatStatsResponse getSellerOverview(SellerStatsRequest request) {
         List<Long> companyIds = requireCompanyIds(request);
         int months = normalizeMonths(request == null ? null : request.getMonths());
         LocalDateTime from = YearMonth.now().minusMonths(months - 1L).atDay(1).atStartOfDay();
@@ -70,7 +70,7 @@ public class InternalChatStatsServiceImpl implements InternalChatStatsService {
         return null;
     }
 
-    private List<Long> requireCompanyIds(SellerStatsFilterRequest request) {
+    private List<Long> requireCompanyIds(SellerStatsRequest request) {
         if (request == null || request.getCompanyIds() == null || request.getCompanyIds().isEmpty()) {
             throw new AppBadException("companyIds is required");
         }

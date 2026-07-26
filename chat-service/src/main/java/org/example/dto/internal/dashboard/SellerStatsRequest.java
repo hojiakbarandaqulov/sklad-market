@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class SellerStatsFilterRequest {
+public class SellerStatsRequest {
     private List<Long> companyIds;
     private Integer months;
 }

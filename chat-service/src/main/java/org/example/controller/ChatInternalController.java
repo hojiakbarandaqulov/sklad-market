@@ -2,7 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.internal.dashboard.SellerChatStatsResponse;
-import org.example.dto.internal.dashboard.SellerStatsFilterRequest;
+import org.example.dto.internal.dashboard.SellerStatsRequest;
 import org.example.service.ChatService;
 import org.example.service.InternalChatStatsService;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +26,7 @@ public class ChatInternalController {
     }
 
     @PostMapping("/stats/seller/overview")
-    public SellerChatStatsResponse sellerOverview(@RequestBody SellerStatsFilterRequest request) {
+    public SellerChatStatsResponse sellerOverview(@RequestBody SellerStatsRequest request) {
         // Dashboarddagi "contacts" va chat trendi shu endpointdan yig'iladi.
         return internalChatStatsService.getSellerOverview(request);
     }
