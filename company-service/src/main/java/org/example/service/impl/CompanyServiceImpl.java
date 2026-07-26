@@ -357,7 +357,8 @@ public class CompanyServiceImpl implements CompanyService {
         return new PageImpl<>(dtoList, pageable, pageResult.getTotalElements());
     }
 
-    private Company findOwnedCompany(Long id, AppLanguage language) {
+    @Override
+    public Company findOwnedCompany(Long id, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
         return companyRepository.findByIdAndOwnerUserIdAndDeletedAtIsNull(id, profileId).orElseThrow(() -> new AppBadException(messageService.getMessage("company.not.found", language)));
     }
