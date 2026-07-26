@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category create bug fix" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="company branch finish commit" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,9 +107,9 @@
         <option value="HTTP Request" />
         <option value="Record" />
         <option value="Dockerfile" />
+        <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
-        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -149,84 +149,84 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.docker-compose.yml.minio: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml: Compose Deployment.executor": "Run",
-    "Gradle.Build api-gateway.executor": "Run",
-    "Gradle.Build auth-service.executor": "Run",
-    "Gradle.Build category-service.executor": "Run",
-    "Gradle.Build chat-service.executor": "Run",
-    "Gradle.Build company-servcie.executor": "Run",
-    "Gradle.Build company-service.executor": "Run",
-    "Gradle.Build discovery-service.executor": "Run",
-    "Gradle.Build file-service.executor": "Run",
-    "Gradle.Build lead-service.executor": "Run",
-    "Gradle.Build notification-service.executor": "Run",
-    "Gradle.Build product-service.executor": "Run",
-    "Gradle.Build report-service.executor": "Run",
-    "Gradle.Build reposrt-service.executor": "Run",
-    "Gradle.Build user-service.executor": "Run",
-    "Gradle.auth-service [build].executor": "Run",
-    "Gradle.category-service [build].executor": "Run",
-    "Gradle.category-service [clean].executor": "Run",
-    "Gradle.company-service [build].executor": "Run",
-    "Gradle.company-service [clean].executor": "Run",
-    "Gradle.product-service [build].executor": "Run",
-    "Gradle.user-service [buildDependents].executor": "Run",
-    "Gradle.user-service [build].executor": "Run",
-    "HTTP Request.attach | #2.executor": "Run",
-    "HTTP Request.attach | attach upload.executor": "Run",
-    "HTTP Request.auth | #1.executor": "Run",
-    "HTTP Request.auth | #2.executor": "Run",
-    "HTTP Request.auth | #3.executor": "Run",
-    "HTTP Request.generated-requests | #47.executor": "Run",
-    "HTTP Request.generated-requests | #48.executor": "Run",
-    "HTTP Request.generated-requests | #49.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "Spring Boot.ApiGatewayApplication.executor": "Run",
-    "Spring Boot.AuthServiceApplication.executor": "Run",
-    "Spring Boot.CategoryServiceApplication.executor": "Run",
-    "Spring Boot.ChatServiceApplication.executor": "Run",
-    "Spring Boot.CompanyServiceApplication.executor": "Run",
-    "Spring Boot.DiscoveryServiceApplication.executor": "Run",
-    "Spring Boot.FileServiceApplication.executor": "Run",
-    "Spring Boot.LeadServiceApplication.executor": "Run",
-    "Spring Boot.NotificationServiceApplication.executor": "Run",
-    "Spring Boot.ProductServiceApplication.executor": "Run",
-    "Spring Boot.ReportServiceApplication.executor": "Run",
-    "Spring Boot.UserServiceApplication.executor": "Run",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "main",
-    "go.import.settings.migrated": "true",
-    "jdk.selected.JAVA_MODULE": "17",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/hojia/Documents/TOSHKSZ-Ariza",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.docker-compose.yml.minio: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build auth-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build category-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build chat-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-servcie.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build discovery-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build file-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build lead-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build notification-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build product-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build report-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build reposrt-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build user-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.auth-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.product-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [buildDependents].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | attach upload.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #47.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #48.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #49.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CategoryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ChatServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CompanyServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.DiscoveryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.FileServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LeadServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ReportServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hojia/Documents/TOSHKSZ-Ariza&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -510,86 +510,7 @@
       <workItem from="1784654959303" duration="1718000" />
       <workItem from="1784904703212" duration="162000" />
       <workItem from="1784952624744" duration="4167000" />
-    </task>
-    <task id="LOCAL-00052" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783606390249</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1783606390249</updated>
-    </task>
-    <task id="LOCAL-00053" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783606405286</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1783606405286</updated>
-    </task>
-    <task id="LOCAL-00054" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783607093738</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1783607093738</updated>
-    </task>
-    <task id="LOCAL-00055" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783607099591</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1783607099592</updated>
-    </task>
-    <task id="LOCAL-00056" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783616253733</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1783616253734</updated>
-    </task>
-    <task id="LOCAL-00057" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783616948213</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1783616948213</updated>
-    </task>
-    <task id="LOCAL-00058" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783700734302</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1783700734302</updated>
-    </task>
-    <task id="LOCAL-00059" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783706651696</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1783706651696</updated>
-    </task>
-    <task id="LOCAL-00060" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783706672221</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1783706672221</updated>
-    </task>
-    <task id="LOCAL-00061" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783706730598</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1783706730598</updated>
+      <workItem from="1785033464499" duration="13993000" />
     </task>
     <task id="LOCAL-00062" summary="mediaBaseurl url bug fix">
       <option name="closed" value="true" />
@@ -903,7 +824,87 @@
       <option name="project" value="LOCAL" />
       <updated>1784972673768</updated>
     </task>
-    <option name="localTasksCounter" value="101" />
+    <task id="LOCAL-00101" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1785034211909</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1785034211909</updated>
+    </task>
+    <task id="LOCAL-00102" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1785034260653</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1785034260653</updated>
+    </task>
+    <task id="LOCAL-00103" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1785074126134</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1785074126134</updated>
+    </task>
+    <task id="LOCAL-00104" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1785075458841</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1785075458841</updated>
+    </task>
+    <task id="LOCAL-00105" summary="category create bug fix">
+      <option name="closed" value="true" />
+      <created>1785075718995</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1785075718995</updated>
+    </task>
+    <task id="LOCAL-00106" summary="seller dashboard api bug fix">
+      <option name="closed" value="true" />
+      <created>1785075733090</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1785075733090</updated>
+    </task>
+    <task id="LOCAL-00107" summary="seller dashboard api bug fix">
+      <option name="closed" value="true" />
+      <created>1785077501403</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1785077501403</updated>
+    </task>
+    <task id="LOCAL-00108" summary="seller dashboard api bug fix">
+      <option name="closed" value="true" />
+      <created>1785078531052</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1785078531052</updated>
+    </task>
+    <task id="LOCAL-00109" summary="company branch finish commit">
+      <option name="closed" value="true" />
+      <created>1785087821760</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1785087821760</updated>
+    </task>
+    <task id="LOCAL-00110" summary="company branch finish commit">
+      <option name="closed" value="true" />
+      <created>1785087957304</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1785087957304</updated>
+    </task>
+    <option name="localTasksCounter" value="111" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -921,8 +922,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="project deploy testing" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/compiler.xml&#10;#&#9;.idea/workspace.xml&#10;#&#9;report-service/src/main/java/org/example/config/clent/CompanyClient.java&#10;#&#9;report-service/src/main/java/org/example/config/clent/ProductClient.java&#10;#&#9;report-service/src/main/java/org/example/service/impl/ReportServiceImpl.java" />
     <MESSAGE value="report service bug fix" />
     <MESSAGE value="server deploy config" />
     <MESSAGE value="file service commit" />
@@ -944,9 +943,11 @@
     <MESSAGE value="message commit" />
     <MESSAGE value="getMyCompany api bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="category create bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="category create bug fix" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
+    <MESSAGE value="seller dashboard api bug fix" />
+    <MESSAGE value="company branch finish commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="company branch finish commit" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

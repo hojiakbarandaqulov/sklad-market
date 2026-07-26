@@ -19,7 +19,7 @@ public class CompanyBranchController {
     private final CompanyBranchService companyBranchService;
 
     @PreAuthorize("hasRole('SELLER')")
-    @PostMapping("/create/{companyId}/branch")
+    @PostMapping("/create/{companyId}/branches")
     public ApiResponse<CompanyBranchCreateDTO> companyBranchCreate(@RequestBody @Valid CompanyBranchCreateDTO companyBranch,
                                                                    @PathVariable Long companyId,
                                                                    @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
