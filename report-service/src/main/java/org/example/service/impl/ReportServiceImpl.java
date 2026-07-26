@@ -165,7 +165,7 @@ public class ReportServiceImpl implements ReportService {
             );*/
             chatClient.blockThread(report.getTargetId());
         } else {
-            throw new AppBadException("Unsupported target type");
+            throw new AppBadException(messageService.getMessage("report.target.type.unsupported", language));
         }
 
         report.setStatus(ReportStatus.RESOLVED);
@@ -186,7 +186,7 @@ public class ReportServiceImpl implements ReportService {
             );*/
             ProductSummaryResponse product = productClient.getProductSummary(report.getTargetId());
             if (product == null || product.getSellerId() == null) {
-                throw new AppBadException("product owner not found");
+                throw new AppBadException(messageService.getMessage("report.product.owner.not.found", language));
             }
             return product.getSellerId();
         }
@@ -198,11 +198,11 @@ public class ReportServiceImpl implements ReportService {
             );*/
             CompanySummaryResponse company = companyClient.getSummary(report.getTargetId());
             if (company == null || company.getOwnerUserId() == null) {
-                throw new AppBadException("company owner not found");
+                throw new AppBadException(messageService.getMessage("report.company.owner.not.found", language));
             }
             return company.getOwnerUserId();
         }
-        throw new AppBadException("Warn user action is not supported for this target type");
+        throw new AppBadException(messageService.getMessage("report.warn.target.type.unsupported", language));
     }
 
     private Long extractCount(Map<String, ?> payload) {

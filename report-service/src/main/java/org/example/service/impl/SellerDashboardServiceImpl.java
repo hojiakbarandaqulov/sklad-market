@@ -47,7 +47,7 @@ public class SellerDashboardServiceImpl implements SellerDashboardService {
     public SellerDashboardResponse getDashboard(Long companyId, Integer months) {
         Long sellerId = SpringSecurityUtil.getProfileId();
         if (sellerId == null) {
-            throw new AppBadException("Seller not found");
+            throw new AppBadException("seller.not.found");
         }
 
         int normalizedMonths = normalizeMonths(months);

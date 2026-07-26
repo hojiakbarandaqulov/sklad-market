@@ -135,7 +135,7 @@ public class CategoryServiceImpl implements CategoryService {
             ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
 
             if (upload == null || upload.getData() == null) {
-                throw new AppBadException("Category rasmi yuklanmadi");
+                throw new AppBadException(messageService.getMessage("category.image.upload.failed", language));
             }
 
             // Yangi rasmning ma'lumotlarini DB ga saqlash shart
