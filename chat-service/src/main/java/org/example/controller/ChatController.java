@@ -20,6 +20,7 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @GetMapping
     public ApiResponse<PagedResponse<ChatThreadResponse>> getThreads(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,
@@ -36,6 +37,7 @@ public class ChatController {
         return ApiResponse.successResponse(chatService.createThread(request));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @GetMapping("/{threadId}/messages")
     public ApiResponse<PagedResponse<ChatMessageResponse>> getMessages(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,
@@ -46,12 +48,14 @@ public class ChatController {
         return ApiResponse.successResponse(chatService.getMessages(threadId, page, perPage, beforeId));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @GetMapping("/unread-count")
     public ApiResponse<UnreadCountResponse> getUnreadCount(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language) {
         return ApiResponse.successResponse(chatService.getUnreadCount());
     }
 
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @PostMapping(value = "/{threadId}/messages/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<UploadAttachmentResponse> uploadImage(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,
@@ -60,6 +64,7 @@ public class ChatController {
         return ApiResponse.successResponse(chatService.uploadAttachment(threadId, file));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @PostMapping(value = "/{threadId}/messages/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<UploadAttachmentResponse> uploadFile(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,
@@ -68,6 +73,7 @@ public class ChatController {
         return ApiResponse.successResponse(chatService.uploadFileAttachment(threadId, file));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @DeleteMapping("/{threadId}")
     public ApiResponse<Map<String, String>> hideThread(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,
@@ -76,6 +82,7 @@ public class ChatController {
         return ApiResponse.successResponse(Map.of("message", "Thread hidden"));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @PostMapping("/ws-token")
     public ApiResponse<WsTokenResponse> issueWsToken(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language) {
