@@ -67,7 +67,6 @@ public class ChatServiceImpl implements ChatService {
     @Value("${media.base-url}")
     private String mediaBaseUrl;
 
-    @Transactional(readOnly = true)
     @Override
     public PagedResponse<ChatThreadResponse> getThreads(int page, int perPage) {
         Long currentUserId = requireCurrentUserId();
@@ -95,7 +94,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public ChatCreateResponse createThread(CreateChatRequest request) {
         Long buyerId = SpringSecurityUtil.getProfileId();
         CompanyOwnershipResponse company = companyClient.checkOwnership(request.getSellerCompanyId(), buyerId);
