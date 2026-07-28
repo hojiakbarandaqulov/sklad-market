@@ -1,13 +1,6 @@
 package org.example.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.entity.base.BaseEntity;
@@ -29,7 +22,7 @@ public class ChatMessage extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ChatParticipantType senderType;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     private String body;
 
     private String attachmentKey;
