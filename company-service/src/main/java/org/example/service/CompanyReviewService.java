@@ -1,0 +1,33 @@
+package org.example.service;
+
+import org.example.dto.ApiResponse;
+import org.example.dto.review.CompanyReviewListResponse;
+import org.example.dto.review.ReviewCreateRequest;
+import org.example.dto.review.ReviewResponse;
+import org.example.dto.review.ReviewUpdateRequest;
+import org.example.enums.AppLanguage;
+
+public interface CompanyReviewService {
+
+    ApiResponse<CompanyReviewListResponse> getReviews(
+            Long companyId,
+            int page,
+            int perPage,
+            AppLanguage language
+    );
+
+    ApiResponse<ReviewResponse> create(
+            Long companyId,
+            ReviewCreateRequest request,
+            AppLanguage language
+    );
+
+    ApiResponse<ReviewResponse> update(
+            Long companyId,
+            Long reviewId,
+            ReviewUpdateRequest request,
+            AppLanguage language
+    );
+
+    ApiResponse<Boolean> delete(Long companyId, Long reviewId, AppLanguage language);
+}

@@ -3,6 +3,7 @@ package org.example.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/internal/**").permitAll()
                         .requestMatchers("/api/v1/companies/public").permitAll()
                         .requestMatchers("/api/v1/companies/search").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/companies/*/reviews").permitAll()
                         .requestMatchers("/api/v1/companies/*/products").permitAll()
                         .requestMatchers("/api/v1/companies/*").permitAll()
                         .requestMatchers("/api/v1/companies/branches/*").permitAll()
