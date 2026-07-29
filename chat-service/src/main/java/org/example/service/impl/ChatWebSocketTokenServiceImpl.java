@@ -20,7 +20,7 @@ public class ChatWebSocketTokenServiceImpl implements ChatWebSocketTokenService 
     @Value("${chat.websocket.token-secret}")
     private String tokenSecret;
 
-    @Value("${chat.websocket.token-expiration-minutes}")
+    @Value("${chat.websocket.token-expiration-second}")
     private long expiresInMinutes;
 
     @Override

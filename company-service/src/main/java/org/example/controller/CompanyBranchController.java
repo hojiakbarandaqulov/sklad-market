@@ -26,8 +26,8 @@ public class CompanyBranchController {
         return companyBranchService.create(companyBranch, companyId, language);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
-    @GetMapping("/{companyId}/branches")
+    @PreAuthorize("permitAll()")
+    @GetMapping("/branches/{companyId}")
     public ApiResponse<List<CompanyBranchResponse>> getBranches(
             @PathVariable Long companyId,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

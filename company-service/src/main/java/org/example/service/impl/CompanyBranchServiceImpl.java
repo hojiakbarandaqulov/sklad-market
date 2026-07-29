@@ -54,7 +54,7 @@ public class CompanyBranchServiceImpl implements CompanyBranchService {
     @Override
     @Transactional(readOnly = true)
     public ApiResponse<List<CompanyBranchResponse>> getBranches(Long companyId, AppLanguage language) {
-        companyService.findOwnedCompany(companyId, language);
+//        companyService.findOwnedCompany(companyId, language);
 
         List<CompanyBranchResponse> branches = companyBranchRepository
                 .findAllByCompany_IdAndDeletedFalseOrderByCreatedDateDesc(companyId)

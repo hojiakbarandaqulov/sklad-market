@@ -17,5 +17,5 @@ media:
 
 chat:
   websocket:
-    token-expiration-minutes: 60
+    token-expiration-second: 60
     token-secret: change-this-chat-websocket-secret-in-production
