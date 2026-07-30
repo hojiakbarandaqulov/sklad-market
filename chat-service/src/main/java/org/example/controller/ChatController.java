@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
 import org.example.dto.PagedResponse;
 import org.example.dto.chat.*;
+import org.example.enums.AppLanguage;
 import org.example.service.ChatService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,9 +44,9 @@ public class ChatController {
             description = "Buyer kompaniyaga yoki uning mahsulotiga chat ochadi. Xuddi shu chat mavjud bo'lsa yangi yozuv yaratilmaydi."
     )
     public ApiResponse<ChatCreateResponse> createThread(
-            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language,
             @RequestBody @Valid CreateChatRequest request) {
-        return ApiResponse.successResponse(chatService.createThread(request));
+        return ApiResponse.successResponse(chatService.createThread(request,language));
     }
 
     @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
