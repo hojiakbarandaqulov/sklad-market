@@ -32,6 +32,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     Optional<Product> findByIdAndDeletedAtIsNull(Long id);
 
+    Optional<Product> findByIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNull(
+            Long id,
+            ProductModerationStatus moderationStatus
+    );
+
     boolean existsBySlug(String slug);
 
     List<Product> findTop8ByCategoryIdAndIdNotAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(

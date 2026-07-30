@@ -28,7 +28,7 @@ public class CompanyBranchController {
     }
 
     @PermitAll
-    @GetMapping("/{companyId}/branches")
+    @GetMapping("/branches/{companyId}")
     public ApiResponse<List<CompanyBranchResponse>> getBranches(
             @PathVariable Long companyId,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

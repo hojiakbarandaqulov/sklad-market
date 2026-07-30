@@ -29,7 +29,7 @@ public class ChatController {
         return ApiResponse.successResponse(chatService.getThreads(page, perPage));
     }
 
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @PostMapping("/create")
     public ApiResponse<ChatCreateResponse> createThread(
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,

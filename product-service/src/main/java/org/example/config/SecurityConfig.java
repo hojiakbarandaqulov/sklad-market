@@ -53,6 +53,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/{slug}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/search").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/all").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/*/reviews").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/reviews/company/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/banners/getAll").permitAll()
                         .requestMatchers("/api/v1/product-favorites", "/api/v1/product-favorites/**").hasAnyRole("BUYER","SELLER")
                         .anyRequest().authenticated()
