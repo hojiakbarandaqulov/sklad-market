@@ -11,11 +11,11 @@ import lombok.Setter;
 @Setter
 public class ProductReviewCreateRequest {
 
-    @NotNull(message = "{review.rating.required}")
+    @NotNull(message = "rating required")
     @Min(value = 1, message = "{review.rating.range}")
     @Max(value = 5, message = "{review.rating.range}")
     private Integer rating;
 
-    @Size(max = 1000, message = "{review.comment.too.long}")
+    @Size(max = 1000, message = "comment required")
     private String comment;
 }

@@ -7,6 +7,7 @@ import org.example.dto.internal.dashboard.SellerStatsFilterRequest;
 import org.example.exp.AppBadException;
 import org.example.repository.ChatThreadRepository;
 import org.example.service.InternalChatStatsService;
+import org.example.service.ResourceBundleService;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -25,6 +26,7 @@ public class InternalChatStatsServiceImpl implements InternalChatStatsService {
     private static final DateTimeFormatter MONTH_KEY_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM", Locale.ROOT);
 
     private final ChatThreadRepository chatThreadRepository;
+    private final ResourceBundleService messageService;
 
     @Override
     public SellerChatStatsResponse getSellerOverview(SellerStatsFilterRequest request) {
@@ -72,7 +74,7 @@ public class InternalChatStatsServiceImpl implements InternalChatStatsService {
 
     private List<Long> requireCompanyIds(SellerStatsFilterRequest request) {
         if (request == null || request.getCompanyIds() == null || request.getCompanyIds().isEmpty()) {
-            throw new AppBadException("companyIds is required");
+            throw new AppBadException(messageService.getMessage("validation.company.ids.required"));
         }
         return request.getCompanyIds();
     }
@@ -80,7 +82,7 @@ public class InternalChatStatsServiceImpl implements InternalChatStatsService {
     private int normalizeMonths(Integer months) {
         int value = months == null ? DEFAULT_MONTHS : months;
         if (value < 1 || value > 12) {
-            throw new AppBadException("months must be between 1 and 12");
+            throw new AppBadException(messageService.getMessage("validation.months.range"));
         }
         return value;
     }

@@ -1,6 +1,9 @@
 package org.example.exp.handle;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.exp.AppBadException;
+import org.example.service.ResourceBundleService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.*;
 
 @ControllerAdvice
+@Slf4j
+@RequiredArgsConstructor
 public class ExceptionHandleController extends ResponseEntityExceptionHandler {
+
+    private final ResourceBundleService messageService;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -49,17 +56,17 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})
     public ResponseEntity<String> handleAccessDenied(Exception e) {
-        return ResponseEntity.status(403).body(e.getMessage());
+        return ResponseEntity.status(403).body(messageService.getMessage("auth.access.denied"));
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<String> handleAuthentication(AuthenticationException e) {
-        return ResponseEntity.status(401).body(e.getMessage());
+        return ResponseEntity.status(401).body(messageService.getMessage("auth.unauthorized"));
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handle(RuntimeException e) {
-        e.printStackTrace();
-        return ResponseEntity.internalServerError().body(e.getMessage());
+        log.error("Unexpected chat-service error", e);
+        return ResponseEntity.internalServerError().body(messageService.getMessage("internal.server.error"));
     }
 }

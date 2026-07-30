@@ -2,8 +2,10 @@ package org.example.service.impl;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.example.dto.chat.WsTokenResponse;
 import org.example.exp.AppBadException;
+import org.example.service.ResourceBundleService;
 import org.example.service.ChatWebSocketTokenService;
 import org.example.utils.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +17,10 @@ import java.time.Instant;
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class ChatWebSocketTokenServiceImpl implements ChatWebSocketTokenService {
+
+    private final ResourceBundleService messageService;
 
     @Value("${chat.websocket.token-secret}")
     private String tokenSecret;
@@ -27,7 +32,7 @@ public class ChatWebSocketTokenServiceImpl implements ChatWebSocketTokenService 
     public WsTokenResponse issueToken() {
         Long userId = SpringSecurityUtil.getProfileId();
         if (userId == null) {
-            throw new AppBadException("Unauthorized");
+            throw new AppBadException(messageService.getMessage("auth.unauthorized"));
         }
 
         Instant now = Instant.now();
@@ -52,12 +57,12 @@ public class ChatWebSocketTokenServiceImpl implements ChatWebSocketTokenService 
                     .getPayload();
 
             if (!"chat-ws".equals(claims.get("purpose"))) {
-                throw new AppBadException("Invalid websocket token");
+                throw new AppBadException(messageService.getMessage("chat.websocket.token.invalid"));
             }
 
             return Long.valueOf(claims.getSubject());
         } catch (Exception e) {
-            throw new AppBadException("Invalid websocket token");
+            throw new AppBadException(messageService.getMessage("chat.websocket.token.invalid"));
         }
     }
 
