@@ -8,8 +8,10 @@ import org.example.dto.chat.ChatMessageResponse;
 import org.example.dto.chat.ReadReceiptResponse;
 import org.example.exp.AppBadException;
 import org.example.service.ChatService;
+import org.example.service.ResourceBundleService;
 import org.example.service.ChatWebSocketTokenService;
 import org.example.service.impl.ChatRateLimitService;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -20,6 +22,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,20 +35,30 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     private final ChatService chatService;
     private final ChatWebSocketTokenService chatWebSocketTokenService;
     private final ChatRateLimitService chatRateLimitService;
+    private final ResourceBundleService messageService;
 
     private final Map<Long, Set<WebSocketSession>> threadSubscribers = new ConcurrentHashMap<>();
     private final Map<String, Set<Long>> sessionSubscriptions = new ConcurrentHashMap<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        String token = extractQueryParam(session.getUri(), "token");
-        Long userId = chatWebSocketTokenService.parseToken(token);
-        session.getAttributes().put("userId", userId);
-        sessionSubscriptions.put(session.getId(), ConcurrentHashMap.newKeySet());
+        Locale locale = resolveLocale(session.getHandshakeHeaders().getFirst("Accept-Language"));
+        session.getAttributes().put("locale", locale);
+        LocaleContextHolder.setLocale(locale);
+        try {
+            String token = extractQueryParam(session.getUri(), "token");
+            Long userId = chatWebSocketTokenService.parseToken(token);
+            session.getAttributes().put("userId", userId);
+            sessionSubscriptions.put(session.getId(), ConcurrentHashMap.newKeySet());
+        } finally {
+            LocaleContextHolder.resetLocaleContext();
+        }
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        Locale locale = (Locale) session.getAttributes().getOrDefault("locale", Locale.forLanguageTag("uz"));
+        LocaleContextHolder.setLocale(locale);
         try {
             JsonNode payload = objectMapper.readTree(message.getPayload());
             String event = getRequiredText(payload, "event");
@@ -56,13 +69,15 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 case "message" -> handleMessage(session, userId, payload);
                 case "read" -> handleRead(userId, payload);
                 case "typing" -> handleTyping(userId, payload);
-                default -> sendError(session, "bad_request", "Unsupported websocket event");
+                default -> sendError(session, "bad_request", messageService.getMessage("chat.websocket.event.unsupported"));
             }
         } catch (AppBadException e) {
             sendError(session, "bad_request", e.getMessage());
         } catch (Exception e) {
             log.error("WebSocket handler error", e);
-            sendError(session, "internal_error", "Unexpected websocket error");
+            sendError(session, "internal_error", messageService.getMessage("chat.websocket.unexpected.error"));
+        } finally {
+            LocaleContextHolder.resetLocaleContext();
         }
     }
 
@@ -93,7 +108,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private void handleMessage(WebSocketSession session, Long userId, JsonNode payload) throws Exception {
         if (!chatRateLimitService.allowMessage(userId)) {
-            sendError(session, "rate_limited", "You can send at most 20 messages in 30 seconds");
+            sendError(session, "rate_limited", messageService.getMessage("chat.rate.limit.exceeded"));
             return;
         }
 
@@ -113,7 +128,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         Long threadId = getRequiredLong(payload, "thread_id");
         List<Long> messageIds = new ArrayList<>();
         if (!payload.has("message_ids")) {
-            throw new AppBadException("message_ids is required");
+            throw new AppBadException(messageService.getMessage("chat.message.ids.required"));
         }
         for (JsonNode node : payload.get("message_ids")) {
             messageIds.add(node.asLong());
@@ -172,21 +187,21 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private String getRequiredText(JsonNode payload, String field) {
         if (!payload.hasNonNull(field)) {
-            throw new AppBadException(field + " is required");
+            throw new AppBadException(messageService.getMessage("validation.field.required", field));
         }
         return payload.get(field).asText();
     }
 
     private Long getRequiredLong(JsonNode payload, String field) {
         if (!payload.hasNonNull(field)) {
-            throw new AppBadException(field + " is required");
+            throw new AppBadException(messageService.getMessage("validation.field.required", field));
         }
         return payload.get(field).asLong();
     }
 
     private String extractQueryParam(URI uri, String paramName) {
         if (uri == null || uri.getQuery() == null) {
-            throw new AppBadException("Missing websocket token");
+            throw new AppBadException(messageService.getMessage("chat.websocket.token.missing"));
         }
 
         for (String part : uri.getQuery().split("&")) {
@@ -195,6 +210,19 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 return pair[1];
             }
         }
-        throw new AppBadException("Missing websocket token");
+        throw new AppBadException(messageService.getMessage("chat.websocket.token.missing"));
+    }
+
+    private Locale resolveLocale(String acceptLanguage) {
+        if (acceptLanguage == null || acceptLanguage.isBlank()) {
+            return Locale.forLanguageTag("uz");
+        }
+
+        String language = Locale.forLanguageTag(acceptLanguage.split(",")[0].trim()).getLanguage();
+        return switch (language.toLowerCase(Locale.ROOT)) {
+            case "ru" -> Locale.forLanguageTag("ru");
+            case "en" -> Locale.forLanguageTag("en");
+            default -> Locale.forLanguageTag("uz");
+        };
     }
 }

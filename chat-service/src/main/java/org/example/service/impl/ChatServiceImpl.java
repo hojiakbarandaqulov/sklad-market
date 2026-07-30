@@ -20,6 +20,7 @@ import org.example.exp.AppBadException;
 import org.example.repository.ChatMessageRepository;
 import org.example.repository.ChatThreadRepository;
 import org.example.service.ChatService;
+import org.example.service.ResourceBundleService;
 import org.example.service.ChatWebSocketTokenService;
 import org.example.utils.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,7 @@ public class ChatServiceImpl implements ChatService {
     private final ProductClient productClient;
     private final MinioClient minioClient;
     private final ChatWebSocketTokenService chatWebSocketTokenService;
+    private final ResourceBundleService messageService;
 
     @Value("${aws.bucket-name}")
     private String bucketName;
@@ -100,17 +102,17 @@ public class ChatServiceImpl implements ChatService {
         CompanyOwnershipResponse company = companyClient.checkOwnership(request.getSellerCompanyId(), buyerId);
 
         if (!company.isExists() || !company.isActive()) {
-            throw new AppBadException("Seller company is not available");
+            throw new AppBadException(messageService.getMessage("chat.seller.company.unavailable"));
         }
 
         if (company.isOwner()) {
-            throw new AppBadException("You cannot start a chat with your own company");
+            throw new AppBadException(messageService.getMessage("chat.own.company.not.allowed"));
         }
 
         if (request.getProductId() != null) {
             ProductSummaryResponse productSummary = productClient.getSummary(request.getProductId());
             if (!request.getSellerCompanyId().equals(productSummary.getCompanyId())) {
-                throw new AppBadException("Product does not belong to the selected company");
+                throw new AppBadException(messageService.getMessage("chat.product.company.mismatch"));
             }
         }
 
@@ -214,7 +216,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void blockThread(Long threadId) {
         ChatThread thread = chatThreadRepository.findByIdAndDeletedFalse(threadId)
-                .orElseThrow(() -> new AppBadException("Thread not found"));
+                .orElseThrow(() -> new AppBadException(messageService.getMessage("chat.thread.not.found")));
         thread.setDeleted(Boolean.TRUE);
         chatThreadRepository.save(thread);
     }
@@ -237,7 +239,7 @@ public class ChatServiceImpl implements ChatService {
         String normalizedAttachmentKey = normalizeAttachmentKey(threadId, attachmentKey);
 
         if ((normalizedBody == null || normalizedBody.isBlank()) && normalizedAttachmentKey == null) {
-            throw new AppBadException("Message body or attachment is required");
+            throw new AppBadException(messageService.getMessage("chat.message.content.required"));
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -396,7 +398,7 @@ public class ChatServiceImpl implements ChatService {
 
     private ThreadContext resolveThreadContext(Long userId, Long threadId) {
         ChatThread thread = chatThreadRepository.findByIdAndDeletedFalse(threadId)
-                .orElseThrow(() -> new AppBadException("Thread not found"));
+                .orElseThrow(() -> new AppBadException(messageService.getMessage("chat.thread.not.found")));
 
         if (userId.equals(thread.getBuyerId())) {
             return new ThreadContext(thread, ChatParticipantType.BUYER);
@@ -407,7 +409,7 @@ public class ChatServiceImpl implements ChatService {
             return new ThreadContext(thread, ChatParticipantType.SELLER);
         }
 
-        throw new AppBadException("You do not have access to this thread");
+        throw new AppBadException(messageService.getMessage("chat.thread.access.denied"));
     }
 
     private ChatParticipantType resolveParticipantType(Long userId, ChatThread thread) {
@@ -425,38 +427,38 @@ public class ChatServiceImpl implements ChatService {
     private Long requireCurrentUserId() {
         Long userId = getProfileId();
         if (userId == null) {
-            throw new AppBadException("Unauthorized");
+            throw new AppBadException(messageService.getMessage("auth.unauthorized"));
         }
         return userId;
     }
 
     private void validatePage(int page, int perPage) {
         if (page < 1) {
-            throw new AppBadException("page must be greater than or equal to 1");
+            throw new AppBadException(messageService.getMessage("validation.page.min"));
         }
         if (perPage < 1 || perPage > 100) {
-            throw new AppBadException("per_page must be between 1 and 100");
+            throw new AppBadException(messageService.getMessage("validation.per.page.range"));
         }
     }
 
     private void validateImage(MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new AppBadException("Image file is required");
+            throw new AppBadException(messageService.getMessage("chat.image.required"));
         }
         if (file.getSize() > 5 * 1024 * 1024) {
-            throw new AppBadException("Image size must be 5MB or less");
+            throw new AppBadException(messageService.getMessage("chat.image.size.limit"));
         }
         if (file.getContentType() == null || !ALLOWED_CONTENT_TYPES.contains(file.getContentType().toLowerCase(Locale.ROOT))) {
-            throw new AppBadException("Only jpg, jpeg, png and webp are allowed");
+            throw new AppBadException(messageService.getMessage("chat.image.type.invalid"));
         }
     }
 
     private void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
-            throw new AppBadException("File is required");
+            throw new AppBadException(messageService.getMessage("chat.file.required"));
         }
         if (file.getSize() > 10 * 1024 * 1024) {
-            throw new AppBadException("File size must be 10MB or less");
+            throw new AppBadException(messageService.getMessage("chat.file.size.limit"));
         }
     }
 
@@ -472,7 +474,7 @@ public class ChatServiceImpl implements ChatService {
                     .contentType(file.getContentType())
                     .build());
         } catch (Exception e) {
-            throw new AppBadException("Attachment upload failed");
+            throw new AppBadException(messageService.getMessage("chat.attachment.upload.failed"));
         }
 
         return UploadAttachmentResponse.builder()
@@ -483,7 +485,7 @@ public class ChatServiceImpl implements ChatService {
 
     private String extractExtension(String fileName) {
         if (fileName == null || !fileName.contains(".")) {
-            throw new AppBadException("Invalid file name");
+            throw new AppBadException(messageService.getMessage("chat.file.name.invalid"));
         }
         return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT);
     }
@@ -503,7 +505,7 @@ public class ChatServiceImpl implements ChatService {
 
         String normalized = attachmentKey.trim();
         if (!normalized.startsWith("chat/" + threadId + "/")) {
-            throw new AppBadException("Attachment does not belong to this thread");
+            throw new AppBadException(messageService.getMessage("chat.attachment.thread.mismatch"));
         }
 
         return normalized;

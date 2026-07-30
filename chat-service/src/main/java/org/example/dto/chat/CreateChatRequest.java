@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateChatRequest {
-    @NotNull
+    @NotNull(message = "{chat.seller.company.id.required}")
     @JsonProperty("seller_company_id")
     private Long sellerCompanyId;
 

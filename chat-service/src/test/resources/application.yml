@@ -1,4 +1,5 @@
 server:
+  domain: http://localhost
   url: http://localhost:8087
 
 spring:
@@ -27,7 +28,7 @@ aws:
 
 chat:
   websocket:
-    token-expiration-seconds: 60
+    token-expiration-second: 60
     token-secret: test-chat-websocket-secret-1234567890
 
 media:
