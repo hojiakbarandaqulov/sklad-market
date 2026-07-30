@@ -15,6 +15,7 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpecificationExecutor<Company> {
 
     Long countByOwnerUserIdAndDeletedAtIsNull(Long userId);
+    Optional<Company> findByOwnerUserIdAndDeletedAtIsNull(Long ownerUserId);
 
     Optional<Company> findByOwnerUserIdAndDeletedFalse(Long userId);
 

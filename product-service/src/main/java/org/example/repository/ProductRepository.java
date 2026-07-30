@@ -108,7 +108,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             Pageable pageable
     );
 
-
     Page<Product> findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, Long categoryId, ProductModerationStatus productModerationStatus, PageRequest createdAt);
 
 

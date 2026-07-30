@@ -1,5 +1,6 @@
 package org.example.service;
 
+import aj.org.objectweb.asm.commons.Remapper;
 import org.example.dto.*;
 import org.example.dto.map.CompanyLocationUpdate;
 import org.example.dto.map.CompanyMapResponse;
@@ -44,6 +45,8 @@ public interface CompanyService {
 
     Optional<Company> findByIdAndDeletedAtIsNull(Long companyId);
 
+    List<Long> getOwnedCompanyIds(Long sellerId);
+
     Company findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId);
 
     Long countByVerificationStatusAndDeletedAtIsNull(VerificationStatus verificationStatus);
@@ -53,4 +56,6 @@ public interface CompanyService {
     ApiResponse<CompanyLocationUpdate> companyLocationUpdate(Long companyId, CompanyLocationUpdate companyLocationUpdate, AppLanguage language);
 
     Company findOwnedCompany(Long companyId, AppLanguage language);
+
+    Company findByOwnerUserIdAndDeletedAtIsNull(Long sellerId);
 }

@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.dto.PagedResponse;
 import org.example.dto.chat.*;
+import org.example.enums.AppLanguage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface ChatService {
     PagedResponse<ChatThreadResponse> getThreads(int page, int perPage);
 
     /** Buyer uchun yangi chat yaratadi yoki mavjud chatni qayta ochadi. */
-    ChatCreateResponse createThread(CreateChatRequest request);
+    ChatCreateResponse createThread(CreateChatRequest request, AppLanguage language);
 
     /** Chat xabarlarini oddiy pagination yoki beforeId orqali qaytaradi. */
     PagedResponse<ChatMessageResponse> getMessages(Long threadId, int page, int perPage, Long beforeId);

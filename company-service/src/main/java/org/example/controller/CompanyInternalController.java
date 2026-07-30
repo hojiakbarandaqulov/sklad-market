@@ -54,14 +54,15 @@ public class CompanyInternalController {
 
     @GetMapping("/owned")
     public List<Long> ownedCompanies(@RequestParam Long sellerId) {
-        Company response = companyService.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
-        List<Long> companyIds = new LinkedList<>();
-        if (response != null) {
-            companyIds.add(response.getId());
-        }
-        return companyIds;
-    }
+        Company company =
+                companyService.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
 
+        if (company == null) {
+            return List.of();
+        }
+
+        return List.of(company.getId());
+    }
     @GetMapping("/{companyId}/summary")
     public CompanyInternalSummaryResponse summary(@PathVariable Long companyId) {
         Company company = companyService.findByIdAndDeletedAtIsNull(companyId)

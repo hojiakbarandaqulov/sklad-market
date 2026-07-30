@@ -235,7 +235,14 @@ public class CompanyServiceImpl implements CompanyService {
     public Optional<Company> findByIdAndDeletedAtIsNull(Long companyId) {
         return companyRepository.findByIdAndDeletedAtIsNull(companyId);
     }
-
+    @Override
+    @Transactional(readOnly = true)
+    public List<Long> getOwnedCompanyIds(Long sellerId) {
+        return companyRepository
+                .findByOwnerUserIdAndDeletedAtIsNull(sellerId)
+                .map(company -> List.of(company.getId()))
+                .orElseGet(List::of);
+    }
     @Override
     public Company findAllByOwnerUserIdAndDeletedAtIsNull(Long sellerId) {
         return companyRepository.findAllByOwnerUserIdAndDeletedAtIsNull(sellerId);
@@ -361,6 +368,11 @@ public class CompanyServiceImpl implements CompanyService {
     public Company findOwnedCompany(Long id, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
         return companyRepository.findByIdAndOwnerUserIdAndDeletedAtIsNull(id, profileId).orElseThrow(() -> new AppBadException(messageService.getMessage("company.not.found", language)));
+    }
+
+    @Override
+    public Company findByOwnerUserIdAndDeletedAtIsNull(Long sellerId) {
+        return null;
     }
 
     private CompanySlugMapResponse toSlugMapResponse(Company company) {

@@ -63,12 +63,12 @@ spring:
         - id: chat-service
           uri: lb://chat-service
           predicates:
-            - Path=/api/v1/chats,/api/v1/chats/**
+            - Path=/api/v1/chats,/api/v1/chats/**,/api/v1/support/**,/api/v1/admin/support/**
         # Chat WebSocket
         - id: chat-service-ws
           uri: lb:ws://chat-service
           predicates:
-            - Path=/api/v1/ws/chat,/api/v1/ws/chat/**
+            - Path=/api/v1/ws/chat,/api/v1/ws/chat/**,/api/v1/ws/support,/api/v1/ws/support/**
         # Notification
         - id: notification-service
           uri: lb://notification-service

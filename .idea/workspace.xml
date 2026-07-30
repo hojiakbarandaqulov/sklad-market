@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="chat service bug" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="chat service bug">
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/resources/application-prod.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -513,14 +515,7 @@
       <workItem from="1785033464499" duration="13993000" />
       <workItem from="1785212610465" duration="4846000" />
       <workItem from="1785384357019" duration="1619000" />
-    </task>
-    <task id="LOCAL-00065" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783793752743</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1783793752743</updated>
+      <workItem from="1785431349573" duration="1230000" />
     </task>
     <task id="LOCAL-00066" summary="mediaBaseurl url bug fix">
       <option name="closed" value="true" />
@@ -906,7 +901,15 @@
       <option name="project" value="LOCAL" />
       <updated>1785385931618</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="chat service bug">
+      <option name="closed" value="true" />
+      <created>1785431377477</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1785431377477</updated>
+    </task>
+    <option name="localTasksCounter" value="115" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
