@@ -53,12 +53,12 @@ public class ProductSearchServiceImpl implements ProductSearchService {
                 .withQuery(q -> q
                         .bool(b -> b
                                 .should(s -> s
-                                        .match(m -> m
+                                        .matchPhrasePrefix(m -> m
                                                 .field("name")
-                                                .query(query)
-                                                .fuzziness("AUTO")
-                                                .boost(3.0f)
+                                                .query(query.trim())
+                                                .boost(5.0f)
                                         )
+
                                 )
                                 .should(s -> s
                                         .match(m -> m
@@ -86,46 +86,75 @@ public class ProductSearchServiceImpl implements ProductSearchService {
     }
 
     @Override
-    public PageImpl<ProductSearchResponse> productSearch(String q, String categoryId, Long regionId, int page, int perPage, AppLanguage language) {
+    public PageImpl<ProductSearchResponse> productSearch(String q, String categoryId, int page, int perPage, AppLanguage language) {
 
+        String searchText = q == null ? null : q.trim();
         Pageable pageable = PageRequest.of(page - 1, perPage);
         NativeQuery searchQuery = NativeQuery.builder()
                 .withQuery(query -> query
                         .bool(b -> {
-                            b.should(s -> s
-                                            .match(m -> m
-                                                    .field("name")
-                                                    .query(q)
-                                                    .fuzziness("AUTO")
-                                                    .boost(3.0f)
-                                            )
+                            b.filter(f -> f
+                                    .term(t -> t
+                                            .field("moderationStatus")
+                                            .value("APPROVED")
                                     )
-                                    .should(s -> s
-                                            .match(m -> m
-                                                    .field("shortDescription")
-                                                    .query(q)
-                                                    .fuzziness("AUTO")
-                                                    .boost(1.0f)
-                                            )
-                                    ).filter(f -> f
-                                            .term(t -> t
-                                                    .field("moderationStatus")
-                                                    .value("APPROVED")
-                                            )
-                                    ).minimumShouldMatch("1");
-                            if (regionId != null) {
+                            );
+
+                            b.filter(f -> f
+                                    .term(t -> t
+                                            .field("isActive")
+                                            .value(true)
+                                    )
+                            );
+
+                            if (searchText != null && !searchText.isBlank()) {
+                                b.should(s -> s
+                                        .matchPhrasePrefix(m -> m
+                                                .field("name")
+                                                .query(searchText)
+                                                .boost(5.0f)
+                                        )
+                                );
+
+                                b.should(s -> s
+                                        .match(m -> m
+                                                .field("name")
+                                                .query(searchText)
+                                                .fuzziness("AUTO")
+                                                .boost(3.0f)
+                                        )
+                                );
+
+                                b.should(s -> s
+                                        .match(m -> m
+                                                .field("shortDescription")
+                                                .query(searchText)
+                                                .fuzziness("AUTO")
+                                                .boost(1.0f)
+                                        )
+                                );
+
+                                b.minimumShouldMatch("1");
+                            }
+
+                         /*   if (regionId != null) {
                                 b.filter(f -> f
                                         .term(t -> t
                                                 .field("regionId")
-                                                .value(regionId))
+                                                .value(regionId)
+                                        )
                                 );
-                            }
-                            if (categoryId != null) {
+                            }*/
+
+                            if (categoryId != null && !categoryId.isBlank()) {
                                 b.filter(f -> f
                                         .term(t -> t
                                                 .field("categoryId")
-                                                .value(categoryId)));
+                                                .value(Long.valueOf(categoryId))
+                                        )
+                                );
                             }
+
                             return b;
                         })
                 )
