@@ -110,4 +110,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
 
     Page<Product> findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, Long categoryId, ProductModerationStatus productModerationStatus, PageRequest createdAt);
+
+
+    Page<Product> findByDeletedAtIsNull(Pageable pageable);
+
+    Page<Product> findBySaleTypeAndDeletedAtIsNull(SaleType saleType, PageRequest pagable);
 }

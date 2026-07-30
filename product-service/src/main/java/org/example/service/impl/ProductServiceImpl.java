@@ -130,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
                 throw new AppBadException(messageService.getMessage("product.image.not.found", language));
             }
             String path = attachInfo.getPath().trim();
-            String objectKey= path.substring(path.lastIndexOf('/') + 1);
+            String objectKey = path.substring(path.lastIndexOf('/') + 1);
 
             ProductImage image = new ProductImage();
             image.setId(upload.getData().getId());
@@ -183,7 +183,7 @@ public class ProductServiceImpl implements ProductService {
         int resolvedPage = normalizePage(page, language);
         int resolvedPerPage = normalizePerPage(perPage, language);
         List<Long> ownedCompanyIds = companyClient.getOwnedCompanyIds(sellerId);
-        if(companyId==null){
+        if (companyId == null) {
             throw new AppBadException(messageService.getMessage("company.not.found", language));
         }
         if (ownedCompanyIds.isEmpty()) {
@@ -334,7 +334,7 @@ public class ProductServiceImpl implements ProductService {
         int resolvedPage = normalizePage(page, language);
         int resolvedPerPage = normalizePerPage(perPage, language);
         Pageable pageable = PageRequest.of(resolvedPage - 1, resolvedPerPage, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Product> all = productRepository.findAll(pageable);
+        Page<Product> all = productRepository.findByDeletedAtIsNull(pageable);
 
         return ProductListResponse.builder()
                 .items(all.getContent().stream().map(this::toResponse).collect(Collectors.toList()))
@@ -604,7 +604,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getById(Long id,AppLanguage language) {
+    public ProductResponse getById(Long id, AppLanguage language) {
         Optional<Product> byId = productRepository.findById(id);
         if (byId.isEmpty()) {
             throw new AppBadException(messageService.getMessage("product.notFound", language));
@@ -614,7 +614,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Long companyId, Long categoryId, ProductModerationStatus productModerationStatus, PageRequest createdAt) {
-        return productRepository.findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(companyId,categoryId,productModerationStatus,createdAt);
+        return productRepository.findByCompanyIdAndCategoryIdAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(companyId, categoryId, productModerationStatus, createdAt);
     }
 
     private ProductModerationStatus resolveStatus(Product product) {

@@ -165,7 +165,7 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     public PageImpl<ProductResponse> getSaleTypeFilterProduct(int page, int perPage, SaleType saleType, AppLanguage language) {
         PageRequest pagable = PageRequest.of(page - 1, perPage);
-        Page<Product> product = productRepository.findBySaleType(saleType, pagable);
+        Page<Product> product = productRepository.findBySaleTypeAndDeletedAtIsNull(saleType, pagable);
 
         List<ProductResponse> list = product.getContent().stream()
                 .map(this::toProductResponse)
