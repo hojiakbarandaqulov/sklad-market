@@ -27,6 +27,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Real-time chat WebSocket handler'i.
+ * Frontend quyidagi eventlarni yuboradi: subscribe, message, read, typing.
+ * Server esa new_message, read_receipt, typing yoki error eventini qaytaradi.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -46,6 +51,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         session.getAttributes().put("locale", locale);
         LocaleContextHolder.setLocale(locale);
         try {
+            // URL'dagi ws-token orqali foydalanuvchini aniqlab, userId'ni session ichida saqlaymiz.
             String token = extractQueryParam(session.getUri(), "token");
             Long userId = chatWebSocketTokenService.parseToken(token);
             session.getAttributes().put("userId", userId);
@@ -65,9 +71,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             Long userId = (Long) session.getAttributes().get("userId");
 
             switch (event) {
+                // Chatdagi xabarlarni olish uchun avval shu thread'ga subscribe qilinadi.
                 case "subscribe" -> handleSubscribe(session, userId, payload);
+                // Yangi matn yoki oldin yuklangan attachment_key yuboriladi.
                 case "message" -> handleMessage(session, userId, payload);
+                // Qarshi tomondan kelgan xabarlar o'qilgan deb belgilanadi.
                 case "read" -> handleRead(userId, payload);
+                // Foydalanuvchi yozayotganini boshqa ulangan sessionlarga bildiradi.
                 case "typing" -> handleTyping(userId, payload);
                 default -> sendError(session, "bad_request", messageService.getMessage("chat.websocket.event.unsupported"));
             }
@@ -101,12 +111,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     private void handleSubscribe(WebSocketSession session, Long userId, JsonNode payload) {
         Long threadId = getRequiredLong(payload, "thread_id");
+        // Begona foydalanuvchi thread'ga ulanib olmasligi uchun access tekshiriladi.
         chatService.validateThreadAccess(userId, threadId);
         threadSubscribers.computeIfAbsent(threadId, ignored -> ConcurrentHashMap.newKeySet()).add(session);
         sessionSubscriptions.computeIfAbsent(session.getId(), ignored -> ConcurrentHashMap.newKeySet()).add(threadId);
     }
 
     private void handleMessage(WebSocketSession session, Long userId, JsonNode payload) throws Exception {
+        // Bir foydalanuvchi juda tez ko'p xabar yuborishining oldini oladi.
         if (!chatRateLimitService.allowMessage(userId)) {
             sendError(session, "rate_limited", messageService.getMessage("chat.rate.limit.exceeded"));
             return;
@@ -167,6 +179,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         String text = objectMapper.writeValueAsString(payload);
         List<WebSocketSession> closedSessions = new ArrayList<>();
         for (WebSocketSession subscriber : sessions) {
+            // Yopilgan sessionlarga xabar yubormaymiz va ularni ro'yxatdan tozalaymiz.
             if (!subscriber.isOpen()) {
                 closedSessions.add(subscriber);
                 continue;

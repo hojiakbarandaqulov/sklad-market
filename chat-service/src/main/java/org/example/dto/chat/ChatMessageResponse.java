@@ -1,13 +1,13 @@
 package org.example.dto.chat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
+@Setter
 public class ChatMessageResponse {
     private Long id;
 
@@ -37,5 +37,6 @@ public class ChatMessageResponse {
     @JsonProperty("read_at")
     private LocalDateTime readAt;
 
+    /** Xabar holati: sent, delivered yoki read. */
     private String status;
 }

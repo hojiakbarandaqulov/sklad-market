@@ -55,7 +55,7 @@ public class ProductReviewController {
         );
     }
 
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @PostMapping("/{productId}/reviews")
     public ApiResponse<ProductReviewResponse> create(
             @PathVariable Long productId,
@@ -65,7 +65,7 @@ public class ProductReviewController {
         return ApiResponse.successResponse(productReviewService.create(productId, request, language));
     }
 
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @PutMapping("/{productId}/reviews/{reviewId}")
     public ApiResponse<ProductReviewResponse> update(
             @PathVariable Long productId,
@@ -78,7 +78,7 @@ public class ProductReviewController {
         );
     }
 
-    @PreAuthorize("hasRole('BUYER')")
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @DeleteMapping("/{productId}/reviews/{reviewId}")
     public ApiResponse<Boolean> delete(
             @PathVariable Long productId,

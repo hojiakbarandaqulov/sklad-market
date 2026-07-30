@@ -1,13 +1,13 @@
 package org.example.dto.chat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Getter
-@Builder
+@Setter
 public class ChatProductSummaryResponse {
     private Long id;
     private String name;

@@ -17,12 +17,12 @@ import org.example.entity.ChatMessage;
 import org.example.entity.ChatThread;
 import org.example.enums.ChatParticipantType;
 import org.example.exp.AppBadException;
+import org.example.mapper.ChatMapper;
 import org.example.repository.ChatMessageRepository;
 import org.example.repository.ChatThreadRepository;
 import org.example.service.ChatService;
 import org.example.service.ResourceBundleService;
 import org.example.service.ChatWebSocketTokenService;
-import org.example.utils.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,6 +59,7 @@ public class ChatServiceImpl implements ChatService {
     private final CompanyClient companyClient;
     private final UserClient userClient;
     private final ProductClient productClient;
+    private final ChatMapper chatMapper;
     private final MinioClient minioClient;
     private final ChatWebSocketTokenService chatWebSocketTokenService;
     private final ResourceBundleService messageService;
@@ -74,14 +75,17 @@ public class ChatServiceImpl implements ChatService {
         Long currentUserId = requireCurrentUserId();
         validatePage(page, perPage);
 
+        // Avval foydalanuvchi buyer sifatida qatnashgan chatlarni olamiz.
         Sort sort = Sort.by(Sort.Order.desc("lastMessageAt"), Sort.Order.desc("modifiedDate"), Sort.Order.desc("id"));
         List<ChatThread> threads = new ArrayList<>(chatThreadRepository.findByBuyerIdAndBuyerHiddenFalseAndDeletedFalse(currentUserId, sort));
 
+        // Foydalanuvchi seller bo'lsa, unga tegishli kompaniyalarning chatlarini ham qo'shamiz.
         List<Long> ownedCompanyIds = getOwnedCompanyIds(currentUserId);
         if (!ownedCompanyIds.isEmpty()) {
             threads.addAll(chatThreadRepository.findBySellerCompanyIdInAndSellerHiddenFalseAndDeletedFalse(ownedCompanyIds, sort));
         }
 
+        // Bir chat buyer va seller qidiruvlaridan bir vaqtda kelib qolsa, dublikatni olib tashlaymiz.
         List<ChatThread> uniqueThreads = new ArrayList<>(new LinkedHashSet<>(threads));
         uniqueThreads.sort(Comparator
                 .comparing(ChatThread::getLastMessageAt, Comparator.nullsLast(Comparator.reverseOrder()))
@@ -98,7 +102,9 @@ public class ChatServiceImpl implements ChatService {
     @Override
     @Transactional
     public ChatCreateResponse createThread(CreateChatRequest request) {
-        Long buyerId = SpringSecurityUtil.getProfileId();
+        Long buyerId = requireCurrentUserId();
+
+        // Company-service orqali kompaniya mavjudligi va buyer uning egasi emasligini tekshiramiz.
         CompanyOwnershipResponse company = companyClient.checkOwnership(request.getSellerCompanyId(), buyerId);
 
         if (!company.isExists() || !company.isActive()) {
@@ -110,6 +116,7 @@ public class ChatServiceImpl implements ChatService {
         }
 
         if (request.getProductId() != null) {
+            // Product berilgan bo'lsa, u aynan requestdagi kompaniyaga tegishli bo'lishi shart.
             ProductSummaryResponse productSummary = productClient.getSummary(request.getProductId());
             if (!request.getSellerCompanyId().equals(productSummary.getCompanyId())) {
                 throw new AppBadException(messageService.getMessage("chat.product.company.mismatch"));
@@ -118,23 +125,19 @@ public class ChatServiceImpl implements ChatService {
 
         return chatThreadRepository.findUnique(buyerId, request.getSellerCompanyId(), request.getProductId())
                 .map(existing -> {
+                    // Oldin yashirilgan chat qayta ochilsa, yangi yozuv yaratmaymiz.
                     existing.setBuyerHidden(Boolean.FALSE);
                     chatThreadRepository.save(existing);
-                    return ChatCreateResponse.builder()
-                            .threadId(existing.getId())
-                            .isNew(false)
-                            .build();
+                    return chatMapper.toCreateResponse(existing, false);
                 })
                 .orElseGet(() -> {
+                    // Xuddi shu buyer + company + product uchun chat topilmasa, yangi thread yaratamiz.
                     ChatThread thread = new ChatThread();
                     thread.setBuyerId(buyerId);
                     thread.setSellerCompanyId(request.getSellerCompanyId());
                     thread.setProductId(request.getProductId());
                     ChatThread saved = chatThreadRepository.save(thread);
-                    return ChatCreateResponse.builder()
-                            .threadId(saved.getId())
-                            .isNew(true)
-                            .build();
+                    return chatMapper.toCreateResponse(saved, true);
                 });
     }
 
@@ -142,8 +145,10 @@ public class ChatServiceImpl implements ChatService {
     public PagedResponse<ChatMessageResponse> getMessages(Long threadId, int page, int perPage, Long beforeId) {
         Long currentUserId = requireCurrentUserId();
         validatePage(page, perPage);
-         resolveThreadContext(currentUserId, threadId);
+        // Foydalanuvchi shu chatning buyer'i yoki seller'i ekanini tekshiramiz.
+        resolveThreadContext(currentUserId, threadId);
 
+        // before_id bo'lsa eski xabarlar olinadi; bu chat scroll pagination uchun ishlatiladi.
         Page<ChatMessage> result = beforeId == null
                 ? chatMessageRepository.findByThread_IdAndDeletedFalse(
                 threadId,
@@ -157,7 +162,7 @@ public class ChatServiceImpl implements ChatService {
 
         List<ChatMessageResponse> items = result.getContent().stream()
                 .sorted(Comparator.comparing(ChatMessage::getId))
-                .map(message -> toMessageResponse(message))
+                .map(this::toMessageResponse)
                 .toList();
 
         return new PagedResponse<>(items, new PageMeta(result.getTotalElements(), page, perPage, result.getTotalPages()));
@@ -166,10 +171,13 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public UnreadCountResponse getUnreadCount() {
         Long currentUserId = requireCurrentUserId();
+
+        // Buyer sifatida sellerdan kelgan, hali o'qilmagan xabarlarni sanaymiz.
         long buyerUnread = chatMessageRepository
                 .countByThread_BuyerIdAndThread_DeletedFalseAndDeletedFalseAndSenderTypeAndBuyerReadAtIsNull(currentUserId, ChatParticipantType.SELLER);
 
         List<Long> ownedCompanyIds = getOwnedCompanyIds(currentUserId);
+        // Seller sifatida buyer'lardan kelgan, hali o'qilmagan xabarlarni ham qo'shamiz.
         long sellerUnread = ownedCompanyIds.isEmpty()
                 ? 0L
                 : chatMessageRepository.countByThread_SellerCompanyIdInAndThread_DeletedFalseAndDeletedFalseAndSenderTypeAndSellerReadAtIsNull(
@@ -205,8 +213,10 @@ public class ChatServiceImpl implements ChatService {
         ThreadContext context = resolveThreadContext(currentUserId, threadId);
 
         if (context.participantType == ChatParticipantType.BUYER) {
+            // Hide faqat buyer ro'yxatidan yashiradi, bazadan butunlay o'chirmaydi.
             context.thread.setBuyerHidden(Boolean.TRUE);
         } else {
+            // Seller yashirsa ham buyer tomonda chat saqlanib qoladi.
             context.thread.setSellerHidden(Boolean.TRUE);
         }
 
@@ -243,6 +253,7 @@ public class ChatServiceImpl implements ChatService {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        // Yangi xabarni yuboruvchining turi bilan birga saqlaymiz.
         ChatMessage message = new ChatMessage();
         message.setThread(context.thread);
         message.setSenderId(userId);
@@ -254,6 +265,8 @@ public class ChatServiceImpl implements ChatService {
         message.setDeliveredAt(now);
 
         ChatMessage saved = chatMessageRepository.save(message);
+
+        // Oxirgi xabar vaqtini yangilaymiz va ikki tomonda ham chatni qayta ko'rsatamiz.
         context.thread.setLastMessageAt(now);
         context.thread.setBuyerHidden(Boolean.FALSE);
         context.thread.setSellerHidden(Boolean.FALSE);
@@ -271,6 +284,7 @@ public class ChatServiceImpl implements ChatService {
         List<Long> updatedIds = new ArrayList<>();
 
         for (ChatMessage message : messages) {
+            // Foydalanuvchi o'zi yuborgan xabarni o'qilgan deb belgilamaymiz.
             if (message.getSenderType() == context.participantType) {
                 continue;
             }
@@ -290,11 +304,7 @@ public class ChatServiceImpl implements ChatService {
             chatMessageRepository.saveAll(messages);
         }
 
-        return ReadReceiptResponse.builder()
-                .threadId(threadId)
-                .messageIds(updatedIds)
-                .readBy(userId)
-                .build();
+        return chatMapper.toReadReceipt(threadId, updatedIds, userId);
     }
 
     private ChatThreadResponse toThreadResponse(ChatThread thread, ChatParticipantType participantType) {
@@ -303,41 +313,23 @@ public class ChatServiceImpl implements ChatService {
                 ? chatMessageRepository.countByThread_IdAndDeletedFalseAndSenderTypeAndBuyerReadAtIsNull(thread.getId(), ChatParticipantType.SELLER)
                 : chatMessageRepository.countByThread_IdAndDeletedFalseAndSenderTypeAndSellerReadAtIsNull(thread.getId(), ChatParticipantType.BUYER);
 
-        return ChatThreadResponse.builder()
-                .threadId(thread.getId())
-                .otherParty(resolveOtherParty(thread, participantType))
-                .lastMessage(lastMessage == null ? null : toLastMessageResponse(lastMessage))
-                .unreadCount(unreadCount)
-                .product(resolveProduct(thread.getProductId()))
-                .build();
+        return chatMapper.toThreadResponse(
+                thread,
+                resolveOtherParty(thread, participantType),
+                lastMessage == null ? null : toLastMessageResponse(lastMessage),
+                unreadCount,
+                resolveProduct(thread.getProductId())
+        );
     }
 
     private ChatParticipantResponse resolveOtherParty(ChatThread thread, ChatParticipantType participantType) {
         if (participantType == ChatParticipantType.BUYER) {
             CompanySummaryResponse company = companyClient.getSummary(thread.getSellerCompanyId());
-            return ChatParticipantResponse.builder()
-                    .id(company.getId())
-                    .type("company")
-                    .displayName(company.getName())
-                    .slug(company.getSlug())
-                    .avatarUrl(company.getLogoPath())
-                    .build();
+            return chatMapper.toCompanyParticipant(company);
         }
 
         UserSummaryResponse user = userClient.getSummary(thread.getBuyerId());
-        String displayName = ((user.getFirstName() == null ? "" : user.getFirstName()) + " "
-                + (user.getLastName() == null ? "" : user.getLastName())).trim();
-        if (displayName.isBlank()) {
-            displayName = user.getUsername();
-        }
-
-        return ChatParticipantResponse.builder()
-                .id(user.getId())
-                .type("user")
-                .displayName(displayName)
-                .username(user.getUsername())
-                .avatarUrl(user.getPhotoUrl())
-                .build();
+        return chatMapper.toBuyerParticipant(user);
     }
 
     private ChatProductSummaryResponse resolveProduct(Long productId) {
@@ -346,40 +338,19 @@ public class ChatServiceImpl implements ChatService {
         }
 
         ProductSummaryResponse product = productClient.getSummary(productId);
-        return ChatProductSummaryResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .slug(product.getSlug())
-                .price(product.getPrice())
-                .currency(product.getCurrency())
-                .primaryImage(product.getPrimaryImage())
-                .build();
+        return chatMapper.toProductSummary(product);
     }
 
     private ChatLastMessageResponse toLastMessageResponse(ChatMessage message) {
-        return ChatLastMessageResponse.builder()
-                .id(message.getId())
-                .body(message.getBody())
-                .attachmentUrl(message.getAttachmentUrl())
-                .sentAt(message.getSentAt())
-                .status(resolveStatus(message))
-                .build();
+        return chatMapper.toLastMessageResponse(message, resolveStatus(message));
     }
 
     private ChatMessageResponse toMessageResponse(ChatMessage message) {
-        return ChatMessageResponse.builder()
-                .id(message.getId())
-                .threadId(message.getThread().getId())
-                .senderId(message.getSenderId())
-                .senderType(message.getSenderType().name().toLowerCase(Locale.ROOT))
-                .body(message.getBody())
-                .attachmentKey(message.getAttachmentKey())
-                .attachmentUrl(message.getAttachmentUrl())
-                .sentAt(message.getSentAt())
-                .deliveredAt(message.getDeliveredAt())
-                .readAt(resolveReadAtForSenderPerspective(message))
-                .status(resolveStatus(message))
-                .build();
+        return chatMapper.toMessageResponse(
+                message,
+                resolveReadAtForSenderPerspective(message),
+                resolveStatus(message)
+        );
     }
 
     private String resolveStatus(ChatMessage message) {
@@ -401,9 +372,11 @@ public class ChatServiceImpl implements ChatService {
                 .orElseThrow(() -> new AppBadException(messageService.getMessage("chat.thread.not.found")));
 
         if (userId.equals(thread.getBuyerId())) {
+            // Thread'dagi buyerId token ichidagi profileId bilan bir xil bo'lsa, bu buyer.
             return new ThreadContext(thread, ChatParticipantType.BUYER);
         }
 
+        // Buyer bo'lmasa, company-service orqali seller kompaniya egasi ekanini tekshiramiz.
         CompanyOwnershipResponse ownership = companyClient.checkOwnership(thread.getSellerCompanyId(), userId);
         if (ownership.isOwner()) {
             return new ThreadContext(thread, ChatParticipantType.SELLER);
@@ -477,10 +450,7 @@ public class ChatServiceImpl implements ChatService {
             throw new AppBadException(messageService.getMessage("chat.attachment.upload.failed"));
         }
 
-        return UploadAttachmentResponse.builder()
-                .attachmentKey(objectKey)
-                .attachmentUrl(mediaBaseUrl + "/" + objectKey)
-                .build();
+        return chatMapper.toUploadAttachment(objectKey, mediaBaseUrl + "/" + objectKey);
     }
 
     private String extractExtension(String fileName) {

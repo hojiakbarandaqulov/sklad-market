@@ -1,13 +1,14 @@
 package org.example.dto.chat;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
+@Setter
 public class ChatParticipantResponse {
     private Long id;
+    /** Qiymati "company" yoki "user" bo'ladi. */
     private String type;
 
     @JsonProperty("display_name")
