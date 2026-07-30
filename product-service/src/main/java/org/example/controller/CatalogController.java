@@ -40,7 +40,7 @@ public class CatalogController {
                                                                @RequestParam(defaultValue = "1") int page,
                                                                @RequestParam(defaultValue = "20") int perPage,
                                                                @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(productSearchService.productSearch(q, category, regionId, page, perPage, language));
+        return ApiResponse.successResponse(productSearchService.productSearch(q, category, page, perPage, language));
     }
 
     @GetMapping("/search/suggestions")

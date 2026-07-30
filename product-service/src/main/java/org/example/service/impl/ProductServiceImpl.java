@@ -310,6 +310,7 @@ public class ProductServiceImpl implements ProductService {
         product.setModerationStatus(ProductModerationStatus.ARCHIVED);
         product.setIsActive(Boolean.FALSE);
         productRepository.save(product);
+        productSearchService.update(toDocument(product));
     }
 
     @Transactional
@@ -325,6 +326,7 @@ public class ProductServiceImpl implements ProductService {
         product.setDeletedAt(LocalDateTime.now());
         product.setIsActive(Boolean.FALSE);
         productRepository.save(product);
+        productSearchService.delete(product.getId());
     }
 
     @Override

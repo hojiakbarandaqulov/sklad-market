@@ -17,5 +17,5 @@ public interface ProductSearchService {
     void update(ProductDocument document);
     List<ProductSearchResponse> search(String query, int page, int perPage);
 
-    PageImpl<ProductSearchResponse> productSearch(String q, String categoryId, Long regionId, int page, int perPage, AppLanguage language);
+    PageImpl<ProductSearchResponse> productSearch(String q, String categoryId, int page, int perPage, AppLanguage language);
 }

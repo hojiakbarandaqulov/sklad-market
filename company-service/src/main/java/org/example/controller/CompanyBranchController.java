@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
@@ -26,8 +27,8 @@ public class CompanyBranchController {
         return companyBranchService.create(companyBranch, companyId, language);
     }
 
-    @PreAuthorize("permitAll()")
-    @GetMapping("/branches/{companyId}")
+    @PermitAll
+    @GetMapping("/{companyId}/branches")
     public ApiResponse<List<CompanyBranchResponse>> getBranches(
             @PathVariable Long companyId,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
