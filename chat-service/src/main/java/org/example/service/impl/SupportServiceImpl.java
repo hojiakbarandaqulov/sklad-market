@@ -106,7 +106,7 @@ public class SupportServiceImpl implements SupportService {
         validatePage(page, perPage);
 
         Sort sort = Sort.by(
-                Sort.Order.desc("lastMessageAt").nullsLast(),
+                Sort.Order.desc("lastMessageAt"),
                 Sort.Order.desc("id")
         );
         PageRequest pageable = PageRequest.of(page - 1, perPage, sort);
