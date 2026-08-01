@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
@@ -85,6 +86,7 @@ public class ProductController {
         return ApiResponse.successResponse(productService.getById(id, language));
     }
 
+    @PermitAll
     @GetMapping("slug/{slug}")
     public ApiResponse<ProductDetailResponse> getBySlug(
             @PathVariable String slug,

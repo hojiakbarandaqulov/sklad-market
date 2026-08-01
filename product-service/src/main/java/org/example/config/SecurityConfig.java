@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(jsr250Enabled = true)
 public class SecurityConfig {
 
     @Value("${server.domain}")
@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/catalog").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/catalog/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/my").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/products/{slug}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/slug/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/search").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/all").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/*/reviews").permitAll()
