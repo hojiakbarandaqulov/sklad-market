@@ -21,6 +21,8 @@ import org.example.repository.SupportThreadRepository;
 import org.example.service.ChatWebSocketTokenService;
 import org.example.service.ResourceBundleService;
 import org.example.service.SupportService;
+import org.example.service.context.AdminContext;
+import org.example.service.context.ParticipantContext;
 import org.example.utils.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -304,7 +306,7 @@ public class SupportServiceImpl implements SupportService {
 
     private SupportThreadResponse toThreadResponse(SupportThread thread) {
         SupportThreadResponse response = new SupportThreadResponse();
-        response.setId(thread.getId());
+        response.setThreadId(thread.getId());
         response.setRequesterId(thread.getRequesterId());
         response.setRequesterRole(thread.getRequesterRole());
         response.setAssignedAdminId(thread.getAssignedAdminId());
@@ -336,9 +338,4 @@ public class SupportServiceImpl implements SupportService {
         return response;
     }
 
-    private record ParticipantContext(SupportThread thread, SupportParticipantRole role) {
-    }
-
-    private record AdminContext(Long userId, AssignedAdminRole role) {
-    }
 }

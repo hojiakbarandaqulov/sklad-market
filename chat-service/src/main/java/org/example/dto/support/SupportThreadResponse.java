@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class SupportThreadResponse {
-    private Long id;
+    @JsonProperty("thread_id")
+    private Long threadId;
 
     @JsonProperty("requester_id")
     private Long requesterId;
