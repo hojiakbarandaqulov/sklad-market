@@ -28,7 +28,7 @@ public class CompanyReviewController {
     }
 
     @GetMapping("/rating")
-    public ApiResponse<Double> getCompanyRating(@PathVariable Long companyId) {
+    public ApiResponse<CompanyRatingDto> getCompanyRating(@PathVariable Long companyId) {
         return ApiResponse.successResponse(companyReviewService.getCompanyRating(companyId));
     }
 

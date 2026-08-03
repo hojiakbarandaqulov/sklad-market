@@ -142,9 +142,15 @@ public class CompanyReviewServiceImpl implements CompanyReviewService {
         return ApiResponse.successResponse(true);
     }
 
-    public Double getCompanyRating(Long companyId) {
+    public CompanyRatingDto getCompanyRating(Long companyId) {
+        SellerRatingProjection result = companyReviewRepository.findRatingStatsByCompanyId(companyId);
 
-        return companyReviewRepository.findAverageRatingByCompanyId(companyId);
+        double avgRating = result.getAverageRating() != null
+                ? result.getAverageRating()
+                : 0.0;
+        long count = result.getReviewCount();
+
+        return new CompanyRatingDto(avgRating, count);
     }
 
     private Company findAvailableCompany(Long companyId, AppLanguage language) {

@@ -28,5 +28,5 @@ public interface CompanyReviewService {
 
     ApiResponse<Boolean> delete(Long companyId, Long reviewId, AppLanguage language);
 
-    Double getCompanyRating(Long companyId);
+    CompanyRatingDto getCompanyRating(Long companyId);
 }
