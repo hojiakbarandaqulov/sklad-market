@@ -28,6 +28,7 @@ public class ProductResponse {
     private PriceType priceType;
     private BigDecimal price;
     private Currency currency;
+    private Long min;
     private Long regionId;
     private Long districtId;
 
