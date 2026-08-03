@@ -4,10 +4,7 @@ import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
-import org.example.dto.review.CompanyReviewListResponse;
-import org.example.dto.review.ReviewCreateRequest;
-import org.example.dto.review.ReviewResponse;
-import org.example.dto.review.ReviewUpdateRequest;
+import org.example.dto.review.*;
 import org.example.enums.AppLanguage;
 import org.example.service.CompanyReviewService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,9 +23,13 @@ public class CompanyReviewController {
             @PathVariable Long companyId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(value = "per_page", defaultValue = "20") int perPage,
-            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
-    ) {
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return companyReviewService.getReviews(companyId, page, perPage, language);
+    }
+
+    @GetMapping("/rating")
+    public ApiResponse<Double> getCompanyRating(@PathVariable Long companyId) {
+        return ApiResponse.successResponse(companyReviewService.getCompanyRating(companyId));
     }
 
     @PreAuthorize("hasRole('BUYER')")

@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.entity.Company;
 import org.example.enums.VerificationStatus;
+import org.example.mapper.SellerRatingProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -43,4 +44,5 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
     Optional<Company> findBySlug(String s);
 
     Optional<Company> findByStirAndDeletedFalse(String stir);
+
 }

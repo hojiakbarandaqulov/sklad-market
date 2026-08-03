@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.entity.CompanyReview;
+import org.example.mapper.SellerRatingProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,5 +30,12 @@ public interface CompanyReviewRepository extends JpaRepository<CompanyReview, Lo
             """)
     Double findAverageRatingByCompanyId(@Param("companyId") Long companyId);
 
+    @Query("SELECT COUNT(r) FROM CompanyReview  r WHERE r.company.id = :companyId")
+    Long countByCompany_Id(@Param("companyId") Long companyId);
+
     Optional<CompanyReview> findByIdAndDeletedFalse(Long reviewId);
+
+    @Query("SELECT AVG(r.rating) as averageRating, COUNT(r) as reviewCount " +
+            "FROM CompanyReview r WHERE r.company.id = :companyId")
+    SellerRatingProjection findRatingStatsByCompanyId(@Param("companyId") Long companyId);
 }

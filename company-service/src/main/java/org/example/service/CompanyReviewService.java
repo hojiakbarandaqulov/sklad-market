@@ -1,10 +1,7 @@
 package org.example.service;
 
 import org.example.dto.ApiResponse;
-import org.example.dto.review.CompanyReviewListResponse;
-import org.example.dto.review.ReviewCreateRequest;
-import org.example.dto.review.ReviewResponse;
-import org.example.dto.review.ReviewUpdateRequest;
+import org.example.dto.review.*;
 import org.example.enums.AppLanguage;
 
 public interface CompanyReviewService {
@@ -30,4 +27,6 @@ public interface CompanyReviewService {
     );
 
     ApiResponse<Boolean> delete(Long companyId, Long reviewId, AppLanguage language);
+
+    Double getCompanyRating(Long companyId);
 }

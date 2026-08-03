@@ -2,14 +2,12 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
-import org.example.dto.review.CompanyReviewListResponse;
-import org.example.dto.review.ReviewCreateRequest;
-import org.example.dto.review.ReviewResponse;
-import org.example.dto.review.ReviewUpdateRequest;
+import org.example.dto.review.*;
 import org.example.entity.Company;
 import org.example.entity.CompanyReview;
 import org.example.enums.AppLanguage;
 import org.example.exp.AppBadException;
+import org.example.mapper.SellerRatingProjection;
 import org.example.repository.CompanyRepository;
 import org.example.repository.CompanyReviewRepository;
 import org.example.service.CompanyReviewService;
@@ -142,6 +140,11 @@ public class CompanyReviewServiceImpl implements CompanyReviewService {
         companyReview.setDeleted(true);
         companyReviewRepository.save(companyReview);
         return ApiResponse.successResponse(true);
+    }
+
+    public Double getCompanyRating(Long companyId) {
+
+        return companyReviewRepository.findAverageRatingByCompanyId(companyId);
     }
 
     private Company findAvailableCompany(Long companyId, AppLanguage language) {
