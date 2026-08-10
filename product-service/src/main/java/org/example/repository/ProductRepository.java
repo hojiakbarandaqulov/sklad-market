@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,4 +115,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     Page<Product> findByDeletedAtIsNull(Pageable pageable);
 
     Page<Product> findBySaleTypeAndDeletedAtIsNull(SaleType saleType, PageRequest pagable);
+
+    @Query("SELECT p FROM Product p WHERE p.price BETWEEN ?1 AND ?2")
+    Page<Product> findByPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
 }

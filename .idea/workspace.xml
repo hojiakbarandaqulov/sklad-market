@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="chat service bug">
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/resources/application-prod.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/resources/application-local.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,8 +113,8 @@
         <option value="Record" />
         <option value="Dockerfile" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -234,6 +237,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.example.dto.review" />
       <recent name="org.example.repository" />
       <recent name="org.example.service" />
       <recent name="org.example.dto.kafka" />
@@ -516,54 +520,8 @@
       <workItem from="1785212610465" duration="4846000" />
       <workItem from="1785384357019" duration="1619000" />
       <workItem from="1785431349573" duration="1230000" />
-    </task>
-    <task id="LOCAL-00066" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783793978190</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1783793978190</updated>
-    </task>
-    <task id="LOCAL-00067" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783794108005</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1783794108005</updated>
-    </task>
-    <task id="LOCAL-00068" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783794251577</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1783794251578</updated>
-    </task>
-    <task id="LOCAL-00069" summary="mediaBaseurl url bug fix">
-      <option name="closed" value="true" />
-      <created>1783871772478</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1783871772478</updated>
-    </task>
-    <task id="LOCAL-00070" summary="message commit">
-      <option name="closed" value="true" />
-      <created>1783874976914</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1783874976914</updated>
-    </task>
-    <task id="LOCAL-00071" summary="message commit">
-      <option name="closed" value="true" />
-      <created>1783923413931</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1783923413931</updated>
+      <workItem from="1785730366515" duration="8486000" />
+      <workItem from="1786184513166" duration="1913000" />
     </task>
     <task id="LOCAL-00072" summary="message commit">
       <option name="closed" value="true" />
@@ -909,7 +867,55 @@
       <option name="project" value="LOCAL" />
       <updated>1785431377477</updated>
     </task>
-    <option name="localTasksCounter" value="115" />
+    <task id="LOCAL-00115" summary="chat service bug">
+      <option name="closed" value="true" />
+      <created>1785730475664</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1785730475664</updated>
+    </task>
+    <task id="LOCAL-00116" summary="chat service bug">
+      <option name="closed" value="true" />
+      <created>1785730648852</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1785730648852</updated>
+    </task>
+    <task id="LOCAL-00117" summary="chat service bug">
+      <option name="closed" value="true" />
+      <created>1785731881230</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1785731881230</updated>
+    </task>
+    <task id="LOCAL-00118" summary="chat service bug">
+      <option name="closed" value="true" />
+      <created>1785751887373</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1785751887373</updated>
+    </task>
+    <task id="LOCAL-00119" summary="chat service bug">
+      <option name="closed" value="true" />
+      <created>1785752523085</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1785752523085</updated>
+    </task>
+    <task id="LOCAL-00120" summary="chat service bug">
+      <option name="closed" value="true" />
+      <created>1785935140658</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1785935140658</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

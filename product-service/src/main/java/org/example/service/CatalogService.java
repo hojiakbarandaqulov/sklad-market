@@ -6,7 +6,9 @@ import org.example.dto.product.ProductResponse;
 import org.example.enums.AppLanguage;
 import org.example.enums.SaleType;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CatalogService {
@@ -28,4 +30,5 @@ public interface CatalogService {
 
     PagedResponse<CatalogMapItemResponse> getCatalogMap(String query, String category, Long regionId, Long districtId, int page, int perPage, AppLanguage language);
 
+    PageImpl<ProductResponse> getProductFilterPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
 }

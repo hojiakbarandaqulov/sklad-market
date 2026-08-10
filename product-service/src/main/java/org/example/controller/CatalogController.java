@@ -10,8 +10,10 @@ import org.example.enums.SaleType;
 import org.example.service.CatalogService;
 import org.example.service.ProductSearchService;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -93,5 +95,13 @@ public class CatalogController {
             @RequestParam(value = "per_page", defaultValue = "20") int perPage,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(catalogService.getCatalogMap(query, category, regionId, districtId, page, perPage, language));
+    }
+
+    @GetMapping("filter/product/price")
+    public ApiResponse<PageImpl<ProductResponse>> getProductFilterPrice(
+            @RequestParam BigDecimal fromPrice,
+            @RequestParam BigDecimal toPrice,
+            Pageable pageable) {
+        return ApiResponse.successResponse(catalogService.getProductFilterPrice(fromPrice, toPrice, pageable));
     }
 }

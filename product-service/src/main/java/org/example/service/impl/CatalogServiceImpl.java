@@ -177,8 +177,8 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     public PageImpl<ProductDto> getPopularProduct(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Product> products = productRepository.findByModerationStatusAndDeletedAtIsNullOrderByIsPromotedDescViewsCountCacheDesc(ProductModerationStatus.APPROVED,pageable);
-        List<ProductDto> list =products.getContent().stream()
+        Page<Product> products = productRepository.findByModerationStatusAndDeletedAtIsNullOrderByIsPromotedDescViewsCountCacheDesc(ProductModerationStatus.APPROVED, pageable);
+        List<ProductDto> list = products.getContent().stream()
                 .map(this::toPopularProductResponse)
                 .collect(Collectors.toList());
         return new PageImpl<>(list, pageable, products.getTotalElements());
@@ -265,6 +265,17 @@ public class CatalogServiceImpl implements CatalogService {
                 items,
                 new PageMeta(productPage.getTotalElements(), safePage, safePerPage, productPage.getTotalPages())
         );
+    }
+
+    @Override
+    public PageImpl<ProductResponse> getProductFilterPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable) {
+        Page<Product> products = productRepository.findByPrice(fromPrice, toPrice,pageable);
+
+        List<ProductResponse> responses=products.getContent()
+                .stream()
+                .map(this::toProductResponse)
+                .toList();
+        return new PageImpl<>(responses, pageable, products.getTotalElements());
     }
 
     private ProductDto toPopularProductResponse(Product p) {
