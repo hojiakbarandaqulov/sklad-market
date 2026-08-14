@@ -374,6 +374,40 @@
         SPRING_APPLICATION_NAME: file-service
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_file
 
+    ai-service:
+          <<: *internal-service
+          build:
+            context: .
+            dockerfile: Dockerfile-service
+            args:
+              SERVICE_DIR: ai-service
+          container_name: ai-service
+          depends_on:
+            - discovery-service
+            - keycloak
+            - ai-db
+          environment:
+            <<: *common-env
+            SERVER_ADDRESS: 127.0.0.1
+            SERVER_PORT: 8091
+            SPRING_APPLICATION_NAME: ai-service
+            SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5442/skalad_market_ai
+            SPRING_DATASOURCE_USERNAME: ${AI_DB_USERNAME:-sklad_user}
+            SPRING_DATASOURCE_PASSWORD: ${AI_DB_PASSWORD:-sklad-market}
+            AI_DB_USERNAME: ${AI_DB_USERNAME:-sklad_user}
+            AI_DB_PASSWORD: ${AI_DB_PASSWORD:-sklad-market}
+            GEMINI_API_KEY: ${GEMINI_API_KEY:-AQ.Ab8RN6I11_rcz3p8SvEZWd4T8uVD5KdNHT7pjkqacANzSvEZqQ}
+            AI_CHAT_MODEL: ${AI_CHAT_MODEL:-gemini-2.5-flash}
+            AI_CHAT_MODEL_ADVANCED: ${AI_CHAT_MODEL_ADVANCED:-gemini-2.5-pro}
+            AI_EMBEDDING_MODEL: ${AI_EMBEDDING_MODEL:-gemini-embedding-001}
+            AI_EMBEDDING_DIM: ${AI_EMBEDDING_DIM:-768}
+            AI_GATEWAY_BASE_URL: ${AI_GATEWAY_BASE_URL:-http://localhost:8080}
+            AI_RATE_LIMIT_RPM: ${AI_RATE_LIMIT_RPM:-10}
+            AI_DAILY_TOKEN_BUDGET: ${AI_DAILY_TOKEN_BUDGET:-200000}
+            AI_MAX_TOOL_ITERATIONS: ${AI_MAX_TOOL_ITERATIONS:-6}
+            AI_REQUEST_TIMEOUT_SECONDS: ${AI_REQUEST_TIMEOUT_SECONDS:-60}
+            AI_DRAFT_TTL_MINUTES: ${AI_DRAFT_TTL_MINUTES:-30}
+
   volumes:
     minio-data:
     elasticsearch-data:

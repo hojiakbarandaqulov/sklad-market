@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.enums.RequesterRole;
 import org.example.enums.SupportThreadStatus;
+import org.example.enums.SupportThreadType;
 
 @Getter
 @AllArgsConstructor
@@ -14,6 +15,9 @@ public class SupportOpenResponse {
 
     @JsonProperty("requester_role")
     private RequesterRole requesterRole;
+
+    @JsonProperty("thread_type")
+    private SupportThreadType threadType;
 
     private SupportThreadStatus status;
 

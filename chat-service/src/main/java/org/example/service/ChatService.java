@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.validation.Valid;
 import org.example.dto.PagedResponse;
 import org.example.dto.chat.*;
 import org.example.enums.AppLanguage;
@@ -44,4 +45,5 @@ public interface ChatService {
 
     /** Qarshi tomondan kelgan xabarlarni o'qilgan deb belgilaydi. */
     ReadReceiptResponse markMessagesRead(Long userId, Long threadId, List<Long> messageIds);
+
 }

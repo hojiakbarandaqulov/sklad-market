@@ -17,6 +17,7 @@ import org.example.entity.ChatMessage;
 import org.example.entity.ChatThread;
 import org.example.enums.AppLanguage;
 import org.example.enums.ChatParticipantType;
+import org.example.enums.RequesterRole;
 import org.example.exp.AppBadException;
 import org.example.mapper.ChatMapper;
 import org.example.repository.ChatMessageRepository;
@@ -24,6 +25,7 @@ import org.example.repository.ChatThreadRepository;
 import org.example.service.ChatService;
 import org.example.service.ResourceBundleService;
 import org.example.service.ChatWebSocketTokenService;
+import org.example.utils.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -309,6 +311,7 @@ public class ChatServiceImpl implements ChatService {
 
         return chatMapper.toReadReceipt(threadId, updatedIds, userId);
     }
+
 
     private ChatThreadResponse toThreadResponse(ChatThread thread, ChatParticipantType participantType) {
         ChatMessage lastMessage = chatMessageRepository.findFirstByThread_IdAndDeletedFalseOrderByIdDesc(thread.getId()).orElse(null);

@@ -13,10 +13,7 @@ import org.example.dto.support.SupportReadReceiptResponse;
 import org.example.dto.support.SupportThreadResponse;
 import org.example.entity.SupportMessage;
 import org.example.entity.SupportThread;
-import org.example.enums.AssignedAdminRole;
-import org.example.enums.RequesterRole;
-import org.example.enums.SupportParticipantRole;
-import org.example.enums.SupportThreadStatus;
+import org.example.enums.*;
 import org.example.exp.AppBadException;
 import org.example.repository.SupportMessageRepository;
 import org.example.repository.SupportThreadRepository;
@@ -57,6 +54,29 @@ public class SupportServiceImpl implements SupportService {
         Long requesterId = requireCurrentUserId();
         RequesterRole requesterRole = resolveRequesterRole();
 
+        SupportThread existing = supportThreadRepository
+                .findFirstByRequesterIdAndRequesterRoleAndStatusInAndDeletedFalseOrderByIdDesc(
+                        requesterId, requesterRole, ACTIVE_STATUSES)
+                .orElse(null);
+
+        if (existing != null) {
+            return new SupportOpenResponse(existing.getId(), requesterRole, existing.getStatus(), false);
+        }
+
+        SupportThread thread = new SupportThread();
+        thread.setRequesterId(requesterId);
+        thread.setRequesterRole(requesterRole);
+        thread.setStatus(SupportThreadStatus.OPEN);
+        thread.setSubject(normalizeSubject(request == null ? null : request.getSubject()));
+
+        SupportThread saved = supportThreadRepository.save(thread);
+        return new SupportOpenResponse(saved.getId(), requesterRole, saved.getStatus(), true);
+    }
+
+    @Override
+    public SupportOpenResponse createThread(SupportCreateRequest request, SupportThreadType supportThreadType) {
+        Long requesterId = requireCurrentUserId();
+        RequesterRole requesterRole = resolveRequesterRole();
         SupportThread existing = supportThreadRepository
                 .findFirstByRequesterIdAndRequesterRoleAndStatusInAndDeletedFalseOrderByIdDesc(
                         requesterId, requesterRole, ACTIVE_STATUSES)

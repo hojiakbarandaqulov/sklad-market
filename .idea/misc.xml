@@ -2,22 +2,13 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
-    <file type="web" url="file://$PROJECT_DIR$/api-gateway" />
-    <file type="web" url="file://$PROJECT_DIR$/auth-service" />
-    <file type="web" url="file://$PROJECT_DIR$/category-service" />
-    <file type="web" url="file://$PROJECT_DIR$/chat-service" />
+    <file type="web" url="file://$APPLICATION_HOME_DIR$/lib" />
+    <file type="web" url="file://$USER_HOME$/Documents/sklad-market-ai/backend/ai-service" />
+    <file type="web" url="file://$PROJECT_DIR$" />
     <file type="web" url="file://$PROJECT_DIR$/company-servcie" />
-    <file type="web" url="file://$PROJECT_DIR$/company-service" />
-    <file type="web" url="file://$PROJECT_DIR$/discovery-service" />
-    <file type="web" url="file://$PROJECT_DIR$/file-service" />
-    <file type="web" url="file://$PROJECT_DIR$/lead-service" />
-    <file type="web" url="file://$PROJECT_DIR$/notification-service" />
-    <file type="web" url="file://$PROJECT_DIR$/product-service" />
-    <file type="web" url="file://$PROJECT_DIR$/report-service" />
     <file type="web" url="file://$PROJECT_DIR$/reposrt-service" />
-    <file type="web" url="file://$PROJECT_DIR$/user-service" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="17" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.example.enums.AssignedAdminRole;
 import org.example.enums.RequesterRole;
 import org.example.enums.SupportThreadStatus;
+import org.example.enums.SupportThreadType;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +29,10 @@ public class SupportThreadResponse {
     private AssignedAdminRole assignedAdminRole;
 
     private SupportThreadStatus status;
+
+    @JsonProperty("thread_type")
+    private SupportThreadType threadType;
+
     private String subject;
 
     @JsonProperty("last_message_at")

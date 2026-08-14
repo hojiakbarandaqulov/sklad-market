@@ -1,5 +1,6 @@
 package org.example.service;
 
+import jakarta.validation.Valid;
 import org.example.dto.PagedResponse;
 import org.example.dto.chat.WsTokenResponse;
 import org.example.dto.support.SupportCreateRequest;
@@ -9,6 +10,7 @@ import org.example.dto.support.SupportReadReceiptResponse;
 import org.example.dto.support.SupportThreadResponse;
 import org.example.enums.SupportParticipantRole;
 import org.example.enums.SupportThreadStatus;
+import org.example.enums.SupportThreadType;
 
 import java.util.List;
 
@@ -32,4 +34,6 @@ public interface SupportService {
     SupportReadReceiptResponse markMessagesRead(Long userId, Long threadId, List<Long> messageIds);
 
     SupportParticipantRole resolveParticipantRole(Long userId, Long threadId);
+
+    SupportOpenResponse createThread(@Valid SupportCreateRequest request, SupportThreadType supportThreadType);
 }

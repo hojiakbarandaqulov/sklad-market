@@ -12,6 +12,7 @@ import org.example.entity.base.BaseEntity;
 import org.example.enums.AssignedAdminRole;
 import org.example.enums.RequesterRole;
 import org.example.enums.SupportThreadStatus;
+import org.example.enums.SupportThreadType;
 
 import java.time.LocalDateTime;
 
@@ -37,6 +38,10 @@ public class SupportThread extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SupportThreadStatus status = SupportThreadStatus.OPEN;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SupportThreadType type = SupportThreadType.GENERAL_SUPPORT;
 
     @Column(length = 300)
     private String subject;

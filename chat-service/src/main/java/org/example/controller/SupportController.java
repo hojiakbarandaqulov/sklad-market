@@ -9,6 +9,7 @@ import org.example.dto.chat.WsTokenResponse;
 import org.example.dto.support.SupportCreateRequest;
 import org.example.dto.support.SupportMessageResponse;
 import org.example.dto.support.SupportOpenResponse;
+import org.example.enums.SupportThreadType;
 import org.example.service.SupportService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,18 @@ public class SupportController {
         return ApiResponse.successResponse(supportService.openThread(request));
     }
 
+    @PreAuthorize("hasRole('SELLER')")
+    @PostMapping("/banner/create")
+    public ApiResponse<SupportOpenResponse> createBannerChat(
+            @Valid @RequestBody(required = false) SupportCreateRequest request) {
+
+        return ApiResponse.successResponse(
+                supportService.createThread(
+                        request,
+                        SupportThreadType.BANNER_REQUEST
+                )
+        );
+    }
     @Operation(summary = "Support chat tarixini pagination bilan olish")
     @PreAuthorize("hasAnyRole('BUYER', 'SELLER', 'ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/{threadId}/messages")

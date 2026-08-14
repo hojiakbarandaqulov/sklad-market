@@ -7,7 +7,7 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
         </processorPath>
-        <module name="lead-service.main" />
+        <module name="ai-service.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -16,5 +16,48 @@
       <module name="reposrt-service.main" target="17" />
       <module name="reposrt-service.test" target="17" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ai-service" options="-parameters" />
+      <module name="ai-service.main" options="-parameters" />
+      <module name="ai-service.test" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
+      <module name="api-gateway.main" options="-parameters" />
+      <module name="api-gateway.test" options="-parameters" />
+      <module name="auth-service" options="-parameters" />
+      <module name="auth-service.main" options="-parameters" />
+      <module name="auth-service.test" options="-parameters" />
+      <module name="category-service" options="-parameters" />
+      <module name="category-service.main" options="-parameters" />
+      <module name="category-service.test" options="-parameters" />
+      <module name="chat-service" options="-parameters" />
+      <module name="chat-service.main" options="-parameters" />
+      <module name="chat-service.test" options="-parameters" />
+      <module name="company-service" options="-parameters" />
+      <module name="company-service.main" options="-parameters" />
+      <module name="company-service.test" options="-parameters" />
+      <module name="discovery-service" options="-parameters" />
+      <module name="discovery-service.main" options="-parameters" />
+      <module name="discovery-service.test" options="-parameters" />
+      <module name="file-service" options="-parameters" />
+      <module name="file-service.main" options="-parameters" />
+      <module name="file-service.test" options="-parameters" />
+      <module name="lead-service" options="-parameters" />
+      <module name="lead-service.main" options="-parameters" />
+      <module name="lead-service.test" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
+      <module name="notification-service.main" options="-parameters" />
+      <module name="notification-service.test" options="-parameters" />
+      <module name="product-service" options="-parameters" />
+      <module name="product-service.main" options="-parameters" />
+      <module name="product-service.test" options="-parameters" />
+      <module name="report-service" options="-parameters" />
+      <module name="report-service.main" options="-parameters" />
+      <module name="report-service.test" options="-parameters" />
+      <module name="user-service" options="-parameters" />
+      <module name="user-service.main" options="-parameters" />
+      <module name="user-service.test" options="-parameters" />
+    </option>
   </component>
 </project>
