@@ -116,6 +116,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     Page<Product> findBySaleTypeAndDeletedAtIsNull(SaleType saleType, PageRequest pagable);
 
-    @Query("SELECT p FROM Product p WHERE p.price BETWEEN ?1 AND ?2")
+    @Query("SELECT p FROM Product p WHERE p.price BETWEEN ?1 AND ?2 AND p.deletedAt is null ")
     Page<Product> findByPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
 }

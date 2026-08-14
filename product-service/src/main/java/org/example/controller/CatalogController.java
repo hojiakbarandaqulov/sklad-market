@@ -10,7 +10,9 @@ import org.example.enums.SaleType;
 import org.example.service.CatalogService;
 import org.example.service.ProductSearchService;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -98,10 +100,12 @@ public class CatalogController {
     }
 
     @GetMapping("filter/product/price")
-    public ApiResponse<PageImpl<ProductResponse>> getProductFilterPrice(
+    public ApiResponse<PageImpl<ProductResponse>> filterByPrice(
             @RequestParam BigDecimal fromPrice,
             @RequestParam BigDecimal toPrice,
-            Pageable pageable) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("price").ascending());
         return ApiResponse.successResponse(catalogService.getProductFilterPrice(fromPrice, toPrice, pageable));
     }
 }
