@@ -2,13 +2,10 @@ package org.example.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.document.ProductDocument;
-import org.example.dto.PagedResponse;
-import org.example.dto.product.*;
+import org.example.dto.product.ProductSearchResponse;
 import org.example.enums.AppLanguage;
-import org.example.enums.ProductModerationStatus;
 import org.example.repository.ProductSearchRepository;
 import org.example.service.ProductSearchService;
-import org.example.service.ProductService;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +14,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +67,11 @@ public class ProductSearchServiceImpl implements ProductSearchService {
                                         .term(t -> t
                                                 .field("moderationStatus")
                                                 .value("APPROVED")
+                                        )
+                                ).filter(f -> f
+                                        .term(t -> t
+                                                .field("isActive")
+                                                .value(true)
                                         )
                                 ).minimumShouldMatch("1")
                         )
