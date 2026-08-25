@@ -120,7 +120,7 @@ public class SupportServiceImpl implements SupportService {
     @Override
     @Transactional(readOnly = true)
     public PagedResponse<SupportThreadResponse> getAdminQueue(
-            SupportThreadStatus status, int page, int perPage) {
+            SupportThreadStatus status, SupportThreadType threadType, int page, int perPage) {
         requireCurrentAdmin();
         validatePage(page, perPage);
 
@@ -129,9 +129,16 @@ public class SupportServiceImpl implements SupportService {
                 Sort.Order.desc("id")
         );
         PageRequest pageable = PageRequest.of(page - 1, perPage, sort);
-        Page<SupportThread> result = status == null
-                ? supportThreadRepository.findByDeletedFalse(pageable)
-                : supportThreadRepository.findByStatusAndDeletedFalse(status, pageable);
+        Page<SupportThread> result;
+        if (status == null && threadType == null) {
+            result = supportThreadRepository.findByDeletedFalse(pageable);
+        } else if (status != null && threadType == null) {
+            result = supportThreadRepository.findByStatusAndDeletedFalse(status, pageable);
+        } else if (status == null) {
+            result = supportThreadRepository.findByTypeAndDeletedFalse(threadType, pageable);
+        } else {
+            result = supportThreadRepository.findByStatusAndTypeAndDeletedFalse(status, threadType, pageable);
+        }
 
         return new PagedResponse<>(
                 result.getContent().stream().map(this::toThreadResponse).toList(),
@@ -312,9 +319,15 @@ public class SupportServiceImpl implements SupportService {
         }
     }
 
-    private String normalizeSubject(String value) {
+    private String normalizeSubject(String value, SupportThreadType threadType) {
         String normalized = normalize(value);
-        return normalized == null ? messageService.getMessage("support.default.subject") : normalized;
+        if (normalized != null) {
+            return normalized;
+        }
+        String messageKey = threadType == SupportThreadType.BANNER_REQUEST
+                ? "support.banner.default.subject"
+                : "support.default.subject";
+        return messageService.getMessage(messageKey);
     }
 
     private String normalize(String value) {
@@ -328,6 +341,7 @@ public class SupportServiceImpl implements SupportService {
         response.setRequesterRole(thread.getRequesterRole());
         response.setAssignedAdminId(thread.getAssignedAdminId());
         response.setAssignedAdminRole(thread.getAssignedAdminRole());
+        response.setThreadType(thread.getType());
         response.setStatus(thread.getStatus());
         response.setSubject(thread.getSubject());
         response.setLastMessageAt(thread.getLastMessageAt());

@@ -1,6 +1,5 @@
 package org.example.service;
 
-import jakarta.validation.Valid;
 import org.example.dto.PagedResponse;
 import org.example.dto.chat.WsTokenResponse;
 import org.example.dto.support.SupportCreateRequest;
@@ -35,5 +34,5 @@ public interface SupportService {
 
     SupportParticipantRole resolveParticipantRole(Long userId, Long threadId);
 
-    SupportOpenResponse createThread(@Valid SupportCreateRequest request, SupportThreadType threadType);
+    SupportOpenResponse createThread(SupportCreateRequest request, SupportThreadType threadType);
 }

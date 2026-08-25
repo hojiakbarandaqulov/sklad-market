@@ -39,16 +39,12 @@ public class SupportController {
     @PostMapping("/banner/create")
     public ApiResponse<SupportOpenResponse> createBannerChat(
             @Valid @RequestBody(required = false) SupportCreateRequest request) {
-
         return ApiResponse.successResponse(
-                supportService.createThread(
-                        request,
-                        SupportThreadType.BANNER_REQUEST
-                )
+                supportService.createThread(request, SupportThreadType.BANNER_REQUEST)
         );
     }
-    @Operation(summary = "Support chat tarixini pagination bilan olish")
 
+    @Operation(summary = "Support chat tarixini pagination bilan olish")
     @PreAuthorize("hasAnyRole('BUYER', 'SELLER', 'ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/{threadId}/messages")
     public ApiResponse<PagedResponse<SupportMessageResponse>> getMessages(

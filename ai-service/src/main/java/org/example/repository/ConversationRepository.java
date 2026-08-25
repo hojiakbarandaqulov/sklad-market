@@ -31,7 +31,7 @@ public interface ConversationRepository extends JpaRepository<Conversation, UUID
                  OFFSET :keepCount
              )
             """, nativeQuery = true)
-    int softDeleteOlderActiveConversations(
+    void softDeleteOlderActiveConversations(
             @Param("userSub") String userSub,
             @Param("keepCount") int keepCount,
             @Param("deletedAt") Instant deletedAt);

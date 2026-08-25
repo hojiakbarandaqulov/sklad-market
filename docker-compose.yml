@@ -385,18 +385,17 @@
           depends_on:
             - discovery-service
             - keycloak
-            - ai-db
           environment:
             <<: *common-env
             SERVER_ADDRESS: 127.0.0.1
             SERVER_PORT: 8091
             SPRING_APPLICATION_NAME: ai-service
-            SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5442/skalad_market_ai
+            SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_ai
             SPRING_DATASOURCE_USERNAME: ${AI_DB_USERNAME:-sklad_user}
             SPRING_DATASOURCE_PASSWORD: ${AI_DB_PASSWORD:-sklad-market}
             AI_DB_USERNAME: ${AI_DB_USERNAME:-sklad_user}
             AI_DB_PASSWORD: ${AI_DB_PASSWORD:-sklad-market}
-            GEMINI_API_KEY: ${GEMINI_API_KEY:-AQ.Ab8RN6I11_rcz3p8SvEZWd4T8uVD5KdNHT7pjkqacANzSvEZqQ}
+            GEMINI_API_KEY: ${GEMINI_API_KEY:-}
             AI_CHAT_MODEL: ${AI_CHAT_MODEL:-gemini-2.5-flash}
             AI_CHAT_MODEL_ADVANCED: ${AI_CHAT_MODEL_ADVANCED:-gemini-2.5-pro}
             AI_EMBEDDING_MODEL: ${AI_EMBEDDING_MODEL:-gemini-embedding-001}
