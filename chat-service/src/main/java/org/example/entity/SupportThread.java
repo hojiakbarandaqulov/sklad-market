@@ -13,6 +13,7 @@ import org.example.enums.AssignedAdminRole;
 import org.example.enums.RequesterRole;
 import org.example.enums.SupportThreadStatus;
 import org.example.enums.SupportThreadType;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "support_thread", indexes = {
         @Index(name = "idx_support_thread_requester", columnList = "requester_id,requester_role,status"),
+        @Index(name = "idx_support_thread_requester_type", columnList = "requester_id,requester_role,type,status"),
         @Index(name = "idx_support_thread_admin", columnList = "assigned_admin_id,status"),
         @Index(name = "idx_support_thread_last_message", columnList = "last_message_at")
 })
@@ -40,7 +42,8 @@ public class SupportThread extends BaseEntity {
     private SupportThreadStatus status = SupportThreadStatus.OPEN;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 32)
+    @ColumnDefault("'GENERAL_SUPPORT'")
     private SupportThreadType type = SupportThreadType.GENERAL_SUPPORT;
 
     @Column(length = 300)

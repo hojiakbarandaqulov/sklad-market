@@ -34,6 +34,7 @@ public class SupportController {
         return ApiResponse.successResponse(supportService.openThread(request));
     }
 
+    @Operation(summary = "Seller uchun banner yaratish bo‘yicha admin chatini ochish")
     @PreAuthorize("hasRole('SELLER')")
     @PostMapping("/banner/create")
     public ApiResponse<SupportOpenResponse> createBannerChat(
@@ -47,6 +48,7 @@ public class SupportController {
         );
     }
     @Operation(summary = "Support chat tarixini pagination bilan olish")
+
     @PreAuthorize("hasAnyRole('BUYER', 'SELLER', 'ADMIN', 'SUPER_ADMIN')")
     @GetMapping("/{threadId}/messages")
     public ApiResponse<PagedResponse<SupportMessageResponse>> getMessages(
