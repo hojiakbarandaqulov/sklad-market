@@ -84,6 +84,11 @@ spring:
           uri: lb://file-service
           predicates:
             - Path=/api/v1/attach/**
+        # Ai
+        - id: ai-service
+          uri: lb://ai-service
+          predicates:
+            - Path=/api/v1/ai,/api/v1/ai/**
 eureka:
   client:
     service-url:
