@@ -385,7 +385,6 @@
           depends_on:
             - discovery-service
             - keycloak
-            - ai-db
           environment:
             <<: *common-env
             SERVER_ADDRESS: 127.0.0.1
