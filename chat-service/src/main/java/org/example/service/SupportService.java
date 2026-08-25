@@ -19,7 +19,7 @@ public interface SupportService {
 
     PagedResponse<SupportMessageResponse> getMessages(Long threadId, int page, int perPage, Long beforeId);
 
-    PagedResponse<SupportThreadResponse> getAdminQueue(SupportThreadStatus status, int page, int perPage);
+    PagedResponse<SupportThreadResponse> getAdminQueue(SupportThreadStatus status, SupportThreadType threadType, int page, int perPage);
 
     SupportThreadResponse assignToCurrentAdmin(Long threadId);
 
@@ -35,5 +35,5 @@ public interface SupportService {
 
     SupportParticipantRole resolveParticipantRole(Long userId, Long threadId);
 
-    SupportOpenResponse createThread(@Valid SupportCreateRequest request, SupportThreadType supportThreadType);
+    SupportOpenResponse createThread(@Valid SupportCreateRequest request, SupportThreadType threadType);
 }

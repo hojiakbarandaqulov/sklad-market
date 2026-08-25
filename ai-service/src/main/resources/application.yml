@@ -1,0 +1,94 @@
+server:
+  url: ${server.domain}:${server.port}
+
+spring:
+  application:
+    name: ai-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:prod}
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+# Observability (PLAN.md Phase 7). Only `health` is public (SecurityConfig AUTH_WHITELIST); `metrics`
+# and `prometheus` are exposed but require a valid JWT (they fall through to anyRequest().authenticated()),
+# so the Micrometer scrape surface is auth-gated. Nothing here widens the unauthenticated attack surface.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: never
+  metrics:
+    tags:
+      application: ai-service
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+ai:
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+    chat-model: ${AI_CHAT_MODEL:gemini-3.6-flash}
+    chat-model-advanced: ${AI_CHAT_MODEL_ADVANCED:gemini-3.1-pro-preview}
+  embedding:
+    model: ${AI_EMBEDDING_MODEL:gemini-embedding-001}
+    dim: ${AI_EMBEDDING_DIM:768}
+    batch-size: ${AI_EMBEDDING_BATCH_SIZE:32}
+  indexer:
+    # The catalog embedding indexer runs on its OWN scheduler/executor (never the chat path). It
+    # only ever reads the PUBLIC product/category endpoints — no credentials (PLAN.md Phase 5).
+    enabled: ${AI_INDEXER_ENABLED:true}
+    initial-delay-ms: ${AI_INDEXER_INITIAL_DELAY_MS:60000}
+    interval-ms: ${AI_INDEXER_INTERVAL_MS:1800000}
+    page-size: ${AI_INDEXER_PAGE_SIZE:50}
+    max-pages: ${AI_INDEXER_MAX_PAGES:1000}
+  business-indexer:
+    # Public-company capability index with verification status. Supplier ranking requires VERIFIED;
+    # general discovery can also label pending verification. It has an independent run state;
+    # disabling refresh keeps the last good index readable.
+    enabled: ${AI_BUSINESS_INDEXER_ENABLED:true}
+    initial-delay-ms: ${AI_BUSINESS_INDEXER_INITIAL_DELAY_MS:120000}
+    interval-ms: ${AI_BUSINESS_INDEXER_INTERVAL_MS:1800000}
+    page-size: ${AI_BUSINESS_INDEXER_PAGE_SIZE:100}
+    max-pages: ${AI_BUSINESS_INDEXER_MAX_PAGES:1000}
+  business-index:
+    # Search responses expose the last complete product/company index time and mark older data stale.
+    max-age-minutes: ${AI_BUSINESS_INDEX_MAX_AGE_MINUTES:90}
+  business-contact:
+    # Optional public-company contact hydration is deliberately short, capped, and isolated from
+    # the 60-second authenticated gateway client so discovery still works during a downstream outage.
+    timeout-ms: ${AI_BUSINESS_CONTACT_TIMEOUT_MS:1200}
+    max-lookups: ${AI_BUSINESS_CONTACT_MAX_LOOKUPS:8}
+    parallelism: ${AI_BUSINESS_CONTACT_PARALLELISM:4}
+  buying-intents:
+    max-active-per-user: ${AI_BUYING_INTENT_MAX_ACTIVE_PER_USER:20}
+    maintenance-batch-size: ${AI_BUYING_INTENT_MAINTENANCE_BATCH_SIZE:250}
+    maintenance-max-batches: ${AI_BUYING_INTENT_MAINTENANCE_MAX_BATCHES:4}
+    retention-days: ${AI_BUYING_INTENT_RETENTION_DAYS:180}
+    maintenance-cron: "${AI_BUYING_INTENT_MAINTENANCE_CRON:0 17 * * * *}"
+  gateway:
+    base-url: ${AI_GATEWAY_BASE_URL:http://localhost:8080}
+  seller:
+    # Seller listing-assist vision endpoint (PLAN.md Phase 6) — its own bounded input caps, separate
+    # from the chat turn's max-input-chars, since it accepts images too.
+    max-description-chars: ${AI_SELLER_MAX_DESCRIPTION_CHARS:2000}
+    max-images: ${AI_SELLER_MAX_IMAGES:4}
+    max-image-bytes: ${AI_SELLER_MAX_IMAGE_BYTES:6000000}
+  limits:
+    rate-limit-rpm: ${AI_RATE_LIMIT_RPM:10}
+    # Dashboard search is debounced but naturally more frequent than explicit chat turns. It uses
+    # an isolated bucket, so raising this does not weaken chat/supplier write protection.
+    daily-token-budget: ${AI_DAILY_TOKEN_BUDGET:200000}
+    max-input-chars: 4000
+    # Only recent user/assistant turns are sent to the provider. Tool audit rows are excluded.
+    history-window-messages: ${AI_HISTORY_WINDOW_MESSAGES:6}
+    max-output-tokens: 2048
+    max-tool-iterations: ${AI_MAX_TOOL_ITERATIONS:6}
+    request-timeout-seconds: ${AI_REQUEST_TIMEOUT_SECONDS:60}
+    draft-ttl-minutes: ${AI_DRAFT_TTL_MINUTES:30}

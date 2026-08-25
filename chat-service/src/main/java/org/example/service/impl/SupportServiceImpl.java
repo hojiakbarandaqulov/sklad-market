@@ -51,49 +51,46 @@ public class SupportServiceImpl implements SupportService {
     @Override
     @Transactional
     public SupportOpenResponse openThread(SupportCreateRequest request) {
-        Long requesterId = requireCurrentUserId();
-        RequesterRole requesterRole = resolveRequesterRole();
-
-        SupportThread existing = supportThreadRepository
-                .findFirstByRequesterIdAndRequesterRoleAndStatusInAndDeletedFalseOrderByIdDesc(
-                        requesterId, requesterRole, ACTIVE_STATUSES)
-                .orElse(null);
-
-        if (existing != null) {
-            return new SupportOpenResponse(existing.getId(), requesterRole, existing.getStatus(), false);
-        }
-
-        SupportThread thread = new SupportThread();
-        thread.setRequesterId(requesterId);
-        thread.setRequesterRole(requesterRole);
-        thread.setStatus(SupportThreadStatus.OPEN);
-        thread.setSubject(normalizeSubject(request == null ? null : request.getSubject()));
-
-        SupportThread saved = supportThreadRepository.save(thread);
-        return new SupportOpenResponse(saved.getId(), requesterRole, saved.getStatus(), true);
+        return createThread(request, SupportThreadType.GENERAL_SUPPORT);
     }
 
     @Override
-    public SupportOpenResponse createThread(SupportCreateRequest request, SupportThreadType supportThreadType) {
+    @Transactional
+    public SupportOpenResponse createThread(SupportCreateRequest request, SupportThreadType threadType) {
         Long requesterId = requireCurrentUserId();
         RequesterRole requesterRole = resolveRequesterRole();
+
+        SupportThreadType resolvedType = threadType == null
+                ? SupportThreadType.GENERAL_SUPPORT
+                : threadType;
+
+        if (resolvedType == SupportThreadType.BANNER_REQUEST && requesterRole != RequesterRole.SELLER) {
+            throw new AppBadException(messageService.getMessage("support.banner.seller.required"));
+        }
+
         SupportThread existing = supportThreadRepository
-                .findFirstByRequesterIdAndRequesterRoleAndStatusInAndDeletedFalseOrderByIdDesc(
-                        requesterId, requesterRole, ACTIVE_STATUSES)
+                .findFirstByRequesterIdAndRequesterRoleAndTypeAndStatusInAndDeletedFalseOrderByIdDesc(
+                        requesterId, requesterRole, resolvedType, ACTIVE_STATUSES)
                 .orElse(null);
 
         if (existing != null) {
-            return new SupportOpenResponse(existing.getId(), requesterRole, existing.getStatus(), false);
+            return new SupportOpenResponse(
+                    existing.getId(), requesterRole, resolvedType, existing.getStatus(), false);
         }
 
         SupportThread thread = new SupportThread();
         thread.setRequesterId(requesterId);
         thread.setRequesterRole(requesterRole);
+        thread.setType(resolvedType);
         thread.setStatus(SupportThreadStatus.OPEN);
-        thread.setSubject(normalizeSubject(request == null ? null : request.getSubject()));
+        thread.setSubject(normalizeSubject(
+                request == null ? null : request.getSubject(),
+                resolvedType
+        ));
 
         SupportThread saved = supportThreadRepository.save(thread);
-        return new SupportOpenResponse(saved.getId(), requesterRole, saved.getStatus(), true);
+        return new SupportOpenResponse(
+                saved.getId(), requesterRole, resolvedType, saved.getStatus(), true);
     }
 
     @Override

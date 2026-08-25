@@ -6,6 +6,7 @@ import org.example.dto.ApiResponse;
 import org.example.dto.PagedResponse;
 import org.example.dto.support.SupportThreadResponse;
 import org.example.enums.SupportThreadStatus;
+import org.example.enums.SupportThreadType;
 import org.example.service.SupportService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,9 +28,10 @@ public class SupportAdminController {
     @GetMapping
     public ApiResponse<PagedResponse<SupportThreadResponse>> getQueue(
             @RequestParam(required = false) SupportThreadStatus status,
+            @RequestParam(value = "thread_type", required = false) SupportThreadType threadType,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(value = "per_page", defaultValue = "30") int perPage) {
-        return ApiResponse.successResponse(supportService.getAdminQueue(status, page, perPage));
+        return ApiResponse.successResponse(supportService.getAdminQueue(status, threadType, page, perPage));
     }
 
     @Operation(summary = "Support chatini joriy adminga biriktirish")

@@ -1,0 +1,87 @@
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.4'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.example'
+version = ''
+description = 'ai-service'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2024.0.1")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // Phase 7 observability: Prometheus scrape endpoint for the Micrometer registry (auth-gated).
+    // Version managed by the Spring Boot BOM.
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql:10.20.1'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+    implementation 'com.google.genai:google-genai:1.60.0'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.4'
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.wiremock:wiremock-jetty12:3.13.2'
+    // Phase 5: real pgvector queries (vector(768), <=> cosine, HNSW) can't be slice-tested — they
+    // need a live Postgres with the extension. Versions are managed by the Spring Boot BOM.
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Phase 7 eval harness: run ONLY the tagged golden-set evaluation (`./gradlew eval`). The
+// deterministic golden set (GoldenSetEvalTest) also runs as part of `test`, so it is a CI gate.
+// The optional live model-judgment eval (LiveToolSelectionEvalIT) self-skips unless AI_EVAL_LIVE=true
+// and GEMINI_API_KEY are set. Documented threshold: deterministic 100%, live >= 85% (golden-set.json).
+tasks.register('eval', Test) {
+    description = 'Runs the AI golden-set evaluation harness (JUnit tag "eval").'
+    group = 'verification'
+    useJUnitPlatform {
+        includeTags 'eval'
+    }
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    shouldRunAfter tasks.named('test')
+}
