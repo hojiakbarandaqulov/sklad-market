@@ -50,7 +50,7 @@ ai:
     # Prod default: only the service's own domain is a permitted CORS origin (localhost patterns are
     # dev-only, added by the local profile's @Value default). Override with a comma-separated list if
     # the deployed SPA is served from a different host. §4.2 prod-hardening.
-    allowed-origins: ${AI_CORS_ALLOWED_ORIGINS:}
+    allowed-origins: "${AI_CORS_ALLOWED_ORIGINS:https://skladmarket.uz,https://www.skladmarket.uz}"
 
 # Structured (JSON) logging in production only (Spring Boot 3.4 native structured logging — no extra
 # dependency). ECS format to the console, which Docker/journald captures. The MDC `requestId` stamped
