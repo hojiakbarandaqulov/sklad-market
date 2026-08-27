@@ -1,5 +1,6 @@
 package org.example.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -50,6 +51,12 @@ public class CreateProductRequest {
 
     @NotNull(message = "minProduct")
     private Long minProduct;
+
+    @JsonProperty("pickup_available")
+    private Boolean pickupAvailable;
+
+    @JsonProperty("pickup_branch_id")
+    private Long pickupBranchId;
 
     private Map<String, Object> attributes;
 }

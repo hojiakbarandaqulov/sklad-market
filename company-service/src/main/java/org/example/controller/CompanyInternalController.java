@@ -2,6 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.dto.admin.ReasonRequest;
+import org.example.dto.internal.CompanyBranchInternalResponse;
 import org.example.dto.internal.CompanyIds;
 import org.example.dto.internal.CompanyInternalOwnershipResponse;
 import org.example.dto.internal.CompanyInternalSummaryResponse;
@@ -12,6 +13,7 @@ import org.example.enums.VerificationStatus;
 import org.example.exp.AppBadException;
 import org.example.repository.CompanyRepository;
 import org.example.service.AdminCompanyService;
+import org.example.service.CompanyBranchService;
 import org.example.service.CompanyService;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +28,7 @@ public class CompanyInternalController {
 
     private final CompanyService companyService;
     private final AdminCompanyService adminCompanyService;
+    private final CompanyBranchService companyBranchService;
 
 
     @GetMapping("/{companyId}/ownership-check")
@@ -75,6 +78,12 @@ public class CompanyInternalController {
                 .slug(company.getSlug())
                 .logoPath(company.getLogoPath())
                 .build();
+    }
+
+    @GetMapping("/{companyId}/branches/{branchId}")
+    public CompanyBranchInternalResponse branch(@PathVariable Long companyId,
+                                                @PathVariable Long branchId) {
+        return companyBranchService.getBranchInternal(companyId, branchId);
     }
 
     @GetMapping("/stats/pending-count")

@@ -65,6 +65,12 @@ public class Product extends BaseEntity {
 
     private Long minProduct;
 
+    @Column(name = "pickup_available")
+    private Boolean pickupAvailable = Boolean.FALSE;
+
+    @Column(name = "pickup_branch_id")
+    private Long pickupBranchId;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String, Object> attributesJsonb = new HashMap<>();

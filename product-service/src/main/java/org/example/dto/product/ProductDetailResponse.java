@@ -53,6 +53,12 @@ public class ProductDetailResponse {
     @JsonProperty("district_id")
     private Long districtId;
 
+    @JsonProperty("pickup_available")
+    private Boolean pickupAvailable;
+
+    @JsonProperty("pickup_location")
+    private PickupLocationResponse pickupLocation;
+
     @JsonProperty("similar_products")
     private List<SimilarProductResponse> similarProducts;
 

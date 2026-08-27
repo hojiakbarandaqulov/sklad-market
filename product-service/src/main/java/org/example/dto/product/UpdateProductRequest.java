@@ -47,5 +47,11 @@ public class UpdateProductRequest {
     @JsonProperty("district_id")
     private Long districtId;
 
+    @JsonProperty("pickup_available")
+    private Boolean pickupAvailable;
+
+    @JsonProperty("pickup_branch_id")
+    private Long pickupBranchId;
+
     private Map<String, Object> attributes;
 }

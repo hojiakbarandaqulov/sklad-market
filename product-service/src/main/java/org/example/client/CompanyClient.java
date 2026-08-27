@@ -1,5 +1,6 @@
 package org.example.client;
 
+import org.example.client.dto.CompanyBranchSummaryResponse;
 import org.example.client.dto.CompanyMapSummaryRequest;
 import org.example.client.dto.CompanyMapSummaryResponse;
 import org.example.client.dto.CompanyOwnershipResponse;
@@ -25,6 +26,9 @@ public interface CompanyClient {
 
     @GetMapping("/internal/companies/{companyId}/summary")
     CompanySummaryResponse getSummary(@PathVariable Long companyId);
+
+    @GetMapping("/internal/companies/{companyId}/branches/{branchId}")
+    CompanyBranchSummaryResponse getBranch(@PathVariable Long companyId, @PathVariable Long branchId);
 
     @PostMapping("/internal/companies/map-summary")
     List<CompanyMapSummaryResponse> getMapSummaries(@RequestBody CompanyMapSummaryRequest request);

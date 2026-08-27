@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
 import org.example.dto.CompanyBranchCreateDTO;
 import org.example.dto.CompanyBranchResponse;
+import org.example.dto.internal.CompanyBranchInternalResponse;
 import org.example.entity.Company;
 import org.example.entity.CompanyBranch;
 import org.example.enums.AppLanguage;
@@ -63,6 +64,27 @@ public class CompanyBranchServiceImpl implements CompanyBranchService {
                 .toList();
 
         return ApiResponse.successResponse(branches);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CompanyBranchInternalResponse getBranchInternal(Long companyId, Long branchId) {
+        return companyBranchRepository.findByIdAndCompany_IdAndDeletedFalse(branchId, companyId)
+                .map(branch -> CompanyBranchInternalResponse.builder()
+                        .exists(true)
+                        .id(branch.getId())
+                        .companyId(branch.getCompany().getId())
+                        .name(branch.getBranchName())
+                        .address(branch.getAddress())
+                        .phone(branch.getPhone())
+                        .lng(branch.getLng())
+                        .lat(branch.getLat())
+                        .build())
+                .orElseGet(() -> CompanyBranchInternalResponse.builder()
+                        .exists(false)
+                        .id(branchId)
+                        .companyId(companyId)
+                        .build());
     }
 
     @Override

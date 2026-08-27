@@ -32,6 +32,12 @@ public class ProductResponse {
     private Long regionId;
     private Long districtId;
 
+    @JsonProperty("pickup_available")
+    private Boolean pickupAvailable;
+
+    @JsonProperty("pickup_branch_id")
+    private Long pickupBranchId;
+
     private Map<String, Object> attributes;
     private ProductModerationStatus status;
     private Boolean isActive;

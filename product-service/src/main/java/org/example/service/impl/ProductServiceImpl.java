@@ -69,6 +69,7 @@ public class ProductServiceImpl implements ProductService {
         Long sellerId = requiredSellerId(language);
         validateCompanyOwnership(request.getCompanyId(), sellerId, language);
         validateCategory(request.getCategoryId(), language);
+        validatePickupBranch(request.getCompanyId(), request.getPickupAvailable(), request.getPickupBranchId(), language);
 
         Product product = new Product();
         applyCommonFields(product, request, language);
@@ -225,6 +226,7 @@ public class ProductServiceImpl implements ProductService {
 
         CompanySummaryResponse company = companyClient.getSummary(product.getCompanyId());
         CategorySummaryResponse category = categoryClient.getSummary(product.getCategoryId());
+        PickupLocationResponse pickupLocation = resolvePickupLocation(product);
 
         viewAsyncService.logView(product.getId(), SpringSecurityUtil.getProfileId(), sessionId);
 
@@ -257,6 +259,8 @@ public class ProductServiceImpl implements ProductService {
                         .build())
                 .regionId(product.getRegionId())
                 .districtId(product.getDistrictId())
+                .pickupAvailable(pickupLocation != null)
+                .pickupLocation(pickupLocation)
                 .similarProducts(productRepository
                         .findTop8ByCategoryIdAndIdNotAndModerationStatusAndIsActiveTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
                                 product.getCategoryId(),
@@ -275,6 +279,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = getOwnedProduct(id, language);
         validateCompanyOwnership(request.getCompanyId(), requiredSellerId(language), language);
         validateCategory(request.getCategoryId(), language);
+        validatePickupBranch(request.getCompanyId(), request.getPickupAvailable(), request.getPickupBranchId(), language);
 
         String previousName = product.getName();
         applyCommonFields(product, request, language);
@@ -403,6 +408,50 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    private void validatePickupBranch(Long companyId,
+                                      Boolean pickupAvailable,
+                                      Long pickupBranchId,
+                                      AppLanguage language) {
+        if (!Boolean.TRUE.equals(pickupAvailable)) {
+            return;
+        }
+        if (pickupBranchId == null) {
+            throw new AppBadException(messageService.getMessage("pickup.branch.required", language));
+        }
+
+        CompanyBranchSummaryResponse branch = companyClient.getBranch(companyId, pickupBranchId);
+        if (branch == null || !branch.isExists() || !companyId.equals(branch.getCompanyId())) {
+            throw new AppBadException(messageService.getMessage("pickup.branch.not.found", language));
+        }
+        if (!StringUtils.hasText(branch.getLat()) || !StringUtils.hasText(branch.getLng())) {
+            throw new AppBadException(messageService.getMessage("pickup.branch.location.required", language));
+        }
+    }
+
+    private PickupLocationResponse resolvePickupLocation(Product product) {
+        if (!Boolean.TRUE.equals(product.getPickupAvailable()) || product.getPickupBranchId() == null) {
+            return null;
+        }
+
+        CompanyBranchSummaryResponse branch = companyClient.getBranch(product.getCompanyId(), product.getPickupBranchId());
+        if (branch == null
+                || !branch.isExists()
+                || !product.getCompanyId().equals(branch.getCompanyId())
+                || !StringUtils.hasText(branch.getLat())
+                || !StringUtils.hasText(branch.getLng())) {
+            return null;
+        }
+
+        return PickupLocationResponse.builder()
+                .branchId(branch.getId())
+                .name(branch.getName())
+                .address(branch.getAddress())
+                .phone(branch.getPhone())
+                .lat(branch.getLat())
+                .lng(branch.getLng())
+                .build();
+    }
+
     private void validateCategory(Long categoryId, AppLanguage language) {
         CategoryValidationResponse response = categoryClient.validate(categoryId);
         if (!response.isExists()) {
@@ -439,6 +488,8 @@ public class ProductServiceImpl implements ProductService {
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());
         product.setDistrictId(request.getDistrictId());
+        product.setPickupAvailable(Boolean.TRUE.equals(request.getPickupAvailable()));
+        product.setPickupBranchId(Boolean.TRUE.equals(request.getPickupAvailable()) ? request.getPickupBranchId() : null);
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
     }
 
@@ -453,6 +504,8 @@ public class ProductServiceImpl implements ProductService {
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());
         product.setDistrictId(request.getDistrictId());
+        product.setPickupAvailable(Boolean.TRUE.equals(request.getPickupAvailable()));
+        product.setPickupBranchId(Boolean.TRUE.equals(request.getPickupAvailable()) ? request.getPickupBranchId() : null);
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
     }
 
@@ -591,6 +644,8 @@ public class ProductServiceImpl implements ProductService {
         response.setMin(product.getMinProduct());
         response.setRegionId(product.getRegionId());
         response.setDistrictId(product.getDistrictId());
+        response.setPickupAvailable(Boolean.TRUE.equals(product.getPickupAvailable()));
+        response.setPickupBranchId(product.getPickupBranchId());
         response.setStatus(resolveStatus(product));
         response.setAttributes(product.getAttributesJsonb());
         response.setIsActive(product.getIsActive());
