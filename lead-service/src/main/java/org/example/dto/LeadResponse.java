@@ -7,6 +7,7 @@ import org.example.enums.LeadSource;
 import org.example.enums.LeadStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -26,5 +27,6 @@ public class LeadResponse {
     private LocalDate neededDate;
     private String comment;
     private String closeReason;
+    private LocalDateTime createdDate;
     private List<LeadItemResponse> items;
 }

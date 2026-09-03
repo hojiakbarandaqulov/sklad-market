@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="chat service bug" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="company service bug">
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/LeadResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/LeadResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/mapper/LeadMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/mapper/LeadMapper.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1010,7 +1013,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="server deploy config" />
     <MESSAGE value="file service commit" />
     <MESSAGE value="file service gradle file commit" />
     <MESSAGE value="keyclok bug fix" />
@@ -1035,7 +1037,8 @@
     <MESSAGE value="company branch finish commit" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="chat service bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="chat service bug" />
+    <MESSAGE value="company service bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="company service bug" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
