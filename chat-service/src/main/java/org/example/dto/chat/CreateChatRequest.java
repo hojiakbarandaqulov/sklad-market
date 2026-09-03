@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateChatRequest {
+
     /** Buyer yozmoqchi bo'lgan seller kompaniyasining ID raqami. */
     @NotNull(message = "{chat.seller.company.id.required}")
     @JsonProperty("seller_company_id")

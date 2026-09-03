@@ -105,18 +105,18 @@ public class ChatServiceImpl implements ChatService {
         CompanyOwnershipResponse company = companyClient.checkOwnership(request.getSellerCompanyId(), buyerId);
 
         if (!company.isExists() || !company.isActive()) {
-            throw new AppBadException(messageService.getMessage("chat.seller.company.unavailable",language));
+            throw new AppBadException(messageService.getMessage("chat.seller.company.unavailable", language));
         }
 
         if (company.isOwner()) {
-            throw new AppBadException(messageService.getMessage("chat.own.company.not.allowed",language));
+            throw new AppBadException(messageService.getMessage("chat.own.company.not.allowed", language));
         }
 
         if (request.getProductId() != null) {
             // Product berilgan bo'lsa, u aynan requestdagi kompaniyaga tegishli bo'lishi shart.
             ProductSummaryResponse productSummary = productClient.getSummary(request.getProductId());
             if (!request.getSellerCompanyId().equals(productSummary.getCompanyId())) {
-                throw new AppBadException(messageService.getMessage("chat.product.company.mismatch",language));
+                throw new AppBadException(messageService.getMessage("chat.product.company.mismatch", language));
             }
         }
         Optional<ChatThread> existingThreadOptional = chatThreadRepository.findUnique(
@@ -140,6 +140,56 @@ public class ChatServiceImpl implements ChatService {
         newThread.setBuyerId(buyerId);
         newThread.setSellerCompanyId(request.getSellerCompanyId());
         newThread.setProductId(request.getProductId());
+
+        ChatThread savedThread = chatThreadRepository.save(newThread);
+
+        return chatMapper.toCreateResponse(savedThread, true);
+    }
+
+    @Override
+    public ChatCreateResponse createThreadSeller(CreateChatSeller request, AppLanguage language) {
+        Long sellerId = requireCurrentUserId();
+        Long buyerId = request.getBuyerId();
+
+        CompanyOwnershipResponse company = companyClient.checkOwnership(request.getSellerCompanyId(), sellerId);
+
+        if (!company.isExists() || !company.isActive()) {
+            throw new AppBadException(messageService.getMessage("chat.seller.company.unavailable", language));
+        }
+
+        if (!company.isOwner()) {
+            throw new AppBadException(messageService.getMessage("chat.own.company.not.allowed", language));
+        }
+
+        if (request.getProductId() != null) {
+            // Product berilgan bo'lsa, u aynan requestdagi kompaniyaga tegishli bo'lishi shart.
+            ProductSummaryResponse productSummary = productClient.getSummary(request.getProductId());
+            if (!request.getSellerCompanyId().equals(productSummary.getCompanyId())) {
+                throw new AppBadException(messageService.getMessage("chat.product.company.mismatch", language));
+            }
+        }
+        Optional<ChatThread> existingThreadOptional = chatThreadRepository.findUnique(
+                buyerId,
+                request.getSellerCompanyId(),
+                request.getProductId()
+        );
+
+        if (existingThreadOptional.isPresent()) {
+            ChatThread existingThread = existingThreadOptional.get();
+
+            existingThread.setBuyerHidden(Boolean.FALSE);
+            ChatThread reopenedThread = chatThreadRepository.save(existingThread);
+
+            return chatMapper.toCreateResponse(reopenedThread, false);
+        }
+
+// Chat mavjud bo‘lmasa, yangi chat yaratamiz.
+        ChatThread newThread = new ChatThread();
+        newThread.setBuyerId(buyerId);
+        newThread.setSellerCompanyId(request.getSellerCompanyId());
+        newThread.setProductId(request.getProductId());
+        newThread.setBuyerHidden(false);
+        newThread.setSellerHidden(false);
 
         ChatThread savedThread = chatThreadRepository.save(newThread);
 

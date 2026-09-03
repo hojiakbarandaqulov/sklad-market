@@ -46,4 +46,5 @@ public interface ChatService {
     /** Qarshi tomondan kelgan xabarlarni o'qilgan deb belgilaydi. */
     ReadReceiptResponse markMessagesRead(Long userId, Long threadId, List<Long> messageIds);
 
+    ChatCreateResponse createThreadSeller(CreateChatSeller request, AppLanguage language);
 }

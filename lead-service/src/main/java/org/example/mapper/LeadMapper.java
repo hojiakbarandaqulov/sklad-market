@@ -27,6 +27,7 @@ public class LeadMapper {
                 .deliveryAddress(lead.getDeliveryAddress())
                 .neededDate(lead.getNeededDate())
                 .comment(lead.getComment())
+                .createdDate(lead.getCreatedDate())
                 .closeReason(lead.getCloseReason())
                 .items(leadItemRepository.findByLeadIdAndDeletedFalse(lead.getId()).stream()
                         .map(item -> LeadItemResponse.builder()

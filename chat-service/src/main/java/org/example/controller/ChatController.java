@@ -49,6 +49,17 @@ public class ChatController {
         return ApiResponse.successResponse(chatService.createThread(request,language));
     }
 
+    @PreAuthorize("hasAnyRole('SELLER')")
+    @PostMapping("seller/create")
+    @Operation(
+            summary = "Chat yaratish yoki avvalgi chatni ochish",
+            description = "Seller Buyer ga chat ochadi. Xuddi shu chat mavjud bo'lsa yangi yozuv yaratilmaydi.")
+    public ApiResponse<ChatCreateResponse> createThreadSeller(
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language,
+            @RequestBody @Valid CreateChatSeller request) {
+        return ApiResponse.successResponse(chatService.createThreadSeller(request,language));
+    }
+
     @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @GetMapping("/{threadId}/messages")
     @Operation(
