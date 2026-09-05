@@ -500,6 +500,7 @@ public class ProductServiceImpl implements ProductService {
         product.setShortDescription(request.getShortDescription());
         product.setDescription(request.getDescription());
         product.setPriceType(request.getPriceType());
+        product.setSaleType(request.getSaleType());
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.Currency;
 import org.example.enums.PriceType;
+import org.example.enums.SaleType;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -34,6 +35,9 @@ public class UpdateProductRequest {
     @NotNull(message = "price_type is required")
     @JsonProperty("price_type")
     private PriceType priceType;
+
+    @NotNull(message = "saleType is required")
+    private SaleType saleType;
 
     private BigDecimal price;
 
