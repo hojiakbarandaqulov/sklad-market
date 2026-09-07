@@ -642,8 +642,6 @@ public class ProductServiceImpl implements ProductService {
         response.setShortDescription(product.getShortDescription());
         response.setDescription(product.getDescription());
         response.setPriceType(product.getPriceType());
-        response.setWholeSale(product.getWholeSale());
-        response.setRetail(product.getRetail());
         response.setPrice(product.getPrice());
         response.setCurrency(product.getCurrency());
         response.setMin(product.getMinProduct());
