@@ -31,6 +31,7 @@ public class ProductResponse {
     private Boolean wholeSale;
 
     private Boolean retail;
+
     private Long min;
     private Long regionId;
     private Long districtId;
