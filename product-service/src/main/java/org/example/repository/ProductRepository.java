@@ -2,7 +2,6 @@ package org.example.repository;
 
 import org.example.entity.Product;
 import org.example.enums.ProductModerationStatus;
-import org.example.enums.SaleType;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,7 +62,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     Optional<Product> findByIdAndIsActiveTrue(Long productId);
 
-    Page<Product> findBySaleType(SaleType saleType, Pageable pageable);
 
 
     Optional<Product> findBySlugAndModerationStatusAndDeletedAtIsNull(String slug, ProductModerationStatus productModerationStatus);
@@ -114,7 +112,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     Page<Product> findByDeletedAtIsNull(Pageable pageable);
 
-    Page<Product> findBySaleTypeAndDeletedAtIsNull(SaleType saleType, PageRequest pagable);
+    @Query("SELECT p FROM Product p WHERE p.wholeSale=:wholeSale AND p.retail=:retail")
+    Page<Product> findBySaleTypeAndDeletedAtIsNull(@Param("wholeSale") Boolean wholeSale,@Param("retail") Boolean retail, PageRequest pagable);
 
     @Query("SELECT p FROM Product p WHERE p.price BETWEEN ?1 AND ?2 AND p.deletedAt is null ")
     Page<Product> findByPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);

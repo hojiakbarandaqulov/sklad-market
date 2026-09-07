@@ -4,7 +4,6 @@ import org.example.dto.*;
 import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
 import org.example.enums.AppLanguage;
-import org.example.enums.SaleType;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
@@ -24,7 +23,7 @@ public interface CatalogService {
 
     CatalogHomepageResponse homepage(AppLanguage language);
 
-    PageImpl<ProductResponse> getSaleTypeFilterProduct(int page, int perPage, SaleType saleType, AppLanguage language);
+    PageImpl<ProductResponse> getSaleTypeFilterProduct(int page, int perPage, Boolean wholeSale, Boolean retail, AppLanguage language);
 
     PageImpl<ProductDto> getPopularProduct(int page, int size);
 

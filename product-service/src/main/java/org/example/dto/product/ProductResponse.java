@@ -1,14 +1,11 @@
 package org.example.dto.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.Currency;
 import org.example.enums.PriceType;
 import org.example.enums.ProductModerationStatus;
-import org.example.enums.SaleType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,7 +27,10 @@ public class ProductResponse {
     private PriceType priceType;
     private BigDecimal price;
     private Currency currency;
-    private SaleType saleType;
+
+    private Boolean wholeSale;
+
+    private Boolean retail;
     private Long min;
     private Long regionId;
     private Long districtId;

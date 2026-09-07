@@ -12,11 +12,9 @@ import org.example.entity.Product;
 import org.example.enums.AppLanguage;
 import org.example.enums.Currency;
 import org.example.enums.ProductModerationStatus;
-import org.example.enums.SaleType;
 import org.example.repository.ProductRepository;
 import org.example.service.BannerService;
 import org.example.service.CatalogService;
-import org.example.service.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -163,9 +161,9 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
-    public PageImpl<ProductResponse> getSaleTypeFilterProduct(int page, int perPage, SaleType saleType, AppLanguage language) {
+    public PageImpl<ProductResponse> getSaleTypeFilterProduct(int page, int perPage, Boolean wholeSale, Boolean retail, AppLanguage language) {
         PageRequest pagable = PageRequest.of(page - 1, perPage);
-        Page<Product> product = productRepository.findBySaleTypeAndDeletedAtIsNull(saleType, pagable);
+        Page<Product> product = productRepository.findBySaleTypeAndDeletedAtIsNull(wholeSale,retail, pagable);
 
         List<ProductResponse> list = product.getContent().stream()
                 .map(this::toProductResponse)
@@ -285,7 +283,8 @@ public class CatalogServiceImpl implements CatalogService {
         res.setSlug(p.getSlug());
         res.setPrice(p.getPrice());
         res.setPriceType(p.getPriceType());
-        res.setSaleType(p.getSaleType());
+        res.setWholeSale(p.getWholeSale());
+        res.setRetail(p.getRetail());
         res.setCurrency(p.getCurrency());
 //        res.setImages(p.getImages());           // images
         res.setViewsCountCache(p.getViewsCountCache());

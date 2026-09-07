@@ -77,7 +77,8 @@ public class ProductServiceImpl implements ProductService {
         product.setSlug(generateUniqueSlug(request.getName()));
         product.setModerationStatus(ProductModerationStatus.PENDING);
         product.setMinProduct(request.getMinProduct());
-        product.setSaleType(request.getSaleType());
+        product.setWholeSale(request.getWholeSale());
+        product.setRetail(request.getRetail());
         product.setPhone(request.getPhone());
 
         Product saved = productRepository.save(product);
@@ -500,7 +501,8 @@ public class ProductServiceImpl implements ProductService {
         product.setShortDescription(request.getShortDescription());
         product.setDescription(request.getDescription());
         product.setPriceType(request.getPriceType());
-        product.setSaleType(request.getSaleType());
+        product.setWholeSale(request.getWholeSale());
+        product.setRetail(request.getRetail());
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());
@@ -640,6 +642,8 @@ public class ProductServiceImpl implements ProductService {
         response.setShortDescription(product.getShortDescription());
         response.setDescription(product.getDescription());
         response.setPriceType(product.getPriceType());
+        response.setWholeSale(product.getWholeSale());
+        response.setRetail(product.getRetail());
         response.setPrice(product.getPrice());
         response.setCurrency(product.getCurrency());
         response.setMin(product.getMinProduct());

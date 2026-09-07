@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.Currency;
 import org.example.enums.PriceType;
-import org.example.enums.SaleType;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -36,8 +35,9 @@ public class CreateProductRequest {
     @NotBlank(message = "phone required")
     private String phone;
 
-    @NotNull(message = "saleType is required")
-    private SaleType saleType;
+    private Boolean wholeSale=false;
+
+    private Boolean retail=false;
 
     @NotNull(message = "price is required")
     private BigDecimal price;

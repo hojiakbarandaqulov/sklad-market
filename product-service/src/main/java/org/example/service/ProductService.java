@@ -11,7 +11,6 @@ import org.example.entity.Product;
 import org.example.entity.ProductImage;
 import org.example.enums.AppLanguage;
 import org.example.enums.ProductModerationStatus;
-import org.example.enums.SaleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;

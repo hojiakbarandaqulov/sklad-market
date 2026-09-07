@@ -6,7 +6,6 @@ import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
 import org.example.dto.product.ProductSearchResponse;
 import org.example.enums.AppLanguage;
-import org.example.enums.SaleType;
 import org.example.service.CatalogService;
 import org.example.service.ProductSearchService;
 import org.springframework.data.domain.PageImpl;
@@ -72,11 +71,12 @@ public class CatalogController {
 
     @GetMapping("/saleType/product")
     public ApiResponse<PageImpl<ProductResponse>> getSaleTypeFilterProduct(
-            @RequestParam(required = false) SaleType saleType,
+            @RequestParam(required = false) Boolean wholeSale,
+            @RequestParam(required = false) Boolean retail,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int perPage,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(catalogService.getSaleTypeFilterProduct(page, perPage, saleType, language));
+        return ApiResponse.successResponse(catalogService.getSaleTypeFilterProduct(page, perPage, wholeSale,retail, language));
     }
 
     @GetMapping("/popular")
