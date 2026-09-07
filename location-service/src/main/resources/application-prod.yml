@@ -1,0 +1,41 @@
+server:
+  address: 127.0.0.1
+  domain: ${SERVER_DOMAIN:https://skladmarket.uz}
+  port: ${SERVER_PORT:8092}
+  url: ${SWAGGER_SERVER_URL:https://skladmarket.uz}
+
+spring:
+  application:
+    name: location-service
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:127.0.0.1}:${DB_PORT:5432}/${DB_NAME:skalad_market_location}
+    username: ${DB_USERNAME:sklad_user}
+    password: ${DB_PASSWORD:sklad-market}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://127.0.0.1:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    ip-address: ${SERVER_IP:127.0.0.1}
+    instance-id: ${spring.application.name}:${server.port}
+
+springdoc:
+  swagger-ui:
+    config-url: /swagger/location/v3/api-docs/swagger-config
+    url: /swagger/location/v3/api-docs

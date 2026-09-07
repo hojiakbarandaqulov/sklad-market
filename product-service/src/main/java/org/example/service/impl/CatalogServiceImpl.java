@@ -276,6 +276,7 @@ public class CatalogServiceImpl implements CatalogService {
         return new PageImpl<>(responses, pageable, products.getTotalElements());
     }
 
+
     private ProductDto toPopularProductResponse(Product p) {
         ProductDto res = new ProductDto();
         res.setId(p.getId());

@@ -30,4 +30,6 @@ public interface CatalogService {
     PagedResponse<CatalogMapItemResponse> getCatalogMap(String query, String category, Long regionId, Long districtId, int page, int perPage, AppLanguage language);
 
     PageImpl<ProductResponse> getProductFilterPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
+
+    PageImpl<ProductResponse> getPriceFilter(BigDecimal fromPrice, BigDecimal toPrice, int page, int page1, AppLanguage language);
 }

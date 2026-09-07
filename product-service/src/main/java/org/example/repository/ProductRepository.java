@@ -1,9 +1,11 @@
 package org.example.repository;
 
+import org.example.dto.product.ProductResponse;
 import org.example.entity.Product;
 import org.example.enums.ProductModerationStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -117,4 +119,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     @Query("SELECT p FROM Product p WHERE p.price BETWEEN ?1 AND ?2 AND p.deletedAt is null ")
     Page<Product> findByPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
+
 }

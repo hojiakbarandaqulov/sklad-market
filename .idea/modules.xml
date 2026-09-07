@@ -6,11 +6,11 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/ai-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ai-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gateway.main.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gateway.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/auth-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/auth-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/category-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/category-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/chat-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chat-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/company-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/company-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/file-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/file-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/lead-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lead-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/location-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/location-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/notification-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/notification-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/order-service/order-service.iml" filepath="$PROJECT_DIR$/order-service/order-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/product-service.main.iml" />

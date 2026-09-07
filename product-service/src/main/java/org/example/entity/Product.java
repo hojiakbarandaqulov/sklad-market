@@ -60,8 +60,6 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private Long regionId;
 
-    private Long districtId;
-
     private Long minProduct;
 
     private Boolean pickupAvailable = Boolean.FALSE;

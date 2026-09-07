@@ -7,10 +7,13 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
         </processorPath>
-        <module name="ai-service.main" />
+        <module name="location-service.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="category-service" target="17" />
+      <module name="category-service.main" target="17" />
+      <module name="category-service.test" target="17" />
       <module name="company-servce" target="17" />
       <module name="reposrt-service" target="17" />
       <module name="reposrt-service.main" target="17" />
@@ -46,6 +49,9 @@
       <module name="lead-service" options="-parameters" />
       <module name="lead-service.main" options="-parameters" />
       <module name="lead-service.test" options="-parameters" />
+      <module name="location-service" options="-parameters" />
+      <module name="location-service.main" options="-parameters" />
+      <module name="location-service.test" options="-parameters" />
       <module name="notification-service" options="-parameters" />
       <module name="notification-service.main" options="-parameters" />
       <module name="notification-service.test" options="-parameters" />

@@ -40,6 +40,7 @@ public interface SupportThreadRepository extends JpaRepository<SupportThread, Lo
     Page<SupportThread> findByTypeAndDeletedFalse(SupportThreadType type, Pageable pageable);
 
     Page<SupportThread> findByStatusAndTypeAndDeletedFalse(SupportThreadStatus status, SupportThreadType type, Pageable pageable);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select t from SupportThread t where t.id = :id and t.deleted = false")
     Optional<SupportThread> findByIdForUpdate(@Param("id") Long id);

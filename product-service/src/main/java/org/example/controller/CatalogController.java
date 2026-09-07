@@ -76,7 +76,7 @@ public class CatalogController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int perPage,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(catalogService.getSaleTypeFilterProduct(page, perPage, wholeSale,retail, language));
+        return ApiResponse.successResponse(catalogService.getSaleTypeFilterProduct(page, perPage, wholeSale, retail, language));
     }
 
     @GetMapping("/popular")
@@ -86,6 +86,7 @@ public class CatalogController {
         PageImpl<ProductDto> result = catalogService.getPopularProduct(page, size);
         return ApiResponse.successResponse(result);
     }
+
 
     @GetMapping("/map")
     public ApiResponse<PagedResponse<CatalogMapItemResponse>> getCatalogMap(

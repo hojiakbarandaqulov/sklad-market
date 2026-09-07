@@ -40,7 +40,12 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/api/v1/users/**,/api/v1/location/**,/api/v1/admin/users,/api/v1/admin/users/**,/api/v1/location
+            - Path=/api/v1/users/**,/api/v1/admin/users,/api/v1/admin/users/**
+        # Location Service
+        - id: location-service
+          uri: lb://location-service
+          predicates:
+            - Path=/api/v1/regions,/api/v1/regions/**,/api/v1/admin/regions,/api/v1/admin/regions/**
 
         # Company Service
         - id: company-service
