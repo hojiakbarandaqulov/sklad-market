@@ -50,9 +50,6 @@ public class ProductDetailResponse {
     @JsonProperty("region_id")
     private Long regionId;
 
-    @JsonProperty("district_id")
-    private Long districtId;
-
     @JsonProperty("pickup_available")
     private Boolean pickupAvailable;
 

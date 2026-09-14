@@ -47,7 +47,6 @@ public class CreateProductRequest {
 
     private Long regionId;
 
-    private Long districtId;
 
     @NotNull(message = "minProduct")
     private Long minProduct;

@@ -34,7 +34,6 @@ public class ProductResponse {
 
     private Long min;
     private Long regionId;
-    private Long districtId;
 
     @JsonProperty("pickup_available")
     private Boolean pickupAvailable;

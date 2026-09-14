@@ -259,7 +259,6 @@ public class ProductServiceImpl implements ProductService {
                         .slug(category.getSlug())
                         .build())
                 .regionId(product.getRegionId())
-                .districtId(product.getDistrictId())
                 .pickupAvailable(pickupLocation != null)
                 .pickupLocation(pickupLocation)
                 .similarProducts(productRepository
@@ -488,7 +487,6 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());
-        product.setDistrictId(request.getDistrictId());
         product.setPickupAvailable(Boolean.TRUE.equals(request.getPickupAvailable()));
         product.setPickupBranchId(Boolean.TRUE.equals(request.getPickupAvailable()) ? request.getPickupBranchId() : null);
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
@@ -506,7 +504,6 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
         product.setRegionId(request.getRegionId());
-        product.setDistrictId(request.getDistrictId());
         product.setPickupAvailable(Boolean.TRUE.equals(request.getPickupAvailable()));
         product.setPickupBranchId(Boolean.TRUE.equals(request.getPickupAvailable()) ? request.getPickupBranchId() : null);
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
@@ -648,7 +645,6 @@ public class ProductServiceImpl implements ProductService {
         response.setCurrency(product.getCurrency());
         response.setMin(product.getMinProduct());
         response.setRegionId(product.getRegionId());
-        response.setDistrictId(product.getDistrictId());
         response.setPickupAvailable(Boolean.TRUE.equals(product.getPickupAvailable()));
         response.setPickupBranchId(product.getPickupBranchId());
         response.setStatus(resolveStatus(product));
