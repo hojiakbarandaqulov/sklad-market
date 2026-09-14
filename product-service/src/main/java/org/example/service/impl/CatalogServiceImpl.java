@@ -277,6 +277,7 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
 
+
     private ProductDto toPopularProductResponse(Product p) {
         ProductDto res = new ProductDto();
         res.setId(p.getId());
