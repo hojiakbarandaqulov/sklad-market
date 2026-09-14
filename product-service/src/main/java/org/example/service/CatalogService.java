@@ -31,5 +31,4 @@ public interface CatalogService {
 
     PageImpl<ProductResponse> getProductFilterPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
 
-    PageImpl<ProductResponse> getPriceFilter(BigDecimal fromPrice, BigDecimal toPrice, int page, int page1, AppLanguage language);
 }
