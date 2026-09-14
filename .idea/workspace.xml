@@ -4,7 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="location service create" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="location service create">
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyLocationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyLocationResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CompanyLocationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CompanyLocationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyLocationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/controller/RegionInternal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/RegionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/RegionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/impl/RegionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/impl/RegionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/CreateProductRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/CreateProductRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDetailResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDetailResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/CatalogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -120,9 +141,9 @@
         <option value="HTTP Request" />
         <option value="Record" />
         <option value="Dockerfile" />
-        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -1061,10 +1082,10 @@
     <MESSAGE value="chat service bug" />
     <MESSAGE value="company service bug" />
     <MESSAGE value="product service bug" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" />
     <MESSAGE value="saleType response bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="location service create" />
     <option name="LAST_COMMIT_MESSAGE" value="location service create" />
   </component>

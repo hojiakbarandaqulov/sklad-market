@@ -6,6 +6,7 @@ import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
 import org.example.dto.product.ProductSearchResponse;
 import org.example.enums.AppLanguage;
+import org.example.enums.LocationType;
 import org.example.service.CatalogService;
 import org.example.service.ProductSearchService;
 import org.springframework.data.domain.PageImpl;
@@ -30,10 +31,12 @@ public class CatalogController {
                                                                   @RequestParam(required = false) String category,
                                                                   @RequestParam(required = false) Long regionId,
                                                                   @RequestParam(required = false) String currency,
+                                                                  @RequestParam(required = false) LocationType type,
+                                                                  @RequestParam(required = false) Long id,
                                                                   @RequestParam(defaultValue = "1") int page,
                                                                   @RequestParam(defaultValue = "20") int perPage,
                                                                   @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(catalogService.getCatalog(q, category, regionId, currency, page, perPage, language));
+        return ApiResponse.successResponse(catalogService.getCatalog(q, category, regionId, currency, page, perPage, language, type, id));
     }
 
     @GetMapping("/search")
@@ -98,6 +101,14 @@ public class CatalogController {
             @RequestParam(value = "per_page", defaultValue = "20") int perPage,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(catalogService.getCatalogMap(query, category, regionId, districtId, page, perPage, language));
+    }
+
+    @GetMapping("filter/location")
+    public ApiResponse<PageImpl<ProductResponse>> getLocationFilterProduct(@RequestParam Long companyId,
+                                                                           @RequestParam(defaultValue = "1") int page,
+                                                                           @RequestParam(value = "per_page", defaultValue = "20") int perPage,
+                                                                           @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(catalogService.getLocationFilterProduct(companyId,page,perPage,language));
     }
 
     @GetMapping("filter/product/price")

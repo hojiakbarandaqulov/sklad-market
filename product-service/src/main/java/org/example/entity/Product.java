@@ -57,9 +57,6 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private Currency currency;
 
-    @Column(nullable = false)
-    private Long regionId;
-
     private Long minProduct;
 
     private Boolean pickupAvailable = Boolean.FALSE;

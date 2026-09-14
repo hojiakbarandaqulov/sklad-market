@@ -16,4 +16,6 @@ public interface RegionService {
     RegionResponse getById(Long id, AppLanguage language);
 
     void delete(Long id, AppLanguage language);
+
+    boolean existsByRegion(Long regionId);
 }

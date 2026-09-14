@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/regions/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/internal/region/**").permitAll()
                         .requestMatchers("/api/v1/admin/regions/**").authenticated()
                         .anyRequest().authenticated()
                 )

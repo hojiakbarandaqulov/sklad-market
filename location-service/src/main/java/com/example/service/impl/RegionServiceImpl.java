@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -74,6 +75,15 @@ public class RegionServiceImpl implements RegionService {
         Region region = getActiveRegion(id, language);
         region.setDeleted(Boolean.TRUE);
         regionRepository.save(region);
+    }
+
+    @Override
+    public boolean existsByRegion(Long regionId) {
+        Optional<Region> byIdAndDeletedFalse = regionRepository.findByIdAndDeletedFalse(regionId);
+        if (byIdAndDeletedFalse.isPresent()){
+            return true;
+        }
+        throw new AppBadException("region not fount");
     }
 
     private Region getActiveRegion(Long id, AppLanguage language) {

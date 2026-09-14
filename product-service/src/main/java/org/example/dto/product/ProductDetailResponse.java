@@ -47,9 +47,6 @@ public class ProductDetailResponse {
     private CompanySummary company;
     private CategorySummary category;
 
-    @JsonProperty("region_id")
-    private Long regionId;
-
     @JsonProperty("pickup_available")
     private Boolean pickupAvailable;
 

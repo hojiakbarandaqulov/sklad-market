@@ -10,6 +10,7 @@ import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
 import org.example.entity.Product;
 import org.example.enums.AppLanguage;
+import org.example.enums.LocationType;
 import org.example.enums.Currency;
 import org.example.enums.ProductModerationStatus;
 import org.example.repository.ProductRepository;
@@ -39,6 +40,26 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     public PagedResponse<ProductResponse> getCatalog(String q, String category, Long regionId, String currency, int page, int perPage, AppLanguage language) {
         return queryProducts(q, category, regionId, currency, page, perPage);
+    }
+
+    @Override
+    public PagedResponse<ProductResponse> getCatalog(String q, String category, Long regionId, String currency,
+                                                     int page, int perPage, AppLanguage language,
+                                                     LocationType type, Long id) {
+        if ((type == null) != (id == null)) {
+            throw new IllegalArgumentException("type and id must be provided together");
+        }
+        if (id != null && id <= 0) {
+            throw new IllegalArgumentException("id must be positive");
+        }
+        Specification<Product> locationFilter = null;
+        if (type != null) {
+            String field = type == LocationType.COMPANY ? "companyId" : "pickupBranchId";
+            locationFilter = (root, query, cb) -> cb.and(
+                    cb.equal(root.get(field), id),
+                    cb.isNull(root.get("deletedAt")));
+        }
+        return queryProducts(q, category, regionId, currency, page, perPage, locationFilter);
     }
 
     @Override
@@ -163,7 +184,7 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     public PageImpl<ProductResponse> getSaleTypeFilterProduct(int page, int perPage, Boolean wholeSale, Boolean retail, AppLanguage language) {
         PageRequest pagable = PageRequest.of(page - 1, perPage);
-        Page<Product> product = productRepository.findBySaleTypeAndDeletedAtIsNull(wholeSale,retail, pagable);
+        Page<Product> product = productRepository.findBySaleTypeAndDeletedAtIsNull(wholeSale, retail, pagable);
 
         List<ProductResponse> list = product.getContent().stream()
                 .map(this::toProductResponse)
@@ -267,15 +288,27 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public PageImpl<ProductResponse> getProductFilterPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable) {
-        Page<Product> products = productRepository.findByPrice(fromPrice, toPrice,pageable);
+        Page<Product> products = productRepository.findByPrice(fromPrice, toPrice, pageable);
 
-        List<ProductResponse> responses=products.getContent()
+        List<ProductResponse> responses = products.getContent()
                 .stream()
                 .map(this::toProductResponse)
                 .toList();
         return new PageImpl<>(responses, pageable, products.getTotalElements());
     }
 
+    @Override
+    public PageImpl<ProductResponse> getLocationFilterProduct(Long companyId, int page, int perPage, AppLanguage language) {
+        PageRequest pageRequest = PageRequest.of(page - 1, perPage);
+
+        Page<Product> products = productRepository.findAllByCompanyIdAndDeletedAtIsNull(companyId, page);
+        List<ProductResponse> responses = products.getContent()
+                .stream()
+                .map(this::toProductResponse)
+                .toList();
+
+        return new PageImpl<>(responses, pageRequest, products.getTotalElements());
+    }
 
 
     private ProductDto toPopularProductResponse(Product p) {
@@ -322,6 +355,11 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     private PagedResponse<ProductResponse> queryProducts(String q, String category, Long regionId, String currency, int page, int perPage) {
+        return queryProducts(q, category, regionId, currency, page, perPage, null);
+    }
+
+    private PagedResponse<ProductResponse> queryProducts(String q, String category, Long regionId, String currency,
+                                                         int page, int perPage, Specification<Product> locationFilter) {
         Specification<Product> spec = (root, query, cb) -> cb.and(
                 cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
                 cb.isTrue(root.get("isActive"))
@@ -342,6 +380,9 @@ public class CatalogServiceImpl implements CatalogService {
         if (currency != null && !currency.isBlank()) {
             String normalized = Currency.valueOf(currency.toUpperCase()).name();
             spec = spec.and((root, query, cb) -> cb.equal(root.get("currency"), normalized));
+        }
+        if (locationFilter != null) {
+            spec = spec.and(locationFilter);
         }
         Page<Product> result = productRepository.findAll(spec, PageRequest.of(Math.max(page - 1, 0), perPage));
         return ServiceHelper.toPagedResponse(result.map(productService::toResponse));

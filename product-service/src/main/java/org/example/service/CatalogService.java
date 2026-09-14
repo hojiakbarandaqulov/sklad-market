@@ -4,6 +4,7 @@ import org.example.dto.*;
 import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
 import org.example.enums.AppLanguage;
+import org.example.enums.LocationType;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
@@ -12,6 +13,8 @@ import java.util.List;
 
 public interface CatalogService {
     PagedResponse<ProductResponse> getCatalog(String q, String category, Long regionId, String currency, int page, int perPage, AppLanguage language);
+
+    PagedResponse<ProductResponse> getCatalog(String q, String category, Long regionId, String currency, int page, int perPage, AppLanguage language, LocationType type, Long id);
 
     PagedResponse<ProductResponse> search(String q, String category, Long regionId, int page, int perPage, AppLanguage language);
 
@@ -31,4 +34,5 @@ public interface CatalogService {
 
     PageImpl<ProductResponse> getProductFilterPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
 
+    PageImpl<ProductResponse> getLocationFilterProduct(Long companyId, int page, int perPage, AppLanguage language);
 }

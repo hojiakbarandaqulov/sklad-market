@@ -1,8 +1,5 @@
 package org.example.service.impl;
 
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.client.CategoryClient;
@@ -31,11 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
@@ -258,7 +250,6 @@ public class ProductServiceImpl implements ProductService {
                         .name(category.getName())
                         .slug(category.getSlug())
                         .build())
-                .regionId(product.getRegionId())
                 .pickupAvailable(pickupLocation != null)
                 .pickupLocation(pickupLocation)
                 .similarProducts(productRepository
@@ -486,7 +477,6 @@ public class ProductServiceImpl implements ProductService {
         product.setPriceType(request.getPriceType());
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
-        product.setRegionId(request.getRegionId());
         product.setPickupAvailable(Boolean.TRUE.equals(request.getPickupAvailable()));
         product.setPickupBranchId(Boolean.TRUE.equals(request.getPickupAvailable()) ? request.getPickupBranchId() : null);
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
@@ -503,7 +493,6 @@ public class ProductServiceImpl implements ProductService {
         product.setRetail(request.getRetail());
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
-        product.setRegionId(request.getRegionId());
         product.setPickupAvailable(Boolean.TRUE.equals(request.getPickupAvailable()));
         product.setPickupBranchId(Boolean.TRUE.equals(request.getPickupAvailable()) ? request.getPickupBranchId() : null);
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
@@ -644,7 +633,6 @@ public class ProductServiceImpl implements ProductService {
         response.setRetail(product.getRetail());
         response.setCurrency(product.getCurrency());
         response.setMin(product.getMinProduct());
-        response.setRegionId(product.getRegionId());
         response.setPickupAvailable(Boolean.TRUE.equals(product.getPickupAvailable()));
         response.setPickupBranchId(product.getPickupBranchId());
         response.setStatus(resolveStatus(product));
