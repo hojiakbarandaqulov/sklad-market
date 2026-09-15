@@ -299,9 +299,6 @@ public class CatalogServiceImpl implements CatalogService {
         if (regionId == null || regionId <= 0) {
             throw new IllegalArgumentException("regionId must be positive");
         }
-        if (page < 1 || perPage < 1 || perPage > 100) {
-            throw new IllegalArgumentException("page must be positive and per_page must be between 1 and 100");
-        }
         PageRequest pageRequest = PageRequest.of(page - 1, perPage,
               Sort.by("createdAt").descending()
                         .and(Sort.by("id").descending()));
