@@ -49,9 +49,7 @@ public class Company extends BaseEntity {
 
     private String website;
 
-   /* private Long regionId;
-
-    private Long districtId;*/
+    private Long regionId;
 
     private String address;
 

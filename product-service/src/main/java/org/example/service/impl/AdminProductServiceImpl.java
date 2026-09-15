@@ -182,7 +182,6 @@ public class AdminProductServiceImpl implements AdminProductService {
         response.setPriceType(product.getPriceType());
         response.setPrice(product.getPrice());
         response.setCurrency(product.getCurrency());
-        response.setRegionId(product.getRegionId());
         response.setAttributes(product.getAttributesJsonb());
         response.setStatus(product.getModerationStatus());
         response.setIsActive(product.getIsActive());

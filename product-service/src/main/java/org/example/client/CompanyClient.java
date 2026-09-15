@@ -18,6 +18,10 @@ import java.util.List;
         name = "company-service")
 public interface CompanyClient {
 
+    @GetMapping("/internal/companies/by-region/ids")
+    List<Long> getCompanyIdsByRegion(@RequestParam("regionId") Long regionId);
+
+
     @GetMapping("/internal/companies/{companyId}/ownership-check")
     CompanyOwnershipResponse checkOwnership(@PathVariable Long companyId, @RequestParam Long buyerId);
 

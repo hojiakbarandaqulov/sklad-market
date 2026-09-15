@@ -104,11 +104,11 @@ public class CatalogController {
     }
 
     @GetMapping("filter/location")
-    public ApiResponse<PageImpl<ProductResponse>> getLocationFilterProduct(@RequestParam Long companyId,
+    public ApiResponse<PageImpl<ProductResponse>> getLocationFilterProduct(@RequestParam Long regionId,
                                                                            @RequestParam(defaultValue = "1") int page,
                                                                            @RequestParam(value = "per_page", defaultValue = "20") int perPage,
                                                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(catalogService.getLocationFilterProduct(companyId,page,perPage,language));
+        return ApiResponse.successResponse(catalogService.getLocationFilterProduct(regionId,page,perPage,language));
     }
 
     @GetMapping("filter/product/price")

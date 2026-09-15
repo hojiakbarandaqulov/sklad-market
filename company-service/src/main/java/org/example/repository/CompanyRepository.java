@@ -15,6 +15,16 @@ import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpecificationExecutor<Company> {
 
+    @Query("""
+            select c.id from Company c
+            where c.regionId = :regionId
+                and c.deleted = false and c.deletedAt is null and c.isBlocked = false
+                and c.verificationStatus in :statuses
+            order by c.id
+            """)
+    List<Long> findPublicIdsByRegionId(@Param("regionId") Long regionId,
+                                     @Param("statuses") List<VerificationStatus> statuses);
+
     Long countByOwnerUserIdAndDeletedAtIsNull(Long userId);
     Optional<Company> findByOwnerUserIdAndDeletedAtIsNull(Long ownerUserId);
 

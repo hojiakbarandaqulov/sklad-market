@@ -120,5 +120,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     @Query("SELECT p FROM Product p WHERE p.price BETWEEN ?1 AND ?2 AND p.deletedAt is null ")
     Page<Product> findByPrice(BigDecimal fromPrice, BigDecimal toPrice, Pageable pageable);
 
-    Page<Product> findAllByCompanyIdAndDeletedAtIsNull(Long companyId, int page);
+    Page<Product> findAllByCompanyIdAndDeletedAtIsNull(Long companyId, Pageable pageable);
 }

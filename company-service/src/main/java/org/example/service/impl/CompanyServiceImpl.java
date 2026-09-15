@@ -51,6 +51,16 @@ public class CompanyServiceImpl implements CompanyService {
     private static final int MAX_COMPANIES_PER_SELLER = 1;
 
     @Override
+    public List<Long> getPublicCompanyIdsByRegion(Long regionId) {
+        if (regionId == null || regionId <= 0) {
+            throw new AppBadException("regionId must be positive");
+        }
+        return companyRepository.findPublicIdsByRegionId(regionId,
+                List.of(VerificationStatus.VERIFIED, VerificationStatus.PENDING_VERIFICATION));
+    }
+
+
+    @Override
     public ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO requestDTO, CompanyType companyType, AppLanguage language) {
         Long userId = SpringSecurityUtil.getProfileId();
         long count = companyRepository.countByOwnerUserIdAndDeletedAtIsNull(userId);
@@ -146,6 +156,7 @@ public class CompanyServiceImpl implements CompanyService {
         company.setPhoneSecondary(dto.getPhoneSecondary());
         company.setWebsite(dto.getWebsite());
         company.setAddress(dto.getAddress());
+        company.setRegionId(dto.getRegionId());
         Company saved = companyRepository.save(company);
         return ApiResponse.successResponse(toResponse(saved));
     }

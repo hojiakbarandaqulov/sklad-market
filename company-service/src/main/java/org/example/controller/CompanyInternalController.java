@@ -55,6 +55,11 @@ public class CompanyInternalController {
                 .build();
     }
 
+    @GetMapping("/by-region/ids")
+    public List<Long> getCompanyIdsByRegion(@RequestParam Long regionId) {
+        return companyService.getPublicCompanyIdsByRegion(regionId);
+    }
+
     @GetMapping("/owned")
     public List<Long> ownedCompanies(@RequestParam Long sellerId) {
         Company company =

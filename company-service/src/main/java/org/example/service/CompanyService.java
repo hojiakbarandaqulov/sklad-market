@@ -17,6 +17,8 @@ import java.util.Optional;
 
 public interface CompanyService {
 
+    List<Long> getPublicCompanyIdsByRegion(Long regionId);
+
     ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO company, CompanyType companyType, AppLanguage language);
 
     ApiResponse<CompanyInfoDTO> getMyCompanies(AppLanguage language);

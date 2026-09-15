@@ -28,10 +28,9 @@ public class CompanyRequestDTO {
     @NotNull(message = "companyCreatedDate required")
     private LocalDate companyCreatedDate;
 
-   /* private Long regionId;
+    @NotNull(message = "regionId required")
+    private Long regionId;
 
-    private Long districtId;
-*/
     @NotBlank(message = "address required")
     private String address;
 

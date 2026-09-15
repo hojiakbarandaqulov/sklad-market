@@ -17,10 +17,7 @@ import org.example.repository.ProductRepository;
 import org.example.service.BannerService;
 import org.example.service.CatalogService;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -298,18 +295,27 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
-    public PageImpl<ProductResponse> getLocationFilterProduct(Long companyId, int page, int perPage, AppLanguage language) {
-        PageRequest pageRequest = PageRequest.of(page - 1, perPage);
-
-        Page<Product> products = productRepository.findAllByCompanyIdAndDeletedAtIsNull(companyId, page);
-        List<ProductResponse> responses = products.getContent()
-                .stream()
-                .map(this::toProductResponse)
+    public PageImpl<ProductResponse> getLocationFilterProduct(Long regionId, int page, int perPage, AppLanguage language) {
+        if (regionId == null || regionId <= 0) {
+            throw new IllegalArgumentException("regionId must be positive");
+        }
+        if (page < 1 || perPage < 1 || perPage > 100) {
+            throw new IllegalArgumentException("page must be positive and per_page must be between 1 and 100");
+        }
+        PageRequest pageRequest = PageRequest.of(page - 1, perPage,
+              Sort.by("createdAt").descending()
+                        .and(Sort.by("id").descending()));
+        List<Long> companyIds = companyClient.getCompanyIdsByRegion(regionId);
+        if (companyIds.isEmpty()) {
+            return new PageImpl<>(List.of(), pageRequest, 0);
+        }
+        Page<Product> products = productRepository.findByCompanyIdInAndModerationStatusAndIsActiveTrueAndDeletedAtIsNull(
+                companyIds, ProductModerationStatus.APPROVED, pageRequest);
+        List<ProductResponse> responses = products.getContent().stream()
+                .map(productService::toResponse)
                 .toList();
-
         return new PageImpl<>(responses, pageRequest, products.getTotalElements());
     }
-
 
     private ProductDto toPopularProductResponse(Product p) {
         ProductDto res = new ProductDto();
