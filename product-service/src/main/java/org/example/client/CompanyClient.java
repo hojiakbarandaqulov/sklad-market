@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient(
-        name = "company-service")
+@FeignClient(name = "company-service")
 public interface CompanyClient {
 
     @GetMapping("/internal/companies/by-region/ids")

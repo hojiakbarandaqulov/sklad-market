@@ -225,7 +225,13 @@ public class CatalogServiceImpl implements CatalogService {
         }
 
         if (regionId != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("regionId"), regionId));
+            if (regionId <= 0) {
+                throw new IllegalArgumentException("regionId must be positive");
+            }
+            List<Long> regionCompanyIds = companyClient.getCompanyIdsByRegion(regionId);
+            spec = spec.and((root, query, cb) -> regionCompanyIds.isEmpty()
+                    ? cb.disjunction()
+                    : root.get("companyId").in(regionCompanyIds));
         }
 
         if (districtId != null) {
@@ -299,9 +305,11 @@ public class CatalogServiceImpl implements CatalogService {
         if (regionId == null || regionId <= 0) {
             throw new IllegalArgumentException("regionId must be positive");
         }
+        validatePagination(page, perPage);
         PageRequest pageRequest = PageRequest.of(page - 1, perPage,
               Sort.by("createdAt").descending()
                         .and(Sort.by("id").descending()));
+        
         List<Long> companyIds = companyClient.getCompanyIdsByRegion(regionId);
         if (companyIds.isEmpty()) {
             return new PageImpl<>(List.of(), pageRequest, 0);
@@ -362,35 +370,61 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     private PagedResponse<ProductResponse> queryProducts(String q, String category, Long regionId, String currency,
-                                                         int page, int perPage, Specification<Product> locationFilter) {
+                                                        int page, int perPage, Specification<Product> locationFilter) {
+        validatePagination(page, perPage);
         Specification<Product> spec = (root, query, cb) -> cb.and(
                 cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
-                cb.isTrue(root.get("isActive"))
+                cb.isTrue(root.get("isActive")),
+                cb.isNull(root.get("deletedAt"))
         );
         if (q != null && !q.isBlank()) {
-            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + q.toLowerCase() + "%"));
+            String keyword = "%" + q.trim().toLowerCase(Locale.ROOT) + "%";
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), keyword));
         }
         if (category != null && !category.isBlank()) {
+            final Long categoryId;
             try {
-                Long categoryId = Long.valueOf(category);
-                spec = spec.and((root, query, cb) -> cb.equal(root.get("categoryId"), categoryId));
-            } catch (NumberFormatException ignored) {
+                categoryId = Long.valueOf(category.trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("category must be a positive numeric ID");
             }
-        }
-        if (regionId != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("regionId"), regionId));
+            if (categoryId <= 0) {
+                throw new IllegalArgumentException("category must be a positive numeric ID");
+            }
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("categoryId"), categoryId));
         }
         if (currency != null && !currency.isBlank()) {
-            String normalized = Currency.valueOf(currency.toUpperCase()).name();
+            final Currency normalized;
+            try {
+                normalized = Currency.valueOf(currency.trim().toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("currency must be UZS or USD");
+            }
             spec = spec.and((root, query, cb) -> cb.equal(root.get("currency"), normalized));
+        }
+        if (regionId != null) {
+            if (regionId <= 0) {
+                throw new IllegalArgumentException("regionId must be positive");
+            }
+            List<Long> regionCompanyIds = companyClient.getCompanyIdsByRegion(regionId);
+            spec = spec.and((root, query, cb) -> regionCompanyIds.isEmpty()
+                    ? cb.disjunction()
+                    : root.get("companyId").in(regionCompanyIds));
         }
         if (locationFilter != null) {
             spec = spec.and(locationFilter);
         }
-        Page<Product> result = productRepository.findAll(spec, PageRequest.of(Math.max(page - 1, 0), perPage));
+        PageRequest pageable = PageRequest.of(page - 1, perPage,
+                Sort.by("createdAt").descending().and(Sort.by("id").descending()));
+        Page<Product> result = productRepository.findAll(spec, pageable);
         return ServiceHelper.toPagedResponse(result.map(productService::toResponse));
     }
 
+    private void validatePagination(int page, int perPage) {
+        if (page < 1 || perPage < 1 || perPage > 100) {
+            throw new IllegalArgumentException("page must be positive and perPage must be between 1 and 100");
+        }
+    }
     private boolean isVisible(Product product) {
         return product.getModerationStatus() == ProductModerationStatus.APPROVED && Boolean.TRUE.equals(product.getIsActive());
     }

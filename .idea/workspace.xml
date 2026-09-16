@@ -4,27 +4,52 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="location service create">
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyLocationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyLocationResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CompanyLocationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CompanyLocationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyLocationServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/controller/RegionInternal.java" afterDir="false" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="product and company service filter location product">
+      <change afterPath="$PROJECT_DIR$/.idea/modules/category-service.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/sklad-jobs.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/AppConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/SwaggerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/clent/CompanyClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/controller/VacancyController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/vacancy/VacancyCreate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/vacancy/VacancyDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/vacancy/VacancyRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/JobApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/Resume.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/enums/AppLanguage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/enums/ApplicationStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/enums/ExperienceLevel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/enums/VacancyModeration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/enums/VacancyStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/exp/AppBadException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/exp/IllegalArgumentException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/exp/handle/CustomGlobalExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/VacancyRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/ResourceBundleService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/VacancyService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/ResourceBundleServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/VacancyServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/resources/application-local.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/resources/application-prod.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/resources/messages/message_en.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/resources/messages/message_ru.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/resources/messages/message_uz.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/RegionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/RegionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/impl/RegionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/impl/RegionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/CreateProductRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/CreateProductRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDetailResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductDetailResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/CatalogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/client/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/CatalogServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/SkladJobsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/SkladJobsApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/Vacancy.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/Vacancy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/base/BaseTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/base/BaseTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/resources/application.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,28 +70,7 @@
       <ProjectState />
     </projectState>
     <projectState path="$PROJECT_DIR$/category-service">
-      <ProjectState>
-        <dataType path="$PROJECT_DIR$/category-service">
-          <ModuleState>
-            <id value="com.intellij.externalSystem.JavaManifestData" />
-            <id value="com.intellij.externalSystem.JavaModuleData" />
-            <id value="com.intellij.openapi.externalSystem.model.project.ContentRootData" />
-            <id value="com.intellij.openapi.externalSystem.model.project.LibraryDependencyData" />
-            <id value="com.intellij.openapi.externalSystem.model.project.ModuleData" />
-            <id value="com.intellij.openapi.externalSystem.model.project.ModuleDependencyData" />
-            <id value="com.intellij.openapi.externalSystem.model.project.ModuleSdkData" />
-            <id value="com.intellij.openapi.externalSystem.model.project.TestData" />
-            <id value="com.intellij.openapi.externalSystem.model.project.dependencies.ProjectDependencies" />
-            <id value="com.intellij.openapi.externalSystem.model.task.TaskData" />
-            <id value="org.jetbrains.plugins.gradle.model.GradleExtensions" />
-            <id value="org.jetbrains.plugins.gradle.model.data.AnnotationProcessingData" />
-            <id value="org.jetbrains.plugins.gradle.model.data.AnnotationProcessingData$AnnotationProcessorOutput" />
-            <id value="org.jetbrains.plugins.gradle.model.data.BuildScriptClasspathData" />
-            <id value="org.jetbrains.plugins.gradle.model.data.GradleProjectBuildScriptData" />
-            <id value="org.jetbrains.plugins.gradle.model.data.GradleSourceSetData" />
-          </ModuleState>
-        </dataType>
-      </ProjectState>
+      <ProjectState />
     </projectState>
     <projectState path="$PROJECT_DIR$/chat-service">
       <ProjectState />
@@ -101,6 +105,9 @@
     <projectState path="$PROJECT_DIR$/reposrt-service">
       <ProjectState />
     </projectState>
+    <projectState path="$PROJECT_DIR$/sklad-jobs">
+      <ProjectState />
+    </projectState>
     <projectState path="$PROJECT_DIR$/user-service">
       <ProjectState />
     </projectState>
@@ -126,9 +133,28 @@
         <task path="$USER_HOME$/Documents/sklad-market-ai/backend/ai-service">
           <activation />
         </task>
+        <task path="$PROJECT_DIR$/sklad-jobs">
+          <activation />
+        </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sklad-jobs" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sklad-jobs" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="sklad-jobs" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -141,9 +167,9 @@
         <option value="HTTP Request" />
         <option value="Record" />
         <option value="Dockerfile" />
+        <option value="Interface" />
         <option value="Enum" />
         <option value="Class" />
-        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -207,11 +233,18 @@
     &quot;Gradle.ai-service [clean].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.ai-service [jar].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.auth-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [bootJar].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.category-service [build].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.category-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [jar].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.company-service [build].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.company-service [clean].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.product-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [bootJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [jar].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.user-service [buildDependents].executor&quot;: &quot;Run&quot;,
     &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.attach | #2.executor&quot;: &quot;Run&quot;,
@@ -251,7 +284,7 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/location-service/src/main/resources&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -259,7 +292,7 @@
     &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
@@ -277,18 +310,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.example.dto" />
       <recent name="com.example.enums" />
+      <recent name="com.example.dto" />
       <recent name="org.example.dto.review" />
       <recent name="org.example.repository" />
       <recent name="org.example.service" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-jobs\src\main\java\com\example\entity" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\location-service\src\main\resources" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\location-service\src\main\java\com\example" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\location-service\src\main\java\com\example\entity" />
       <recent name="D:\JavaProject\Microservice\Skalad-market" />
-      <recent name="D:\JavaProject\Microservice\Skalad-market\category-service\src\main\java\org\example\dto" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\JavaProject\Microservice\Skalad-market\location-service\src\main\java\com\example" />
@@ -304,17 +337,17 @@
       <recent name="org.example.client.dto" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.ai-service [build]">
+  <component name="RunManager" selected="Gradle.sklad-jobs [build]">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="ai-service [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="category-service [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$USER_HOME$/Documents/sklad-market-ai/backend/ai-service" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/category-service" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -322,57 +355,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <GradleProfilingDisabled>false</GradleProfilingDisabled>
-      <GradleCoverageDisabled>false</GradleCoverageDisabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="ai-service [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$USER_HOME$/Documents/sklad-market-ai/backend/ai-service" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="clean" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
-      <GradleProfilingDisabled>false</GradleProfilingDisabled>
-      <GradleCoverageDisabled>false</GradleCoverageDisabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="ai-service [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$USER_HOME$/Documents/sklad-market-ai/backend/ai-service" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="jar" />
+            <option value="bootJar" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -405,17 +388,16 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <EXTENSION ID="com.haulmont.jmixstudio.buildsystem.runconfiguration.JmixRunConfigurationExtension" isNew="true" />
       <DebugAllEnabled>false</DebugAllEnabled>
       <RunAsTest>false</RunAsTest>
       <GradleProfilingDisabled>false</GradleProfilingDisabled>
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="category-service [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="sklad-jobs [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/category-service" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/sklad-jobs" />
         <option name="externalSystemIdString" value="GRADLE" />
         <option name="scriptParameters" />
         <option name="taskDescriptions">
@@ -423,7 +405,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="clean" />
+            <option value="bootJar" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -431,7 +413,56 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
-      <EXTENSION ID="com.haulmont.jmixstudio.buildsystem.runconfiguration.JmixRunConfigurationExtension" isNew="true" />
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="sklad-jobs [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/sklad-jobs" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <GradleProfilingDisabled>false</GradleProfilingDisabled>
+      <GradleCoverageDisabled>false</GradleCoverageDisabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="sklad-jobs [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/sklad-jobs" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
       <DebugAllEnabled>false</DebugAllEnabled>
       <RunAsTest>false</RunAsTest>
       <GradleProfilingDisabled>false</GradleProfilingDisabled>
@@ -550,6 +581,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="SkladJobsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="sklad-jobs.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.SkladJobsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="user-service.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.UserServiceApplication" />
@@ -572,11 +610,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.ai-service [build]" />
-        <item itemvalue="Gradle.ai-service [clean]" />
-        <item itemvalue="Gradle.ai-service [jar]" />
+        <item itemvalue="Gradle.sklad-jobs [build]" />
+        <item itemvalue="Gradle.sklad-jobs [dependencies]" />
+        <item itemvalue="Gradle.sklad-jobs [bootJar]" />
+        <item itemvalue="Gradle.category-service [bootJar]" />
         <item itemvalue="Gradle.category-service [build]" />
-        <item itemvalue="Gradle.category-service [clean]" />
       </list>
     </recent_temporary>
   </component>
@@ -1062,7 +1100,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="profileId add keycloak" />
     <MESSAGE value="profileId String type parsing add" />
     <MESSAGE value="migrate file table name bug fix" />
     <MESSAGE value="keyklock add profileId bug fix" />
@@ -1085,9 +1122,10 @@
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" />
     <MESSAGE value="saleType response bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="location service create" />
-    <option name="LAST_COMMIT_MESSAGE" value="location service create" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
+    <MESSAGE value="product and company service filter location product" />
+    <option name="LAST_COMMIT_MESSAGE" value="product and company service filter location product" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

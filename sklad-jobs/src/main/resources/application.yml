@@ -1,0 +1,14 @@
+server:
+  url: ${server.domain}:${server.port}
+spring:
+  application:
+    name: sklad-jobs
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:prod}
+
+
+  # Eureka Client
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
