@@ -12,8 +12,7 @@ import java.util.List;
 public interface CompanyLocationRepository extends Repository<Company, Long> {
 
     @Query("""
-            select new org.example.dto.CompanyLocationResponse(
-                c.id, 'COMPANY', c.id, c.name, c.address, c.lat, c.lng)
+            select c.id, 'COMPANY', c.id, c.name, c.address, c.lat, c.lng
             from Company c
             where c.deleted = false and c.deletedAt is null and c.isBlocked = false
                 and c.verificationStatus in :statuses
@@ -22,8 +21,7 @@ public interface CompanyLocationRepository extends Repository<Company, Long> {
     List<CompanyLocationResponse> findCompanyLocations(@Param("statuses") List<VerificationStatus> statuses);
 
     @Query("""
-            select new org.example.dto.CompanyLocationResponse(
-                b.id, 'BRANCH', c.id, b.branchName, b.address, b.lat, b.lng)
+            select b.id, 'BRANCH', c.id, b.branchName, b.address, b.lat, b.lng
             from CompanyBranch b join b.company c
             where b.deleted = false
                 and c.deleted = false and c.deletedAt is null and c.isBlocked = false
