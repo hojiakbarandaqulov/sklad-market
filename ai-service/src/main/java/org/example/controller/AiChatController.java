@@ -49,6 +49,8 @@ public class AiChatController {
         rateLimitService.registerUser(userSub, AiSecurityUtil.currentUsername());
         String bearerToken = AiSecurityUtil.requireBearerToken();
         Set<String> callerRoles = AiSecurityUtil.currentRoleSet();
-        return aiChatService.streamMessage(userSub, id, request.getContent(), acceptLanguage, bearerToken, callerRoles);
+        return request.getRequestId() == null
+                ? aiChatService.streamMessage(userSub, id, request.getContent(), acceptLanguage, bearerToken, callerRoles)
+                : aiChatService.streamMessage(userSub, id, request.getContent(), acceptLanguage, bearerToken, callerRoles, request.getRequestId());
     }
 }

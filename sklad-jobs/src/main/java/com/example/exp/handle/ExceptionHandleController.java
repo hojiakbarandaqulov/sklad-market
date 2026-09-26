@@ -1,6 +1,8 @@
 package com.example.exp.handle;
 
 import com.example.exp.AppBadException;
+import com.example.exp.AppNotFoundException;
+import com.example.exp.AppConflictException;
 import com.example.service.ResourceBundleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -44,6 +46,15 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(errorBody(e.getMessage(), Map.of()));
     }
 
+    @ExceptionHandler(AppConflictException.class)
+    public ResponseEntity<Map<String, Object>> handleConflict(AppConflictException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody(e.getMessage(), Map.of()));
+    }
+    @ExceptionHandler(AppNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNotFound(AppNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorBody(e.getMessage(), Map.of()));
+    }
     @ExceptionHandler(AppBadException.class)
     public ResponseEntity<Map<String, Object>> handleException(AppBadException e) {
         return ResponseEntity.badRequest().body(errorBody(e.getMessage(), Map.of()));

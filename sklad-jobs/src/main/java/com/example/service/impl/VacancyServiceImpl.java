@@ -2,6 +2,14 @@ package com.example.service.impl;
 
 import com.example.config.clent.CompanyClient;
 import com.example.dto.ApiResponse;
+import com.example.dto.vacancy.PublicVacancyDTO;
+import com.example.dto.vacancy.VacancyFilter;
+import com.example.dto.vacancy.CompanySummaryDTO;
+import com.example.exp.AppNotFoundException;
+import com.example.repository.specification.VacancySpecifications;
+import org.springframework.data.domain.Sort;
+import java.util.HashMap;
+import java.util.Map;
 import com.example.dto.vacancy.VacancyCreate;
 import com.example.dto.vacancy.VacancyDTO;
 import com.example.dto.vacancy.VacancyRequest;
@@ -220,4 +228,44 @@ public class VacancyServiceImpl implements VacancyService {
         return profileId;
     }
 
+
+    @Override
+    public PageImpl<PublicVacancyDTO> getVacancies(VacancyFilter filter, AppLanguage language) {
+        if (filter.getPage()<1 || filter.getPerPage()<1 || filter.getPerPage()>100 || !filter.isSalaryRangeValid())
+            throw new AppBadException(messageService.getMessage("vacancy.filter.invalid",language));
+        Pageable pageable=PageRequest.of(filter.getPage()-1,filter.getPerPage(),Sort.by(Sort.Order.desc("publishedAt"),Sort.Order.desc("id")));
+        Page<Vacancy> page=vacancyRepository.findAll(VacancySpecifications.published(filter),pageable);
+        Map<Long,CompanySummaryDTO> companies=new HashMap<>();
+        var items=page.getContent().stream().map(v -> {
+            PublicVacancyDTO dto=toPublicDTO(v);
+            if (v.getCompanyId()!=null) enrichCompany(dto,companies.computeIfAbsent(v.getCompanyId(),companyClient::getSummary));
+            return dto;
+        }).toList();
+        return new PageImpl<>(items,pageable,page.getTotalElements());
+    }
+    @Override
+    public PublicVacancyDTO getVacancy(Long id, AppLanguage language) {
+        if (id==null || id<=0) throw new AppBadException(messageService.getMessage("vacancy.id.invalid",language));
+        Vacancy vacancy=vacancyRepository.findByIdAndVacancyStatusAndDeletedFalse(id,VacancyStatus.PUBLISHED)
+            .orElseThrow(() -> new AppNotFoundException(messageService.getMessage("vacancy.not.found",language)));
+        PublicVacancyDTO dto=toPublicDTO(vacancy);
+        if (vacancy.getCompanyId()!=null) {
+            CompanySummaryDTO company=companyClient.getSummary(vacancy.getCompanyId());
+            enrichCompany(dto,company);
+            if (Boolean.TRUE.equals(vacancy.getShowContacts()) && company!=null && company.getSlug()!=null) {
+                var response=companyClient.getPublicContacts(company.getSlug(),language.name());
+                if (response!=null && Boolean.TRUE.equals(response.getSuccess())) dto.setContacts(response.getData());
+            }
+        }
+        return dto;
+    }
+
+    private PublicVacancyDTO toPublicDTO(Vacancy vacancy) {
+        PublicVacancyDTO dto=modelMapper.map(vacancy,PublicVacancyDTO.class);
+        dto.setId(vacancy.getId()); dto.setViewsCount(vacancy.getViewsCountCache()); dto.setContacts(null);
+        return dto;
+    }
+    private void enrichCompany(PublicVacancyDTO dto,CompanySummaryDTO company) {
+        if (company!=null) { dto.setCompanyName(company.getName()); dto.setCompanyLogo(company.getLogoPath()); }
+    }
 }

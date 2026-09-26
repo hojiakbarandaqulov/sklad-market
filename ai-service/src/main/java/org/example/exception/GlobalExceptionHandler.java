@@ -58,6 +58,12 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.errorResponse(e.getMessage()));
     }
 
+    @ExceptionHandler(ChatConflictException.class)
+    public ResponseEntity<ApiResponse<Void>> handleChatConflict(ChatConflictException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).header("X-AI-Error-Code", e.code())
+                .body(ApiResponse.errorResponse(e.getMessage()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<Void>> handleIllegalArgument(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(ApiResponse.errorResponse(e.getMessage()));

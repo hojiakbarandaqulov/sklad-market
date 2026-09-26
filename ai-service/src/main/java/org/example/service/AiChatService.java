@@ -16,4 +16,7 @@ public interface AiChatService {
      */
     SseEmitter streamMessage(
             String userSub, UUID conversationId, String content, String acceptLanguage, String bearerToken, Set<String> callerRoles);
+
+    SseEmitter streamMessage(String userSub, UUID conversationId, String content, String acceptLanguage,
+            String bearerToken, Set<String> callerRoles, UUID requestId);
 }

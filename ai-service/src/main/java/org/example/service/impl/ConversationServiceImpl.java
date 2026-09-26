@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -33,28 +34,64 @@ public class ConversationServiceImpl implements ConversationService {
     private final ConversationRepository conversationRepository;
     private final MessageRepository messageRepository;
     private final ToolRegistry toolRegistry;
+    private final JdbcTemplate jdbc;
 
     public ConversationServiceImpl(
             ConversationRepository conversationRepository,
             MessageRepository messageRepository,
-            ToolRegistry toolRegistry) {
+            ToolRegistry toolRegistry, JdbcTemplate jdbc) {
         this.conversationRepository = conversationRepository;
         this.messageRepository = messageRepository;
         this.toolRegistry = toolRegistry;
+        this.jdbc = jdbc;
     }
 
     @Override
     @Transactional
     public ConversationDto create(String userSub, String userRole, String title, String acceptLanguage) {
+        return create(userSub, userRole, title, acceptLanguage, null);
+    }
+
+    @Override
+    @Transactional
+    public ConversationDto create(String userSub, String userRole, String title, String acceptLanguage, UUID requestId) {
+        jdbc.execute("SET LOCAL lock_timeout = '3s'");
+        jdbc.queryForObject("SELECT pg_advisory_xact_lock(hashtextextended(?, 0))", Object.class, userSub);
+        if (requestId != null) {
+            var existing = conversationRepository.findByUserSubAndClientRequestId(userSub, requestId);
+            if (existing.isPresent()) {
+                if (existing.get().getDeletedAt() != null) throw new AiNotFoundException("Conversation not found");
+                ConversationRolePolicy.requireCurrentRoles(existing.get(),
+                        userRole == null ? Set.of() : Set.of(userRole.split(",")));
+                return toDto(existing.get());
+            }
+        }
         Conversation conversation = new Conversation();
+        conversation.setClientRequestId(requestId);
         conversation.setUserSub(userSub);
         conversation.setUserRole(userRole == null || userRole.isBlank() ? "USER" : userRole);
         conversation.setTitle(title == null || title.isBlank() ? null : title.trim());
         conversation.setLocale(LocaleNormalizer.normalize(acceptLanguage));
         Conversation saved = conversationRepository.save(conversation);
-        conversationRepository.softDeleteOlderActiveConversations(
-                userSub, MAX_ACTIVE_CONVERSATIONS_PER_USER, Instant.now());
+        // Only an accepted first message may displace a previous non-empty session.
         return toDto(saved);
+    }
+
+    @Override
+    public ConversationDto latest(String userSub, Set<String> currentRoles) {
+        var recent = conversationRepository.findByUserSubAndDeletedAtIsNullOrderByUpdatedAtDesc(
+                userSub, PageRequest.of(0, MAX_ACTIVE_CONVERSATIONS_PER_USER));
+        for (Conversation candidate : recent) {
+            try { return toDto(requireOwnedForRoles(userSub, candidate.getId(), currentRoles)); }
+            catch (AiNotFoundException inaccessible) { /* Try the next owner-accessible session. */ }
+        }
+        return null;
+    }
+
+    @Override
+    public List<MessageDto> recentMessages(String userSub, UUID conversationId, Set<String> currentRoles) {
+        requireOwnedForRoles(userSub, conversationId, currentRoles);
+        return messageRepository.findRecentExchanges(conversationId).stream().map(m -> toDto(m, currentRoles)).toList();
     }
 
     @Override

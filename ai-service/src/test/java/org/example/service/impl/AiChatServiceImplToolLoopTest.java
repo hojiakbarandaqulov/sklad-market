@@ -59,6 +59,12 @@ import static org.mockito.Mockito.when;
  */
 class AiChatServiceImplToolLoopTest {
 
+    private org.example.service.ChatMemoryService memoryService() {
+        var service = mock(org.example.service.ChatMemoryService.class);
+        when(service.renew(any(), any())).thenReturn(true);
+        return service;
+    }
+
     private static final int MAX_TOOL_ITERATIONS = 2;
     private static final String USER_SUB = "user-sub-1";
     private static final String BEARER_TOKEN = "user-jwt-abc";
@@ -114,7 +120,8 @@ class AiChatServiceImplToolLoopTest {
                 conversationService, conversationRepository, messageRepository, chatModelProvider,
                 rateLimiter, budgetGuard, usageLedgerService, systemPromptProvider, toolRegistry, toolAuditService,
                 new ObjectMapper(), chatExecutor, heartbeatScheduler,
-                4000, 20, 2048, MAX_TOOL_ITERATIONS, "gemini-2.5-flash", new AiMetrics(new SimpleMeterRegistry()));
+                4000, 20, 2048, MAX_TOOL_ITERATIONS, "gemini-2.5-flash", new AiMetrics(new SimpleMeterRegistry()),
+                memoryService(), new org.example.ai.guardrail.ChatContextWindow(new ObjectMapper(), 131072));
 
         service.streamMessage(USER_SUB, conversationId, "search for cement", "ru", BEARER_TOKEN, Set.of("BUYER"));
 
@@ -210,7 +217,8 @@ class AiChatServiceImplToolLoopTest {
                 conversationService, conversationRepository, messageRepository, chatModelProvider,
                 rateLimiter, budgetGuard, usageLedgerService, systemPromptProvider, toolRegistry, toolAuditService,
                 new ObjectMapper(), chatExecutor, heartbeatScheduler,
-                4000, 20, 2048, 1, "gemini-2.5-flash", new AiMetrics(new SimpleMeterRegistry()));
+                4000, 20, 2048, 1, "gemini-2.5-flash", new AiMetrics(new SimpleMeterRegistry()),
+                memoryService(), new org.example.ai.guardrail.ChatContextWindow(new ObjectMapper(), 131072));
 
         service.streamMessage(USER_SUB, conversationId, "draft a lead", "ru", BEARER_TOKEN, Set.of("BUYER"));
 

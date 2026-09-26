@@ -10,4 +10,6 @@ public class CreateConversationRequest {
 
     @Size(max = 255)
     private String title;
+
+    private java.util.UUID requestId;
 }

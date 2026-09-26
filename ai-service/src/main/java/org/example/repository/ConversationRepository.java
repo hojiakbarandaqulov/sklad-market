@@ -14,7 +14,11 @@ import java.util.UUID;
 
 public interface ConversationRepository extends JpaRepository<Conversation, UUID> {
 
-    Page<Conversation> findByUserSubAndDeletedAtIsNullOrderByUpdatedAtDesc(String userSub, Pageable pageable);
+    @Query("select c from Conversation c where c.userSub = :userSub and c.deletedAt is null "
+            + "and exists (select m.id from Message m where m.conversationId = c.id) order by c.updatedAt desc, c.id desc")
+    Page<Conversation> findByUserSubAndDeletedAtIsNullOrderByUpdatedAtDesc(@Param("userSub") String userSub, Pageable pageable);
+
+    Optional<Conversation> findByUserSubAndClientRequestId(String userSub, UUID clientRequestId);
 
     Optional<Conversation> findByIdAndUserSubAndDeletedAtIsNull(UUID id, String userSub);
 
