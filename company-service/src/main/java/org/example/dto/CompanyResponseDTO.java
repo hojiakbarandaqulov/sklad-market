@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class CompanyResponseDTO {
+
     private Long id;
     private String name;
     private String fullName;
@@ -19,6 +20,7 @@ public class CompanyResponseDTO {
     private String logoUrl;
     private String coverUrl;
     private String stir;
+    private Long productCount;
     private String phonePrimary;
     private String phoneSecondary;
     private String website;

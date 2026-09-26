@@ -9,6 +9,10 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class CompanySlugMapResponse {
+    // null means the product count is temporarily unavailable.
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)
+    private Long productCount;
+
     private Long id;
     private String name;
     private String slug;

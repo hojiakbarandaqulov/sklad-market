@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "product-service")
 public interface ProductClient {
+    @org.springframework.web.bind.annotation.PostMapping("/internal/products/counts/by-company")
+    java.util.Map<Long, Long> getCompanyProductCounts(@org.springframework.web.bind.annotation.RequestBody java.util.List<Long> companyIds);
 
     @GetMapping("/internal/products/{companyId}/company/{categoryId}")
     CompanyProductListResponse getCompanyProducts(@PathVariable("companyId") Long companyId,

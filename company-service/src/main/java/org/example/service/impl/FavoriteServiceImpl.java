@@ -27,6 +27,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final ResourceBundleService messageService;
     private final CompanyRepository companyRepository;
+    private final org.example.service.CompanyProductCountService productCounts;
     private final ModelMapper modelMapper;
 
 
@@ -74,6 +75,7 @@ public class FavoriteServiceImpl implements FavoriteService {
                 .map(company -> modelMapper.map(company, CompanyResponseDTO.class))
                 .toList();
 
+        productCounts.enrich(items, CompanyResponseDTO::getId, CompanyResponseDTO::setProductCount);
         return new PageImpl<>(items, PageRequest.of(page-1, perPage), companyPage.getTotalElements());
     }
 

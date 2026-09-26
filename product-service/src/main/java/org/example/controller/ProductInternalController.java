@@ -88,6 +88,11 @@ public class ProductInternalController {
                 .build();
     }
 
+    @PostMapping("/counts/by-company")
+    public Map<Long, Long> companyProductCounts(@RequestBody List<Long> companyIds) {
+        return internalProductStatsService.getCompanyProductCounts(companyIds);
+    }
+
     @GetMapping("/stats/pending-count")
     public Map<String, Long> pendingCount() {
         return Map.of("count", productService.countByModerationStatusAndDeletedAtIsNull(ProductModerationStatus.PENDING));

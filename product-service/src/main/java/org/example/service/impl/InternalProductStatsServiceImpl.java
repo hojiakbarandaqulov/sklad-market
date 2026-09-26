@@ -82,6 +82,21 @@ public class InternalProductStatsServiceImpl implements InternalProductStatsServ
                 .toList();
     }
 
+    @Override
+    public java.util.Map<Long, Long> getCompanyProductCounts(List<Long> companyIds) {
+        if (companyIds == null || companyIds.size() > 500 ||
+                companyIds.stream().anyMatch(id -> id == null || id <= 0)) {
+            throw new AppBadException("companyIds must contain at most 500 positive IDs");
+        }
+        java.util.Map<Long, Long> counts = new java.util.LinkedHashMap<>();
+        companyIds.forEach(id -> counts.put(id, 0L));
+        if (!counts.isEmpty()) {
+            productRepository.countPublicProductsByCompany(List.copyOf(counts.keySet()), ProductModerationStatus.APPROVED)
+                .forEach(row -> counts.put(row.getCompanyId(), row.getProductCount()));
+        }
+        return counts;
+    }
+
     private SellerProductCardResponse toCardResponse(Product product) {
         ProductImage primaryImage = productImageRepository
                 .findFirstByProduct_IdAndIsPrimaryTrueOrderByCreatedDateDesc(product.getId())

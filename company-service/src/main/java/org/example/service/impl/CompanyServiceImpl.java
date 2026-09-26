@@ -46,6 +46,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final ModelMapper modelMapper;
     private final FileClient fileClient;
     private final ProductClient productClient;
+    private final org.example.service.CompanyProductCountService productCounts;
     private final ResourceBundleService messageService;
 
     private static final int MAX_COMPANIES_PER_SELLER = 1;
@@ -280,7 +281,7 @@ public class CompanyServiceImpl implements CompanyService {
             companyMapResponse.setVerificationStatus(company.getVerificationStatus());
             companyMapResponses.add(companyMapResponse);
         });
-        return companyMapResponses;
+        return productCounts.enrich(companyMapResponses, CompanyMapResponse::getCompanyId, CompanyMapResponse::setProductCount);
     }
 
     @Override
@@ -337,6 +338,7 @@ public class CompanyServiceImpl implements CompanyService {
         Page<Company> pageResult = companyRepository.findAll(spec, pageable);
 
         List<CompanyShortDTO> dtoList = pageResult.getContent().stream().map(this::toShortResponse).toList();
+        productCounts.enrich(dtoList, CompanyShortDTO::getId, CompanyShortDTO::setProductCount);
         return new PageImpl<>(dtoList, pageable, pageResult.getTotalElements());
     }
 
@@ -372,6 +374,7 @@ public class CompanyServiceImpl implements CompanyService {
         Page<Company> pageResult = companyRepository.findAll(spec, pageable);
 
         List<CompanyMapResponse> dtoList = pageResult.getContent().stream().map(this::toCompanyMapResponse).toList();
+        productCounts.enrich(dtoList, CompanyMapResponse::getCompanyId, CompanyMapResponse::setProductCount);
         return new PageImpl<>(dtoList, pageable, pageResult.getTotalElements());
     }
 
@@ -388,6 +391,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private CompanySlugMapResponse toSlugMapResponse(Company company) {
         CompanySlugMapResponse response = new CompanySlugMapResponse();
+        response.setProductCount(productCounts.get(company.getId()));
         response.setId(company.getId());
         response.setName(company.getName());
         response.setSlug(company.getSlug());
@@ -404,6 +408,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private CompanyResponseDTO toResponse(Company company) {
         CompanyResponseDTO response = new CompanyResponseDTO();
+        response.setProductCount(productCounts.get(company.getId()));
         response.setId(company.getId());
         response.setName(company.getName());
         response.setFullName(company.getName()+" "+company.getType());
@@ -452,6 +457,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private CompanyInfoDTO toInfoResponse(Company company) {
         CompanyInfoDTO response = new CompanyInfoDTO();
+        response.setProductCount(productCounts.get(company.getId()));
         response.setId(company.getId());
         response.setName(company.getName());
         response.setSlug(company.getSlug());

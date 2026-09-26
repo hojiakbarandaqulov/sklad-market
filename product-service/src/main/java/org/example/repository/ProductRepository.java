@@ -19,6 +19,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    interface CompanyProductCount {
+        Long getCompanyId();
+        Long getProductCount();
+    }
+
+    @Query("select p.companyId as companyId, count(p) as productCount from Product p " +
+           "where p.companyId in :companyIds and p.moderationStatus = :status " +
+           "and p.isActive = true and p.deletedAt is null group by p.companyId")
+    List<CompanyProductCount> countPublicProductsByCompany(
+        @Param("companyIds") List<Long> companyIds,
+        @Param("status") ProductModerationStatus status);
     @Query("""
             select new org.example.dto.CategoryCountResponse(p.categoryId, count(p.id))
             from Product p

@@ -28,6 +28,7 @@ import java.util.List;
 public class AdminCompanyServiceImpl implements AdminCompanyService {
 
     private final CompanyRepository companyRepository;
+    private final org.example.service.CompanyProductCountService productCounts;
     private final ResourceBundleService messageService;
 
     @Override
@@ -54,6 +55,7 @@ public class AdminCompanyServiceImpl implements AdminCompanyService {
         List<CompanyResponseDTO> items = result.getContent().stream()
                 .map(this::toResponse)
                 .toList();
+        productCounts.enrich(items, CompanyResponseDTO::getId, CompanyResponseDTO::setProductCount);
         return new PageImpl<>(items, pageRequest, result.getTotalElements());
     }
 
@@ -62,10 +64,11 @@ public class AdminCompanyServiceImpl implements AdminCompanyService {
         Specification<Company> specification = notDeleted()
                 .and((root, query, cb) -> cb.equal(root.get("verificationStatus"), VerificationStatus.PENDING_VERIFICATION));
 
-        return companyRepository.findAll(specification, Sort.by(Sort.Direction.ASC, "createdDate"))
+        List<CompanyResponseDTO> items = companyRepository.findAll(specification, Sort.by(Sort.Direction.ASC, "createdDate"))
                 .stream()
                 .map(this::toResponse)
                 .toList();
+        return productCounts.enrich(items, CompanyResponseDTO::getId, CompanyResponseDTO::setProductCount);
     }
 
     @Override
