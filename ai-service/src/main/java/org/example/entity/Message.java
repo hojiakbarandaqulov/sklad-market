@@ -52,6 +52,9 @@ public class Message {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    @Column(name = "archived_at")
+    private Instant archivedAt;
+
     @jakarta.persistence.PrePersist
     void onCreate() {
         if (createdAt == null) {
