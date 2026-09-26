@@ -42,7 +42,21 @@ public class ConversationController {
         String title = request == null ? null : request.getTitle();
         String userSub = AiSecurityUtil.requireSub();
         String userRole = roleSnapshot();
-        return ApiResponse.successResponse(conversationService.create(userSub, userRole, title, acceptLanguage));
+        return ApiResponse.successResponse(request != null && request.getRequestId() != null
+                ? conversationService.create(userSub, userRole, title, acceptLanguage, request.getRequestId())
+                : conversationService.create(userSub, userRole, title, acceptLanguage));
+    }
+
+    @GetMapping("/latest")
+    public ApiResponse<ConversationDto> latest() {
+        return ApiResponse.successResponse(conversationService.latest(
+                AiSecurityUtil.requireSub(), AiSecurityUtil.currentRoleSet()));
+    }
+
+    @GetMapping("/{id}/messages/recent")
+    public ApiResponse<java.util.List<MessageDto>> recentMessages(@PathVariable UUID id) {
+        return ApiResponse.successResponse(conversationService.recentMessages(
+                AiSecurityUtil.requireSub(), id, AiSecurityUtil.currentRoleSet()));
     }
 
     @GetMapping

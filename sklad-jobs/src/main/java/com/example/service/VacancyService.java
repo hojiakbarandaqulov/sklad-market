@@ -1,6 +1,8 @@
 package com.example.service;
 
 import com.example.dto.ApiResponse;
+import com.example.dto.vacancy.PublicVacancyDTO;
+import com.example.dto.vacancy.VacancyFilter;
 import com.example.dto.vacancy.VacancyCreate;
 import com.example.dto.vacancy.VacancyDTO;
 import com.example.dto.vacancy.VacancyRequest;
@@ -22,4 +24,8 @@ public interface VacancyService {
     ApiResponse<String> archiveVacancy(Long vacancyId, AppLanguage language);
 
     ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, AppLanguage language);
+
+    PageImpl<PublicVacancyDTO> getVacancies(VacancyFilter filter, AppLanguage language);
+
+    PublicVacancyDTO getVacancy(Long id, AppLanguage language);
 }

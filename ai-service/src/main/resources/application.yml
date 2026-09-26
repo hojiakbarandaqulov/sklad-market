@@ -32,6 +32,10 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka/
 
 ai:
+  history:
+    cleanup-enabled: ${AI_HISTORY_CLEANUP_ENABLED:false}
+    recovery-days: ${AI_HISTORY_RECOVERY_DAYS:30}
+    cleanup-cron: ${AI_HISTORY_CLEANUP_CRON:0 43 * * * *}
   gemini:
     api-key: ${GEMINI_API_KEY:}
     chat-model: ${AI_CHAT_MODEL:gemini-3.6-flash}
@@ -88,6 +92,7 @@ ai:
     max-input-chars: 4000
     # Only recent user/assistant turns are sent to the provider. Tool audit rows are excluded.
     history-window-messages: ${AI_HISTORY_WINDOW_MESSAGES:6}
+    max-context-bytes: ${AI_MAX_CONTEXT_BYTES:131072}
     max-output-tokens: 2048
     max-tool-iterations: ${AI_MAX_TOOL_ITERATIONS:6}
     request-timeout-seconds: ${AI_REQUEST_TIMEOUT_SECONDS:60}

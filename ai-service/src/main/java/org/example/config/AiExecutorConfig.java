@@ -57,4 +57,14 @@ public class AiExecutorConfig {
         scheduler.initialize();
         return scheduler;
     }
+
+    @Bean(name = "aiHistoryScheduler")
+    public ThreadPoolTaskScheduler aiHistoryScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setThreadNamePrefix("ai-history-");
+        scheduler.setPoolSize(1);
+        scheduler.setWaitForTasksToCompleteOnShutdown(false);
+        scheduler.initialize();
+        return scheduler;
+    }
 }

@@ -7,6 +7,7 @@ import org.example.ai.audit.ToolAuditSanitizer;
 import org.example.ai.error.AiChatException;
 import org.example.ai.error.AiErrorCode;
 import org.example.ai.guardrail.AiChatRateLimitService;
+import org.example.ai.guardrail.ChatContextWindow;
 import org.example.ai.guardrail.TokenBudgetGuard;
 import org.example.ai.guardrail.UsageLedgerService;
 import org.example.ai.observability.AiMetrics;
@@ -38,6 +39,7 @@ import org.example.repository.ConversationRepository;
 import org.example.repository.MessageRepository;
 import org.example.service.AiChatService;
 import org.example.service.ConversationService;
+import org.example.service.ChatMemoryService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -86,6 +88,8 @@ public class AiChatServiceImpl implements AiChatService {
     private final ThreadPoolTaskExecutor chatExecutor;
     private final ThreadPoolTaskScheduler heartbeatScheduler;
     private final AiMetrics aiMetrics;
+    private final ChatMemoryService memory;
+    private final ChatContextWindow contextWindow;
 
     private final int maxInputChars;
     private final int historyWindowMessages;
@@ -112,7 +116,7 @@ public class AiChatServiceImpl implements AiChatService {
             @Value("${ai.limits.max-output-tokens:2048}") int maxOutputTokens,
             @Value("${ai.limits.max-tool-iterations:6}") int maxToolIterations,
             @Value("${ai.gemini.chat-model:gemini-2.5-flash}") String chatModel,
-            AiMetrics aiMetrics) {
+            AiMetrics aiMetrics, ChatMemoryService memory, ChatContextWindow contextWindow) {
         this.conversationService = conversationService;
         this.conversationRepository = conversationRepository;
         this.messageRepository = messageRepository;
@@ -132,12 +136,21 @@ public class AiChatServiceImpl implements AiChatService {
         this.maxToolIterations = Math.max(maxToolIterations, 0);
         this.chatModel = chatModel;
         this.aiMetrics = aiMetrics;
+        this.memory = memory;
+        this.contextWindow = contextWindow;
     }
 
     @Override
     public SseEmitter streamMessage(
             String userSub, UUID conversationId, String content, String acceptLanguage, String bearerToken, Set<String> callerRoles) {
+        return streamMessage(userSub, conversationId, content, acceptLanguage, bearerToken, callerRoles, UUID.randomUUID());
+    }
+
+    @Override
+    public SseEmitter streamMessage(String userSub, UUID conversationId, String content, String acceptLanguage,
+            String bearerToken, Set<String> callerRoles, UUID requestId) {
         Conversation conversation = conversationService.requireOwnedForRoles(userSub, conversationId, callerRoles);
+        memory.claim(userSub, conversationId, requestId, content);
 
         SseEmitter emitter = new SseEmitter(EMITTER_TIMEOUT_MILLIS);
         SseEventPublisher publisher = new SseEventPublisher(emitter);
@@ -163,15 +176,33 @@ public class AiChatServiceImpl implements AiChatService {
         });
         emitter.onError(throwable -> cleanup.run());
 
-        heartbeatHandle.set(heartbeatScheduler.scheduleAtFixedRate(() -> {
-            if (!publisher.sendHeartbeat()) {
-                cleanup.run();
-            }
-        }, Duration.ofSeconds(HEARTBEAT_INTERVAL_SECONDS)));
-
         Set<String> effectiveRoles = callerRoles == null ? Set.of() : callerRoles;
-        chatExecutor.execute(() ->
-                runTurn(userSub, conversation, content, acceptLanguage, bearerToken, effectiveRoles, emitter, publisher, activeStream, disconnected));
+        try {
+            heartbeatHandle.set(heartbeatScheduler.scheduleAtFixedRate(() -> {
+                try {
+                    if (!memory.renew(conversationId, requestId) || !publisher.sendHeartbeat()) {
+                        cleanup.run();
+                        emitter.complete();
+                    }
+                } catch (RuntimeException unavailable) { cleanup.run(); emitter.complete(); }
+            }, Duration.ofSeconds(HEARTBEAT_INTERVAL_SECONDS)));
+            chatExecutor.execute(() -> {
+                try {
+                    if (!disconnected.get()) runTurn(userSub, conversation, content, acceptLanguage,
+                            bearerToken, effectiveRoles, emitter, publisher, activeStream, disconnected);
+                } finally {
+                    cleanup.run();
+                    memory.finish(conversationId, requestId);
+                    try { memory.retainRecent(userSub, conversationId); }
+                    catch (RuntimeException retentionFailure) { log.warn("AI history retention deferred", retentionFailure); }
+                }
+            });
+        } catch (RuntimeException rejected) {
+            cleanup.run();
+            memory.finish(conversationId, requestId);
+            emitter.complete();
+            throw new AiChatException(AiErrorCode.RATE_LIMITED, "The assistant is busy. Please try again shortly.");
+        }
 
         return emitter;
     }
@@ -240,17 +271,18 @@ public class AiChatServiceImpl implements AiChatService {
             long totalTokensIn = 0;
             long totalTokensOut = 0;
             int iteration = 0;
+            int toolCallsUsed = 0;
             Set<String> assistantRequiredRoles = new LinkedHashSet<>();
 
             while (true) {
                 if (disconnected.get()) {
                     return;
                 }
-                boolean toolsAllowedThisCall = iteration < maxToolIterations;
+                boolean toolsAllowedThisCall = iteration < maxToolIterations && toolCallsUsed < 8;
                 List<ToolSpec> toolsForCall = toolsAllowedThisCall ? toolSpecs : List.of();
 
-                ChatGenerationRequest request = new ChatGenerationRequest(
-                        chatModel, systemInstruction, history, toolsForCall, pendingExchange, TEMPERATURE, maxOutputTokens);
+                ChatGenerationRequest request = contextWindow.fit(new ChatGenerationRequest(
+                        chatModel, systemInstruction, history, toolsForCall, pendingExchange, TEMPERATURE, maxOutputTokens));
 
                 StringBuilder roundText = new StringBuilder();
                 List<ToolCallRequest> roundToolCalls = new ArrayList<>();
@@ -309,6 +341,10 @@ public class AiChatServiceImpl implements AiChatService {
                 if (roundToolCalls.isEmpty()) {
                     break;
                 }
+                if (!toolsAllowedThisCall || roundToolCalls.size() > 8 - toolCallsUsed) {
+                    throw new AiChatException(AiErrorCode.INVALID_INPUT, "Please ask for fewer actions in one message.");
+                }
+                toolCallsUsed += roundToolCalls.size();
 
                 pendingExchange.add(new ModelToolCallEntry(roundText.toString(), roundToolCalls));
                 List<ToolCallOutcome> outcomes = new ArrayList<>(roundToolCalls.size());
@@ -333,6 +369,10 @@ public class AiChatServiceImpl implements AiChatService {
             publisher.sendDone(assistantMessage.getId(), conversation.getId());
             aiMetrics.recordTokens(totalTokensIn, totalTokensOut);
             aiMetrics.recordChatTurn("success", System.currentTimeMillis() - turnStart);
+            emitter.complete();
+        } catch (AiChatException boundedRequest) {
+            publisher.sendError(boundedRequest.code(), boundedRequest.getMessage());
+            aiMetrics.recordChatTurn(boundedRequest.code().wireCode(), System.currentTimeMillis() - turnStart);
             emitter.complete();
         } catch (Exception unexpected) {
             log.error("Unexpected failure in AI chat turn", unexpected);
@@ -534,7 +574,7 @@ public class AiChatServiceImpl implements AiChatService {
         List<Message> recent = messageRepository.findByConversationIdAndRoleInOrderByCreatedAtDesc(
                 conversationId,
                 List.of(MessageRole.USER, MessageRole.ASSISTANT),
-                PageRequest.of(0, historyWindowMessages));
+                PageRequest.of(0, 31));
         List<Message> chronological = new ArrayList<>(recent);
         Collections.reverse(chronological);
 
@@ -546,7 +586,7 @@ public class AiChatServiceImpl implements AiChatService {
                 history.add(new ChatMessageInput("model", message.getContent()));
             }
         }
-        return history;
+        return ChatContextWindow.recentPairs(history, Math.min(3, historyWindowMessages / 2));
     }
 
     private String resolveLocale(Conversation conversation, String acceptLanguage) {

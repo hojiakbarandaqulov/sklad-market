@@ -12,6 +12,12 @@ public interface ConversationService {
 
     ConversationDto create(String userSub, String userRole, String title, String acceptLanguage);
 
+    ConversationDto create(String userSub, String userRole, String title, String acceptLanguage, UUID requestId);
+
+    ConversationDto latest(String userSub, Set<String> currentRoles);
+
+    java.util.List<MessageDto> recentMessages(String userSub, UUID conversationId, Set<String> currentRoles);
+
     PagedResponse<ConversationDto> list(String userSub, int page, int perPage);
 
     PagedResponse<MessageDto> getMessages(

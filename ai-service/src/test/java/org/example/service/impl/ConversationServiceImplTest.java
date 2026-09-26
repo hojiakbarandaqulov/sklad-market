@@ -51,7 +51,8 @@ class ConversationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new ConversationServiceImpl(conversationRepository, messageRepository, toolRegistry);
+        service = new ConversationServiceImpl(conversationRepository, messageRepository, toolRegistry,
+                org.mockito.Mockito.mock(org.springframework.jdbc.core.JdbcTemplate.class));
     }
 
     @Test
@@ -68,7 +69,7 @@ class ConversationServiceImplTest {
 
         ArgumentCaptor<Conversation> captor = ArgumentCaptor.forClass(Conversation.class);
         verify(conversationRepository).save(captor.capture());
-        verify(conversationRepository).softDeleteOlderActiveConversations(
+        verify(conversationRepository, never()).softDeleteOlderActiveConversations(
                 org.mockito.ArgumentMatchers.eq(USER_A),
                 org.mockito.ArgumentMatchers.eq(15),
                 any(Instant.class));

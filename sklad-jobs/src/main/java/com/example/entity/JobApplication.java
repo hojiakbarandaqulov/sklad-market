@@ -49,6 +49,10 @@ public class JobApplication extends BaseEntity {
     @Column(nullable = false)
     private Long resumeId;
 
+    // Arizaga oxirgi biriktirilgan rezyumening mustaqil nusxasi.
+    @Column(columnDefinition = "TEXT")
+    private String resumeSnapshot;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 32)
     private ApplicationStatus status = ApplicationStatus.NEW;

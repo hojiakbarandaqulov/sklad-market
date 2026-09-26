@@ -43,6 +43,9 @@ public class Conversation {
     @Column(name = "deleted_at")
     private Instant deletedAt;
 
+    @Column(name = "client_request_id")
+    private UUID clientRequestId;
+
     @jakarta.persistence.PrePersist
     void onCreate() {
         Instant now = Instant.now();
