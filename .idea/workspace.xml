@@ -4,23 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="product and company service filter location product">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="company response add data productCount">
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CompanyProductCountService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyProductCountServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/ProductClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyInfoDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyInfoDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyShortDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/CompanyShortDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanyMapResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanyMapResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanySlugMapResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/map/CompanySlugMapResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/AdminCompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/AdminCompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CompanyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/FavoriteServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/FavoriteServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ProductInternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/InternalProductStatsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/InternalProductStatsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/InternalProductStatsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/InternalProductStatsServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1088,7 +1075,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="profileId String type parsing add" />
     <MESSAGE value="migrate file table name bug fix" />
     <MESSAGE value="keyklock add profileId bug fix" />
     <MESSAGE value="prod yml file bug fix" />
@@ -1111,9 +1097,10 @@
     <MESSAGE value="saleType response bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="location service create" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="product and company service filter location product" />
-    <option name="LAST_COMMIT_MESSAGE" value="product and company service filter location product" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
+    <MESSAGE value="company response add data productCount" />
+    <option name="LAST_COMMIT_MESSAGE" value="company response add data productCount" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
