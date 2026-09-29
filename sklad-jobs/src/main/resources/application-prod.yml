@@ -64,5 +64,5 @@ eureka:
 
 springdoc:
   swagger-ui:
-    config-url: /swagger/product/v3/api-docs/swagger-config
-    url: /swagger/product/v3/api-docs
+    config-url: /swagger/skladjobs/v3/api-docs/swagger-config
+    url: /swagger/skladjobs/v3/api-docs
