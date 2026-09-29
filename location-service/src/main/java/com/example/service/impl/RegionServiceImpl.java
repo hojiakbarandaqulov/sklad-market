@@ -110,6 +110,9 @@ public class RegionServiceImpl implements RegionService {
                 region.getId(),
                 region.getCode(),
                 resolveName(region, language),
+                region.getNameUz(),
+                region.getNameRu(),
+                region.getNameEn(),
                 region.getType(),
                 region.getSortOrder()
         );

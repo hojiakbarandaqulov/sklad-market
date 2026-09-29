@@ -10,6 +10,9 @@ public class RegionResponse {
     private Long id;
     private String code;
     private String name;
+    private String nameUz;
+    private String nameRu;
+    private String nameEn;
     private RegionType type;
     private Integer sortOrder;
 }
