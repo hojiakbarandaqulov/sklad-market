@@ -15,7 +15,7 @@ public class RegionInternal {
     private final RegionService regionService;
 
     @GetMapping("exists/{regionId}")
-    public boolean existsByRegion(@PathVariable Long regionId){
+    public boolean existsByRegion(@PathVariable Long regionId) {
         return regionService.existsByRegion(regionId);
     }
 }
