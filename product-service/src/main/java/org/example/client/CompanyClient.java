@@ -22,7 +22,7 @@ public interface CompanyClient {
 
 
     @GetMapping("/internal/companies/{companyId}/ownership-check")
-    CompanyOwnershipResponse checkOwnership(@PathVariable Long companyId, @RequestParam Long buyerId);
+    CompanyOwnershipResponse checkOwnership(@PathVariable Long companyId, @RequestParam Long sellerId);
 
     @GetMapping("/internal/companies/owned")
     List<Long> getOwnedCompanyIds(@RequestParam Long sellerId);
