@@ -8,6 +8,7 @@ import org.example.dto.*;
 import org.example.dto.banner.BannerResponse;
 import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
+import org.example.dto.product.ProductSearchResponse;
 import org.example.entity.Product;
 import org.example.enums.AppLanguage;
 import org.example.enums.LocationType;
@@ -16,6 +17,7 @@ import org.example.enums.ProductModerationStatus;
 import org.example.repository.ProductRepository;
 import org.example.service.BannerService;
 import org.example.service.CatalogService;
+import org.example.service.ProductSearchService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,6 +35,7 @@ public class CatalogServiceImpl implements CatalogService {
     private final BannerService bannerService;
     private final ModelMapper modelMapper;
     private final CompanyClient companyClient;
+    private final ProductSearchService productSearchService;
 
     @Override
     public PagedResponse<ProductResponse> getCatalog(String q, String category, Long regionId, String currency, int page, int perPage, AppLanguage language) {
@@ -69,11 +72,9 @@ public class CatalogServiceImpl implements CatalogService {
         if (q == null || q.trim().length() < 2) {
             return new SuggestionResponse(List.of());
         }
-        List<String> suggestions = productRepository.findAll().stream()
-                .filter(this::isVisible)
-                .map(Product::getName)
+        List<String> suggestions = productSearchService.search(q.trim(), 1, 10).stream()
+                .map(ProductSearchResponse::getName)
                 .filter(Objects::nonNull)
-                .filter(name -> name.toLowerCase().contains(q.toLowerCase()))
                 .distinct()
                 .limit(10)
                 .toList();
