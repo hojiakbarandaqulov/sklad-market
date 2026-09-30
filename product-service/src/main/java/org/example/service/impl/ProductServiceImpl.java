@@ -317,11 +317,9 @@ public class ProductServiceImpl implements ProductService {
         validateCategory(request.getCategoryId(), language);
         validatePickupBranch(request.getCompanyId(), request.getPickupAvailable(), request.getPickupBranchId(), language);
 
-        String previousName = product.getName();
         applyCommonFields(product, request, language);
-        if (!previousName.equalsIgnoreCase(request.getName())) {
-            product.setSlug(generateUniqueSlug(request.getName()));
-        }
+        product.setSlug(generateUniqueSlug(request.getName()));
+
         if (product.getModerationStatus() == ProductModerationStatus.APPROVED) {
             product.setModerationStatus(ProductModerationStatus.PENDING);
         }
