@@ -28,6 +28,7 @@ public class ProductDetailResponse {
 
     private BigDecimal price;
     private Currency currency;
+    private Long min;
     private List<ProductImageResponse> images;
     private Map<String, Object> attributes;
     private ProductModerationStatus status;

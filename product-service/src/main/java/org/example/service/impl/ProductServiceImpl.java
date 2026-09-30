@@ -276,6 +276,7 @@ public class ProductServiceImpl implements ProductService {
                 .priceType(product.getPriceType())
                 .price(product.getPrice())
                 .currency(product.getCurrency())
+                .min(product.getMinProduct())
                 .images(getImages(product.getId()))
                 .attributes(product.getAttributesJsonb())
                 .status(product.getModerationStatus())
