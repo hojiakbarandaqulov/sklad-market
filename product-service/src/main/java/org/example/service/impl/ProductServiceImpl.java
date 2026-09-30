@@ -319,9 +319,9 @@ public class ProductServiceImpl implements ProductService {
 
         String previousName = product.getName();
         applyCommonFields(product, request, language);
-       /* if (!previousName.equalsIgnoreCase(request.getName())) {
+        if (!previousName.equalsIgnoreCase(request.getName())) {
             product.setSlug(generateUniqueSlug(request.getName()));
-        }*/
+        }
         if (product.getModerationStatus() == ProductModerationStatus.APPROVED) {
             product.setModerationStatus(ProductModerationStatus.PENDING);
         }
