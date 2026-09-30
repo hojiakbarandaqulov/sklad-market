@@ -28,8 +28,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
 import java.text.Normalizer;
+import java.util.Locale;
+import java.util.Map;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,6 +41,47 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private static final Set<String> ALLOWED_IMAGE_TYPES = Set.of("image/jpeg", "image/png", "image/webp", "image/jpg");
+    private static final Map<Character, String> CYRILLIC_TO_LATIN = Map.ofEntries(
+            Map.entry('а', "a"),
+            Map.entry('б', "b"),
+            Map.entry('в', "v"),
+            Map.entry('г', "g"),
+            Map.entry('д', "d"),
+            Map.entry('е', "e"),
+            Map.entry('ё', "yo"),
+            Map.entry('ж', "zh"),
+            Map.entry('з', "z"),
+            Map.entry('и', "i"),
+            Map.entry('й', "y"),
+            Map.entry('к', "k"),
+            Map.entry('л', "l"),
+            Map.entry('м', "m"),
+            Map.entry('н', "n"),
+            Map.entry('о', "o"),
+            Map.entry('п', "p"),
+            Map.entry('р', "r"),
+            Map.entry('с', "s"),
+            Map.entry('т', "t"),
+            Map.entry('у', "u"),
+            Map.entry('ф', "f"),
+            Map.entry('х', "x"),
+            Map.entry('ц', "ts"),
+            Map.entry('ч', "ch"),
+            Map.entry('ш', "sh"),
+            Map.entry('щ', "shch"),
+            Map.entry('ъ', ""),
+            Map.entry('ы', "y"),
+            Map.entry('ь', ""),
+            Map.entry('э', "e"),
+            Map.entry('ю', "yu"),
+            Map.entry('я', "ya"),
+
+            // O‘zbek kirill harflari
+            Map.entry('ў', "o"),
+            Map.entry('қ', "q"),
+            Map.entry('ғ', "g"),
+            Map.entry('ҳ', "h")
+    );
     private static final long MAX_FILE_SIZE = 5L * 1024 * 1024;
     private static final int MAX_IMAGES = 12;
 
@@ -274,9 +318,9 @@ public class ProductServiceImpl implements ProductService {
 
         String previousName = product.getName();
         applyCommonFields(product, request, language);
-        if (!previousName.equalsIgnoreCase(request.getName())) {
+       /* if (!previousName.equalsIgnoreCase(request.getName())) {
             product.setSlug(generateUniqueSlug(request.getName()));
-        }
+        }*/
         if (product.getModerationStatus() == ProductModerationStatus.APPROVED) {
             product.setModerationStatus(ProductModerationStatus.PENDING);
         }
@@ -498,25 +542,6 @@ public class ProductServiceImpl implements ProductService {
         product.setAttributesJsonb(normalizeAttributes(request.getAttributes()));
     }
 
-    private String generateUniqueSlug(String name) {
-        String base = slugify(name);
-        String candidate = base;
-        int counter = 1;
-        while (productRepository.existsBySlug(candidate)) {
-            candidate = base + "-" + counter++;
-        }
-        return candidate;
-    }
-
-    private String slugify(String value) {
-        String normalized = Normalizer.normalize(value, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}+", "");
-        String slug = normalized.toLowerCase(Locale.ROOT)
-                .replaceAll("[^a-z0-9]+", "-")
-                .replaceAll("(^-|-$)", "");
-        return StringUtils.hasText(slug) ? slug : "product";
-    }
-
    /* private ImageMeta validateAndReadImage(MultipartFile file, AppLanguage language) {
         if (file.isEmpty()) {
             throw new AppBadException(messageService.getMessage("file.empty", language));
@@ -666,6 +691,62 @@ public class ProductServiceImpl implements ProductService {
         return product.getModerationStatus() == null ? ProductModerationStatus.PENDING : product.getModerationStatus();
     }
 
+    private String transliterate(String value) {
+        String lowerCase = value.toLowerCase(Locale.ROOT);
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < lowerCase.length(); i++) {
+            char character = lowerCase.charAt(i);
+            String replacement = CYRILLIC_TO_LATIN.get(character);
+
+            if (replacement != null) {
+                result.append(replacement);
+            } else {
+                result.append(character);
+            }
+        }
+
+        return result.toString();
+    }
+
+    private String slugify(String value) {
+        if (!StringUtils.hasText(value)) {
+            return "product";
+        }
+
+        String transliterated = transliterate(value)
+                // O‘zbekcha o‘, g‘ kabi harflardagi apostroflarni olib tashlaydi
+                .replaceAll("[‘’'`ʻʼ]", "");
+
+        String normalized = Normalizer.normalize(
+                        transliterated,
+                        Normalizer.Form.NFD
+                )
+                .replaceAll("\\p{M}+", "");
+
+        String slug = normalized
+                .toLowerCase(Locale.ROOT)
+                .replaceAll("[^a-z0-9]+", "-")
+                .replaceAll("^-+|-+$", "");
+
+        if (slug.length() > 180) {
+            slug = slug.substring(0, 180)
+                    .replaceAll("-+$", "");
+        }
+
+        return StringUtils.hasText(slug) ? slug : "product";
+    }
+
+    private String generateUniqueSlug(String name) {
+        String base = slugify(name);
+
+        String uniquePart = UUID.randomUUID()
+                .toString()
+                .replace("-", "")
+                .substring(0, 12);
+
+        return base + "-" + uniquePart;
+    }
 
     /*private void fillProduct(Product product, org.example.dto.CreateProductRequest request) {
         product.setCompanyId(request.getCompanyId());
