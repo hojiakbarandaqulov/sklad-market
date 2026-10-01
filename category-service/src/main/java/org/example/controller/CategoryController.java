@@ -93,6 +93,18 @@ public class CategoryController {
     }
 
     @PreAuthorize("permitAll()")
+    @GetMapping("/search")
+    public ApiResponse<Page<CategoryResponse>> searchCategory(
+            @RequestParam("q") String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "sortOrder"));
+        return ApiResponse.successResponse(categoryService.searchByName(query, pageable, language));
+    }
+
+    @PreAuthorize("permitAll()")
     @GetMapping("/{slug}")
     public ApiResponse<CategoryResponse> getCategoryBySlug(@PathVariable String slug,
                                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

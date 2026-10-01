@@ -171,28 +171,25 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryResponse> getCategory(Pageable pageable, AppLanguage language) {
-        Pageable sortedPagable = PageRequest.of(
+        Pageable sortedPageable = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
                 Sort.by(Sort.Direction.ASC, "sortOrder")
         );
-        Page<Category> all = categoryRepository.findAllByIsActiveTrue(sortedPagable);
-        return all.map(category -> {
-            CategoryResponse response = new CategoryResponse();
-            response.setId(category.getId());
-            response.setSlug(category.getSlug());
-            response.setSortOrder(category.getSortOrder());
-            response.setIsActive(category.getIsActive());
-            response.setIconId(category.getIconId());
-            response.setIconUrl(category.getIconUrl());
+        return categoryRepository.findAllByIsActiveTrue(sortedPageable)
+                .map(category -> toCategoryResponse(category, language));
+    }
 
-            switch (language) {
-                case EN -> response.setNameEn(category.getNameEn());
-                case RU -> response.setNameRu(category.getNameRu());
-                case UZ -> response.setNameUz(category.getNameUz());
-            }
-            return response;
-        });
+    @Override
+    public Page<CategoryResponse> searchByName(String query, Pageable pageable, AppLanguage language) {
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.ASC, "sortOrder")
+        );
+
+        return categoryRepository.searchByName(query.trim(), sortedPageable)
+                .map(category -> toCategoryResponse(category, language));
     }
 
     @Override
@@ -251,5 +248,23 @@ public class CategoryServiceImpl implements CategoryService {
             case RU -> category.getNameRu();
             default -> category.getNameUz();
         };
+    }
+
+    private CategoryResponse toCategoryResponse(Category category, AppLanguage language) {
+        CategoryResponse response = new CategoryResponse();
+        response.setId(category.getId());
+        response.setSlug(category.getSlug());
+        response.setSortOrder(category.getSortOrder());
+        response.setIsActive(category.getIsActive());
+        response.setIconId(category.getIconId());
+        response.setIconUrl(category.getIconUrl());
+
+        switch (language) {
+            case EN -> response.setNameEn(category.getNameEn());
+            case RU -> response.setNameRu(category.getNameRu());
+            case UZ -> response.setNameUz(category.getNameUz());
+        }
+
+        return response;
     }
 }

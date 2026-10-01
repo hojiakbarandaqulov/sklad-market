@@ -25,6 +25,8 @@ public interface CategoryService {
 
     Page<CategoryResponse> getCategory(Pageable pageable,AppLanguage language);
 
+    Page<CategoryResponse> searchByName(String query, Pageable pageable, AppLanguage language);
+
     CategoryResponse getCategoryBySlug(String slug, AppLanguage language);
 
     List<CategoryTreeResponse> getCategoryTree(AppLanguage language);
