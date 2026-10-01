@@ -22,6 +22,9 @@ public class ChatThread extends BaseEntity {
     private Long sellerCompanyId;
 
     private Long productId;
+    @jakarta.persistence.Column(name="application_id", unique=true)
+    private Long applicationId;
+    private Long vacancyId;
 
     private Boolean buyerHidden = Boolean.FALSE;
 

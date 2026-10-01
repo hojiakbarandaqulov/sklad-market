@@ -12,6 +12,7 @@ public class JobApplicationDTO {
     private String positionName;
     private Long companyId;
     private Long resumeId;
+    private Long chatThreadId;
     private ApplicationStatus status;
     private String fullName;
     private String phone;

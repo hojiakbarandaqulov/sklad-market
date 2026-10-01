@@ -34,6 +34,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     private final ResourceBundleService messageService;
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
+    private final com.example.config.clent.CompanyClient companyClient;
 
     @Override
     @Transactional
@@ -65,6 +66,8 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         application.setStatus(ApplicationStatus.NEW);
         application.setConsentAcceptedAt(Instant.now());
         application.setSource("SKLAD_JOBS");
+        application.setChatPending(true);
+        application.setChatNextAttemptAt(Instant.now());
         return toDTO(applicationRepository.save(application));
     }
 
@@ -110,12 +113,17 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     @Override
+    @Transactional
     public JobApplicationDTO applicationStatusResponse(Long id, ApplicationResponseStatus applicationResponseStatus, AppLanguage language) {
-        Optional<JobApplication> jobApplication = applicationRepository.findByIdAndDeletedFalse(id);
+        Optional<JobApplication> jobApplication = applicationRepository.findForChat(id);
         if (jobApplication.isEmpty()) {
             throw new AppNotFoundException(messageService.getMessage("resume.not.found", language));
         }
         JobApplication jobApplicationEntity = jobApplication.get();
+        requireCompanyOwner(jobApplicationEntity.getVacancy().getCompanyId());
+        if(applicationResponseStatus==null) throw new AppBadException("Status required");
+        requireActive(jobApplicationEntity,language);
+        if(jobApplicationEntity.getFirstResponseAt()==null) jobApplicationEntity.setFirstResponseAt(Instant.now());
         ApplicationStatus applicationResponse = switch (applicationResponseStatus) {
             case ACCEPTED -> ApplicationStatus.ACCEPTED;
             case REJECTED -> ApplicationStatus.REJECTED;
@@ -127,7 +135,11 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public Page<JobApplicationDTO> getApplicationVacancy(Long vacancyId, GetNewApplicationStatus status, int page, int perPage) {
-//        Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDeletedFalse(vacancyId);
+        var vacancy=vacancyRepository.findByIdAndDeletedFalse(vacancyId)
+            .orElseThrow(()->new AppNotFoundException("Vacancy not found"));
+        requireCompanyOwner(vacancy.getCompanyId());
+        if(page<1 || perPage<1 || perPage>100) throw new AppBadException("Invalid pagination");
+        if(status==null) status=GetNewApplicationStatus.NEW;
 
         Pageable pageable = PageRequest.of(
                 page - 1,
@@ -146,6 +158,14 @@ public class JobApplicationServiceImpl implements JobApplicationService {
                         );
 
         return applications.map(this::toDTO);
+    }
+
+    private void requireCompanyOwner(Long companyId) {
+        Long userId=SpringSecurityUtil.getProfileId();
+        if(userId==null) throw new org.springframework.security.access.AccessDeniedException("Authentication required");
+        var owned=companyClient.getOwnedCompanyIds(userId);
+        if(owned==null || !owned.contains(companyId))
+            throw new org.springframework.security.access.AccessDeniedException("Company access denied");
     }
 
     private String snapshot(Resume resume) {
@@ -190,6 +210,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         dto.setCompanyId(a.getVacancy().getCompanyId());
         dto.setPositionName(a.getVacancy().getPositionName());
         dto.setResumeId(a.getResumeId());
+        dto.setChatThreadId(a.getChatThreadId());
         dto.setStatus(a.getStatus());
         dto.setFullName(a.getFullName());
         dto.setPhone(a.getPhone());

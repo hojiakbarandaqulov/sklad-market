@@ -3,10 +3,25 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="company response add data productCount">
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="Merge remote-tracking branch 'origin/main'">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CompanyInternalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/dto/chat/ChatThreadResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/dto/chat/ChatThreadResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/mapper/ChatMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/mapper/ChatMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/SkladJobsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/SkladJobsApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/controller/JobApplicationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/controller/JobApplicationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/application/JobApplicationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/application/JobApplicationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/JobApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/JobApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/JobApplicationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/JobApplicationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/JobApplicationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/JobApplicationServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,6 +189,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;CidrDebugProfileConversion&quot;: &quot;true&quot;,
     &quot;Docker.docker-compose.yml.minio: Compose Deployment.executor&quot;: &quot;Run&quot;,
     &quot;Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor&quot;: &quot;Run&quot;,
     &quot;Docker.docker-compouse.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
@@ -221,10 +237,13 @@
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
@@ -239,6 +258,7 @@
     &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.ReportServiceApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -572,11 +592,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.sklad-jobs [build]" />
         <item itemvalue="Gradle.sklad-jobs [dependencies]" />
+        <item itemvalue="Gradle.sklad-jobs [build]" />
         <item itemvalue="Gradle.sklad-jobs [bootJar]" />
-        <item itemvalue="Gradle.category-service [bootJar]" />
         <item itemvalue="Gradle.category-service [build]" />
+        <item itemvalue="Gradle.category-service [bootJar]" />
       </list>
     </recent_temporary>
   </component>
@@ -1097,9 +1117,9 @@
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="location service create" />
     <MESSAGE value="product and company service filter location product" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
     <MESSAGE value="company response add data productCount" />
-    <option name="LAST_COMMIT_MESSAGE" value="company response add data productCount" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/main'" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

@@ -46,16 +46,18 @@ public class JobApplicationController {
         return ApiResponse.successResponse(jobApplicationService.replaceResume(id, request, language));
     }
 
+    @PreAuthorize("hasRole('SELLER')")
     @PutMapping("/{id}/status")
     public ApiResponse<JobApplicationDTO> applicationResponse(@PathVariable Long id,
-                                                              @RequestParam(required = false) ApplicationResponseStatus applicationResponseStatus,
+                                                              @RequestParam ApplicationResponseStatus applicationResponseStatus,
                                                               @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(jobApplicationService.applicationStatusResponse(id, applicationResponseStatus, language));
     }
 
-    @GetMapping("/{vacancyId}")
+    @PreAuthorize("hasRole('SELLER')")
+    @GetMapping("/vacancy/{vacancyId}")
     public ApiResponse<Page<JobApplicationDTO>> getApplicationVacancy(@PathVariable Long vacancyId,
-                                                                @RequestParam(required = false) GetNewApplicationStatus status,
+                                                                @RequestParam(defaultValue = "NEW") GetNewApplicationStatus status,
                                                                 @RequestParam(defaultValue = "1") int page,
                                                                 @RequestParam(defaultValue = "20") int perPage,
                                                                 @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

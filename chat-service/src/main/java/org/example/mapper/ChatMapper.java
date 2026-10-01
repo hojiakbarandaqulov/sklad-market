@@ -48,6 +48,8 @@ public class ChatMapper {
         response.setLastMessage(lastMessage);
         response.setUnreadCount(unreadCount);
         response.setProduct(product);
+        response.setApplicationId(thread.getApplicationId());
+        response.setVacancyId(thread.getVacancyId());
         return response;
     }
 

@@ -64,6 +64,11 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(401).body(messageService.getMessage("auth.unauthorized"));
     }
 
+    @ExceptionHandler(org.springframework.web.server.ResponseStatusException.class)
+    public ResponseEntity<String> handleStatus(org.springframework.web.server.ResponseStatusException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handle(RuntimeException e) {
         log.error("Unexpected chat-service error", e);

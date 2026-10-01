@@ -25,4 +25,6 @@ public class ChatThreadResponse {
 
     /** Chat mahsulotdan boshlangan bo'lsa mahsulot haqida qisqa ma'lumot. */
     private ChatProductSummaryResponse product;
+    @JsonProperty("application_id") private Long applicationId;
+    @JsonProperty("vacancy_id") private Long vacancyId;
 }

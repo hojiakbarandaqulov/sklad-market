@@ -48,6 +48,9 @@ public class JobApplication extends BaseEntity {
     // Tizimda yaratilgan Resume yozuvining ID si; fayl ID si emas.
     @Column(nullable = false)
     private Long resumeId;
+    private Long chatThreadId;
+    private boolean chatPending = false;
+    private Instant chatNextAttemptAt;
 
     // Arizaga oxirgi biriktirilgan rezyumening mustaqil nusxasi.
     @Column(columnDefinition = "TEXT")
