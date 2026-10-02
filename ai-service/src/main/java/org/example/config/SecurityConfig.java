@@ -51,6 +51,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/ai/guest/status").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/api/v1/ai/guest/session", "/api/v1/ai/guest/messages").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));

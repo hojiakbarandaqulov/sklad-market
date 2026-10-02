@@ -18,6 +18,17 @@ import java.util.Map;
 @Configuration
 public class AiExecutorConfig {
 
+    @Bean(name = "aiGuestExecutor")
+    public ThreadPoolTaskExecutor aiGuestExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setThreadNamePrefix("ai-guest-");
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
+        executor.setQueueCapacity(4);
+        executor.initialize();
+        return executor;
+    }
+
     @Bean(name = "aiChatExecutor")
     public ThreadPoolTaskExecutor aiChatExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

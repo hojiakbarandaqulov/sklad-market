@@ -22,6 +22,12 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(org.example.ai.guest.GuestTrialException.class)
+    public ResponseEntity<ApiResponse<Void>> handleGuest(org.example.ai.guest.GuestTrialException error) {
+        return ResponseEntity.status(error.status()).header("X-AI-Error-Code", error.code())
+                .header("Cache-Control", "no-store").body(ApiResponse.errorResponse(error.code()));
+    }
+
     @ExceptionHandler(AiNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleNotFound(AiNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.errorResponse(e.getMessage()));
