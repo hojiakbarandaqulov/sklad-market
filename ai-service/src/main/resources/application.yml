@@ -32,6 +32,11 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka/
 
 ai:
+  guest:
+    trusted-proxies: ${AI_GUEST_TRUSTED_PROXIES:}
+    # Persistent total trial allowance (default 5) is controlled by Admin/Super Admin in the UI.
+    ip-daily-messages: ${AI_GUEST_IP_DAILY_MESSAGES:30}
+    global-daily-messages: ${AI_GUEST_GLOBAL_DAILY_MESSAGES:1000}
   history:
     cleanup-enabled: ${AI_HISTORY_CLEANUP_ENABLED:false}
     recovery-days: ${AI_HISTORY_RECOVERY_DAYS:30}
