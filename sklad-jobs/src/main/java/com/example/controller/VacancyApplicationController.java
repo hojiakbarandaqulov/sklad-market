@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/vacancies/{id}/applications")
 @PreAuthorize("hasRole('BUYER')")
 public class VacancyApplicationController {
+
     private final JobApplicationService jobApplicationService;
 
     @PostMapping @ResponseStatus(HttpStatus.CREATED)

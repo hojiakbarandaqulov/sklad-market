@@ -10,18 +10,6 @@
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="Merge remote-tracking branch 'origin/main'">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/dto/chat/ChatThreadResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/dto/chat/ChatThreadResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/mapper/ChatMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/mapper/ChatMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/SkladJobsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/SkladJobsApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/controller/JobApplicationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/controller/JobApplicationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/application/JobApplicationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/application/JobApplicationDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/JobApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/JobApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/JobApplicationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/JobApplicationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/JobApplicationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/JobApplicationServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

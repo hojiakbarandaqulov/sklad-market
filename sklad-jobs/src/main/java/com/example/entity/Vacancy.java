@@ -38,7 +38,7 @@ public class Vacancy extends BaseEntity {
     private String requirements;
     @Column(columnDefinition = "TEXT")
     private String workingConditions;
-    private Boolean showContacts=false;
+    private Boolean showContacts = false;
     private Instant publishedAt;
 
 }

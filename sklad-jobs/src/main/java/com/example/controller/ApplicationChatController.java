@@ -18,4 +18,5 @@ public class ApplicationChatController {
     public ApiResponse<ApplicationChatDTO> open(@PathVariable Long id) {
         return ApiResponse.successResponse(service.open(id));
     }
+
 }

@@ -67,7 +67,6 @@ public class VacancyController {
         return vacancyService.archiveVacancy(vacancyId, language);
     }
 
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("admin/{vacancyId}/moderation")
     public ApiResponse<String> vacancyModeration(@PathVariable Long vacancyId,
