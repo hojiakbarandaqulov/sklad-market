@@ -36,6 +36,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final org.example.service.CategorySearchService categorySearchService;
     private final FileClient fileClient;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
@@ -81,7 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setSlug(request.getSlug());
         category.setSortOrder(request.getSortOrder());
         category.setIsActive(request.getIsActive());
-        Category saved = categoryRepository.save(category);
+        Category saved = saveAndIndex(category);
 
         return modelMapper.map(saved, CategoryResponse.class);
     }
@@ -142,7 +143,7 @@ public class CategoryServiceImpl implements CategoryService {
             category.setIconId(upload.getData().getId());
             category.setIconUrl(upload.getData().getUrl());
 
-            Category saved = categoryRepository.save(category);
+            Category saved = saveAndIndex(category);
 
             // Eski rasm bo'lsa, keyin o'chiramiz
             if (oldIconId != null && !oldIconId.isBlank()) {
@@ -156,8 +157,7 @@ public class CategoryServiceImpl implements CategoryService {
             return modelMapper.map(saved, CategoryResponse.class);
         }
 
-        // Rasm yuborilmagan bo'lsa, eskisini saqlab qoladi
-        Category saved = categoryRepository.save(category);
+        Category saved = saveAndIndex(category);
         return modelMapper.map(saved, CategoryResponse.class);
     }
 
@@ -165,7 +165,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Boolean delete(Long id, AppLanguage language) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new AppBadException(messageService.getMessage("category.not.found", language)));
         category.setIsActive(false);
-        categoryRepository.save(category);
+        saveAndIndex(category);
         return true;
     }
 
@@ -188,7 +188,7 @@ public class CategoryServiceImpl implements CategoryService {
                 Sort.by(Sort.Direction.ASC, "sortOrder")
         );
 
-        return categoryRepository.searchByName(query.trim(), sortedPageable)
+        return categorySearchService.search(query == null ? "" : query.trim(), sortedPageable)
                 .map(category -> toCategoryResponse(category, language));
     }
 
@@ -243,13 +243,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private String resolveName(Category category, AppLanguage language) {
-        return switch (language) {
+        String preferred = switch (language == null ? AppLanguage.UZ : language) {
             case EN -> category.getNameEn();
             case RU -> category.getNameRu();
             default -> category.getNameUz();
         };
+        if (preferred != null && !preferred.isBlank()) {
+            return preferred;
+        }
+        return Stream.of(category.getNameUz(), category.getNameRu(), category.getNameEn(), category.getSlug())
+                .filter(value -> value != null && !value.isBlank()).findFirst().orElse("");
     }
-
     private CategoryResponse toCategoryResponse(Category category, AppLanguage language) {
         CategoryResponse response = new CategoryResponse();
         response.setId(category.getId());
@@ -259,12 +263,16 @@ public class CategoryServiceImpl implements CategoryService {
         response.setIconId(category.getIconId());
         response.setIconUrl(category.getIconUrl());
 
-        switch (language) {
-            case EN -> response.setNameEn(category.getNameEn());
-            case RU -> response.setNameRu(category.getNameRu());
-            case UZ -> response.setNameUz(category.getNameUz());
-        }
+        response.setNameUz(category.getNameUz());
+        response.setNameRu(category.getNameRu());
+        response.setNameEn(category.getNameEn());
+        response.setName(resolveName(category, language));
 
         return response;
+    }
+    private Category saveAndIndex(Category category) {
+        Category saved = categoryRepository.save(category);
+        categorySearchService.index(saved);
+        return saved;
     }
 }

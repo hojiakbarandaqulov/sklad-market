@@ -25,6 +25,7 @@ import java.util.List;
 public class AdminCategoryServiceImpl implements AdminCategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final org.example.service.CategorySearchService categorySearchService;
     private final CategoryAttributeRepository categoryAttributeRepository;
     private final ResourceBundleService messageService;
 
@@ -45,7 +46,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
 
         Category category = new Category();
         applyCategoryFields(category, request, language);
-        return toCategoryResponse(categoryRepository.save(category));
+        return toCategoryResponse(saveAndIndex(category));
     }
 
     @Override
@@ -57,7 +58,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         }
 
         applyCategoryFields(category, request, language);
-        return toCategoryResponse(categoryRepository.save(category));
+        return toCategoryResponse(saveAndIndex(category));
     }
 
     @Override
@@ -65,7 +66,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     public void archiveCategory(Long id, AppLanguage language) {
         Category category = getCategory(id, language);
         category.setIsActive(Boolean.FALSE);
-        categoryRepository.save(category);
+        saveAndIndex(category);
     }
 
     @Override
@@ -174,5 +175,10 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         response.setOptionsJson(attribute.getOptionsJson());
         response.setSortOrder(attribute.getSortOrder());
         return response;
+    }
+    private Category saveAndIndex(Category category) {
+        Category saved = categoryRepository.save(category);
+        categorySearchService.index(saved);
+        return saved;
     }
 }

@@ -2,6 +2,8 @@ server:
   url: ${server.domain}:${server.port}
 
 spring:
+  elasticsearch:
+    uris: ${SPRING_ELASTICSEARCH_URIS:http://localhost:9200}
   application:
     name: category-service
   profiles:

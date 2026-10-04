@@ -30,6 +30,15 @@ import java.util.Map;
 public class AdminCategoryController {
 
     private final AdminCategoryService adminCategoryService;
+    private final org.example.service.CategorySearchService categorySearchService;
+
+    @PostMapping("/search/reindex")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
+    public ApiResponse<Boolean> reindexSearch() {
+        categorySearchService.reindex();
+        return ApiResponse.successResponse(true);
+    }
+
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")

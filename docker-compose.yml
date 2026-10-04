@@ -243,6 +243,7 @@
         SERVER_ADDRESS: 127.0.0.1
         SERVER_PORT: 8084
         SPRING_APPLICATION_NAME: category-service
+        SPRING_ELASTICSEARCH_URIS: http://localhost:9200
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_category
 
     product-service:
