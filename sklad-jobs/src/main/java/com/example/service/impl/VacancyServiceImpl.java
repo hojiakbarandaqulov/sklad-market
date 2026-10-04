@@ -192,7 +192,6 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setRequirements(request.getRequirements());
         vacancy.setWorkingConditions(request.getWorkingConditions());
         vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
-        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
         return vacancy;
     }
 
