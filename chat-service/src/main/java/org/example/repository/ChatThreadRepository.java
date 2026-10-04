@@ -12,15 +12,16 @@ import java.util.Optional;
 
 public interface ChatThreadRepository extends JpaRepository<ChatThread, Long> {
     Optional<ChatThread> findByApplicationId(Long applicationId);
+
     @org.springframework.data.jpa.repository.Modifying
-    @Query(value="""
-        insert into chat_threads (application_id,vacancy_id,buyer_id,seller_company_id,
-            buyer_hidden,seller_hidden,deleted,created_date,modified_date)
-        values (:applicationId,:vacancyId,:candidateId,:companyId,false,false,false,current_timestamp,current_timestamp)
-        on conflict (application_id) do nothing
-        """,nativeQuery=true)
-    int insertJobThread(@Param("applicationId") Long applicationId,@Param("vacancyId") Long vacancyId,
-                        @Param("candidateId") Long candidateId,@Param("companyId") Long companyId);
+    @Query(value = """
+            insert into chat_threads (application_id,vacancy_id,buyer_id,seller_company_id,
+                buyer_hidden,seller_hidden,deleted,created_date,modified_date)
+            values (:applicationId,:vacancyId,:candidateId,:companyId,false,false,false,current_timestamp,current_timestamp)
+            on conflict (application_id) do nothing
+            """, nativeQuery = true)
+    int insertJobThread(@Param("applicationId") Long applicationId, @Param("vacancyId") Long vacancyId,
+                        @Param("candidateId") Long candidateId, @Param("companyId") Long companyId);
 
     @Query("""
             select t from ChatThread t

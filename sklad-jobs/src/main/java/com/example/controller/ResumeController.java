@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.*;
 public class ResumeController {
     private final ResumeService resumeService;
 
+    @PreAuthorize("hasRole('BUYER')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<ResumeDTO> createResume(@RequestBody @Valid ResumeRequest request,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(resumeService.createResume(request, language));
     }
-
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping
     public ApiResponse<PageImpl<ResumeDTO>> getMyResumes(
             @RequestParam(defaultValue = "1") int page,
@@ -34,12 +35,14 @@ public class ResumeController {
         return ApiResponse.successResponse(resumeService.getMyResumes(page, perPage, language));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping("/{id}")
     public ApiResponse<ResumeDTO> getResume(@PathVariable Long id,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(resumeService.getResume(id, language));
     }
 
+    @PreAuthorize("hasRole('BUYER')")
     @PutMapping("/{id}")
     public ApiResponse<ResumeDTO> updateResume(@PathVariable Long id,
             @RequestBody @Valid ResumeRequest request,
@@ -47,6 +50,7 @@ public class ResumeController {
         return ApiResponse.successResponse(resumeService.updateResume(id, request, language));
     }
 
+    @PreAuthorize("hasRole('BUYER')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteResume(@PathVariable Long id,

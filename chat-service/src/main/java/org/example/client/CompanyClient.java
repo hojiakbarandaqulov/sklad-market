@@ -16,10 +16,10 @@ import java.util.List;
 public interface CompanyClient {
 
     @GetMapping("/internal/companies/{companyId}/ownership-check")
-    CompanyOwnershipResponse checkOwnership(@PathVariable Long companyId, @RequestParam Long buyerId);
+    CompanyOwnershipResponse checkOwnership(@PathVariable("companyId") Long companyId, @RequestParam("sellerId") Long sellerId);
 
     @GetMapping("/internal/companies/owned")
-    List<Long> getOwnedCompanyIds(@RequestParam Long sellerId);
+    List<Long> getOwnedCompanyIds(@RequestParam("sellerId") Long sellerId);
 
     @GetMapping("/internal/companies/{companyId}/summary")
     CompanySummaryResponse getSummary(@PathVariable Long companyId);

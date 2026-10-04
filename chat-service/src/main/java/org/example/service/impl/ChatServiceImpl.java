@@ -374,7 +374,7 @@ public class ChatServiceImpl implements ChatService {
                 resolveOtherParty(thread, participantType),
                 lastMessage == null ? null : toLastMessageResponse(lastMessage),
                 unreadCount,
-                resolveProduct(thread.getProductId())
+                thread.getApplicationId() == null ? resolveProduct(thread.getProductId()) : null
         );
     }
 
