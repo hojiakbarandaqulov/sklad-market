@@ -9,7 +9,6 @@ import com.example.service.ApplicationChatService;
 import com.example.utils.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +22,6 @@ public class ApplicationChatServiceImpl implements ApplicationChatService {
     private final JobApplicationRepository repository;
     private final ChatClient chatClient;
     private final CompanyClient companyClient;
-    @Value("${jobs.chat.internal-token:}")
-    private String token;
 
     @Override
     @Transactional
@@ -61,9 +58,8 @@ public class ApplicationChatServiceImpl implements ApplicationChatService {
         if (a.getChatThreadId() != null) return;
         a.setChatPending(true);
         a.setChatNextAttemptAt(Instant.now().plusSeconds(60));
-        if (token == null || token.isBlank()) return;
         try {
-            var response = chatClient.open(token, new JobChatRequest(a.getId(), a.getVacancy().getId(),
+            var response = chatClient.open(new JobChatRequest(a.getId(), a.getVacancy().getId(),
                     a.getCandidateId(), a.getVacancy().getCompanyId()));
             Long threadId = response == null ? null : response.get("threadId");
             if (threadId == null || threadId <= 0) {

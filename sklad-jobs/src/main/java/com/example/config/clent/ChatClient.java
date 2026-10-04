@@ -9,5 +9,5 @@ import java.util.Map;
 @FeignClient(name = "chat-service", configuration = ChatFeignConfiguration.class)
 public interface ChatClient {
     @PostMapping("/internal/chats/jobs")
-    Map<String, Long> open(@RequestHeader("X-Jobs-Chat-Token") String token, @RequestBody JobChatRequest request);
+    Map<String, Long> open(@RequestBody JobChatRequest request);
 }
