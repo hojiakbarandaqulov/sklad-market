@@ -68,6 +68,15 @@ public class VacancyController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("admin/moderation-queue")
+    public ApiResponse<PageImpl<VacancyDTO>> moderationQueue(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "12") int perPage,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(vacancyService.getModerationQueue(page, perPage, language));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("admin/{vacancyId}/moderation")
     public ApiResponse<String> vacancyModeration(@PathVariable Long vacancyId,
                                               @RequestParam VacancyModeration vacancyModeration,

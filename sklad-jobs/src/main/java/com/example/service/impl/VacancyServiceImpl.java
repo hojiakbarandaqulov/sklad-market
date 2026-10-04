@@ -158,6 +158,18 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
+    public PageImpl<VacancyDTO> getModerationQueue(int page, int perPage, AppLanguage language) {
+        if (page < 1 || perPage < 1 || perPage > 100) {
+            throw new AppBadException(messageService.getMessage("vacancy.filter.invalid", language));
+        }
+        Pageable pageable = PageRequest.of(page - 1, perPage, Sort.by("id").ascending());
+        Page<Vacancy> vacancies = vacancyRepository.findAllByVacancyStatusAndDeletedFalse(
+                VacancyStatus.UNDER_MODERATION, pageable);
+        return new PageImpl<>(vacancies.getContent().stream().map(this::toDTO).toList(),
+                pageable, vacancies.getTotalElements());
+    }
+
+    @Override
     public ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, AppLanguage language) {
         Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDeletedFalse(vacancyId);
         if (vacancyOptional.isEmpty()) {

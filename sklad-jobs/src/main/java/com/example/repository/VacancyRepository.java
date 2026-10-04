@@ -20,5 +20,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long>, org.spr
 
     Optional<Vacancy>  findByIdAndDeletedFalse(Long vacancyId);
 
+    org.springframework.data.domain.Page<Vacancy> findAllByVacancyStatusAndDeletedFalse(com.example.enums.VacancyStatus status, Pageable pageable);
+
     PageImpl<Vacancy> findAllByCompanyIdAndDeletedFalse(Long companyId, Pageable pageable);
 }

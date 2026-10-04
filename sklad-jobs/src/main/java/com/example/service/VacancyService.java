@@ -23,6 +23,8 @@ public interface VacancyService {
 
     ApiResponse<String> archiveVacancy(Long vacancyId, AppLanguage language);
 
+    PageImpl<VacancyDTO> getModerationQueue(int page, int perPage, AppLanguage language);
+
     ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, AppLanguage language);
 
     PageImpl<PublicVacancyDTO> getVacancies(VacancyFilter filter, AppLanguage language);
