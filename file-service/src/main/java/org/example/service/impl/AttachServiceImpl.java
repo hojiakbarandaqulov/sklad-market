@@ -137,10 +137,4 @@ public class AttachServiceImpl implements AttachService {
         }
     }
 
-    @Override
-    public AttachDto getAttach(String id) {
-
-        return null;
-    }
-
 }
