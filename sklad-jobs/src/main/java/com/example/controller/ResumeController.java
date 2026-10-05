@@ -47,12 +47,13 @@ public class ResumeController {
     }
 
     @PostMapping(value = "/{id}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasRole('BUYER')")
     public ApiResponse<ResumeImageResponse> uploadImages(@PathVariable Long id,
                                                          @RequestParam(value = "file") MultipartFile file,
                                                          @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(resumeService.uploadImages(id, file, language));
     }
+
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping("byId/{id}")
     public ApiResponse<ResumeDTO> getByIdResume(@PathVariable Long id,
