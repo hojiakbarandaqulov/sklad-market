@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/me/resumes")
-@PreAuthorize("hasRole('BUYER')")
 public class ResumeController {
     private final ResumeService resumeService;
 
