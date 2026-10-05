@@ -29,4 +29,6 @@ public interface VacancyService {
     PublicVacancyDTO getVacancy(Long id, AppLanguage language);
 
     VacancyCreateBuyerResponseDTO createVacancyBuyer(VacancyCreateBuyer vacancyDTO, AppLanguage language);
+
+    PageImpl<VacancyDTO> getMyVacancy(int page, int perPage, AppLanguage language);
 }

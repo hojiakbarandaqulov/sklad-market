@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class VacancyCreateBuyer {
     @NotNull(message = "{validation.position.name.required}")
     private String positionName;
+    private Long buyerId;
     private BigDecimal price;
     @NotNull(message = "{validation.employment.type.required}")
     private String employmentType;

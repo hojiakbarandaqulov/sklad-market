@@ -19,6 +19,7 @@ import java.time.Instant;
 public class Vacancy extends BaseEntity {
     private String positionName;
     private Long companyId;
+    private Long buyerId;
     private BigDecimal price;
     private String employmentType;
     private String workSchedule;

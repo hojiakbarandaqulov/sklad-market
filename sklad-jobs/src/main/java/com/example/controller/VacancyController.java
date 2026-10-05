@@ -28,12 +28,12 @@ public class VacancyController {
     @PreAuthorize("hasRole('BUYER')")
     @PostMapping("create/buyer")
     public ApiResponse<VacancyCreateBuyerResponseDTO> vacancyCreateBuyer(@RequestBody @Valid VacancyCreateBuyer vacancyDTO,
-                                                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+                                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         VacancyCreateBuyerResponseDTO vacancyDTOResult = vacancyService.createVacancyBuyer(vacancyDTO, language);
         return ApiResponse.successResponse(vacancyDTOResult);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("update")
     public ApiResponse<VacancyDTO> vacancyUpdate(@RequestBody @Valid VacancyRequest vacancyUpdate,
                                                  @RequestParam Long vacancyId,
@@ -47,26 +47,36 @@ public class VacancyController {
     public ApiResponse<PageImpl<VacancyDTO>> getCompanyVacancy(@RequestParam Long companyId,
                                                                @RequestParam(defaultValue = "1") int page,
                                                                @RequestParam(defaultValue = "20") int perPage,
-                                                              @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        PageImpl<VacancyDTO> vacancyDTOResult = vacancyService.getCompanyVacancy(companyId,page,perPage, language);
+                                                               @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        PageImpl<VacancyDTO> vacancyDTOResult = vacancyService.getCompanyVacancy(companyId, page, perPage, language);
         return ApiResponse.successResponse(vacancyDTOResult);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasRole('BUYER')")
+    @GetMapping("myVacancies")
+    public ApiResponse<PageImpl<VacancyDTO>> getMyVacancy(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int perPage,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        PageImpl<VacancyDTO> vacancyDTOResult = vacancyService.getMyVacancy(page, perPage, language);
+        return ApiResponse.successResponse(vacancyDTOResult);
+    }
+
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("{vacancyId}/submit")
     public ApiResponse<String> submitModerationVacancy(@PathVariable Long vacancyId,
                                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return vacancyService.submitVacancyModeration(vacancyId, language);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("{vacancyId}/close")
     public ApiResponse<String> closeVacancy(@PathVariable Long vacancyId,
                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return vacancyService.closeVacancy(vacancyId, language);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("{vacancyId}/archive")
     public ApiResponse<String> archiveVacancy(@PathVariable Long vacancyId,
                                               @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
@@ -85,8 +95,8 @@ public class VacancyController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("admin/{vacancyId}/moderation")
     public ApiResponse<String> vacancyModeration(@PathVariable Long vacancyId,
-                                              @RequestParam VacancyModeration vacancyModeration,
-                                              @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+                                                 @RequestParam VacancyModeration vacancyModeration,
+                                                 @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return vacancyService.vacancyModeration(vacancyId, vacancyModeration, language);
     }
 

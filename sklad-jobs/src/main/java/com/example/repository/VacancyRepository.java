@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import com.example.entity.Vacancy;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +24,6 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long>, org.spr
     org.springframework.data.domain.Page<Vacancy> findAllByVacancyStatusAndDeletedFalse(com.example.enums.VacancyStatus status, Pageable pageable);
 
     PageImpl<Vacancy> findAllByCompanyIdAndDeletedFalse(Long companyId, Pageable pageable);
+
+    Page<Vacancy> findByBuyerIdAndDeletedFalse(Long profileId, Pageable pageable);
 }
