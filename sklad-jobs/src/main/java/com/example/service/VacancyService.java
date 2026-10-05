@@ -1,13 +1,10 @@
 package com.example.service;
 
 import com.example.dto.ApiResponse;
-import com.example.dto.vacancy.PublicVacancyDTO;
-import com.example.dto.vacancy.VacancyFilter;
-import com.example.dto.vacancy.VacancyCreate;
-import com.example.dto.vacancy.VacancyDTO;
-import com.example.dto.vacancy.VacancyRequest;
+import com.example.dto.vacancy.*;
 import com.example.enums.AppLanguage;
 import com.example.enums.VacancyModeration;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.PageImpl;
 
 public interface VacancyService {
@@ -30,4 +27,6 @@ public interface VacancyService {
     PageImpl<PublicVacancyDTO> getVacancies(VacancyFilter filter, AppLanguage language);
 
     PublicVacancyDTO getVacancy(Long id, AppLanguage language);
+
+    VacancyCreateBuyerResponseDTO createVacancyBuyer(VacancyCreateBuyer vacancyDTO, AppLanguage language);
 }

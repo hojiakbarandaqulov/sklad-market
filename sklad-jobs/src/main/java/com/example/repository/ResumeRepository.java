@@ -11,4 +11,5 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
     Page<Resume> findAllByCandidateIdAndDeletedFalse(Long candidateId, Pageable pageable);
 
     Optional<Resume> findByIdAndDeletedFalse(Long id);
+
 }

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class ResumeDTO {
     private Long id;
     private Long candidateId;
+    private String fileId;
     private String title;
     private String fullName;
     private String phone;

@@ -2,9 +2,7 @@ package com.example.service.impl;
 
 import com.example.config.clent.CompanyClient;
 import com.example.dto.ApiResponse;
-import com.example.dto.vacancy.PublicVacancyDTO;
-import com.example.dto.vacancy.VacancyFilter;
-import com.example.dto.vacancy.CompanySummaryDTO;
+import com.example.dto.vacancy.*;
 import com.example.exp.AppNotFoundException;
 import com.example.repository.specification.VacancySpecifications;
 import org.springframework.data.domain.Sort;
@@ -12,9 +10,6 @@ import org.springframework.data.domain.Sort;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.dto.vacancy.VacancyCreate;
-import com.example.dto.vacancy.VacancyDTO;
-import com.example.dto.vacancy.VacancyRequest;
 import com.example.entity.Vacancy;
 import com.example.enums.AppLanguage;
 import com.example.enums.VacancyModeration;
@@ -274,6 +269,32 @@ public class VacancyServiceImpl implements VacancyService {
             }
         }
         return dto;
+    }
+
+    @Override
+    public VacancyCreateBuyerResponseDTO createVacancyBuyer(VacancyCreateBuyer vacancyDTO, AppLanguage language) {
+        Vacancy savedVacancy = vacancyRepository.save(toEntityBuyer(vacancyDTO));
+        return modelMapper.map(savedVacancy, VacancyCreateBuyerResponseDTO.class);
+    }
+
+    private Vacancy toEntityBuyer(VacancyCreateBuyer request) {
+        Vacancy vacancy = new Vacancy();
+        vacancy.setPositionName(request.getPositionName());
+        vacancy.setPrice(request.getPrice());
+        vacancy.setEmploymentType(request.getEmploymentType());
+        vacancy.setWorkSchedule(request.getWorkSchedule());
+        vacancy.setShortDescription(request.getShortDescription());
+        vacancy.setRegionId(request.getRegionId());
+        vacancy.setAddress(request.getAddress());
+        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
+        vacancy.setLng(request.getLng());
+        vacancy.setLat(request.getLat());
+        vacancy.setExperienceLevel(request.getExperienceLevel());
+        vacancy.setResponsibilities(request.getResponsibilities());
+        vacancy.setRequirements(request.getRequirements());
+        vacancy.setWorkingConditions(request.getWorkingConditions());
+        vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
+        return vacancy;
     }
 
     private PublicVacancyDTO toPublicDTO(Vacancy vacancy) {

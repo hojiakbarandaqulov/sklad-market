@@ -1,9 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.ApiResponse;
-import com.example.dto.vacancy.VacancyCreate;
-import com.example.dto.vacancy.VacancyDTO;
-import com.example.dto.vacancy.VacancyRequest;
+import com.example.dto.vacancy.*;
 import com.example.enums.AppLanguage;
 import com.example.enums.VacancyModeration;
 import com.example.service.VacancyService;
@@ -24,6 +22,14 @@ public class VacancyController {
     public ApiResponse<VacancyDTO> vacancyCreate(@RequestBody @Valid VacancyCreate vacancyDTO,
                                                  @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         VacancyDTO vacancyDTOResult = vacancyService.createVacancy(vacancyDTO, language);
+        return ApiResponse.successResponse(vacancyDTOResult);
+    }
+
+    @PreAuthorize("hasRole('BUYER')")
+    @PostMapping("create/buyer")
+    public ApiResponse<VacancyCreateBuyerResponseDTO> vacancyCreateBuyer(@RequestBody @Valid VacancyCreateBuyer vacancyDTO,
+                                                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        VacancyCreateBuyerResponseDTO vacancyDTOResult = vacancyService.createVacancyBuyer(vacancyDTO, language);
         return ApiResponse.successResponse(vacancyDTOResult);
     }
 

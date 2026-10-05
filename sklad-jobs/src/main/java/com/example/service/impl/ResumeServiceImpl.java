@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.config.clent.CompanyClient;
 import com.example.config.clent.FileClient;
 import com.example.config.clent.dto.AttachDto;
+import com.example.config.clent.dto.AttachInfoDto;
 import com.example.dto.ApiResponse;
 import com.example.dto.resume.ResumeDTO;
 import com.example.dto.resume.ResumeImageResponse;
@@ -18,6 +19,7 @@ import com.example.utils.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,6 +116,7 @@ public class ResumeServiceImpl implements ResumeService {
         resumeImageResponse.setUrl(upload.getData().getUrl());
         return resumeImageResponse;
     }
+
 
     private AppNotFoundException resumeNotFound(AppLanguage language) {
         return new AppNotFoundException(messageService.getMessage("resume.not.found", language));
