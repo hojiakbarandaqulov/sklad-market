@@ -273,19 +273,21 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public VacancyCreateBuyerResponseDTO createVacancyBuyer(VacancyCreateBuyer vacancyDTO, AppLanguage language) {
-        Vacancy savedVacancy = vacancyRepository.save(toEntityBuyer(vacancyDTO));
+        Vacancy vacancy = toEntityBuyer(vacancyDTO);
+        vacancy.setBuyerId(requireSellerProfile(language));
+        Vacancy savedVacancy = vacancyRepository.save(vacancy);
         return modelMapper.map(savedVacancy, VacancyCreateBuyerResponseDTO.class);
     }
 
     @Override
     public PageImpl<VacancyDTO> getMyVacancy(int page, int perPage, AppLanguage language) {
-        Long profileId = SpringSecurityUtil.getProfileId();
+        Long profileId = requireSellerProfile(language);
+        if (page < 1 || perPage < 1 || perPage > 100) {
+            throw new AppBadException(messageService.getMessage("vacancy.filter.invalid", language));
+        }
         Pageable pageable = PageRequest.of(page - 1, perPage, Sort.by(Sort.Order.desc("createdDate"), Sort.Order.desc("id")));
 
         Page<Vacancy> vacancies = vacancyRepository.findByBuyerIdAndDeletedFalse(profileId, pageable);
-        if (vacancies.isEmpty()) {
-            throw new AppNotFoundException(messageService.getMessage("vacancy.not.found", language));
-        }
 
         return new PageImpl<>(vacancies.getContent().stream().map(this::toDTO).toList(),
                 pageable, vacancies.getTotalElements());

@@ -28,7 +28,7 @@ public class VacancyController {
     @PreAuthorize("hasRole('BUYER')")
     @PostMapping("create/buyer")
     public ApiResponse<VacancyCreateBuyerResponseDTO> vacancyCreateBuyer(@RequestBody @Valid VacancyCreateBuyer vacancyDTO,
-                                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+                                                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         VacancyCreateBuyerResponseDTO vacancyDTOResult = vacancyService.createVacancyBuyer(vacancyDTO, language);
         return ApiResponse.successResponse(vacancyDTOResult);
     }

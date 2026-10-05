@@ -31,4 +31,5 @@ public interface VacancyService {
     VacancyCreateBuyerResponseDTO createVacancyBuyer(VacancyCreateBuyer vacancyDTO, AppLanguage language);
 
     PageImpl<VacancyDTO> getMyVacancy(int page, int perPage, AppLanguage language);
+
 }
