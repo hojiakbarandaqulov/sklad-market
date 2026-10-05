@@ -105,10 +105,11 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
+    @Transactional
     public ResumeImageResponse uploadImages(Long id, MultipartFile file, AppLanguage language) {
+        Resume resume = findOwnedResume(id, requireProfile(language), language);
         ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
-        Optional<Resume> byIdAndDeletedFalse = resumeRepository.findByIdAndDeletedFalse(id);
-        Resume resume = byIdAndDeletedFalse.get();
+
         resume.setFileId(upload.getData().getId());
         resumeRepository.save(resume);
         ResumeImageResponse resumeImageResponse = new ResumeImageResponse();
