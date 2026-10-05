@@ -1,9 +1,11 @@
 package com.example.service;
 
 import com.example.dto.resume.ResumeDTO;
+import com.example.dto.resume.ResumeImageResponse;
 import com.example.dto.resume.ResumeRequest;
 import com.example.enums.AppLanguage;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ResumeService {
     ResumeDTO createResume(ResumeRequest request, AppLanguage language);
@@ -13,4 +15,6 @@ public interface ResumeService {
     void deleteResume(Long id, AppLanguage language);
 
     ResumeDTO getByIdResume(Long id, AppLanguage language);
+
+    ResumeImageResponse uploadImages(Long id, MultipartFile file, AppLanguage language);
 }

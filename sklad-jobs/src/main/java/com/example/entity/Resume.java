@@ -22,6 +22,8 @@ public class Resume extends BaseEntity {
     @Column(name = "candidate_id", nullable = false)
     private Long candidateId;
 
+    private String fileId;
+
     // Rezyume nomi: masalan, "Java dasturchi".
     @Column(nullable = false)
     private String title;

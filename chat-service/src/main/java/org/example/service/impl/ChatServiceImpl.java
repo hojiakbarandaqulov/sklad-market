@@ -178,6 +178,7 @@ public class ChatServiceImpl implements ChatService {
             ChatThread existingThread = existingThreadOptional.get();
 
             existingThread.setBuyerHidden(Boolean.FALSE);
+            existingThread.setSellerHidden(Boolean.FALSE);
             ChatThread reopenedThread = chatThreadRepository.save(existingThread);
 
             return chatMapper.toCreateResponse(reopenedThread, false);

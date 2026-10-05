@@ -1,6 +1,11 @@
 package com.example.service.impl;
 
+import com.example.config.clent.CompanyClient;
+import com.example.config.clent.FileClient;
+import com.example.config.clent.dto.AttachDto;
+import com.example.dto.ApiResponse;
 import com.example.dto.resume.ResumeDTO;
+import com.example.dto.resume.ResumeImageResponse;
 import com.example.dto.resume.ResumeRequest;
 import com.example.entity.Resume;
 import com.example.enums.AppLanguage;
@@ -16,6 +21,7 @@ import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -27,7 +33,8 @@ public class ResumeServiceImpl implements ResumeService {
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
     private final com.example.repository.JobApplicationRepository applicationRepository;
-    private final com.example.config.clent.CompanyClient companyClient;
+    private final CompanyClient companyClient;
+    private final FileClient fileClient;
 
     @Override
     @Transactional
@@ -89,10 +96,23 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public ResumeDTO getByIdResume(Long id, AppLanguage language) {
         Optional<Resume> byIdAndDeletedFalse = resumeRepository.findByIdAndDeletedFalse(id);
-        if (byIdAndDeletedFalse.isEmpty()){
+        if (byIdAndDeletedFalse.isEmpty()) {
             throw resumeNotFound(language);
         }
         return toDTO(byIdAndDeletedFalse.get());
+    }
+
+    @Override
+    public ResumeImageResponse uploadImages(Long id, MultipartFile file, AppLanguage language) {
+        ApiResponse<AttachDto> upload = fileClient.upload(file, language.name());
+        Optional<Resume> byIdAndDeletedFalse = resumeRepository.findByIdAndDeletedFalse(id);
+        Resume resume = byIdAndDeletedFalse.get();
+        resume.setFileId(upload.getData().getId());
+        resumeRepository.save(resume);
+        ResumeImageResponse resumeImageResponse = new ResumeImageResponse();
+        resumeImageResponse.setId(resume.getFileId());
+        resumeImageResponse.setUrl(upload.getData().getUrl());
+        return resumeImageResponse;
     }
 
     private AppNotFoundException resumeNotFound(AppLanguage language) {
