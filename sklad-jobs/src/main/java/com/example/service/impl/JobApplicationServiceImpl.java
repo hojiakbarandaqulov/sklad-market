@@ -160,6 +160,36 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         return applications.map(this::toDTO);
     }
 
+    @Override
+    public ResumeDTO getApplicationResume(Long id, AppLanguage language) {
+        Long viewerId = requireProfile(language);
+        validateId(id, language);
+        JobApplication application = applicationRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> notFound(language));
+        if (!viewerId.equals(application.getCandidateId())) {
+            requireCompanyOwner(application.getVacancy().getCompanyId());
+        }
+
+        // Read the submitted copy even if the original resume was edited or deleted.
+        String submittedResume = application.getResumeSnapshot();
+        if (submittedResume != null && !submittedResume.isBlank()) {
+            try {
+                ResumeDTO resume = objectMapper.readValue(submittedResume, ResumeDTO.class);
+                if (resume == null) throw new IllegalStateException("Empty resume snapshot");
+                return resume;
+            } catch (JsonProcessingException e) {
+                throw new IllegalStateException("Cannot deserialize resume snapshot", e);
+            }
+        }
+
+        // Older applications may not have a stored snapshot.
+        Resume resume = resumeRepository.findByIdAndCandidateIdAndDeletedFalse(
+                        application.getResumeId(), application.getCandidateId())
+                .orElseThrow(() -> new AppNotFoundException(
+                        messageService.getMessage("resume.not.found", language)));
+        return modelMapper.map(resume, ResumeDTO.class);
+    }
+
     private void requireCompanyOwner(Long companyId) {
         Long userId=SpringSecurityUtil.getProfileId();
         if(userId==null) throw new org.springframework.security.access.AccessDeniedException("Authentication required");

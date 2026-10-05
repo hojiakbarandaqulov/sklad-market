@@ -40,6 +40,14 @@ public class JobApplicationController {
         return ApiResponse.successResponse(jobApplicationService.withdraw(id, language));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
+    @GetMapping("/{id}/resume")
+    public ApiResponse<com.example.dto.resume.ResumeDTO> getApplicationResume(
+            @PathVariable Long id,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(jobApplicationService.getApplicationResume(id, language));
+    }
+
     @PatchMapping("/{id}/resume")
     public ApiResponse<JobApplicationDTO> replaceResume(@PathVariable Long id, @RequestBody @Valid ApplicationResumeRequest request,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {

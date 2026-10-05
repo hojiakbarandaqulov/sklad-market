@@ -8,6 +8,7 @@ public interface JobApplicationService {
     JobApplicationDTO create(Long vacancyId,ApplicationCreateRequest request,AppLanguage language);
     PageImpl<JobApplicationDTO> getMyApplications(ApplicationStatus status,int page,int perPage,AppLanguage language);
     JobApplicationDTO getMyApplication(Long id,AppLanguage language);
+    com.example.dto.resume.ResumeDTO getApplicationResume(Long id, AppLanguage language);
     JobApplicationDTO withdraw(Long id,AppLanguage language);
     JobApplicationDTO replaceResume(Long id,ApplicationResumeRequest request,AppLanguage language);
 
