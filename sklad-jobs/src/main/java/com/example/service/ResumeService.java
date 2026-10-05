@@ -12,4 +12,5 @@ public interface ResumeService {
     ResumeDTO updateResume(Long id, ResumeRequest request, AppLanguage language);
     void deleteResume(Long id, AppLanguage language);
 
+    ResumeDTO getByIdResume(Long id, AppLanguage language);
 }

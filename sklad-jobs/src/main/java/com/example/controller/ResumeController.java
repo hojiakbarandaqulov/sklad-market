@@ -41,6 +41,13 @@ public class ResumeController {
         return ApiResponse.successResponse(resumeService.getResume(id, language));
     }
 
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
+    @GetMapping("byId/{id}")
+    public ApiResponse<ResumeDTO> getByIdResume(@PathVariable Long id,
+                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(resumeService.getByIdResume(id, language));
+    }
+
     @PreAuthorize("hasRole('BUYER')")
     @PutMapping("/{id}")
     public ApiResponse<ResumeDTO> updateResume(@PathVariable Long id,

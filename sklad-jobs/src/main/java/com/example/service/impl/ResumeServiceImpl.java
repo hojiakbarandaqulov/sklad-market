@@ -17,6 +17,8 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -54,7 +56,7 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDTO getResume(Long id, AppLanguage language) {
         Long viewerId = requireProfile(language);
         validateResumeId(id, language);
-        var owned = resumeRepository.findByIdAndCandidateIdAndDeletedFalse(id, viewerId);
+        Optional<Resume> owned = resumeRepository.findByIdAndCandidateIdAndDeletedFalse(id, viewerId);
         if (owned.isPresent()) return toDTO(owned.get());
 
         Resume resume = resumeRepository.findByIdAndDeletedFalse(id)
@@ -82,6 +84,15 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = findOwnedResume(id, requireProfile(language), language);
         resume.setDeleted(true);
         resumeRepository.save(resume);
+    }
+
+    @Override
+    public ResumeDTO getByIdResume(Long id, AppLanguage language) {
+        Optional<Resume> byIdAndDeletedFalse = resumeRepository.findByIdAndDeletedFalse(id);
+        if (byIdAndDeletedFalse.isEmpty()){
+            throw resumeNotFound(language);
+        }
+        return toDTO(byIdAndDeletedFalse.get());
     }
 
     private AppNotFoundException resumeNotFound(AppLanguage language) {
