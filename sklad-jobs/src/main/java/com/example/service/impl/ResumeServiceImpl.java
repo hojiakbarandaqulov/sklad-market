@@ -24,6 +24,8 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
+    private final com.example.repository.JobApplicationRepository applicationRepository;
+    private final com.example.config.clent.CompanyClient companyClient;
 
     @Override
     @Transactional
@@ -50,7 +52,20 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public ResumeDTO getResume(Long id, AppLanguage language) {
-        return toDTO(findOwnedResume(id, requireProfile(language), language));
+        Long viewerId = requireProfile(language);
+        validateResumeId(id, language);
+        var owned = resumeRepository.findByIdAndCandidateIdAndDeletedFalse(id, viewerId);
+        if (owned.isPresent()) return toDTO(owned.get());
+
+        Resume resume = resumeRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> resumeNotFound(language));
+        var companyIds = companyClient.getOwnedCompanyIds(viewerId);
+        if (companyIds != null && !companyIds.isEmpty()
+                && applicationRepository.existsResumeApplicationForCompanies(
+                id, resume.getCandidateId(), companyIds)) {
+            return toDTO(resume);
+        }
+        throw resumeNotFound(language);
     }
 
     @Override
@@ -67,6 +82,16 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = findOwnedResume(id, requireProfile(language), language);
         resume.setDeleted(true);
         resumeRepository.save(resume);
+    }
+
+    private AppNotFoundException resumeNotFound(AppLanguage language) {
+        return new AppNotFoundException(messageService.getMessage("resume.not.found", language));
+    }
+
+    private void validateResumeId(Long id, AppLanguage language) {
+        if (id == null || id <= 0) {
+            throw new AppBadException(messageService.getMessage("resume.id.invalid", language));
+        }
     }
 
     private Resume findOwnedResume(Long id, Long candidateId, AppLanguage language) {

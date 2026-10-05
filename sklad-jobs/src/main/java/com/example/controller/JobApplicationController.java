@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.ApiResponse;
 import com.example.dto.application.*;
+import com.example.dto.resume.ResumeDTO;
 import com.example.enums.*;
 import com.example.service.JobApplicationService;
 import jakarta.validation.Valid;
@@ -42,7 +43,7 @@ public class JobApplicationController {
 
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping("/{id}/resume")
-    public ApiResponse<com.example.dto.resume.ResumeDTO> getApplicationResume(
+    public ApiResponse<ResumeDTO> getApplicationResume(
             @PathVariable Long id,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(jobApplicationService.getApplicationResume(id, language));

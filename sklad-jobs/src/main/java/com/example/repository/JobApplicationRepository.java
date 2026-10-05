@@ -30,5 +30,12 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication,L
 
     Optional<JobApplication> findByIdAndDeletedFalse(Long id);
 
+    @Query("select (count(a) > 0) from JobApplication a where a.resumeId = :resumeId " +
+            "and a.candidateId = :candidateId and a.deleted = false " +
+            "and a.vacancy.deleted = false and a.vacancy.companyId in :companyIds")
+    boolean existsResumeApplicationForCompanies(@Param("resumeId") Long resumeId,
+            @Param("candidateId") Long candidateId,
+            @Param("companyIds") java.util.List<Long> companyIds);
+
     Page<JobApplication> findByVacancyIdAndDeletedFalseAndStatus(Long vacancy_id, ApplicationStatus status, Pageable pageable);
 }
