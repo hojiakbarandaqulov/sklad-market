@@ -33,7 +33,7 @@ public class VacancyController {
         return ApiResponse.successResponse(vacancyDTOResult);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("update")
     public ApiResponse<VacancyDTO> vacancyUpdate(@RequestBody @Valid VacancyRequest vacancyUpdate,
                                                  @RequestParam Long vacancyId,
@@ -52,21 +52,21 @@ public class VacancyController {
         return ApiResponse.successResponse(vacancyDTOResult);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("{vacancyId}/submit")
     public ApiResponse<String> submitModerationVacancy(@PathVariable Long vacancyId,
                                                        @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return vacancyService.submitVacancyModeration(vacancyId, language);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("{vacancyId}/close")
     public ApiResponse<String> closeVacancy(@PathVariable Long vacancyId,
                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return vacancyService.closeVacancy(vacancyId, language);
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
     @PostMapping("{vacancyId}/archive")
     public ApiResponse<String> archiveVacancy(@PathVariable Long vacancyId,
                                               @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
