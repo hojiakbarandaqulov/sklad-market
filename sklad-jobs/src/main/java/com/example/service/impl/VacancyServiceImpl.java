@@ -288,7 +288,9 @@ public class VacancyServiceImpl implements VacancyService {
         Pageable pageable = PageRequest.of(page - 1, perPage, Sort.by(Sort.Order.desc("createdDate"), Sort.Order.desc("id")));
 
         Page<Vacancy> vacancies = vacancyRepository.findByBuyerIdAndDeletedFalse(profileId, pageable);
-
+        if (vacancies.isEmpty()){
+            throw  new AppBadException(messageService.getMessage("vacancy.not.found", language));
+        }
         return new PageImpl<>(vacancies.getContent().stream().map(this::toDTO).toList(),
                 pageable, vacancies.getTotalElements());
     }
