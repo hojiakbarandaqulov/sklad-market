@@ -63,7 +63,7 @@ public class JobApplicationController {
         return ApiResponse.successResponse(jobApplicationService.applicationStatusResponse(id, applicationResponseStatus, language));
     }
 
-    @PreAuthorize("hasRole('SELLER')")
+    @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping("/vacancy/{vacancyId}")
     public ApiResponse<Page<JobApplicationDTO>> getApplicationVacancy(@PathVariable Long vacancyId,
                                                                 @RequestParam(defaultValue = "NEW") GetNewApplicationStatus status,
