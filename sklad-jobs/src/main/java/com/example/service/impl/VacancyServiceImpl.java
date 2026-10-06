@@ -243,7 +243,7 @@ public class VacancyServiceImpl implements VacancyService {
             throw new AppBadException(messageService.getMessage("vacancy.not.found", language));
         }
         Vacancy vacancy = vacancyOptional.get();
-        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
+        vacancy.setVacancyStatus(VacancyStatus.PUBLISHED);
         vacancyRepository.save(vacancy);
         return ApiResponse.successResponse(messageService.getMessage("vacancy.archive.success", language));
     }
