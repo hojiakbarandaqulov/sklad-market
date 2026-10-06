@@ -32,4 +32,5 @@ public interface VacancyService {
 
     PageImpl<VacancyDTO> getMyVacancy(int page, int perPage, AppLanguage language);
 
+    ApiResponse<String> archiveExtVacancy(Long vacancyId, AppLanguage language);
 }

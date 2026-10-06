@@ -181,63 +181,6 @@ public class VacancyServiceImpl implements VacancyService {
         return ApiResponse.successResponse(messageService.getMessage("vacancy.moderation.success", language));
     }
 
-    private Vacancy toEntity(VacancyCreate request) {
-        Vacancy vacancy = new Vacancy();
-        vacancy.setCompanyId(request.getCompanyId());
-        vacancy.setPositionName(request.getPositionName());
-        vacancy.setPrice(request.getPrice());
-        vacancy.setEmploymentType(request.getEmploymentType());
-        vacancy.setWorkSchedule(request.getWorkSchedule());
-        vacancy.setShortDescription(request.getShortDescription());
-        vacancy.setRegionId(request.getRegionId());
-        vacancy.setAddress(request.getAddress());
-        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
-        vacancy.setLng(request.getLng());
-        vacancy.setLat(request.getLat());
-        vacancy.setExperienceLevel(request.getExperienceLevel());
-        vacancy.setResponsibilities(request.getResponsibilities());
-        vacancy.setRequirements(request.getRequirements());
-        vacancy.setWorkingConditions(request.getWorkingConditions());
-        vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
-        return vacancy;
-    }
-
-    private Vacancy toEntityUpdate(VacancyRequest request) {
-        Vacancy vacancy = new Vacancy();
-        vacancy.setPositionName(request.getPositionName());
-        vacancy.setPrice(request.getPrice());
-        vacancy.setEmploymentType(request.getEmploymentType());
-        vacancy.setWorkSchedule(request.getWorkSchedule());
-        vacancy.setShortDescription(request.getShortDescription());
-        vacancy.setRegionId(request.getRegionId());
-        vacancy.setAddress(request.getAddress());
-        vacancy.setLng(request.getLng());
-        vacancy.setLat(request.getLat());
-        vacancy.setExperienceLevel(request.getExperienceLevel());
-        vacancy.setResponsibilities(request.getResponsibilities());
-        vacancy.setRequirements(request.getRequirements());
-        vacancy.setWorkingConditions(request.getWorkingConditions());
-        vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
-        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
-        return vacancy;
-    }
-
-    private VacancyDTO toDTO(Vacancy vacancy) {
-        return modelMapper.map(vacancy, VacancyDTO.class);
-    }
-
-
-    private Long requireSellerProfile(AppLanguage language) {
-        Long profileId = SpringSecurityUtil.getProfileId();
-        if (profileId == null) {
-            throw new AccessDeniedException(
-                    messageService.getMessage("auth.seller.profile.required", language)
-            );
-        }
-        return profileId;
-    }
-
-
     @Override
     public PageImpl<PublicVacancyDTO> getVacancies(VacancyFilter filter, AppLanguage language) {
         if (filter.getPage() < 1 || filter.getPerPage() < 1 || filter.getPerPage() > 100 || !filter.isSalaryRangeValid())
@@ -293,6 +236,18 @@ public class VacancyServiceImpl implements VacancyService {
                 pageable, vacancies.getTotalElements());
     }
 
+    @Override
+    public ApiResponse<String> archiveExtVacancy(Long vacancyId, AppLanguage language) {
+        Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDeletedFalse(vacancyId);
+        if (vacancyOptional.isEmpty()) {
+            throw new AppBadException(messageService.getMessage("vacancy.not.found", language));
+        }
+        Vacancy vacancy = vacancyOptional.get();
+        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
+        vacancyRepository.save(vacancy);
+        return ApiResponse.successResponse(messageService.getMessage("vacancy.archive.success", language));
+    }
+
     private Vacancy toEntityBuyer(VacancyCreateBuyer request) {
         Vacancy vacancy = new Vacancy();
         vacancy.setPositionName(request.getPositionName());
@@ -326,5 +281,60 @@ public class VacancyServiceImpl implements VacancyService {
             dto.setCompanyName(company.getName());
             dto.setCompanyLogo(company.getLogoPath());
         }
+    }
+    private Vacancy toEntity(VacancyCreate request) {
+        Vacancy vacancy = new Vacancy();
+        vacancy.setCompanyId(request.getCompanyId());
+        vacancy.setPositionName(request.getPositionName());
+        vacancy.setPrice(request.getPrice());
+        vacancy.setEmploymentType(request.getEmploymentType());
+        vacancy.setWorkSchedule(request.getWorkSchedule());
+        vacancy.setShortDescription(request.getShortDescription());
+        vacancy.setRegionId(request.getRegionId());
+        vacancy.setAddress(request.getAddress());
+        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
+        vacancy.setLng(request.getLng());
+        vacancy.setLat(request.getLat());
+        vacancy.setExperienceLevel(request.getExperienceLevel());
+        vacancy.setResponsibilities(request.getResponsibilities());
+        vacancy.setRequirements(request.getRequirements());
+        vacancy.setWorkingConditions(request.getWorkingConditions());
+        vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
+        return vacancy;
+    }
+
+    private Vacancy toEntityUpdate(VacancyRequest request) {
+        Vacancy vacancy = new Vacancy();
+        vacancy.setPositionName(request.getPositionName());
+        vacancy.setPrice(request.getPrice());
+        vacancy.setEmploymentType(request.getEmploymentType());
+        vacancy.setWorkSchedule(request.getWorkSchedule());
+        vacancy.setShortDescription(request.getShortDescription());
+        vacancy.setRegionId(request.getRegionId());
+        vacancy.setAddress(request.getAddress());
+        vacancy.setLng(request.getLng());
+        vacancy.setLat(request.getLat());
+        vacancy.setExperienceLevel(request.getExperienceLevel());
+        vacancy.setResponsibilities(request.getResponsibilities());
+        vacancy.setRequirements(request.getRequirements());
+        vacancy.setWorkingConditions(request.getWorkingConditions());
+        vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
+        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
+        return vacancy;
+    }
+
+    private VacancyDTO toDTO(Vacancy vacancy) {
+        return modelMapper.map(vacancy, VacancyDTO.class);
+    }
+
+
+    private Long requireSellerProfile(AppLanguage language) {
+        Long profileId = SpringSecurityUtil.getProfileId();
+        if (profileId == null) {
+            throw new AccessDeniedException(
+                    messageService.getMessage("auth.seller.profile.required", language)
+            );
+        }
+        return profileId;
     }
 }

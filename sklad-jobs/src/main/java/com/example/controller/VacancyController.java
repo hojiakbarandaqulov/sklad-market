@@ -83,6 +83,13 @@ public class VacancyController {
         return vacancyService.archiveVacancy(vacancyId, language);
     }
 
+    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
+    @PostMapping("{vacancyId}/archive/ext")
+    public ApiResponse<String> archiveExtVacancy(@PathVariable Long vacancyId,
+                                              @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return vacancyService.archiveExtVacancy(vacancyId, language);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("admin/moderation-queue")
     public ApiResponse<PageImpl<VacancyDTO>> moderationQueue(

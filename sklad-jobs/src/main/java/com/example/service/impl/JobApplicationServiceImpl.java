@@ -137,7 +137,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public Page<JobApplicationDTO> getApplicationVacancy(Long vacancyId, GetNewApplicationStatus status, int page, int perPage) {
         var vacancy=vacancyRepository.findByIdAndDeletedFalse(vacancyId)
             .orElseThrow(()->new AppNotFoundException("Vacancy not found"));
-        requireCompanyOwner(vacancy.getCompanyId());
+        requireVacancyOwner(vacancy);
         if(page<1 || perPage<1 || perPage>100) throw new AppBadException("Invalid pagination");
         if(status==null) status=GetNewApplicationStatus.NEW;
 
@@ -188,6 +188,18 @@ public class JobApplicationServiceImpl implements JobApplicationService {
                 .orElseThrow(() -> new AppNotFoundException(
                         messageService.getMessage("resume.not.found", language)));
         return modelMapper.map(resume, ResumeDTO.class);
+    }
+
+    private void requireVacancyOwner(Vacancy vacancy) {
+        Long viewerId = SpringSecurityUtil.getProfileId();
+        if (viewerId == null || viewerId <= 0) {
+            throw new org.springframework.security.access.AccessDeniedException("Authentication required");
+        }
+        if (viewerId.equals(vacancy.getBuyerId())) return;
+        if (vacancy.getCompanyId() == null) {
+            throw new org.springframework.security.access.AccessDeniedException("Vacancy access denied");
+        }
+        requireCompanyOwner(vacancy.getCompanyId());
     }
 
     private void requireCompanyOwner(Long companyId) {
