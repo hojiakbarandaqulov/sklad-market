@@ -19,26 +19,18 @@ public class VacancyController {
 
     @PreAuthorize("hasRole('SELLER')")
     @PostMapping("create")
-    public ApiResponse<VacancyDTO> vacancyCreate(@RequestBody @Valid VacancyCreate vacancyDTO,
+    public ApiResponse<VacancyCreate> vacancyCreate(@RequestBody @Valid VacancyCreate vacancyDTO,
                                                  @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        VacancyDTO vacancyDTOResult = vacancyService.createVacancy(vacancyDTO, language);
+        VacancyCreate vacancyDTOResult = vacancyService.createVacancy(vacancyDTO, language);
         return ApiResponse.successResponse(vacancyDTOResult);
     }
 
-    @PreAuthorize("hasRole('BUYER')")
-    @PostMapping("create/buyer")
-    public ApiResponse<VacancyCreateBuyerResponseDTO> vacancyCreateBuyer(@RequestBody @Valid VacancyCreateBuyer vacancyDTO,
-                                                                             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        VacancyCreateBuyerResponseDTO vacancyDTOResult = vacancyService.createVacancyBuyer(vacancyDTO, language);
-        return ApiResponse.successResponse(vacancyDTOResult);
-    }
-
-    @PreAuthorize("hasAnyRole('SELLER','BUYER')")
+    @PreAuthorize("hasAnyRole('SELLER')")
     @PostMapping("update")
-    public ApiResponse<VacancyDTO> vacancyUpdate(@RequestBody @Valid VacancyRequest vacancyUpdate,
+    public ApiResponse<VacancyCreate> vacancyUpdate(@RequestBody @Valid VacancyRequest vacancyUpdate,
                                                  @RequestParam Long vacancyId,
                                                  @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        VacancyDTO vacancyDTOResult = vacancyService.updateVacancy(vacancyUpdate, vacancyId, language);
+        VacancyCreate vacancyDTOResult = vacancyService.updateVacancy(vacancyUpdate, vacancyId, language);
         return ApiResponse.successResponse(vacancyDTOResult);
     }
 
@@ -102,9 +94,10 @@ public class VacancyController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("admin/{vacancyId}/moderation")
     public ApiResponse<String> vacancyModeration(@PathVariable Long vacancyId,
+                                                 @RequestBody @Valid VacancyModerationComment vacancyModerationComment,
                                                  @RequestParam VacancyModeration vacancyModeration,
                                                  @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return vacancyService.vacancyModeration(vacancyId, vacancyModeration, language);
+        return vacancyService.vacancyModeration(vacancyId, vacancyModeration, vacancyModerationComment, language);
     }
 
 }

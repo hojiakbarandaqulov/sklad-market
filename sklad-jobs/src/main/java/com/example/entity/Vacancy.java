@@ -27,6 +27,7 @@ public class Vacancy extends BaseEntity {
     private Long viewsCountCache = 0L;
     @Enumerated(EnumType.STRING)
     private VacancyStatus vacancyStatus;
+    private String comment;
     private Long regionId;
     private String address;
     private String lng;

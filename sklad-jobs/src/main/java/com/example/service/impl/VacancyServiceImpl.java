@@ -43,7 +43,7 @@ public class VacancyServiceImpl implements VacancyService {
     private final ResourceBundleService messageService;
 
     @Override
-    public VacancyDTO createVacancy(VacancyCreate vacancyCreate, AppLanguage language) {
+    public VacancyCreate createVacancy(VacancyCreate vacancyCreate, AppLanguage language) {
         Long profileId = requireSellerProfile(language);
 
         List<Long> ownedCompanyIds = companyClient.getOwnedCompanyIds(profileId);
@@ -54,11 +54,11 @@ public class VacancyServiceImpl implements VacancyService {
         }
 
         Vacancy savedVacancy = vacancyRepository.save(toEntity(vacancyCreate));
-        return modelMapper.map(savedVacancy, VacancyDTO.class);
+        return modelMapper.map(savedVacancy, VacancyCreate.class);
     }
 
     @Override
-    public VacancyDTO updateVacancy(VacancyRequest vacancyUpdate, Long vacancyId, AppLanguage language) {
+    public VacancyCreate updateVacancy(VacancyRequest vacancyUpdate, Long vacancyId, AppLanguage language) {
         Optional<Vacancy> vacancy = vacancyRepository.findByIdAndDeletedFalse(vacancyId);
         if (vacancy.isEmpty()) {
             throw new AppBadException(messageService.getMessage("vacancy.not.found", language));
@@ -80,7 +80,7 @@ public class VacancyServiceImpl implements VacancyService {
         vacancyEntity.setShowContacts(Boolean.TRUE.equals(vacancyUpdate.getShowContacts()));
         vacancyEntity.setVacancyStatus(VacancyStatus.DRAFT);
         Vacancy save = vacancyRepository.save(vacancyEntity);
-        return modelMapper.map(save, VacancyDTO.class);
+        return modelMapper.map(save, VacancyCreate.class);
     }
 
     @Override
@@ -163,8 +163,9 @@ public class VacancyServiceImpl implements VacancyService {
                 pageable, vacancies.getTotalElements());
     }
 
+
     @Override
-    public ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, AppLanguage language) {
+    public ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, VacancyModerationComment vacancyModerationComment, AppLanguage language) {
         Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDeletedFalse(vacancyId);
         if (vacancyOptional.isEmpty()) {
             throw new AppBadException(messageService.getMessage("vacancy.not.found", language));
@@ -176,6 +177,7 @@ public class VacancyServiceImpl implements VacancyService {
             case PUBLISHED -> VacancyStatus.PUBLISHED;
         };
         vacancy.setVacancyStatus(status);
+        vacancy.setComment(vacancyModerationComment.getComment());
         vacancyRepository.save(vacancy);
         return ApiResponse.successResponse(messageService.getMessage("vacancy.moderation.success", language));
     }

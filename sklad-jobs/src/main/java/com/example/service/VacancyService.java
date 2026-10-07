@@ -8,9 +8,9 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.PageImpl;
 
 public interface VacancyService {
-    VacancyDTO createVacancy(VacancyCreate vacancyCreate, AppLanguage language);
+    VacancyCreate createVacancy(VacancyCreate vacancyCreate, AppLanguage language);
 
-    VacancyDTO updateVacancy(VacancyRequest vacancyUpdate, Long vacancyId, AppLanguage language);
+    VacancyCreate updateVacancy(VacancyRequest vacancyUpdate, Long vacancyId, AppLanguage language);
 
     PageImpl<VacancyDTO> getCompanyVacancy(Long vacancyId, int page, int perPage, AppLanguage language);
 
@@ -22,7 +22,7 @@ public interface VacancyService {
 
     PageImpl<VacancyDTO> getModerationQueue(int page, int perPage, AppLanguage language);
 
-    ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, AppLanguage language);
+    ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, VacancyModerationComment vacancyModerationComment, AppLanguage language);
 
     PageImpl<PublicVacancyDTO> getVacancies(VacancyFilter filter, AppLanguage language);
 

@@ -33,6 +33,8 @@ public class VacancyDTO {
     private ExperienceLevel experienceLevel;
     @NotNull(message = "{validation.requirements.required}")
     private String requirements;
+    @NotNull(message = "{validation.comment.required}")
+    private String comment;
     @NotNull(message = "{validation.working.conditions.required}")
     private String workingConditions;
     private Boolean showContacts = false;
