@@ -13,6 +13,8 @@ public interface ChatService {
     /** Login qilgan foydalanuvchining buyer va seller chatlarini qaytaradi. */
     PagedResponse<ChatThreadResponse> getThreads(int page, int perPage);
 
+    PagedResponse<ChatThreadResponse> getJobThreads(int page, int perPage);
+
     /** Buyer uchun yangi chat yaratadi yoki mavjud chatni qayta ochadi. */
     ChatCreateResponse createThread(CreateChatRequest request, AppLanguage language);
 

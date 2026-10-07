@@ -11,6 +11,21 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChatThreadRepository extends JpaRepository<ChatThread, Long> {
+    @Query("""
+            select t from ChatThread t
+            where t.deleted = false and t.buyerHidden = false
+              and t.buyerId = :buyerId and t.applicationId is not null
+              and exists (select m.id from ChatMessage m where m.thread = t and m.deleted = false)
+            """)
+    List<ChatThread> findBuyerJobThreadsWithMessages(@Param("buyerId") Long buyerId, Sort sort);
+
+    @Query("""
+            select t from ChatThread t
+            where t.deleted = false and t.sellerHidden = false
+              and t.sellerCompanyId in :companyIds and t.applicationId is not null
+              and exists (select m.id from ChatMessage m where m.thread = t and m.deleted = false)
+            """)
+    List<ChatThread> findSellerJobThreadsWithMessages(@Param("companyIds") List<Long> companyIds, Sort sort);
     Optional<ChatThread> findByApplicationId(Long applicationId);
 
     @org.springframework.data.jpa.repository.Modifying

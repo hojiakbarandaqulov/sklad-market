@@ -364,7 +364,37 @@ public class ChatServiceImpl implements ChatService {
     }
 
 
+    @Override
+    public PagedResponse<ChatThreadResponse> getJobThreads(int page, int perPage) {
+        Long userId = requireCurrentUserId();
+        validatePage(page, perPage);
+        Sort sort = Sort.by(Sort.Order.desc("lastMessageAt"), Sort.Order.desc("modifiedDate"), Sort.Order.desc("id"));
+        List<ChatThread> threads = new ArrayList<>(chatThreadRepository.findBuyerJobThreadsWithMessages(userId, sort));
+        List<Long> companyIds = getOwnedCompanyIds(userId);
+        if (companyIds != null && !companyIds.isEmpty()) {
+            threads.addAll(chatThreadRepository.findSellerJobThreadsWithMessages(companyIds, sort));
+        }
+        Map<Long, ChatThread> uniqueThreads = new LinkedHashMap<>();
+        threads.forEach(thread -> uniqueThreads.putIfAbsent(thread.getId(), thread));
+        List<ChatThread> ordered = new ArrayList<>(uniqueThreads.values());
+        ordered.sort(Comparator
+                .comparing(ChatThread::getLastMessageAt, Comparator.nullsLast(Comparator.reverseOrder()))
+                .thenComparing(ChatThread::getModifiedDate, Comparator.nullsLast(Comparator.reverseOrder()))
+                .thenComparing(ChatThread::getId, Comparator.reverseOrder()));
+        // Page first: enrich only the requested jobs, and never fetch product summaries.
+        PagedResponse<ChatThread> paged = ServiceHelper.toPagedResponse(ordered, page, perPage);
+        List<ChatThreadResponse> responses = paged.getItems().stream()
+                .map(thread -> toThreadResponse(thread,
+                        userId.equals(thread.getBuyerId()) ? ChatParticipantType.BUYER : ChatParticipantType.SELLER,
+                        false))
+                .toList();
+        return new PagedResponse<>(responses, paged.getMeta());
+    }
     private ChatThreadResponse toThreadResponse(ChatThread thread, ChatParticipantType participantType) {
+        return toThreadResponse(thread, participantType, true);
+    }
+
+    private ChatThreadResponse toThreadResponse(ChatThread thread, ChatParticipantType participantType, boolean includeProduct) {
         ChatMessage lastMessage = chatMessageRepository.findFirstByThread_IdAndDeletedFalseOrderByIdDesc(thread.getId()).orElse(null);
         long unreadCount = participantType == ChatParticipantType.BUYER
                 ? chatMessageRepository.countByThread_IdAndDeletedFalseAndSenderTypeAndBuyerReadAtIsNull(thread.getId(), ChatParticipantType.SELLER)
@@ -375,7 +405,7 @@ public class ChatServiceImpl implements ChatService {
                 resolveOtherParty(thread, participantType),
                 lastMessage == null ? null : toLastMessageResponse(lastMessage),
                 unreadCount,
-                thread.getApplicationId() == null ? resolveProduct(thread.getProductId()) : null
+                includeProduct && thread.getApplicationId() == null ? resolveProduct(thread.getProductId()) : null
         );
     }
 

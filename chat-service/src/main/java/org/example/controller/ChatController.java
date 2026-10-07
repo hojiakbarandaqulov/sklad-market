@@ -25,6 +25,18 @@ public class ChatController {
     private final ChatService chatService;
 
     @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
+    @GetMapping("/jobs")
+    @Operation(summary = "Vakansiya yozishmalari ro'yxati",
+            description = "Xabar yozilgan jobs chatlarni qaytaradi. Product-service chaqirilmaydi.")
+    public ApiResponse<PagedResponse<ChatThreadResponse>> getJobThreads(
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") String language,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(value = "per_page", defaultValue = "20") int perPage) {
+        return ApiResponse.successResponse(chatService.getJobThreads(page, perPage));
+    }
+
+
+    @PreAuthorize("hasAnyRole('BUYER', 'SELLER')")
     @GetMapping
     @Operation(
             summary = "Chatlar ro'yxatini olish",
