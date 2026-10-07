@@ -34,8 +34,6 @@ public class Vacancy extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ExperienceLevel experienceLevel;
     @Column(columnDefinition = "TEXT")
-    private String responsibilities;
-    @Column(columnDefinition = "TEXT")
     private String requirements;
     @Column(columnDefinition = "TEXT")
     private String workingConditions;

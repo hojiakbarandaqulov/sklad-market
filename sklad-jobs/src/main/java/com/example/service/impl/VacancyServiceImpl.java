@@ -75,7 +75,6 @@ public class VacancyServiceImpl implements VacancyService {
         vacancyEntity.setLng(vacancyUpdate.getLng());
         vacancyEntity.setLat(vacancyUpdate.getLat());
         vacancyEntity.setExperienceLevel(vacancyUpdate.getExperienceLevel());
-        vacancyEntity.setResponsibilities(vacancyUpdate.getResponsibilities());
         vacancyEntity.setRequirements(vacancyUpdate.getRequirements());
         vacancyEntity.setWorkingConditions(vacancyUpdate.getWorkingConditions());
         vacancyEntity.setShowContacts(Boolean.TRUE.equals(vacancyUpdate.getShowContacts()));
@@ -261,7 +260,6 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setLng(request.getLng());
         vacancy.setLat(request.getLat());
         vacancy.setExperienceLevel(request.getExperienceLevel());
-        vacancy.setResponsibilities(request.getResponsibilities());
         vacancy.setRequirements(request.getRequirements());
         vacancy.setWorkingConditions(request.getWorkingConditions());
         vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
@@ -296,7 +294,6 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setLng(request.getLng());
         vacancy.setLat(request.getLat());
         vacancy.setExperienceLevel(request.getExperienceLevel());
-        vacancy.setResponsibilities(request.getResponsibilities());
         vacancy.setRequirements(request.getRequirements());
         vacancy.setWorkingConditions(request.getWorkingConditions());
         vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
@@ -315,7 +312,6 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setLng(request.getLng());
         vacancy.setLat(request.getLat());
         vacancy.setExperienceLevel(request.getExperienceLevel());
-        vacancy.setResponsibilities(request.getResponsibilities());
         vacancy.setRequirements(request.getRequirements());
         vacancy.setWorkingConditions(request.getWorkingConditions());
         vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));

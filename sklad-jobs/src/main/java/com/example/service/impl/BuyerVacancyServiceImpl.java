@@ -38,7 +38,6 @@ public class BuyerVacancyServiceImpl implements BuyerVacancyService {
         vacancy.setLng(request.getLng());
         vacancy.setLat(request.getLat());
         vacancy.setExperienceLevel(request.getExperienceLevel());
-        vacancy.setResponsibilities(request.getResponsibilities());
         vacancy.setRequirements(request.getRequirements());
         vacancy.setWorkingConditions(request.getWorkingConditions());
         vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));

@@ -31,8 +31,6 @@ public class VacancyDTO {
     private String lat;
     @NotNull(message = "{validation.experience.level.required}")
     private ExperienceLevel experienceLevel;
-    @NotNull(message = "{validation.responsibilities.required}")
-    private String responsibilities;
     @NotNull(message = "{validation.requirements.required}")
     private String requirements;
     @NotNull(message = "{validation.working.conditions.required}")
