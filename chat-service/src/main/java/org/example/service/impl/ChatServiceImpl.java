@@ -390,6 +390,7 @@ public class ChatServiceImpl implements ChatService {
                 .toList();
         return new PagedResponse<>(responses, paged.getMeta());
     }
+
     private ChatThreadResponse toThreadResponse(ChatThread thread, ChatParticipantType participantType) {
         return toThreadResponse(thread, participantType, true);
     }
@@ -405,7 +406,8 @@ public class ChatServiceImpl implements ChatService {
                 resolveOtherParty(thread, participantType),
                 lastMessage == null ? null : toLastMessageResponse(lastMessage),
                 unreadCount,
-                includeProduct && thread.getApplicationId() == null ? resolveProduct(thread.getProductId()) : null
+                null
+//                includeProduct && thread.getApplicationId() == null ? resolveProduct(thread.getProductId()) : null
         );
     }
 
