@@ -5,6 +5,7 @@ import com.example.dto.ApiResponse;
 import com.example.dto.vacancy.*;
 import com.example.exp.AppNotFoundException;
 import com.example.repository.specification.VacancySpecifications;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
@@ -198,9 +199,11 @@ public class VacancyServiceImpl implements VacancyService {
         return new PageImpl<>(items, pageable, page.getTotalElements());
     }
 
+    @Transactional
     @Override
     public PublicVacancyDTO getVacancy(Long id, AppLanguage language) {
         if (id == null || id <= 0) throw new AppBadException(messageService.getMessage("vacancy.id.invalid", language));
+        int i = vacancyRepository.incrementCount(id, VacancyStatus.PUBLISHED);
         Vacancy vacancy = vacancyRepository.findByIdAndVacancyStatusAndDeletedFalse(id, VacancyStatus.PUBLISHED)
                 .orElseThrow(() -> new AppNotFoundException(messageService.getMessage("vacancy.not.found", language)));
         PublicVacancyDTO dto = toPublicDTO(vacancy);
@@ -282,6 +285,7 @@ public class VacancyServiceImpl implements VacancyService {
             dto.setCompanyLogo(company.getLogoPath());
         }
     }
+
     private Vacancy toEntity(VacancyCreate request) {
         Vacancy vacancy = new Vacancy();
         vacancy.setCompanyId(request.getCompanyId());
