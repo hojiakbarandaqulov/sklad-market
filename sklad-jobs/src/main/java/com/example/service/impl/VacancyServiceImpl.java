@@ -1,10 +1,12 @@
 package com.example.service.impl;
 
 import com.example.config.clent.CompanyClient;
+import com.example.document.VacancyDocument;
 import com.example.dto.ApiResponse;
 import com.example.dto.vacancy.*;
 import com.example.exp.AppNotFoundException;
 import com.example.repository.specification.VacancySpecifications;
+import com.example.service.VacancySearchService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 
@@ -40,6 +42,7 @@ public class VacancyServiceImpl implements VacancyService {
 
     private final VacancyRepository vacancyRepository;
     private final CompanyClient companyClient;
+    private final VacancySearchService vacancySearchService;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
 
@@ -187,16 +190,48 @@ public class VacancyServiceImpl implements VacancyService {
     public PageImpl<PublicVacancyDTO> getVacancies(VacancyFilter filter, AppLanguage language) {
         if (filter.getPage() < 1 || filter.getPerPage() < 1 || filter.getPerPage() > 100 || !filter.isSalaryRangeValid())
             throw new AppBadException(messageService.getMessage("vacancy.filter.invalid", language));
-        Pageable pageable = PageRequest.of(filter.getPage() - 1, filter.getPerPage(), Sort.by(Sort.Order.desc("publishedAt"), Sort.Order.desc("id")));
-        Page<Vacancy> page = vacancyRepository.findAll(VacancySpecifications.published(filter), pageable);
+
+        Pageable pageable = PageRequest.of(
+                filter.getPage() - 1,
+                filter.getPerPage(),
+                Sort.by(Sort.Order.desc("publishedAt"),
+                        Sort.Order.desc("id")
+                )
+        );
+        Page<VacancyDocument> page =
+                vacancySearchService.search(filter, pageable);
+
         Map<Long, CompanySummaryDTO> companies = new HashMap<>();
-        var items = page.getContent().stream().map(v -> {
-            PublicVacancyDTO dto = toPublicDTO(v);
-            if (v.getCompanyId() != null)
-                enrichCompany(dto, companies.computeIfAbsent(v.getCompanyId(), companyClient::getSummary));
-            return dto;
-        }).toList();
-        return new PageImpl<>(items, pageable, page.getTotalElements());
+
+        var items = page.getContent().stream()
+                .map(document -> {
+                    PublicVacancyDTO dto = modelMapper.map(
+                            document,
+                            PublicVacancyDTO.class
+                    );
+
+                    dto.setId(Long.valueOf(document.getId()));
+                    dto.setViewsCount(document.getViewsCountCache());
+                    dto.setContacts(null);
+
+                    if (document.getCompanyId() != null) {
+                        CompanySummaryDTO company = companies.computeIfAbsent(
+                                document.getCompanyId(),
+                                companyClient::getSummary
+                        );
+
+                        enrichCompany(dto, company);
+                    }
+
+                    return dto;
+                })
+                .toList();
+
+        return new PageImpl<>(
+                items,
+                pageable,
+                page.getTotalElements()
+        );
     }
 
     @Transactional
