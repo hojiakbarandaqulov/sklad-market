@@ -7,6 +7,7 @@ import com.example.enums.*;
 import com.example.exp.AppBadException;
 import com.example.repository.VacancyRepository;
 import com.example.service.ResourceBundleService;
+import com.example.service.VacancySearchService;
 import com.example.utils.SpringSecurityUtil;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,8 @@ class BuyerVacancyServiceTest {
     final VacancyRepository repository = mock(VacancyRepository.class);
     final CompanyClient companies = mock(CompanyClient.class);
     final ResourceBundleService messages = mock(ResourceBundleService.class);
-    final VacancyServiceImpl service = new VacancyServiceImpl(repository, companies, new ModelMapper(), messages);
+    final VacancySearchService search = mock(VacancySearchService.class);
+    final VacancyServiceImpl service = new VacancyServiceImpl(repository, companies, search, new ModelMapper(), messages);
 
     @Test void creationStoresJwtBuyerAndListReturnsTheSavedVacancy() {
         Vacancy[] saved = new Vacancy[1];

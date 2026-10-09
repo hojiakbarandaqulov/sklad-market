@@ -2,6 +2,7 @@ package com.example.document;
 
 
 import com.example.enums.ExperienceLevel;
+import com.example.enums.VacancyStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "vacancy", createIndex = false)
+@Document(indexName = "vacancy", createIndex = true)
 @Setting(settingPath = "/elasticsearch/vacancy-index-settings.json")
 public class VacancyDocument {
     @Id
@@ -67,6 +68,20 @@ public class VacancyDocument {
 
     @Field(type = FieldType.Double)
     private Double lat;
+
+    @Field(type = FieldType.Long)
+    private Long vacancyId;
+
+    @Field(type = FieldType.Keyword)
+    private VacancyStatus vacancyStatus;
+
+    @Builder.Default
+    @Field(type = FieldType.Boolean)
+    private Boolean deleted = false;
+
+    @Builder.Default
+    @Field(type = FieldType.Boolean)
+    private Boolean showContacts = false;
 
     @Field(type = FieldType.Keyword)
     private ExperienceLevel experienceLevel;

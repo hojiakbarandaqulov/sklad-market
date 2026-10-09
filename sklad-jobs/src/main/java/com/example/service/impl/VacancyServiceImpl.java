@@ -31,6 +31,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +59,7 @@ public class VacancyServiceImpl implements VacancyService {
         }
 
         Vacancy savedVacancy = vacancyRepository.save(toEntity(vacancyCreate));
+        vacancySearchService.index(toDocument(savedVacancy));
         return modelMapper.map(savedVacancy, VacancyCreate.class);
     }
 
@@ -84,6 +86,7 @@ public class VacancyServiceImpl implements VacancyService {
         vacancyEntity.setShowContacts(Boolean.TRUE.equals(vacancyUpdate.getShowContacts()));
         vacancyEntity.setVacancyStatus(VacancyStatus.DRAFT);
         Vacancy save = vacancyRepository.save(vacancyEntity);
+        vacancySearchService.update(toDocument(save));
         return modelMapper.map(save, VacancyCreate.class);
     }
 
@@ -194,8 +197,7 @@ public class VacancyServiceImpl implements VacancyService {
         Pageable pageable = PageRequest.of(
                 filter.getPage() - 1,
                 filter.getPerPage(),
-                Sort.by(Sort.Order.desc("publishedAt"),
-                        Sort.Order.desc("id")
+                Sort.by(Sort.Order.desc("publishedAt")
                 )
         );
         Page<VacancyDocument> page =
@@ -258,6 +260,7 @@ public class VacancyServiceImpl implements VacancyService {
         Vacancy vacancy = toEntityBuyer(vacancyDTO);
         vacancy.setBuyerId(requireSellerProfile(language));
         Vacancy savedVacancy = vacancyRepository.save(vacancy);
+
         return modelMapper.map(savedVacancy, VacancyCreateBuyerResponseDTO.class);
     }
 
@@ -373,5 +376,105 @@ public class VacancyServiceImpl implements VacancyService {
             );
         }
         return profileId;
+    }
+
+    public VacancyDocument toDocument(Vacancy vacancy) {
+        Assert.notNull(vacancy, "Vacancy must not be null");
+        Assert.isTrue(
+                vacancy.getId() != null && vacancy.getId() > 0,
+                "Vacancy must be saved in the database before indexing"
+        );
+
+        return VacancyDocument.builder()
+                .id(vacancy.getId().toString())
+                .vacancyId(vacancy.getId())
+                .positionName(vacancy.getPositionName())
+                .companyId(vacancy.getCompanyId())
+                .buyerId(vacancy.getBuyerId())
+                .price(vacancy.getPrice())
+                .employmentType(vacancy.getEmploymentType())
+                .workSchedule(vacancy.getWorkSchedule())
+                .shortDescription(vacancy.getShortDescription())
+                .viewsCountCache(
+                        vacancy.getViewsCountCache() == null
+                                ? 0L
+                                : vacancy.getViewsCountCache()
+                )
+                .vacancyStatus(vacancy.getVacancyStatus())
+                .comment(vacancy.getComment())
+                .regionId(vacancy.getRegionId())
+                .address(vacancy.getAddress())
+                .lng(toCoordinate(vacancy.getLng(), "lng"))
+                .lat(toCoordinate(vacancy.getLat(), "lat"))
+                .experienceLevel(vacancy.getExperienceLevel())
+                .requirements(vacancy.getRequirements())
+                .workingConditions(vacancy.getWorkingConditions())
+                .publishedAt(vacancy.getPublishedAt())
+                .deleted(Boolean.TRUE.equals(vacancy.getDeleted()))
+                .showContacts(Boolean.TRUE.equals(vacancy.getShowContacts()))
+                .build();
+    }
+
+    public PublicVacancyDTO toPublicDTO(VacancyDocument document) {
+        Assert.notNull(document, "Vacancy document must not be null");
+
+        PublicVacancyDTO dto = new PublicVacancyDTO();
+
+        dto.setId(Long.valueOf(document.getId()));
+        dto.setCompanyId(document.getCompanyId());
+        dto.setPositionName(document.getPositionName());
+        dto.setPrice(document.getPrice());
+        dto.setEmploymentType(document.getEmploymentType());
+        dto.setWorkSchedule(document.getWorkSchedule());
+        dto.setShortDescription(document.getShortDescription());
+        dto.setVacancyStatus(document.getVacancyStatus());
+        dto.setRegionId(document.getRegionId());
+        dto.setAddress(document.getAddress());
+        dto.setLng(toCoordinateText(document.getLng()));
+        dto.setLat(toCoordinateText(document.getLat()));
+        dto.setExperienceLevel(document.getExperienceLevel());
+        dto.setRequirements(document.getRequirements());
+        dto.setComment(document.getComment());
+        dto.setWorkingConditions(document.getWorkingConditions());
+        dto.setShowContacts(Boolean.TRUE.equals(document.getShowContacts()));
+        dto.setPublishedAt(document.getPublishedAt());
+        dto.setViewsCount(
+                document.getViewsCountCache() == null
+                        ? 0L
+                        : document.getViewsCountCache()
+        );
+
+        // Kontaktlar alohida detail API orqali olinadi.
+        dto.setContacts(null);
+
+        // companyName va companyLogo keyin CompanyClient orqali qo‘shiladi.
+        return dto;
+    }
+
+    private Double toCoordinate(String value, String fieldName) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        try {
+            double coordinate = Double.parseDouble(value.trim());
+
+            if (!Double.isFinite(coordinate)) {
+                throw new IllegalArgumentException(
+                        fieldName + " must be a finite number"
+                );
+            }
+
+            return coordinate;
+        } catch (NumberFormatException exception) {
+            throw new IllegalArgumentException(
+                    fieldName + " must be a number: " + value,
+                    exception
+            );
+        }
+    }
+
+    private String toCoordinateText(Double value) {
+        return value == null ? null : value.toString();
     }
 }
