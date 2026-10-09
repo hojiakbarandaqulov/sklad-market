@@ -120,7 +120,7 @@ public class VacancyServiceImpl implements VacancyService {
             throw new AppBadException(messageService.getMessage("company.not.found", language));
         }
         vacancy.setVacancyStatus(VacancyStatus.UNDER_MODERATION);
-        vacancyRepository.save(vacancy);
+        vacancySearchService.update(toDocument(vacancyRepository.save(vacancy)));
         return ApiResponse.successResponse(messageService.getMessage("vacancy.submit.success", language));
     }
 
@@ -137,7 +137,7 @@ public class VacancyServiceImpl implements VacancyService {
             throw new AppBadException(messageService.getMessage("company.not.found", language));
         }
         vacancy.setVacancyStatus(VacancyStatus.CLOSED);
-        vacancyRepository.save(vacancy);
+        vacancySearchService.update(toDocument(vacancyRepository.save(vacancy)));
         return ApiResponse.successResponse(messageService.getMessage("vacancy.close.success", language));
     }
 
@@ -154,7 +154,7 @@ public class VacancyServiceImpl implements VacancyService {
             throw new AppBadException(messageService.getMessage("company.not.found", language));
         }
         vacancy.setVacancyStatus(VacancyStatus.ARCHIVE);
-        vacancyRepository.save(vacancy);
+        vacancySearchService.update(toDocument(vacancyRepository.save(vacancy)));
         return ApiResponse.successResponse(messageService.getMessage("vacancy.archive.success", language));
     }
 
@@ -185,7 +185,14 @@ public class VacancyServiceImpl implements VacancyService {
         };
         vacancy.setVacancyStatus(status);
         vacancy.setComment(vacancyModerationComment.getComment());
-        vacancyRepository.save(vacancy);
+
+        if (status == VacancyStatus.PUBLISHED && vacancy.getPublishedAt() == null) {
+            vacancy.setPublishedAt(java.time.Instant.now());
+        }
+
+        Vacancy savedVacancy = vacancyRepository.save(vacancy);
+
+        vacancySearchService.update(toDocument(savedVacancy));
         return ApiResponse.successResponse(messageService.getMessage("vacancy.moderation.success", language));
     }
 
@@ -202,6 +209,20 @@ public class VacancyServiceImpl implements VacancyService {
         );
         Page<VacancyDocument> page =
                 vacancySearchService.search(filter, pageable);
+
+        // Older publications may not yet exist in the search index.
+        if (page.getTotalElements() == 0) {
+            Page<Vacancy> stored = vacancyRepository.findAll(VacancySpecifications.published(filter), pageable);
+            Map<Long, CompanySummaryDTO> storedCompanies = new HashMap<>();
+            var storedItems = stored.getContent().stream().map(vacancy -> {
+                PublicVacancyDTO dto = toPublicDTO(vacancy);
+                if (vacancy.getCompanyId() != null) {
+                    enrichCompany(dto, storedCompanies.computeIfAbsent(vacancy.getCompanyId(), companyClient::getSummary));
+                }
+                return dto;
+            }).toList();
+            return new PageImpl<>(storedItems, pageable, stored.getTotalElements());
+        }
 
         Map<Long, CompanySummaryDTO> companies = new HashMap<>();
 
@@ -286,7 +307,7 @@ public class VacancyServiceImpl implements VacancyService {
         }
         Vacancy vacancy = vacancyOptional.get();
         vacancy.setVacancyStatus(VacancyStatus.DRAFT);
-        vacancyRepository.save(vacancy);
+        vacancySearchService.update(toDocument(vacancyRepository.save(vacancy)));
         return ApiResponse.successResponse(messageService.getMessage("vacancy.archive.success", language));
     }
 
