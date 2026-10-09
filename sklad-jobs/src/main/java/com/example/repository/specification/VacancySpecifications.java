@@ -33,7 +33,7 @@ public final class VacancySpecifications {
                 String pattern = "%" + text + "%";
                 predicates.add(cb.or(cb.like(cb.lower(root.get("positionName")), pattern, '!'),
                         cb.like(cb.lower(root.get("shortDescription")), pattern, '!'),
-                        cb.like(cb.lower(root.get("responsibilities")), pattern, '!'),
+                        cb.like(cb.lower(root.get("workingConditions")), pattern, '!'),
                         cb.like(cb.lower(root.get("requirements")), pattern, '!')));
             }
             return cb.and(predicates.toArray(Predicate[]::new));

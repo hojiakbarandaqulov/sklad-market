@@ -185,7 +185,12 @@ public class VacancyServiceImpl implements VacancyService {
         };
         vacancy.setVacancyStatus(status);
         vacancy.setComment(vacancyModerationComment.getComment());
-        vacancyRepository.save(vacancy);
+
+        vacancy.setPublishedAt(java.time.Instant.now());
+
+        Vacancy savedVacancy = vacancyRepository.save(vacancy);
+
+        vacancySearchService.update(toDocument(savedVacancy));
         return ApiResponse.successResponse(messageService.getMessage("vacancy.moderation.success", language));
     }
 
