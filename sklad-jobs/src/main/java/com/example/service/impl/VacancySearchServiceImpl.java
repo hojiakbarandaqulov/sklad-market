@@ -5,6 +5,7 @@ import co.elastic.clients.json.JsonData;
 import com.example.document.VacancyDocument;
 import com.example.dto.vacancy.VacancyFilter;
 import com.example.enums.VacancyStatus;
+import com.example.repository.VacancySearchRepository;
 import com.example.service.VacancySearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,31 +24,32 @@ import java.util.Optional;
 @Service
 public class VacancySearchServiceImpl implements VacancySearchService {
 
+    private final VacancySearchRepository vacancySearchRepository;
     private final ElasticsearchOperations elasticsearchOperations;
 
     @Override
     public void index(VacancyDocument document) {
         validateDocument(document);
-        elasticsearchOperations.save(document);
+        vacancySearchRepository.save(document);
     }
 
     @Override
     public Optional<VacancyDocument> get(Long id) {
         validateId(id);
-        return Optional.ofNullable(elasticsearchOperations.get(id.toString(), VacancyDocument.class));
+        return vacancySearchRepository.findById(id.toString());
     }
 
     @Override
     public void delete(Long id) {
         validateId(id);
-        elasticsearchOperations.delete(id.toString(), VacancyDocument.class);
+        vacancySearchRepository.deleteById(id.toString());
     }
 
     @Override
     public void update(VacancyDocument document) {
         validateDocument(document);
         // Replace the full document; a missing ID in Elasticsearch is inserted.
-        elasticsearchOperations.save(document);
+        vacancySearchRepository.save(document);
     }
 
     @Override

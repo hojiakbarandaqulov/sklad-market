@@ -19,7 +19,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "vacancy", createIndex = false)
+@Document(indexName = "vacancy", createIndex = true)
 @Setting(settingPath = "/elasticsearch/vacancy-index-settings.json")
 public class VacancyDocument {
     @Id
