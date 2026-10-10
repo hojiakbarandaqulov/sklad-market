@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.config.clent.CompanyClient;
 import com.example.document.VacancyDocument;
+import com.example.mapper.VacancyDocumentMapper;
 import com.example.dto.ApiResponse;
 import com.example.dto.vacancy.*;
 import com.example.exp.AppNotFoundException;
@@ -400,40 +401,7 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     public VacancyDocument toDocument(Vacancy vacancy) {
-        Assert.notNull(vacancy, "Vacancy must not be null");
-        Assert.isTrue(
-                vacancy.getId() != null && vacancy.getId() > 0,
-                "Vacancy must be saved in the database before indexing"
-        );
-
-        return VacancyDocument.builder()
-                .id(vacancy.getId().toString())
-                .vacancyId(vacancy.getId())
-                .positionName(vacancy.getPositionName())
-                .companyId(vacancy.getCompanyId())
-                .buyerId(vacancy.getBuyerId())
-                .price(vacancy.getPrice())
-                .employmentType(vacancy.getEmploymentType())
-                .workSchedule(vacancy.getWorkSchedule())
-                .shortDescription(vacancy.getShortDescription())
-                .viewsCountCache(
-                        vacancy.getViewsCountCache() == null
-                                ? 0L
-                                : vacancy.getViewsCountCache()
-                )
-                .vacancyStatus(vacancy.getVacancyStatus())
-                .comment(vacancy.getComment())
-                .regionId(vacancy.getRegionId())
-                .address(vacancy.getAddress())
-                .lng(toCoordinate(vacancy.getLng(), "lng"))
-                .lat(toCoordinate(vacancy.getLat(), "lat"))
-                .experienceLevel(vacancy.getExperienceLevel())
-                .requirements(vacancy.getRequirements())
-                .workingConditions(vacancy.getWorkingConditions())
-                .publishedAt(vacancy.getPublishedAt())
-                .deleted(Boolean.TRUE.equals(vacancy.getDeleted()))
-                .showContacts(Boolean.TRUE.equals(vacancy.getShowContacts()))
-                .build();
+        return VacancyDocumentMapper.from(vacancy);
     }
 
     public PublicVacancyDTO toPublicDTO(VacancyDocument document) {
@@ -470,29 +438,6 @@ public class VacancyServiceImpl implements VacancyService {
 
         // companyName va companyLogo keyin CompanyClient orqali qo‘shiladi.
         return dto;
-    }
-
-    private Double toCoordinate(String value, String fieldName) {
-        if (value == null || value.isBlank()) {
-            return null;
-        }
-
-        try {
-            double coordinate = Double.parseDouble(value.trim());
-
-            if (!Double.isFinite(coordinate)) {
-                throw new IllegalArgumentException(
-                        fieldName + " must be a finite number"
-                );
-            }
-
-            return coordinate;
-        } catch (NumberFormatException exception) {
-            throw new IllegalArgumentException(
-                    fieldName + " must be a number: " + value,
-                    exception
-            );
-        }
     }
 
     private String toCoordinateText(Double value) {
