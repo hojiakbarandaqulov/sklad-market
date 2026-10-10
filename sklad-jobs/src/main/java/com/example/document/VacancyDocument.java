@@ -20,7 +20,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "vacancy", createIndex = true)
+@Document(indexName = "vacancy-v2", createIndex = true)
 @Setting(settingPath = "/elasticsearch/vacancy-index-settings.json")
 public class VacancyDocument {
     @Id
@@ -47,7 +47,7 @@ public class VacancyDocument {
     @Field(type = FieldType.Text)
     private String workSchedule;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, analyzer = "uz_ru_translit_analyzer", searchAnalyzer = "uz_ru_translit_analyzer")
     private String shortDescription;
 
     @Field(type = FieldType.Long)
@@ -86,10 +86,10 @@ public class VacancyDocument {
     @Field(type = FieldType.Keyword)
     private ExperienceLevel experienceLevel;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, analyzer = "uz_ru_translit_analyzer", searchAnalyzer = "uz_ru_translit_analyzer")
     private String requirements;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, analyzer = "uz_ru_translit_analyzer", searchAnalyzer = "uz_ru_translit_analyzer")
     private String workingConditions;
 
     @Field(type = FieldType.Date,

@@ -9,7 +9,7 @@ import org.springframework.data.elasticsearch.annotations.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(indexName = "categories-v1", createIndex = false)
+@Document(indexName = "categories-v2", createIndex = false)
 @Setting(settingPath = "/elasticsearch/category-index-settings.json")
 public class CategoryDocument {
     @Id

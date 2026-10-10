@@ -52,6 +52,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.apache.lucene:lucene-core:9.8.0'
+    testImplementation 'org.apache.lucene:lucene-analysis-common:9.8.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
