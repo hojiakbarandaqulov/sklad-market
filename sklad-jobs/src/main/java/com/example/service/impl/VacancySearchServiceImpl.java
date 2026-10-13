@@ -81,6 +81,10 @@ public class VacancySearchServiceImpl implements VacancySearchService {
                                 .value(filter.getRegionId())));
                     }
 
+                    if (filter.getCategoryId() != null) {
+                        b.filter(f -> f.term(t -> t.field("categoryId").value(filter.getCategoryId())));
+                    }
+
                     if (filter.getSalaryMin() != null
                             || filter.getSalaryMax() != null) {
 

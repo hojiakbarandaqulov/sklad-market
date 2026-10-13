@@ -20,6 +20,7 @@ public class Vacancy extends BaseEntity {
     private String positionName;
     private Long companyId;
     private Long buyerId;
+    private Long categoryId;
     private BigDecimal price;
     private String employmentType;
     private String workSchedule;

@@ -35,6 +35,9 @@ public class VacancyDocument {
     @Field(type = FieldType.Long)
     private Long buyerId;
 
+    @Field(type = FieldType.Long)
+    private Long categoryId;
+
     @Field(
             type = FieldType.Scaled_Float,
             scalingFactor = 100

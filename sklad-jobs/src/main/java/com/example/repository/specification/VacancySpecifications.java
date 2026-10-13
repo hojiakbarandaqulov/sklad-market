@@ -20,6 +20,7 @@ public final class VacancySpecifications {
             predicates.add(cb.equal(root.get("vacancyStatus"), VacancyStatus.PUBLISHED));
             if (f.getCompanyId() != null) predicates.add(cb.equal(root.get("companyId"), f.getCompanyId()));
             if (f.getRegionId() != null) predicates.add(cb.equal(root.get("regionId"), f.getRegionId()));
+            if (f.getCategoryId() != null) predicates.add(cb.equal(root.get("categoryId"), f.getCategoryId()));
             if (f.getSalaryMin() != null) predicates.add(cb.greaterThanOrEqualTo(root.get("price"), f.getSalaryMin()));
             if (f.getSalaryMax() != null) predicates.add(cb.lessThanOrEqualTo(root.get("price"), f.getSalaryMax()));
             if (f.getExperienceLevel() != null)

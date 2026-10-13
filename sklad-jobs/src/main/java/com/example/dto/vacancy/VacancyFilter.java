@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class VacancyFilter {
+    @Positive
+    private Long categoryId;
     @Size(max = 200)
     private String q;
     @Positive

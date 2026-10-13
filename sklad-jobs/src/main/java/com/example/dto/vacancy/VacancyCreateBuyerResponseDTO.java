@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class VacancyCreateBuyerResponseDTO {
+    private Long categoryId;
     private Long id;
     @NotNull(message = "{validation.position.name.required}")
     private String positionName;

@@ -19,6 +19,7 @@ public final class VacancyDocumentMapper {
                 .positionName(vacancy.getPositionName())
                 .companyId(vacancy.getCompanyId())
                 .buyerId(vacancy.getBuyerId())
+                .categoryId(vacancy.getCategoryId())
                 .price(vacancy.getPrice())
                 .employmentType(vacancy.getEmploymentType())
                 .workSchedule(vacancy.getWorkSchedule())

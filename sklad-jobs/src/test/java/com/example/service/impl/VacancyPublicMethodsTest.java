@@ -22,7 +22,7 @@ class VacancyPublicMethodsTest {
     CompanyClient client=mock(CompanyClient.class);
     ResourceBundleService messages=mock(ResourceBundleService.class);
     VacancySearchService search=mock(VacancySearchService.class);
-    VacancyServiceImpl service=new VacancyServiceImpl(repository,client,search,new ModelMapper(),messages);
+    VacancyServiceImpl service=new VacancyServiceImpl(repository,client,search,new ModelMapper(),messages,mock(com.example.service.JobCategoryService.class));
     Vacancy vacancy;
     @BeforeEach void setup() {
         vacancy=new Vacancy(); vacancy.setId(100L); vacancy.setCompanyId(42L); vacancy.setVacancyStatus(VacancyStatus.PUBLISHED);

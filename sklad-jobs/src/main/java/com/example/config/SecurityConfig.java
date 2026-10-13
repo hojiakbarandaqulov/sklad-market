@@ -45,7 +45,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/vacancies", "/api/v1/vacancies/{id}").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/vacancies", "/api/v1/vacancies/{id}",
+                                "/api/v1/job-categories", "/api/v1/job-categories/{id}").permitAll()
                         .anyRequest().authenticated()
                 ).oauth2ResourceServer(auth2 -> auth2
                         .jwt(jwt -> jwt

@@ -8,6 +8,7 @@ import com.example.dto.vacancy.*;
 import com.example.exp.AppNotFoundException;
 import com.example.repository.specification.VacancySpecifications;
 import com.example.service.VacancySearchService;
+import com.example.service.JobCategoryService;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 
@@ -47,6 +48,7 @@ public class VacancyServiceImpl implements VacancyService {
     private final VacancySearchService vacancySearchService;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
+    private final JobCategoryService jobCategoryService;
 
     @Override
     public VacancyCreate createVacancy(VacancyCreate vacancyCreate, AppLanguage language) {
@@ -59,6 +61,7 @@ public class VacancyServiceImpl implements VacancyService {
             );
         }
 
+        jobCategoryService.validateSelection(vacancyCreate.getCategoryId(), language);
         Vacancy savedVacancy = vacancyRepository.save(toEntity(vacancyCreate));
         vacancySearchService.index(toDocument(savedVacancy));
         return modelMapper.map(savedVacancy, VacancyCreate.class);
@@ -71,6 +74,8 @@ public class VacancyServiceImpl implements VacancyService {
             throw new AppBadException(messageService.getMessage("vacancy.not.found", language));
         }
         Vacancy vacancyEntity = vacancy.get();
+        jobCategoryService.validateSelection(vacancyUpdate.getCategoryId(), language);
+        if (vacancyUpdate.getCategoryId() != null) vacancyEntity.setCategoryId(vacancyUpdate.getCategoryId());
         vacancyEntity.setPositionName(vacancyUpdate.getPositionName());
         vacancyEntity.setPrice(vacancyUpdate.getPrice());
         vacancyEntity.setEmploymentType(vacancyUpdate.getEmploymentType());
@@ -279,6 +284,7 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public VacancyCreateBuyerResponseDTO createVacancyBuyer(VacancyCreateBuyer vacancyDTO, AppLanguage language) {
+        jobCategoryService.validateSelection(vacancyDTO.getCategoryId(), language);
         Vacancy vacancy = toEntityBuyer(vacancyDTO);
         vacancy.setBuyerId(requireSellerProfile(language));
         Vacancy savedVacancy = vacancyRepository.save(vacancy);
@@ -314,6 +320,7 @@ public class VacancyServiceImpl implements VacancyService {
 
     private Vacancy toEntityBuyer(VacancyCreateBuyer request) {
         Vacancy vacancy = new Vacancy();
+        vacancy.setCategoryId(request.getCategoryId());
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
         vacancy.setEmploymentType(request.getEmploymentType());
@@ -348,6 +355,7 @@ public class VacancyServiceImpl implements VacancyService {
 
     private Vacancy toEntity(VacancyCreate request) {
         Vacancy vacancy = new Vacancy();
+        vacancy.setCategoryId(request.getCategoryId());
         vacancy.setCompanyId(request.getCompanyId());
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
@@ -368,6 +376,7 @@ public class VacancyServiceImpl implements VacancyService {
 
     private Vacancy toEntityUpdate(VacancyRequest request) {
         Vacancy vacancy = new Vacancy();
+        vacancy.setCategoryId(request.getCategoryId());
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
         vacancy.setEmploymentType(request.getEmploymentType());
@@ -411,6 +420,7 @@ public class VacancyServiceImpl implements VacancyService {
 
         dto.setId(Long.valueOf(document.getId()));
         dto.setCompanyId(document.getCompanyId());
+        dto.setCategoryId(document.getCategoryId());
         dto.setPositionName(document.getPositionName());
         dto.setPrice(document.getPrice());
         dto.setEmploymentType(document.getEmploymentType());

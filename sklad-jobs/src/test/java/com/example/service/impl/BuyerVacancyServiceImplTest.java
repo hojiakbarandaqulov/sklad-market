@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.*;
 class BuyerVacancyServiceImplTest {
     VacancyRepository repository = mock(VacancyRepository.class);
     ResourceBundleService messages = mock(ResourceBundleService.class);
-    BuyerVacancyServiceImpl service = new BuyerVacancyServiceImpl(repository, new ModelMapper(), messages);
+    BuyerVacancyServiceImpl service = new BuyerVacancyServiceImpl(repository, new ModelMapper(), messages, mock(com.example.service.JobCategoryService.class), mock(com.example.service.VacancySearchService.class));
     MockedStatic<SpringSecurityUtil> auth;
     Vacancy vacancy;
 

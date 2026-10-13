@@ -2,12 +2,15 @@ package com.example.dto.vacancy;
 
 import com.example.enums.ExperienceLevel;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
 public class VacancyRequest {
+    @Positive
+    private Long categoryId;
     @NotNull(message = "{validation.position.name.required}")
     private String positionName;
     private BigDecimal price;

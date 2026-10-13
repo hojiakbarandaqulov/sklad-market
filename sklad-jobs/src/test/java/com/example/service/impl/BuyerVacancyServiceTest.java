@@ -23,7 +23,7 @@ class BuyerVacancyServiceTest {
     final CompanyClient companies = mock(CompanyClient.class);
     final ResourceBundleService messages = mock(ResourceBundleService.class);
     final VacancySearchService search = mock(VacancySearchService.class);
-    final VacancyServiceImpl service = new VacancyServiceImpl(repository, companies, search, new ModelMapper(), messages);
+    final VacancyServiceImpl service = new VacancyServiceImpl(repository, companies, search, new ModelMapper(), messages, mock(com.example.service.JobCategoryService.class));
 
     @Test void creationStoresJwtBuyerAndListReturnsTheSavedVacancy() {
         Vacancy[] saved = new Vacancy[1];

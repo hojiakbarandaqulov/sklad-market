@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class VacancyDTO {
+    private Long categoryId;
     private Long id;
     @NotNull(message = "{validation.company.id.required}")
     private Long companyId;

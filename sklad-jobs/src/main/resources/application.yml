@@ -5,6 +5,12 @@ spring:
     name: sklad-jobs
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:prod}
+  flyway:
+    locations: classpath:db/skladjobs-migration
+    # Separate history because production can share a database with other services.
+    table: flyway_schema_history_sklad_jobs
+    baseline-on-migrate: true
+    baseline-version: 0
 
 
   # Eureka Client

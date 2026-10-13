@@ -10,12 +10,17 @@ import com.example.exp.AppBadException;
 import com.example.repository.VacancyRepository;
 import com.example.service.BuyerVacancyService;
 import com.example.service.ResourceBundleService;
+import com.example.service.JobCategoryService;
+import com.example.service.VacancySearchService;
+import com.example.mapper.VacancyDocumentMapper;
 import com.example.utils.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +29,14 @@ public class BuyerVacancyServiceImpl implements BuyerVacancyService {
     private final VacancyRepository repository;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messages;
+    private final JobCategoryService jobCategoryService;
+    private final VacancySearchService vacancySearchService;
 
     @Override
     public VacancyDTO update(Long id, VacancyRequest request, AppLanguage language) {
         Vacancy vacancy = findOwned(id, language);
+        jobCategoryService.validateSelection(request.getCategoryId(), language);
+        if (request.getCategoryId() != null) vacancy.setCategoryId(request.getCategoryId());
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
         vacancy.setEmploymentType(request.getEmploymentType());
@@ -43,7 +52,9 @@ public class BuyerVacancyServiceImpl implements BuyerVacancyService {
         vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
         vacancy.setVacancyStatus(VacancyStatus.DRAFT);
         vacancy.setPublishedAt(null);
-        return modelMapper.map(repository.save(vacancy), VacancyDTO.class);
+        Vacancy saved = repository.save(vacancy);
+        updateSearchAfterCommit(saved);
+        return modelMapper.map(saved, VacancyDTO.class);
     }
 
     @Override
@@ -65,6 +76,7 @@ public class BuyerVacancyServiceImpl implements BuyerVacancyService {
         Vacancy vacancy = findOwned(id, language);
         vacancy.setVacancyStatus(status);
         repository.save(vacancy);
+        updateSearchAfterCommit(vacancy);
         return ApiResponse.successResponse(messages.getMessage(message, language));
     }
 
@@ -82,5 +94,20 @@ public class BuyerVacancyServiceImpl implements BuyerVacancyService {
             throw new AccessDeniedException("Buyer vacancy access denied");
         }
         return vacancy;
+    }
+
+    private void updateSearchAfterCommit(Vacancy vacancy) {
+        var document = VacancyDocumentMapper.from(vacancy);
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(
+                    new TransactionSynchronization() {
+                        @Override
+                        public void afterCommit() {
+                            vacancySearchService.update(document);
+                        }
+                    });
+        } else {
+            vacancySearchService.update(document);
+        }
     }
 }

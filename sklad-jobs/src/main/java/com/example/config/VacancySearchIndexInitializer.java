@@ -26,6 +26,8 @@ public class VacancySearchIndexInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        // Add new fields to an existing index before rebuilding documents from the database.
+        operations.indexOps(VacancyDocument.class).putMapping();
         int pageNumber = 0;
         long indexed = 0;
         Page<Vacancy> page;
