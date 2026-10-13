@@ -32,6 +32,9 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka/
 
 ai:
+  jobs:
+    # Dedicated bounded credential-free public Jobs client. REST recommendations never call a model.
+    timeout-ms: ${AI_JOBS_TIMEOUT_MS:3000}
   guest:
     trusted-proxies: ${AI_GUEST_TRUSTED_PROXIES:}
     # Persistent total trial allowance (default 5) is controlled by Admin/Super Admin in the UI.

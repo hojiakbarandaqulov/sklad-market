@@ -2,6 +2,7 @@ package org.example.ai.guest;
 
 import org.example.ai.LocaleNormalizer;
 import org.example.ai.business.tool.SearchBusinessesTool;
+import org.example.ai.jobs.SearchJobsTool;
 import org.example.ai.guardrail.ChatContextWindow;
 import org.example.ai.guardrail.UsageLedgerService;
 import org.example.ai.prompt.SystemPromptProvider;
@@ -14,11 +15,12 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-/** Deliberately separate from account chat: one public search capability, no account tools/drafts. */
+/** Deliberately separate from account chat: public catalog/jobs search only, no account tools/drafts. */
 @Service
 public class GuestAnswerService {
     private final ChatModelProvider provider;
     private final SearchBusinessesTool publicSearch;
+    private final SearchJobsTool publicJobs;
     private final SystemPromptProvider prompts;
     private final ChatContextWindow contextWindow;
     private final UsageLedgerService usage;
@@ -28,11 +30,12 @@ public class GuestAnswerService {
             "types", Map.of("type", "ARRAY", "items", Map.of("type", "STRING", "enum", List.of("PRODUCT", "COMPANY")))),
             "required", List.of("query"));
 
-    public GuestAnswerService(ChatModelProvider provider, SearchBusinessesTool publicSearch,
+    public GuestAnswerService(ChatModelProvider provider, SearchBusinessesTool publicSearch, SearchJobsTool publicJobs,
             SystemPromptProvider prompts, ChatContextWindow contextWindow, UsageLedgerService usage,
             @Value("${ai.gemini.chat-model:gemini-2.5-flash}") String model) {
         this.provider = provider;
         this.publicSearch = publicSearch;
+        this.publicJobs = publicJobs;
         this.prompts = prompts;
         this.contextWindow = contextWindow;
         this.usage = usage;
@@ -47,6 +50,9 @@ public class GuestAnswerService {
                 GUEST TRIAL RULES: This is an anonymous visitor, not a signed-in buyer/seller/admin.
                 Reply in the website language specified below. Be concise, at most three recommendations.
                 You can explain the marketplace and search PUBLIC products/companies using search_businesses.
+                You can search PUBLIC job vacancies using search_jobs (at most three). Personal saved job recommendations,
+                preferences, resumes and applications require sign-in; you cannot access recommend_jobs.
+                Never submit an application. Use real tool-returned /jobs/{id} links; do not invent job/company/salary data.
                 You cannot see account history, favorites, carts, private contacts, orders, messages or admin data.
                 Never create drafts, place orders or take account actions; ask the user to sign in for these.
                 Use search before asserting catalog facts. Do not fetch the entire catalog for general questions.
@@ -58,13 +64,14 @@ public class GuestAnswerService {
         List<ToolExchangeEntry> exchange = new ArrayList<>();
         List<Map<String, Object>> resultSets = new ArrayList<>();
         ToolSpec tool = new ToolSpec(SearchBusinessesTool.NAME, publicSearch.description(), SCHEMA);
+        ToolSpec jobsTool = new ToolSpec(SearchJobsTool.NAME, publicJobs.description(), publicJobs.parametersSchema());
         for (int iteration = 0; iteration < 3; iteration++) {
             if (cancelled.get()) throw new GuestTrialException("guest_unavailable", 503);
             List<ToolCallRequest> calls = new ArrayList<>();
             StringBuilder text = new StringBuilder();
             TokenUsage tokenUsage = null;
             ChatGenerationRequest request = contextWindow.fit(new ChatGenerationRequest(model, instruction, history,
-                    iteration < 2 ? List.of(tool) : List.of(), exchange, 0.3f, 1024));
+                    iteration < 2 ? List.of(tool, jobsTool) : List.of(), exchange, 0.3f, 1024));
             try (ChatStream stream = provider.generateStream(request)) {
                 active.set(stream);
                 if (cancelled.get()) throw new GuestTrialException("guest_unavailable", 503);
@@ -101,7 +108,16 @@ public class GuestAnswerService {
     }
 
     ToolResult executePublicSearch(ToolCallRequest call, String locale, AtomicBoolean cancelled) {
-        if (cancelled.get() || !SearchBusinessesTool.NAME.equals(call.name())) return ToolResult.error("Sign in to use account features", 403);
+        if (cancelled.get()) return ToolResult.error("Search cancelled", 503);
+        if (SearchJobsTool.NAME.equals(call.name())) {
+            try {
+                ToolArgumentValidator.validate(publicJobs.parametersSchema(), call.args());
+                Map<String, Object> args = new LinkedHashMap<>(call.args());
+                args.put("limit", 3);
+                return publicJobs.execute(args, new ToolExecutionContext(null, null, null, Set.of(), locale));
+            } catch (IllegalArgumentException | ToolArgumentException invalid) { return ToolResult.error("Invalid job search arguments", 400); }
+        }
+        if (!SearchBusinessesTool.NAME.equals(call.name())) return ToolResult.error("Sign in to use account features", 403);
         try {
             ToolArgumentValidator.validate(SCHEMA, call.args());
             String query = ToolArgs.asString(call.args().get("query"));

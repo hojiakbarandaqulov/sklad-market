@@ -30,6 +30,8 @@ class PublicVacancyControllerTest {
         @Bean VacancyService vacancyService(){return mock(VacancyService.class);}
         @Bean VacancyController vacancyController(VacancyService s){return new VacancyController(s);}
         @Bean PublicVacancyController controller(VacancyService s){return new PublicVacancyController(s);}
+        @Bean AiVacancyCandidatesService aiCandidates(){return mock(AiVacancyCandidatesService.class);}
+        @Bean AiVacancyCandidatesController aiController(AiVacancyCandidatesService s){return new AiVacancyCandidatesController(s);}
         @Bean ResourceBundleService messages(){ResourceBundleService s=mock(ResourceBundleService.class); when(s.getMessage(anyString())).thenAnswer(i->i.getArgument(0));return s;}
         @Bean ExceptionHandleController errors(ResourceBundleService s){return new ExceptionHandleController(s);}
     }
@@ -52,6 +54,16 @@ class PublicVacancyControllerTest {
         mvc.perform(post("/api/v1/vacancies")).andExpect(status().isUnauthorized());
         mvc.perform(get("/api/v1/me/resumes")).andExpect(status().isUnauthorized());
         mvc.perform(get("/api/v1/vacancies/100/applications")).andExpect(status().isUnauthorized());
+        verifyNoInteractions(service);
+    }
+    @Test void anonymousAiCandidatesAreReadOnlyBoundedAndDoNotCallDetailViews() throws Exception {
+        var candidates=context.getBean(AiVacancyCandidatesService.class);
+        when(candidates.find(any(),any(),any(),eq(40))).thenReturn(List.of());
+        mvc.perform(get("/api/v1/vacancies/ai-candidates").param("terms","driver")).andExpect(status().isOk());
+        mvc.perform(get("/api/v1/vacancies/ai-candidates").param("limit","41")).andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/vacancies/ai-candidates").param("limit","invalid")).andExpect(status().isBadRequest());
+        mvc.perform(post("/api/v1/vacancies/ai-candidates")).andExpect(status().isUnauthorized());
+        verify(candidates,times(1)).find(any(),any(),any(),eq(40));
         verifyNoInteractions(service);
     }
     @Test void invalidFiltersFailBeforeQueryingService() throws Exception {

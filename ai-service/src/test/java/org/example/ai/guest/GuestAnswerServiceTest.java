@@ -1,6 +1,7 @@
 package org.example.ai.guest;
 
 import org.example.ai.business.tool.SearchBusinessesTool;
+import org.example.ai.jobs.SearchJobsTool;
 import org.example.ai.provider.ToolCallRequest;
 import org.example.ai.tool.ToolExecutionContext;
 import org.example.ai.tool.ToolResult;
@@ -15,7 +16,8 @@ import static org.mockito.ArgumentMatchers.*;
 
 class GuestAnswerServiceTest {
     SearchBusinessesTool search = mock(SearchBusinessesTool.class);
-    GuestAnswerService service = new GuestAnswerService(null, search, null, null, null, "test-model");
+    SearchJobsTool jobs = mock(SearchJobsTool.class);
+    GuestAnswerService service = new GuestAnswerService(null, search, jobs, null, null, null, "test-model");
     @Test void guestsHaveNoAccountToolsEvenIfModelRequestsThem() {
         assertThat(service.executePublicSearch(new ToolCallRequest("a", "get_my_leads", Map.of()), "en", new AtomicBoolean()).success()).isFalse();
         verifyNoInteractions(search);
@@ -28,6 +30,14 @@ class GuestAnswerServiceTest {
     @Test void invalidSearchDoesNotInvokeCatalog() {
         assertThat(service.executePublicSearch(new ToolCallRequest("a", "search_businesses", Map.of("query", "")), "en", new AtomicBoolean()).success()).isFalse();
         assertThat(service.executePublicSearch(new ToolCallRequest("a", "search_businesses", Map.of("query", "cement", "limit", 200)), "en", new AtomicBoolean()).success()).isFalse();
+        verifyNoInteractions(search);
+    }
+    @Test void guestJobsSearchHasNoCredentialsAndStaysWithinExistingTrialBudget() {
+        when(jobs.parametersSchema()).thenReturn(new SearchJobsTool(null).parametersSchema());
+        when(jobs.execute(anyMap(), any())).thenReturn(ToolResult.ok(Map.of("kind", "job_search", "items", List.of())));
+        assertThat(service.executePublicSearch(new ToolCallRequest("a", "search_jobs", Map.of("query", "driver", "limit", 6)), "uz", new AtomicBoolean()).success()).isTrue();
+        verify(jobs).execute(eq(Map.of("query", "driver", "limit", 3)), argThat((ToolExecutionContext c) -> c.userSub()==null && c.bearerToken()==null && c.roles().isEmpty()));
+        assertThat(service.executePublicSearch(new ToolCallRequest("b", "recommend_jobs", Map.of()), "uz", new AtomicBoolean()).success()).isFalse();
         verifyNoInteractions(search);
     }
     @Test void forwardedIpIsTrustedOnlyThroughConfiguredProxyHops() {

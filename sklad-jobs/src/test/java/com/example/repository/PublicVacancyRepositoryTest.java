@@ -3,6 +3,8 @@ import com.example.entity.Vacancy;
 import com.example.dto.vacancy.VacancyFilter;
 import com.example.enums.*;
 import com.example.repository.specification.VacancySpecifications;
+import com.example.service.AiVacancyCandidatesService;
+import com.example.config.clent.AiCompanySummaryClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -55,6 +57,22 @@ class PublicVacancyRepositoryTest {
         VacancyFilter f=new VacancyFilter(); f.setQ("%_Java!");
         var found=repository.findAll(VacancySpecifications.published(f));
         assertEquals(1,found.size()); assertEquals(wanted.getId(),found.get(0).getId());
+    }
+    @Test void aiCandidatesAreLiveBoundedNoViewIncrementsAndApostropheSafe() {
+        var wanted=save("O'qituvchi",VacancyStatus.PUBLISHED,false,42,1,"100");
+        save("Teacher",VacancyStatus.CLOSED,false,42,1,"100");
+        save("Teacher",VacancyStatus.DRAFT,false,42,1,"100");
+        save("Teacher",VacancyStatus.PUBLISHED,true,42,1,"100");
+        var companies=org.mockito.Mockito.mock(AiCompanySummaryClient.class);
+        var service=new AiVacancyCandidatesService(repository,companies);
+        var filter=new VacancyFilter(); filter.setRegionId(1L);
+        var found=service.find(filter,java.util.List.of("oqituvch","teacher"),null,40);
+        assertEquals(1,found.size()); assertEquals(wanted.getId(),found.get(0).id());
+        assertEquals(0L,repository.findById(wanted.getId()).orElseThrow().getViewsCountCache());
+        org.mockito.Mockito.verifyNoInteractions(companies);
+        assertTrue(service.find(new VacancyFilter(),java.util.List.of(),null,40).isEmpty());
+        wanted.setVacancyStatus(VacancyStatus.CLOSED); repository.saveAndFlush(wanted);
+        assertTrue(service.find(filter,java.util.List.of(),java.util.List.of(wanted.getId()),3).isEmpty());
     }
     @Test void moderationQueueIncludesOnlyPendingNonDeletedWithPagination() {
         Vacancy first = save("Pending 1", VacancyStatus.UNDER_MODERATION, false, 42, 1, "100");
