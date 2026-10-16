@@ -1,3 +1,4 @@
+/*
 package org.example.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -72,3 +73,4 @@ public class GoogleLoginTokenConfig {
         return JwtDecoders.fromIssuerLocation(issuer);
     }
 }
+*/
