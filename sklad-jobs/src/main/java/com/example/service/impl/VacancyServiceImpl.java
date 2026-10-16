@@ -185,6 +185,10 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public ApiResponse<String> vacancyModeration(Long vacancyId, VacancyModeration vacancyModeration, VacancyModerationComment vacancyModerationComment, AppLanguage language) {
+        String reason = vacancyModerationComment == null ? null : vacancyModerationComment.getComment();
+        if (vacancyModeration == VacancyModeration.REJECTED && (reason == null || reason.isBlank())) {
+            throw new AppBadException(messageService.getMessage("vacancy.rejection.reason.required", language));
+        }
         Optional<Vacancy> vacancyOptional = vacancyRepository.findByIdAndDeletedFalse(vacancyId);
         if (vacancyOptional.isEmpty()) {
             throw new AppBadException(messageService.getMessage("vacancy.not.found", language));
@@ -196,7 +200,7 @@ public class VacancyServiceImpl implements VacancyService {
             case PUBLISHED -> VacancyStatus.PUBLISHED;
         };
         vacancy.setVacancyStatus(status);
-        vacancy.setComment(vacancyModerationComment.getComment());
+        vacancy.setComment(status == VacancyStatus.REJECTED ? reason.trim() : null);
 
         if (status == VacancyStatus.PUBLISHED && vacancy.getPublishedAt() == null) {
             vacancy.setPublishedAt(java.time.Instant.now());
