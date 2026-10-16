@@ -69,11 +69,17 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public VacancyCreate updateVacancy(VacancyRequest vacancyUpdate, Long vacancyId, AppLanguage language) {
+        Long profileId = requireSellerProfile(language);
         Optional<Vacancy> vacancy = vacancyRepository.findByIdAndDeletedFalse(vacancyId);
         if (vacancy.isEmpty()) {
             throw new AppBadException(messageService.getMessage("vacancy.not.found", language));
         }
         Vacancy vacancyEntity = vacancy.get();
+        List<Long> ownedCompanyIds = companyClient.getOwnedCompanyIds(profileId);
+        if (vacancyEntity.getCompanyId() == null || ownedCompanyIds == null
+                || !ownedCompanyIds.contains(vacancyEntity.getCompanyId())) {
+            throw new AppBadException(messageService.getMessage("company.not.found", language));
+        }
         jobCategoryService.validateSelection(vacancyUpdate.getCategoryId(), language);
         if (vacancyUpdate.getCategoryId() != null) vacancyEntity.setCategoryId(vacancyUpdate.getCategoryId());
         vacancyEntity.setPositionName(vacancyUpdate.getPositionName());
@@ -83,14 +89,14 @@ public class VacancyServiceImpl implements VacancyService {
         vacancyEntity.setShortDescription(vacancyUpdate.getShortDescription());
         vacancyEntity.setRegionId(vacancyUpdate.getRegionId());
         vacancyEntity.setAddress(vacancyUpdate.getAddress());
-        vacancyEntity.setVacancyStatus(VacancyStatus.DRAFT);
         vacancyEntity.setLng(vacancyUpdate.getLng());
         vacancyEntity.setLat(vacancyUpdate.getLat());
         vacancyEntity.setExperienceLevel(vacancyUpdate.getExperienceLevel());
         vacancyEntity.setRequirements(vacancyUpdate.getRequirements());
         vacancyEntity.setWorkingConditions(vacancyUpdate.getWorkingConditions());
         vacancyEntity.setShowContacts(Boolean.TRUE.equals(vacancyUpdate.getShowContacts()));
-        vacancyEntity.setVacancyStatus(VacancyStatus.DRAFT);
+        vacancyEntity.setVacancyStatus(VacancyStatus.UNDER_MODERATION);
+        vacancyEntity.setPublishedAt(null);
         Vacancy save = vacancyRepository.save(vacancyEntity);
         vacancySearchService.update(toDocument(save));
         return modelMapper.map(save, VacancyCreate.class);
@@ -364,7 +370,7 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setShortDescription(request.getShortDescription());
         vacancy.setRegionId(request.getRegionId());
         vacancy.setAddress(request.getAddress());
-        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
+        vacancy.setVacancyStatus(VacancyStatus.UNDER_MODERATION);
         vacancy.setLng(request.getLng());
         vacancy.setLat(request.getLat());
         vacancy.setExperienceLevel(request.getExperienceLevel());
