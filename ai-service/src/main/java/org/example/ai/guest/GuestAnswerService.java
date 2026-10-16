@@ -48,9 +48,9 @@ public class GuestAnswerService {
         String instruction = prompts.render(locale, Set.of()) + """
 
                 GUEST TRIAL RULES: This is an anonymous visitor, not a signed-in buyer/seller/admin.
-                Reply in the website language specified below. Be concise, at most three recommendations.
+                Reply in the website language specified below. Be concise, at most three product/company recommendations.
                 You can explain the marketplace and search PUBLIC products/companies using search_businesses.
-                You can search PUBLIC job vacancies using search_jobs (at most three). Personal saved job recommendations,
+                You can search PUBLIC job vacancies using search_jobs (at most five). Personal saved job recommendations,
                 preferences, resumes and applications require sign-in; you cannot access recommend_jobs.
                 Never submit an application. Use real tool-returned /jobs/{id} links; do not invent job/company/salary data.
                 You cannot see account history, favorites, carts, private contacts, orders, messages or admin data.
@@ -113,7 +113,7 @@ public class GuestAnswerService {
             try {
                 ToolArgumentValidator.validate(publicJobs.parametersSchema(), call.args());
                 Map<String, Object> args = new LinkedHashMap<>(call.args());
-                args.put("limit", 3);
+                args.put("limit", 5);
                 return publicJobs.execute(args, new ToolExecutionContext(null, null, null, Set.of(), locale));
             } catch (IllegalArgumentException | ToolArgumentException invalid) { return ToolResult.error("Invalid job search arguments", 400); }
         }

@@ -36,7 +36,7 @@ class GuestAnswerServiceTest {
         when(jobs.parametersSchema()).thenReturn(new SearchJobsTool(null).parametersSchema());
         when(jobs.execute(anyMap(), any())).thenReturn(ToolResult.ok(Map.of("kind", "job_search", "items", List.of())));
         assertThat(service.executePublicSearch(new ToolCallRequest("a", "search_jobs", Map.of("query", "driver", "limit", 6)), "uz", new AtomicBoolean()).success()).isTrue();
-        verify(jobs).execute(eq(Map.of("query", "driver", "limit", 3)), argThat((ToolExecutionContext c) -> c.userSub()==null && c.bearerToken()==null && c.roles().isEmpty()));
+        verify(jobs).execute(eq(Map.of("query", "driver", "limit", 5)), argThat((ToolExecutionContext c) -> c.userSub()==null && c.bearerToken()==null && c.roles().isEmpty()));
         assertThat(service.executePublicSearch(new ToolCallRequest("b", "recommend_jobs", Map.of()), "uz", new AtomicBoolean()).success()).isFalse();
         verifyNoInteractions(search);
     }

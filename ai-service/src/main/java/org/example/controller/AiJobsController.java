@@ -20,8 +20,11 @@ public class AiJobsController {
     private final JobMatchingService matching;
     private final PublicJobsClient jobs;
     private final RpmRateLimiter limiter;
-    public AiJobsController(JobPreferencesStore profiles, JobMatchingService matching, PublicJobsClient jobs, RpmRateLimiter limiter) {
+    private final ResumeJobMatchingService resumeMatching;
+    public AiJobsController(JobPreferencesStore profiles, JobMatchingService matching, PublicJobsClient jobs, RpmRateLimiter limiter,
+            ResumeJobMatchingService resumeMatching) {
         this.profiles = profiles; this.matching = matching; this.jobs = jobs; this.limiter = limiter;
+        this.resumeMatching = resumeMatching;
     }
     public record ProfileResponse(JobPreferences preferences) {}
     @GetMapping("/preferences")
@@ -44,11 +47,13 @@ public class AiJobsController {
     }
     @GetMapping("/recommendations")
     public ResponseEntity<?> recommendations(@RequestParam(defaultValue = "5") int limit,
+            @RequestParam(required = false) Long resumeId, @RequestParam(required = false) String experienceLevel,
             @RequestHeader(value = "Accept-Language", required = false) String language) {
         String owner = AiSecurityUtil.requireSub();
         JobCriteria criteria = JobCriteria.defaults(limit).validated(false);
         guard("recommendations", owner);
-        return response(matching.recommend(owner, criteria, language));
+        return response(resumeId == null ? matching.recommend(owner, criteria, language)
+                : resumeMatching.recommend(resumeId, experienceLevel, criteria, AiSecurityUtil.requireBearerToken(), language));
     }
     private static ResponseEntity<?> response(Object data) { return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(ApiResponse.successResponse(data)); }
     @ExceptionHandler({org.springframework.http.converter.HttpMessageNotReadableException.class,

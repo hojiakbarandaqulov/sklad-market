@@ -138,6 +138,10 @@ public class GeminiChatModelProvider implements ChatModelProvider {
                 .maxOutputTokens(request.maxOutputTokens())
                 .responseMimeType("application/json")
                 .responseSchema(Schema.fromJson(writeJson(request.responseSchema())));
+        if (request.reasoningBudgetTokens() != null) {
+            configBuilder.thinkingConfig(com.google.genai.types.ThinkingConfig.builder()
+                    .thinkingBudget(request.reasoningBudgetTokens()).build());
+        }
         if (request.systemInstruction() != null && !request.systemInstruction().isBlank()) {
             configBuilder.systemInstruction(Content.builder().parts(List.of(Part.fromText(request.systemInstruction()))).build());
         }

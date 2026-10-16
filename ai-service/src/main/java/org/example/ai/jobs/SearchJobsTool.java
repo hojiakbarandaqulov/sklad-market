@@ -14,7 +14,7 @@ public class SearchJobsTool implements AgentTool {
     public String name() { return NAME; }
     public String description() {
         return "Search live public Sklad Jobs vacancies with a short specific job title and optional hard filters. "
-                + "Returns at most three initial grounded job cards (max six), never applies for a job. "
+                + "Returns up to five grounded jobs, never applies for a job. "
                 + "Use for public job search across all roles. No private resumes or contact details. "
                 + "Do not infer numeric region/category IDs; use only IDs supplied by the user or actual Jobs taxonomy.";
     }
@@ -34,15 +34,20 @@ public class SearchJobsTool implements AgentTool {
         fields.put("experienceLevel", Map.of("type", "STRING", "enum", JobPreferences.EXPERIENCE_LEVELS));
         fields.put("employmentType", Map.of("type", "STRING", "description", "Exact existing platform employment type when explicitly specified."));
         fields.put("workSchedule", Map.of("type", "STRING", "description", "Exact existing platform schedule when explicitly specified."));
-        fields.put("limit", Map.of("type", "INTEGER", "description", "Default three, maximum six. Use three initially."));
+        fields.put("limit", Map.of("type", "INTEGER", "description", "Default and maximum five. Never fill with unrelated jobs."));
         fields.put("presentation", Map.of("type", "STRING", "enum", List.of("CARDS", "PLAIN_TEXT"), "description", "PLAIN_TEXT only on explicit user request."));
+        if (!search) {
+            fields.put("resumeId", Map.of("type", "INTEGER", "description", "Explicitly selected caller-owned resume ID only; never guess."));
+            fields.put("confirmedExperience", Map.of("type", "STRING", "enum", JobPreferences.EXPERIENCE_LEVELS,
+                    "description", "Only a level explicitly confirmed by the user; never infer from prose."));
+        }
         return Map.of("type", "OBJECT", "properties", fields, "required", search ? List.of("query") : List.of());
     }
     static JobCriteria criteria(Map<String, Object> args) {
         return new JobCriteria(ToolArgs.asString(args.get("query")), number(args.get("regionId")), number(args.get("categoryId")),
                 args.get("salaryMin") instanceof Number n ? new BigDecimal(n.toString()) : null,
                 ToolArgs.asString(args.get("experienceLevel")), ToolArgs.asString(args.get("employmentType")),
-                ToolArgs.asString(args.get("workSchedule")), ToolArgs.asInt(args.get("limit"), 3));
+                ToolArgs.asString(args.get("workSchedule")), ToolArgs.asInt(args.get("limit"), 5));
     }
     private static Long number(Object value) { return value instanceof Number n ? n.longValue() : null; }
     static ToolResult withPresentation(Map<String, Object> result, Map<String, Object> args) {

@@ -21,6 +21,12 @@ public class JobMatchingService {
         JobCriteria safe = requested.validated(false);
         var profile = profiles.find(owner).orElse(null);
         if (profile == null) return profileRequired();
+        return recommendProfile(profile, safe, language);
+    }
+
+    public Map<String, Object> recommendProfile(JobPreferences profile, JobCriteria requested, String language) {
+        profile = profile.validated();
+        JobCriteria safe = requested.validated(false);
         String query = safe.query() == null ? profile.desiredPosition() : safe.query();
         // Selecting a saved category is deliberate; explicit category always overrides it.
         JobCriteria hard = new JobCriteria(safe.query(), safe.regionId() == null ? profile.regionId() : safe.regionId(),

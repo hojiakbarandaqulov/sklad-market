@@ -151,4 +151,18 @@ class ResumeServiceImplTest {
         assertEquals(501L, service.getResume(501L, AppLanguage.UZ).getId());
         verifyNoInteractions(companies, applications);
     }
+    @Test void legacyByIdAliasCannotReadUnrelatedPrivateResume() {
+        candidateResume();
+        when(companies.getOwnedCompanyIds(25L)).thenReturn(List.of());
+        assertThrows(AppNotFoundException.class,()->service.getByIdResume(501L,AppLanguage.UZ));
+        owned();
+        assertEquals(501L,service.getByIdResume(501L,AppLanguage.UZ).getId());
+    }
+    @Test void buyerOwnerCanReadAnActuallySubmittedResumeNotEveryResume() {
+        authenticateRole("BUYER");
+        candidateResume();
+        when(applications.existsResumeApplicationForBuyer(501L,26L,25L)).thenReturn(true);
+        assertEquals(501L,service.getByIdResume(501L,AppLanguage.UZ).getId());
+        verifyNoInteractions(companies);
+    }
 }

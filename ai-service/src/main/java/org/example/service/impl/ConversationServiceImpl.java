@@ -35,15 +35,17 @@ public class ConversationServiceImpl implements ConversationService {
     private final MessageRepository messageRepository;
     private final ToolRegistry toolRegistry;
     private final JdbcTemplate jdbc;
+    private final org.example.ai.jobs.CandidateResultPrivacy candidatePrivacy;
 
     public ConversationServiceImpl(
             ConversationRepository conversationRepository,
             MessageRepository messageRepository,
-            ToolRegistry toolRegistry, JdbcTemplate jdbc) {
+            ToolRegistry toolRegistry, JdbcTemplate jdbc, org.example.ai.jobs.CandidateResultPrivacy candidatePrivacy) {
         this.conversationRepository = conversationRepository;
         this.messageRepository = messageRepository;
         this.toolRegistry = toolRegistry;
         this.jdbc = jdbc;
+        this.candidatePrivacy = candidatePrivacy;
     }
 
     @Override
@@ -177,6 +179,7 @@ public class ConversationServiceImpl implements ConversationService {
 
     private MessageDto toDto(Message message, Set<String> currentRoles) {
         String toolPayload = message.getToolPayload();
+        if (toolPayload != null && toolPayload.contains("candidate_search")) toolPayload = candidatePrivacy.restore(toolPayload);
         if (message.getToolName() != null
                 && toolRegistry.findAllowed(message.getToolName(), currentRoles == null ? Set.of() : currentRoles).isEmpty()) {
             // The caller still owns the conversation, but a revoked role must not keep granting

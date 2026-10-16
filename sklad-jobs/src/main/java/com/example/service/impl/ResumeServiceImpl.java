@@ -70,6 +70,10 @@ public class ResumeServiceImpl implements ResumeService {
 
         Resume resume = resumeRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> resumeNotFound(language));
+        var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_BUYER"))
+                && applicationRepository.existsResumeApplicationForBuyer(id,resume.getCandidateId(),viewerId))
+            return toDTO(resume);
         var companyIds = companyClient.getOwnedCompanyIds(viewerId);
         if (companyIds != null && !companyIds.isEmpty()
                 && applicationRepository.existsResumeApplicationForCompanies(
@@ -97,11 +101,8 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public ResumeDTO getByIdResume(Long id, AppLanguage language) {
-        Optional<Resume> byIdAndDeletedFalse = resumeRepository.findByIdAndDeletedFalse(id);
-        if (byIdAndDeletedFalse.isEmpty()) {
-            throw resumeNotFound(language);
-        }
-        return toDTO(byIdAndDeletedFalse.get());
+        // Legacy alias must enforce the same owner/application policy as the canonical route.
+        return getResume(id, language);
     }
 
     @Override

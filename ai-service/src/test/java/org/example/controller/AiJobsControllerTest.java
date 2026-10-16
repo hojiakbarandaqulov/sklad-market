@@ -31,6 +31,7 @@ class AiJobsControllerTest {
     @MockBean JobMatchingService matching;
     @MockBean PublicJobsClient jobs;
     @MockBean RpmRateLimiter limiter;
+    @MockBean ResumeJobMatchingService resumeMatching;
 
     @Test void guestsCannotReadOrWritePreferencesRecommendationsOrCategories() throws Exception {
         for (String endpoint : List.of("preferences", "recommendations", "categories"))

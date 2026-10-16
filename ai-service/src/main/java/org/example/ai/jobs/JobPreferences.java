@@ -19,7 +19,7 @@ public record JobPreferences(String desiredPosition, List<String> skills, Long r
         }
         positive(regionId, "regionId", true);
         positive(categoryId, "categoryId", false);
-        if (!EXPERIENCE_LEVELS.contains(experienceLevel)) throw new IllegalArgumentException("Select a valid experienceLevel");
+        if (experienceLevel == null || !EXPERIENCE_LEVELS.contains(experienceLevel)) throw new IllegalArgumentException("Select a valid experienceLevel");
         money(salaryMin);
         return new JobPreferences(position, List.copyOf(unique.values()), regionId, experienceLevel,
                 categoryId, salaryMin, text(employmentType, 80, "employmentType"), text(workSchedule, 80, "workSchedule"));

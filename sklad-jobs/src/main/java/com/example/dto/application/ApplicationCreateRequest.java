@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 
 @Getter @Setter
 public class ApplicationCreateRequest {
+    @Positive
+    private Long invitationId;
     @NotNull
     private Long resumeId;
     @NotBlank @Size(max = 255)

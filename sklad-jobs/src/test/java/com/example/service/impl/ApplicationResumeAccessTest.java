@@ -72,6 +72,16 @@ class ApplicationResumeAccessTest {
     }
 
     @Test
+    void buyerVacancyOwnerCanReadOnlyItsSubmittedApplicationResume() {
+        application.getVacancy().setCompanyId(null);
+        application.getVacancy().setBuyerId(77L);
+        assertEquals("Submitted resume", service.getApplicationResume(9001L, AppLanguage.UZ).getTitle());
+        verifyNoInteractions(companies,resumes);
+        application.getVacancy().setBuyerId(66L);
+        assertThrows(AccessDeniedException.class,()->service.getApplicationResume(9001L,AppLanguage.UZ));
+    }
+
+    @Test
     void anotherCompanyCannotReadTheResume() {
         when(companies.getOwnedCompanyIds(77L)).thenReturn(List.of(8L));
         assertThrows(AccessDeniedException.class, () -> service.getApplicationResume(9001L, AppLanguage.UZ));

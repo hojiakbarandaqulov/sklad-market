@@ -35,6 +35,11 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
     private final com.example.config.clent.CompanyClient companyClient;
+    // Setter injection preserves the established constructor for existing service consumers/tests.
+    private JobInvitationService invitationService;
+
+    @org.springframework.beans.factory.annotation.Autowired
+    void configureInvitations(JobInvitationService invitationService) { this.invitationService = invitationService; }
 
     @Override
     @Transactional
@@ -52,6 +57,8 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         Resume resume = resumeRepository.findByIdAndCandidateIdAndDeletedFalse(request.getResumeId(), candidateId).orElseThrow(() -> new AppNotFoundException(messageService.getMessage("resume.not.found", language)));
         if (applicationRepository.existsByVacancyIdAndCandidateIdAndDeletedFalse(vacancyId, candidateId))
             throw new AppConflictException(messageService.getMessage("application.duplicate", language));
+        JobInvitation invitation = request.getInvitationId() == null ? null
+                : invitationService.validateApplication(request.getInvitationId(), candidateId, vacancy, resume.getId());
         JobApplication application = new JobApplication();
         application.setVacancy(vacancy);
         application.setCandidateId(candidateId);
@@ -68,7 +75,9 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         application.setSource("SKLAD_JOBS");
         application.setChatPending(true);
         application.setChatNextAttemptAt(Instant.now());
-        return toDTO(applicationRepository.save(application));
+        JobApplication saved = applicationRepository.save(application);
+        if (invitation != null) invitationService.completeApplication(invitation);
+        return toDTO(saved);
     }
 
     @Override
@@ -167,7 +176,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         JobApplication application = applicationRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> notFound(language));
         if (!viewerId.equals(application.getCandidateId())) {
-            requireCompanyOwner(application.getVacancy().getCompanyId());
+            requireVacancyOwner(application.getVacancy());
         }
 
         // Read the submitted copy even if the original resume was edited or deleted.
