@@ -65,7 +65,7 @@ public class VacancyServiceImpl implements VacancyService {
                 .positionName(savedVacancy.getPositionName())
                 .vacancyId(savedVacancy.getId())
                 .companyId(savedVacancy.getCompanyId())
-                .ownerId(savedVacancy.getId())
+                .ownerId(profileId)
                 .categoryId(savedVacancy.getCategoryId())
                 .regionId(savedVacancy.getRegionId())
                 .createdDate(savedVacancy.getCreatedDate())
@@ -305,6 +305,15 @@ public class VacancyServiceImpl implements VacancyService {
         Vacancy vacancy = toEntityBuyer(vacancyDTO);
         vacancy.setBuyerId(requireSellerProfile(language));
         Vacancy savedVacancy = vacancyRepository.save(vacancy);
+        kafkaProducerService.sendVacancyCreated(VacancyCreatedEvent.builder()
+                .positionName(savedVacancy.getPositionName())
+                .vacancyId(savedVacancy.getId())
+                .companyId(savedVacancy.getCompanyId())
+                .ownerId(savedVacancy.getBuyerId())
+                .categoryId(savedVacancy.getCategoryId())
+                .regionId(savedVacancy.getRegionId())
+                .createdDate(savedVacancy.getCreatedDate())
+                .price(savedVacancy.getPrice()).build());
 
         return modelMapper.map(savedVacancy, VacancyCreateBuyerResponseDTO.class);
     }

@@ -7,24 +7,7 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="vacancy moderation">
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/resources/db/migration/V3__users-alter.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/dto/event/VacancyCreatedEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/vacancy/VacancyCreatedEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/KafkaProducerService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/KafkaProducerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/entity/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/entity/Users.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/enums/NotificationCreateType.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/enums/NotificationCreateType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/KafkaConsumerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/KafkaConsumerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/NotificationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/NotificationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/impl/NotificationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/service/impl/NotificationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/ResumeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/ResumeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" afterDir="false" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java">
       <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/VacancyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/VacancyServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -152,8 +135,8 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
-        <option value="Ibodulloxon &lt;ioa22052005@gmail.com&gt;" />
         <option value="Xojiakbar" />
+        <option value="Ibodulloxon &lt;ioa22052005@gmail.com&gt;" />
       </list>
     </option>
     <option name="PUSH_TAGS">
@@ -169,7 +152,6 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="SYNC" />
-    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -1144,8 +1126,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="message commit" />
-    <MESSAGE value="getMyCompany api bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;category-service/src/main/java/org/example/controller/CategoryController.java" />
     <MESSAGE value="category create bug fix" />
     <MESSAGE value="seller dashboard api bug fix" />
@@ -1169,7 +1149,9 @@
     <MESSAGE value="feat(ai): integrate live jobs search and private recommendations" />
     <MESSAGE value="feat(ai): integrate live jobs search and private recommendations&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;" />
     <MESSAGE value="vacancy moderation" />
-    <option name="LAST_COMMIT_MESSAGE" value="vacancy moderation" />
+    <MESSAGE value="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
