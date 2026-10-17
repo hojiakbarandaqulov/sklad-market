@@ -7,8 +7,8 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java">
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/VacancyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/VacancyServiceImpl.java" afterDir="false" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;">
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/BuyerVacancyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/BuyerVacancyServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1149,9 +1149,9 @@
     <MESSAGE value="feat(ai): integrate live jobs search and private recommendations" />
     <MESSAGE value="feat(ai): integrate live jobs search and private recommendations&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;" />
     <MESSAGE value="vacancy moderation" />
-    <MESSAGE value="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" />
+    <MESSAGE value="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

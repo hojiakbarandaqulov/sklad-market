@@ -50,7 +50,7 @@ public class BuyerVacancyServiceImpl implements BuyerVacancyService {
         vacancy.setRequirements(request.getRequirements());
         vacancy.setWorkingConditions(request.getWorkingConditions());
         vacancy.setShowContacts(Boolean.TRUE.equals(request.getShowContacts()));
-        vacancy.setVacancyStatus(VacancyStatus.DRAFT);
+        vacancy.setVacancyStatus(VacancyStatus.UNDER_MODERATION);
         vacancy.setPublishedAt(null);
         Vacancy saved = repository.save(vacancy);
         updateSearchAfterCommit(saved);
