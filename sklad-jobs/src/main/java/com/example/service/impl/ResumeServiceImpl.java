@@ -118,6 +118,15 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeImageResponse;
     }
 
+    @Override
+    public PageImpl<ResumeDTO> getAllResumes(int page, int perPage, AppLanguage language) {
+        Pageable pageable = PageRequest.of(page - 1, perPage,
+                Sort.by(Sort.Order.desc("createdDate"), Sort.Order.desc("id")));
+        Page<Resume> all = resumeRepository.findAll(pageable);
+
+        return new PageImpl<>(all.getContent().stream().map(this::toDTO).toList(),pageable, all.getTotalElements());
+    }
+
 
     private AppNotFoundException resumeNotFound(AppLanguage language) {
         return new AppNotFoundException(messageService.getMessage("resume.not.found", language));

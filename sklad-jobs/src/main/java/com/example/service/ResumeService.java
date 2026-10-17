@@ -19,4 +19,5 @@ public interface ResumeService {
 
     ResumeImageResponse uploadImages(Long id, MultipartFile file, AppLanguage language);
 
+    PageImpl<ResumeDTO> getAllResumes(int page, int perPage, AppLanguage language);
 }
