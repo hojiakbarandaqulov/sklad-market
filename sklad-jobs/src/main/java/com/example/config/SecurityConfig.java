@@ -46,7 +46,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/v1/vacancies", "/api/v1/vacancies/{id}",
-                                "/api/v1/job-categories", "/api/v1/job-categories/{id}").permitAll()
+                                "/api/v1/job-categories", "/api/v1/job-categories/{id}", "/api/v1/me/resumes/all").permitAll()
                         .anyRequest().authenticated()
                 ).oauth2ResourceServer(auth2 -> auth2
                         .jwt(jwt -> jwt

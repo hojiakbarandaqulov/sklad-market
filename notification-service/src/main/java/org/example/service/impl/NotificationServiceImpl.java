@@ -122,7 +122,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationResponse createInternal(CreateNotificationRequest request) {
+    public void createInternal(CreateNotificationRequest request) {
         try {
             Notification notification = new Notification();
             notification.setUserId(request.getUserId());
@@ -142,7 +142,7 @@ public class NotificationServiceImpl implements NotificationService {
                 userNotificationResult.getNotifications().add(notification);
                 userNotificationRepository.save(userNotificationResult);
             }*/
-            return toResponse(save);
+            toResponse(save);
         } catch (Exception e) {
             throw new AppBadException("Failed to create notification");
         }

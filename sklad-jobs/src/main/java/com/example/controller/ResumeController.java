@@ -32,6 +32,7 @@ public class ResumeController {
                                                @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(resumeService.createResume(request, language));
     }
+
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping
     public ApiResponse<PageImpl<ResumeDTO>> getMyResumes(
@@ -39,6 +40,16 @@ public class ResumeController {
             @RequestParam(defaultValue = "20") int perPage,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(resumeService.getMyResumes(page, perPage, language));
+    }
+
+
+    @PreAuthorize("permitAll()")
+    @GetMapping("all")
+    public ApiResponse<PageImpl<ResumeDTO>> getAllResumes(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int perPage,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(resumeService.getAllResumes(page, perPage, language));
     }
 
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")

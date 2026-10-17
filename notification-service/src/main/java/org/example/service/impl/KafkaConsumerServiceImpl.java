@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.event.CompanyCreateEvent;
 import org.example.dto.event.ProductCreatedEvent;
+import org.example.dto.event.VacancyCreatedEvent;
 import org.example.dto.notification.CreateNotificationRequest;
 import org.example.enums.NotificationCreateType;
 import org.example.service.KafkaConsumerService;
@@ -70,5 +71,31 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
         req.setPayload(payload);
         notificationService.createInternal(req);
 
+    }
+
+    @KafkaListener(
+            topics = "vacancy.created",
+            properties = {"spring.json.value.default.type=org.example.dto.event.VacancyCreatedEvent"}
+    )
+    @Override
+    public void onVacancyCreated(VacancyCreatedEvent event) {
+        if (event.vacancyId() == null) return;
+
+        CreateNotificationRequest request = new CreateNotificationRequest();
+        request.setUserId(event.ownerId());
+        request.setType(NotificationCreateType.VACANCY_CREATED);
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("positionName", event.positionName());
+        payload.put("vacancyId", event.vacancyId());
+        payload.put("companyId", event.companyId());
+        payload.put("ownerId", event.ownerId());
+        payload.put("categoryId", event.categoryId());
+        payload.put("regionId", event.regionId());
+        payload.put("createdDate", event.createdDate());
+        payload.put("price", event.price());
+        request.setPayload(payload);
+
+        notificationService.createInternal(request);
     }
 }

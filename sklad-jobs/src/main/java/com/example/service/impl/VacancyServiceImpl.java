@@ -7,8 +7,7 @@ import com.example.dto.ApiResponse;
 import com.example.dto.vacancy.*;
 import com.example.exp.AppNotFoundException;
 import com.example.repository.specification.VacancySpecifications;
-import com.example.service.VacancySearchService;
-import com.example.service.JobCategoryService;
+import com.example.service.*;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 
@@ -21,8 +20,6 @@ import com.example.enums.VacancyModeration;
 import com.example.enums.VacancyStatus;
 import com.example.exp.AppBadException;
 import com.example.repository.VacancyRepository;
-import com.example.service.ResourceBundleService;
-import com.example.service.VacancyService;
 import com.example.utils.SpringSecurityUtil;
 import feign.Client;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +46,7 @@ public class VacancyServiceImpl implements VacancyService {
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
     private final JobCategoryService jobCategoryService;
+    private final KafkaProducerService kafkaProducerService;
 
     @Override
     public VacancyCreate createVacancy(VacancyCreate vacancyCreate, AppLanguage language) {
@@ -63,6 +61,15 @@ public class VacancyServiceImpl implements VacancyService {
 
         jobCategoryService.validateSelection(vacancyCreate.getCategoryId(), language);
         Vacancy savedVacancy = vacancyRepository.save(toEntity(vacancyCreate));
+        kafkaProducerService.sendVacancyCreated(VacancyCreatedEvent.builder()
+                .positionName(savedVacancy.getPositionName())
+                .vacancyId(savedVacancy.getId())
+                .companyId(savedVacancy.getCompanyId())
+                .ownerId(savedVacancy.getId())
+                .categoryId(savedVacancy.getCategoryId())
+                .regionId(savedVacancy.getRegionId())
+                .createdDate(savedVacancy.getCreatedDate())
+                .price(savedVacancy.getPrice()).build());
         vacancySearchService.index(toDocument(savedVacancy));
         return modelMapper.map(savedVacancy, VacancyCreate.class);
     }

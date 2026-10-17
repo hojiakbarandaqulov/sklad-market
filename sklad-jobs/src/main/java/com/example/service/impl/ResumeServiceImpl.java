@@ -118,6 +118,18 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeImageResponse;
     }
 
+    @Override
+    public PageImpl<ResumeDTO> getAllResumes(int page, int perPage, AppLanguage language) {
+        if (page < 1 || perPage < 1 || perPage > 100) {
+            throw new AppBadException(messageService.getMessage("vacancy.filter.invalid", language));
+        }
+        Pageable pageable = PageRequest.of(page - 1, perPage,
+                Sort.by(Sort.Order.desc("createdDate"), Sort.Order.desc("id")));
+        Page<Resume> all = resumeRepository.findAllByDeletedFalse(pageable);
+
+        return new PageImpl<>(all.getContent().stream().map(this::toDTO).toList(),pageable, all.getTotalElements());
+    }
+
 
     private AppNotFoundException resumeNotFound(AppLanguage language) {
         return new AppNotFoundException(messageService.getMessage("resume.not.found", language));

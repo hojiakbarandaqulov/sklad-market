@@ -16,5 +16,5 @@ public interface NotificationService {
 
     PushTokenResponse registerPushToken(PushTokenRequest request);
 
-    NotificationResponse createInternal(CreateNotificationRequest request);
+    void createInternal(CreateNotificationRequest request);
 }
