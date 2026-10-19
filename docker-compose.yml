@@ -114,7 +114,9 @@
     keycloak:
       image: quay.io/keycloak/keycloak:24.0
       container_name: keycloak
-      command: start-dev
+      command:
+          - start-dev
+          - --features=token-exchange,admin-fine-grained-authz
       ports:
         - "127.0.0.1:9090:8080"
       environment:
@@ -122,6 +124,8 @@
         KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
         TZ: ${TZ:-Asia/Tashkent}
       restart: unless-stopped
+      volumes:
+       - /opt/sklad-market/keycloak-data:/opt/keycloak/data
 
     elasticsearch:
       image: elasticsearch:8.11.0
@@ -186,6 +190,7 @@
         SERVER_PORT: 8081
         SPRING_APPLICATION_NAME: auth-service
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_auth
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
 
     user-service:
       <<: *internal-service
@@ -447,3 +452,4 @@
   volumes:
     minio-data:
     elasticsearch-data:
+    keycloak:
