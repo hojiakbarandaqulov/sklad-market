@@ -11,12 +11,14 @@ import com.example.entity.Resume;
 import com.example.enums.AppLanguage;
 import com.example.exp.AppBadException;
 import com.example.exp.AppNotFoundException;
+import com.example.repository.JobApplicationRepository;
 import com.example.repository.ResumeRepository;
 import com.example.mapper.ResumeDocumentMapper;
 import com.example.service.ResourceBundleService;
 import com.example.service.ResumeSearchService;
 import com.example.service.ResumeService;
 import com.example.utils.SpringSecurityUtil;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
@@ -30,16 +32,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Transactional(readOnly = true)
 public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
-    private final com.example.repository.JobApplicationRepository applicationRepository;
+    private final JobApplicationRepository applicationRepository;
     private final CompanyClient companyClient;
     private final FileClient fileClient;
     private final ResumeSearchService resumeSearchService;
+
 
     @Override
     @Transactional

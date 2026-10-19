@@ -1,12 +1,15 @@
 package com.example.service.impl;
 
+import com.example.config.clent.CompanyClient;
 import com.example.dto.resume.ResumeRequest;
 import com.example.entity.Resume;
 import com.example.enums.AppLanguage;
 import com.example.exp.AppBadException;
 import com.example.exp.AppNotFoundException;
+import com.example.repository.JobApplicationRepository;
 import com.example.repository.ResumeRepository;
 import com.example.service.ResourceBundleService;
+import com.example.service.ResumeService;
 import com.example.utils.SpringSecurityUtil;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
@@ -21,10 +24,15 @@ import static org.mockito.ArgumentMatchers.*;
 class ResumeServiceImplTest {
     private final ResumeRepository repository = mock(ResumeRepository.class);
     private final ResourceBundleService messages = mock(ResourceBundleService.class);
-    private final com.example.repository.JobApplicationRepository applications = mock(com.example.repository.JobApplicationRepository.class);
-    private final com.example.config.clent.CompanyClient companies = mock(com.example.config.clent.CompanyClient.class);
-    private final ResumeServiceImpl service = new ResumeServiceImpl(repository, new ModelMapper(), messages, applications, companies, mock(com.example.config.clent.FileClient.class));
+    private final JobApplicationRepository applications = mock(JobApplicationRepository.class);
+    private final CompanyClient companies = mock(CompanyClient.class);
+//    private final ResumeServiceImpl service = new ResumeServiceImpl(repository, new ModelMapper(), messages, applications, companies, mock(com.example.config.clent.FileClient.class));
+   private final ResumeService service;
     private MockedStatic<SpringSecurityUtil> security;
+
+    ResumeServiceImplTest(ResumeService service) {
+        this.service = service;
+    }
 
     @BeforeEach void setup() {
         security = mockStatic(SpringSecurityUtil.class);
