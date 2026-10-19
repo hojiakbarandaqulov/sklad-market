@@ -125,7 +125,7 @@
         TZ: ${TZ:-Asia/Tashkent}
       restart: unless-stopped
       volumes:
-       - /opt/sklad-market/keycloak-data:/opt/keycloak/data
+        - /var/snap/docker/common/sklad-keycloak-data:/opt/keycloak/data
 
     elasticsearch:
       image: elasticsearch:8.11.0
@@ -190,7 +190,7 @@
         SERVER_PORT: 8081
         SPRING_APPLICATION_NAME: auth-service
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_auth
-        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+#        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
 
     user-service:
       <<: *internal-service
