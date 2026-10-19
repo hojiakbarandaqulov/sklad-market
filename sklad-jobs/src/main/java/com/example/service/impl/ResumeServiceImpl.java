@@ -3,7 +3,6 @@ package com.example.service.impl;
 import com.example.config.clent.CompanyClient;
 import com.example.config.clent.FileClient;
 import com.example.config.clent.dto.AttachDto;
-import com.example.config.clent.dto.AttachInfoDto;
 import com.example.dto.ApiResponse;
 import com.example.dto.resume.ResumeDTO;
 import com.example.dto.resume.ResumeImageResponse;
@@ -13,16 +12,19 @@ import com.example.enums.AppLanguage;
 import com.example.exp.AppBadException;
 import com.example.exp.AppNotFoundException;
 import com.example.repository.ResumeRepository;
+import com.example.mapper.ResumeDocumentMapper;
 import com.example.service.ResourceBundleService;
+import com.example.service.ResumeSearchService;
 import com.example.service.ResumeService;
 import com.example.utils.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
@@ -37,6 +39,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final com.example.repository.JobApplicationRepository applicationRepository;
     private final CompanyClient companyClient;
     private final FileClient fileClient;
+    private final ResumeSearchService resumeSearchService;
 
     @Override
     @Transactional
@@ -45,7 +48,9 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = new Resume();
         resume.setCandidateId(candidateId);
         mapRequest(request, resume);
-        return toDTO(resumeRepository.save(resume));
+        Resume saved = resumeRepository.save(resume);
+        updateSearchAfterCommit(saved);
+        return toDTO(saved);
     }
 
     @Override
@@ -84,7 +89,9 @@ public class ResumeServiceImpl implements ResumeService {
     public ResumeDTO updateResume(Long id, ResumeRequest request, AppLanguage language) {
         Resume resume = findOwnedResume(id, requireProfile(language), language);
         mapRequest(request, resume);
-        return toDTO(resumeRepository.save(resume));
+        Resume saved = resumeRepository.save(resume);
+        updateSearchAfterCommit(saved);
+        return toDTO(saved);
     }
 
     @Override
@@ -93,6 +100,7 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = findOwnedResume(id, requireProfile(language), language);
         resume.setDeleted(true);
         resumeRepository.save(resume);
+        afterCommit(() -> resumeSearchService.delete(id));
     }
 
     @Override
@@ -112,6 +120,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         resume.setFileId(upload.getData().getId());
         resumeRepository.save(resume);
+        updateSearchAfterCommit(resume);
         ResumeImageResponse resumeImageResponse = new ResumeImageResponse();
         resumeImageResponse.setId(resume.getFileId());
         resumeImageResponse.setUrl(upload.getData().getUrl());
@@ -120,16 +129,41 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public PageImpl<ResumeDTO> getAllResumes(int page, int perPage, AppLanguage language) {
-        if (page < 1 || perPage < 1 || perPage > 100) {
-            throw new AppBadException(messageService.getMessage("vacancy.filter.invalid", language));
-        }
-        Pageable pageable = PageRequest.of(page - 1, perPage,
-                Sort.by(Sort.Order.desc("createdDate"), Sort.Order.desc("id")));
-        Page<Resume> all = resumeRepository.findAllByDeletedFalse(pageable);
-
-        return new PageImpl<>(all.getContent().stream().map(this::toDTO).toList(),pageable, all.getTotalElements());
+        return getByFilterResumes(null, null, page, perPage, language);
     }
 
+    @Override
+    public PageImpl<ResumeDTO> getByFilterResumes(String q, Long categoryId, int page, int perPage, AppLanguage language) {
+        if (page < 1 || perPage < 1 || perPage > 100) {
+            throw new AppBadException(messageService.getMessage("resume.pagination.invalid", language));
+        }
+        if (categoryId != null && categoryId <= 0) {
+            throw new AppBadException(messageService.getMessage("job.category.invalid", language));
+        }
+        Pageable pageable = PageRequest.of(page - 1, perPage,
+                Sort.by(Sort.Order.desc("createdDate"), Sort.Order.desc("resumeId")));
+        Page<com.example.document.ResumeDocument> results = resumeSearchService.search(q, categoryId, pageable);
+        return new PageImpl<>(results.getContent().stream().map(ResumeDocumentMapper::toDTO).toList(),
+                pageable, results.getTotalElements());
+    }
+
+    private void updateSearchAfterCommit(Resume resume) {
+        // Capture audited dates after JPA has flushed the transaction.
+        afterCommit(() -> resumeSearchService.update(ResumeDocumentMapper.from(resume)));
+    }
+
+    private void afterCommit(Runnable action) {
+        if (TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    action.run();
+                }
+            });
+        } else {
+            action.run();
+        }
+    }
 
     private AppNotFoundException resumeNotFound(AppLanguage language) {
         return new AppNotFoundException(messageService.getMessage("resume.not.found", language));
@@ -165,6 +199,7 @@ public class ResumeServiceImpl implements ResumeService {
         resume.setPhone(request.getPhone().trim());
         resume.setEmail(request.getEmail().trim());
         resume.setRegionId(request.getRegionId());
+        resume.setCategoryId(request.getCategoryId());
         resume.setDesiredPosition(request.getDesiredPosition());
         resume.setExpectedSalary(request.getExpectedSalary());
         resume.setAboutMe(request.getAboutMe());

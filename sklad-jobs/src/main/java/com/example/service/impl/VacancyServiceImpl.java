@@ -46,7 +46,6 @@ public class VacancyServiceImpl implements VacancyService {
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
     private final JobCategoryService jobCategoryService;
-    private final KafkaProducerService kafkaProducerService;
 
     @Override
     public VacancyCreate createVacancy(VacancyCreate vacancyCreate, AppLanguage language) {
@@ -61,15 +60,6 @@ public class VacancyServiceImpl implements VacancyService {
 
         jobCategoryService.validateSelection(vacancyCreate.getCategoryId(), language);
         Vacancy savedVacancy = vacancyRepository.save(toEntity(vacancyCreate));
-        kafkaProducerService.sendVacancyCreated(VacancyCreatedEvent.builder()
-                .positionName(savedVacancy.getPositionName())
-                .vacancyId(savedVacancy.getId())
-                .companyId(savedVacancy.getCompanyId())
-                .ownerId(profileId)
-                .categoryId(savedVacancy.getCategoryId())
-                .regionId(savedVacancy.getRegionId())
-                .createdDate(savedVacancy.getCreatedDate())
-                .price(savedVacancy.getPrice()).build());
         vacancySearchService.index(toDocument(savedVacancy));
         return modelMapper.map(savedVacancy, VacancyCreate.class);
     }
@@ -305,15 +295,6 @@ public class VacancyServiceImpl implements VacancyService {
         Vacancy vacancy = toEntityBuyer(vacancyDTO);
         vacancy.setBuyerId(requireSellerProfile(language));
         Vacancy savedVacancy = vacancyRepository.save(vacancy);
-        kafkaProducerService.sendVacancyCreated(VacancyCreatedEvent.builder()
-                .positionName(savedVacancy.getPositionName())
-                .vacancyId(savedVacancy.getId())
-                .companyId(savedVacancy.getCompanyId())
-                .ownerId(savedVacancy.getBuyerId())
-                .categoryId(savedVacancy.getCategoryId())
-                .regionId(savedVacancy.getRegionId())
-                .createdDate(savedVacancy.getCreatedDate())
-                .price(savedVacancy.getPrice()).build());
 
         return modelMapper.map(savedVacancy, VacancyCreateBuyerResponseDTO.class);
     }

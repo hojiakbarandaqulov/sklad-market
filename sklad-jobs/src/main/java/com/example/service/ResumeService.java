@@ -5,7 +5,6 @@ import com.example.dto.resume.ResumeImageResponse;
 import com.example.dto.resume.ResumeRequest;
 import com.example.enums.AppLanguage;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ResumeService {
@@ -20,4 +19,6 @@ public interface ResumeService {
     ResumeImageResponse uploadImages(Long id, MultipartFile file, AppLanguage language);
 
     PageImpl<ResumeDTO> getAllResumes(int page, int perPage, AppLanguage language);
+
+    PageImpl<ResumeDTO> getByFilterResumes(String q, Long categoryId, int page, int perPage, AppLanguage language);
 }

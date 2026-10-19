@@ -16,6 +16,7 @@ public class ResumeDTO {
     private String phone;
     private String email;
     private Long regionId;
+    private Long categoryId;
     private String desiredPosition;
     private BigDecimal expectedSalary;
     private String aboutMe;

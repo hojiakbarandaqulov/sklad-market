@@ -4,6 +4,7 @@ import com.example.dto.vacancy.VacancyFilter;
 import com.example.enums.*;
 import com.example.repository.specification.VacancySpecifications;
 import com.example.service.AiVacancyCandidatesService;
+import com.example.service.impl.AiVacancyCandidatesServiceImpl;
 import com.example.config.clent.AiCompanySummaryClient;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ class PublicVacancyRepositoryTest {
         save("Teacher",VacancyStatus.DRAFT,false,42,1,"100");
         save("Teacher",VacancyStatus.PUBLISHED,true,42,1,"100");
         var companies=org.mockito.Mockito.mock(AiCompanySummaryClient.class);
-        var service=new AiVacancyCandidatesService(repository,companies);
+        AiVacancyCandidatesService service=new AiVacancyCandidatesServiceImpl(repository,companies);
         var filter=new VacancyFilter(); filter.setRegionId(1L);
         var found=service.find(filter,java.util.List.of("oqituvch","teacher"),null,40);
         assertEquals(1,found.size()); assertEquals(wanted.getId(),found.get(0).id());

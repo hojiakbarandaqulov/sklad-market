@@ -8,7 +8,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;">
-      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/BuyerVacancyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/BuyerVacancyServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/document/ResumeDocument.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/repository/ResumeSearchRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/ResumeSearchService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/AiVacancyCandidatesServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/ResumeSearchServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-jobs/src/main/resources/db/skladjobs-migration/V1__job_categories.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/company-service.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/company-service.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/controller/ResumeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/controller/ResumeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/resume/ResumeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/resume/ResumeDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/resume/ResumeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/dto/resume/ResumeRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/Resume.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/entity/Resume.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/AiVacancyCandidatesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/AiVacancyCandidatesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/KafkaProducerService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/ResumeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/ResumeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/KafkaProducerServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/ResumeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/VacancyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/VacancyServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/PublicVacancyRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/PublicVacancyRepositoryTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,17 +121,6 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="sklad-jobs" type="f1a62948:ProjectNode" />
               </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="sklad-jobs" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="sklad-jobs" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
             </expand>
             <select />
           </tree_state>
@@ -127,8 +135,8 @@
         <option value="Record" />
         <option value="Dockerfile" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -285,8 +293,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.example.dto.vacancy" />
       <recent name="org.example.repository" />
+      <recent name="com.example.dto.vacancy" />
       <recent name="com.example.dto.resume" />
       <recent name="com.example.enums" />
       <recent name="com.example.dto" />
@@ -305,11 +313,11 @@
       <recent name="D:\JavaProject\Microservice\Skalad-market\product-service\src\main\resources\db" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.service" />
+      <recent name="com.example.document" />
       <recent name="org.example.dto.event" />
       <recent name="com.example.dto.vacancy" />
       <recent name="com.example.config.clent" />
-      <recent name="com.example.dto" />
-      <recent name="org.example.config.internal" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.sklad-jobs [build]">

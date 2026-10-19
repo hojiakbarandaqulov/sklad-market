@@ -41,6 +41,9 @@ public class Resume extends BaseEntity {
     @Column(nullable = false)
     private Long regionId;
 
+    @Column(nullable = false)
+    private Long categoryId;
+
     // Nomzod ishlamoqchi bo'lgan lavozim.
     private String desiredPosition;
 

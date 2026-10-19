@@ -19,6 +19,8 @@ public class ResumeRequest {
     private String email;
     @NotNull @Positive
     private Long regionId;
+    @NotNull @Positive
+    private Long categoryId;
     @Size(max = 255)
     private String desiredPosition;
     @DecimalMin("0.00") @Digits(integer = 17, fraction = 2)

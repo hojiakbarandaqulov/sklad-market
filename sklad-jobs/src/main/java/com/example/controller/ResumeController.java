@@ -6,18 +6,15 @@ import com.example.dto.resume.ResumeImageResponse;
 import com.example.dto.resume.ResumeRequest;
 import com.example.enums.AppLanguage;
 import com.example.service.ResumeService;
-import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -43,15 +40,6 @@ public class ResumeController {
     }
 
 
-    @PreAuthorize("permitAll()")
-    @GetMapping("all")
-    public ApiResponse<PageImpl<ResumeDTO>> getAllResumes(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int perPage,
-            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(resumeService.getAllResumes(page, perPage, language));
-    }
-
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping("/{id}")
     public ApiResponse<ResumeDTO> getResume(@PathVariable Long id,
@@ -66,6 +54,7 @@ public class ResumeController {
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(resumeService.uploadImages(id, file, language));
     }
+
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     @GetMapping("byId/{id}")
     public ApiResponse<ResumeDTO> getByIdResume(@PathVariable Long id,
@@ -87,5 +76,22 @@ public class ResumeController {
     public void deleteResume(@PathVariable Long id,
                              @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         resumeService.deleteResume(id, language);
+    }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping("all")
+    public ApiResponse<PageImpl<ResumeDTO>> getAllResumes(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int perPage,
+            @RequestHeader(
+                    value = "Accept-Language",
+                    defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(
+                resumeService.getByFilterResumes(
+                        q, categoryId, page, perPage, language
+                )
+        );
     }
 }
