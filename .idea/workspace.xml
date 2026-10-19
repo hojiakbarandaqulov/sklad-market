@@ -7,7 +7,16 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;">
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/GoogleLoginController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/dto/auth/GoogleLoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleLoginService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleLoginServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/GoogleLoginTokenConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/GoogleLoginTokenConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application-prod.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -111,11 +120,11 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTTP Request" />
-        <option value="Record" />
         <option value="Dockerfile" />
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -272,11 +281,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.example.service" />
       <recent name="org.example.repository" />
       <recent name="com.example.dto.vacancy" />
       <recent name="com.example.dto.resume" />
       <recent name="com.example.enums" />
-      <recent name="com.example.dto" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-jobs\src\main\java\com\example" />

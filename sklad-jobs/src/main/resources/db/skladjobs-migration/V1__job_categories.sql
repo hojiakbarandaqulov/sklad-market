@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS job_category (
     deleted BOOLEAN NOT NULL DEFAULT FALSE,
     name_uz VARCHAR(255) NOT NULL,
     name_ru VARCHAR(255) NOT NULL,
-    name_en VARCHAR(255) NOT NULL,
+    name_en VARCHAR(255) NOT NULL
 );
 
 -- Flyway runs before Hibernate, so this also supports a fresh database.
