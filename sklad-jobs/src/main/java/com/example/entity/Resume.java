@@ -41,7 +41,8 @@ public class Resume extends BaseEntity {
     @Column(nullable = false)
     private Long regionId;
 
-    @Column(nullable = false)
+    // Nullable for legacy rows; ResumeRequest requires a category on create/update.
+    @Column(name = "category_id")
     private Long categoryId;
 
     // Nomzod ishlamoqchi bo'lgan lavozim.
