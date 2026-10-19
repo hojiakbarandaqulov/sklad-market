@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.config.clent.CompanyClient;
 import com.example.config.clent.FileClient;
 import com.example.config.clent.dto.AttachDto;
+import com.example.document.ResumeDocument;
 import com.example.dto.ApiResponse;
 import com.example.dto.resume.ResumeDTO;
 import com.example.dto.resume.ResumeImageResponse;
@@ -19,7 +20,6 @@ import com.example.service.ResumeSearchService;
 import com.example.service.ResumeService;
 import com.example.utils.SpringSecurityUtil;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -52,7 +52,28 @@ public class ResumeServiceImpl implements ResumeService {
         resume.setCandidateId(candidateId);
         mapRequest(request, resume);
         Resume saved = resumeRepository.save(resume);
-        updateSearchAfterCommit(saved);
+        afterCommit(() -> resumeSearchService.index(ResumeDocument.builder()
+                .id(saved.getId().toString())
+                .resumeId(saved.getId())
+                .candidateId(saved.getCandidateId())
+                .fileId(saved.getFileId())
+                .title(saved.getTitle())
+                .fullName(saved.getFullName())
+                .phone(saved.getPhone())
+                .email(saved.getEmail())
+                .regionId(saved.getRegionId())
+                .categoryId(saved.getCategoryId())
+                .desiredPosition(saved.getDesiredPosition())
+                .expectedSalary(saved.getExpectedSalary())
+                .aboutMe(saved.getAboutMe())
+                .skills(saved.getSkills())
+                .workExperience(saved.getWorkExperience())
+                .education(saved.getEducation())
+                .languages(saved.getLanguages())
+                .createdDate(saved.getCreatedDate())
+                .modifiedDate(saved.getModifiedDate())
+                .deleted(Boolean.TRUE.equals(saved.getDeleted()))
+                .build()));
         return toDTO(saved);
     }
 
@@ -93,7 +114,29 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = findOwnedResume(id, requireProfile(language), language);
         mapRequest(request, resume);
         Resume saved = resumeRepository.save(resume);
-        updateSearchAfterCommit(saved);
+
+        afterCommit(() -> resumeSearchService.update(ResumeDocument.builder()
+                .id(saved.getId().toString())
+                .resumeId(saved.getId())
+                .candidateId(saved.getCandidateId())
+                .fileId(saved.getFileId())
+                .title(saved.getTitle())
+                .fullName(saved.getFullName())
+                .phone(saved.getPhone())
+                .email(saved.getEmail())
+                .regionId(saved.getRegionId())
+                .categoryId(saved.getCategoryId())
+                .desiredPosition(saved.getDesiredPosition())
+                .expectedSalary(saved.getExpectedSalary())
+                .aboutMe(saved.getAboutMe())
+                .skills(saved.getSkills())
+                .workExperience(saved.getWorkExperience())
+                .education(saved.getEducation())
+                .languages(saved.getLanguages())
+                .createdDate(saved.getCreatedDate())
+                .modifiedDate(saved.getModifiedDate())
+                .deleted(Boolean.TRUE.equals(saved.getDeleted()))
+                .build()));
         return toDTO(saved);
     }
 
@@ -145,7 +188,7 @@ public class ResumeServiceImpl implements ResumeService {
         }
         Pageable pageable = PageRequest.of(page - 1, perPage,
                 Sort.by(Sort.Order.desc("createdDate"), Sort.Order.desc("resumeId")));
-        Page<com.example.document.ResumeDocument> results = resumeSearchService.search(q, categoryId, pageable);
+        Page<ResumeDocument> results = resumeSearchService.search(q, categoryId, pageable);
         return new PageImpl<>(results.getContent().stream().map(ResumeDocumentMapper::toDTO).toList(),
                 pageable, results.getTotalElements());
     }
