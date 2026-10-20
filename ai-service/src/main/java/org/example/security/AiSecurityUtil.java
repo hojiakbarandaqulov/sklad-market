@@ -23,10 +23,6 @@ public final class AiSecurityUtil {
     }
 
     public static String requireSub() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof uz.sklad.security.GoogleAuthenticationToken google) {
-            return google.getIdentity().keycloakId();
-        }
         Jwt jwt = currentJwt();
         String sub = jwt.getSubject();
         if (sub == null || sub.isBlank()) {
@@ -48,10 +44,6 @@ public final class AiSecurityUtil {
 
     /** Stable human-readable label for AI-only administration; authorization still uses sub. */
     public static String currentUsername() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof uz.sklad.security.GoogleAuthenticationToken google) {
-            return google.getIdentity().username();
-        }
         Jwt jwt = currentJwt();
         String username = jwt.getClaimAsString("preferred_username");
         if (username == null || username.isBlank()) username = jwt.getClaimAsString("email");

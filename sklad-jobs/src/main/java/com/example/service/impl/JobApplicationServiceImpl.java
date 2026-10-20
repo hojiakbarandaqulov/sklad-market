@@ -114,20 +114,25 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     @Transactional
-    public JobApplicationDTO applicationStatusResponse(Long id, ApplicationResponseStatus applicationResponseStatus, AppLanguage language) {
+    public JobApplicationDTO applicationStatusResponse(Long id, ApplicationResponseStatus applicationResponseStatus, String comment, AppLanguage language) {
         Optional<JobApplication> jobApplication = applicationRepository.findForChat(id);
         if (jobApplication.isEmpty()) {
             throw new AppNotFoundException(messageService.getMessage("resume.not.found", language));
         }
         JobApplication jobApplicationEntity = jobApplication.get();
         requireCompanyOwner(jobApplicationEntity.getVacancy().getCompanyId());
-        if(applicationResponseStatus==null) throw new AppBadException("Status required");
-        requireActive(jobApplicationEntity,language);
-        if(jobApplicationEntity.getFirstResponseAt()==null) jobApplicationEntity.setFirstResponseAt(Instant.now());
+        if (applicationResponseStatus == null) throw new AppBadException("Status required");
+        requireActive(jobApplicationEntity, language);
+        if (jobApplicationEntity.getFirstResponseAt() == null) jobApplicationEntity.setFirstResponseAt(Instant.now());
         ApplicationStatus applicationResponse = switch (applicationResponseStatus) {
             case ACCEPTED -> ApplicationStatus.ACCEPTED;
             case REJECTED -> ApplicationStatus.REJECTED;
         };
+        if (applicationResponse==ApplicationStatus.REJECTED){
+            if (comment !=null){
+                jobApplicationEntity.setComment(comment);
+            }
+        }
         jobApplicationEntity.setStatus(applicationResponse);
         return toDTO(applicationRepository.save(jobApplicationEntity));
 
@@ -135,18 +140,18 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public Page<JobApplicationDTO> getApplicationVacancy(Long vacancyId, GetNewApplicationStatus status, int page, int perPage) {
-        var vacancy=vacancyRepository.findByIdAndDeletedFalse(vacancyId)
-            .orElseThrow(()->new AppNotFoundException("Vacancy not found"));
+        var vacancy = vacancyRepository.findByIdAndDeletedFalse(vacancyId)
+                .orElseThrow(() -> new AppNotFoundException("Vacancy not found"));
         requireVacancyOwner(vacancy);
-        if(page<1 || perPage<1 || perPage>100) throw new AppBadException("Invalid pagination");
-        if(status==null) status=GetNewApplicationStatus.NEW;
+        if (page < 1 || perPage < 1 || perPage > 100) throw new AppBadException("Invalid pagination");
+        if (status == null) status = GetNewApplicationStatus.NEW;
 
         Pageable pageable = PageRequest.of(
                 page - 1,
                 perPage,
                 Sort.by(Sort.Direction.DESC, "createdDate")
         );
-        ApplicationStatus applicationStatus =switch (status){
+        ApplicationStatus applicationStatus = switch (status) {
             case NEW -> ApplicationStatus.NEW;
         };
         Page<JobApplication> applications =
@@ -203,10 +208,11 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     }
 
     private void requireCompanyOwner(Long companyId) {
-        Long userId=SpringSecurityUtil.getProfileId();
-        if(userId==null) throw new org.springframework.security.access.AccessDeniedException("Authentication required");
-        var owned=companyClient.getOwnedCompanyIds(userId);
-        if(owned==null || !owned.contains(companyId))
+        Long userId = SpringSecurityUtil.getProfileId();
+        if (userId == null)
+            throw new org.springframework.security.access.AccessDeniedException("Authentication required");
+        var owned = companyClient.getOwnedCompanyIds(userId);
+        if (owned == null || !owned.contains(companyId))
             throw new org.springframework.security.access.AccessDeniedException("Company access denied");
     }
 
@@ -252,6 +258,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
         dto.setCompanyId(a.getVacancy().getCompanyId());
         dto.setPositionName(a.getVacancy().getPositionName());
         dto.setResumeId(a.getResumeId());
+        dto.setComment(a.getComment());
         dto.setChatThreadId(a.getChatThreadId());
         dto.setStatus(a.getStatus());
         dto.setFullName(a.getFullName());

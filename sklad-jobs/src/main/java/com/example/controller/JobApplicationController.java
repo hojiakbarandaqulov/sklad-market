@@ -58,9 +58,10 @@ public class JobApplicationController {
     @PreAuthorize("hasRole('SELLER')")
     @PutMapping("/{id}/status")
     public ApiResponse<JobApplicationDTO> applicationResponse(@PathVariable Long id,
+                                                              @RequestParam String comment,
                                                               @RequestParam ApplicationResponseStatus applicationResponseStatus,
                                                               @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(jobApplicationService.applicationStatusResponse(id, applicationResponseStatus, language));
+        return ApiResponse.successResponse(jobApplicationService.applicationStatusResponse(id, applicationResponseStatus, comment, language));
     }
 
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")

@@ -146,7 +146,7 @@ public class AuthServiceImpl implements AuthService {
         }
         Users profile = optional.get();
         if (profile.getPassword() == null) {
-            throw new AppBadException("Bu akkauntga Google orqali kiring");
+            throw new AppBadException(messageService.getMessage("wrong.password", language));
         }
         LocalDateTime timestamp = LocalDateTime.now();
         if (profile.getLockedUntil() != null && profile.getLockedUntil().isAfter(timestamp)) {

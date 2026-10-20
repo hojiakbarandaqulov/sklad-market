@@ -85,13 +85,3 @@ tasks.register('eval', Test) {
     classpath = sourceSets.test.runtimeClasspath
     shouldRunAfter tasks.named('test')
 }
-
-// Shared servlet JWT support is compiled into each independently built service.
-sourceSets {
-    main {
-        java {
-            srcDir(file('../shared-security/src/main/java').exists()
-                    ? '../shared-security/src/main/java' : 'shared-security/src/main/java')
-        }
-    }
-}

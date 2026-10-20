@@ -10,18 +10,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@RestController @RequiredArgsConstructor
+@RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/vacancies/{id}/applications")
 @PreAuthorize("hasRole('BUYER')")
 public class VacancyApplicationController {
 
     private final JobApplicationService jobApplicationService;
 
-    @PostMapping @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<JobApplicationDTO> create(@PathVariable Long id,
-            @Valid @RequestBody ApplicationCreateRequest request,
-            @RequestHeader(value="Accept-Language",defaultValue="UZ") AppLanguage language) {
-        return ApiResponse.successResponse(jobApplicationService.create(id,request,language));
+                                                 @Valid @RequestBody ApplicationCreateRequest request,
+                                                 @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(jobApplicationService.create(id, request, language));
     }
 
 }

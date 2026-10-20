@@ -17,8 +17,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.security.authentication.BadCredentialsException;
 
 import javax.management.relation.Role;
 import java.util.*;
@@ -49,54 +47,6 @@ public class KeycloakServiceImpl implements KeycloakService {
     private String masterTokenUrl;
 
     private final RestTemplate restTemplate;
-
-    @Override
-    public String createGoogleUser(String firstName, String lastName, String email, String googleSubject,
-                                   Long profileId, Roles role) {
-        String adminToken = getAdminToken();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(adminToken);
-        Map<String, Object> user = new LinkedHashMap<>();
-        user.put("username", email);
-        user.put("email", email);
-        user.put("firstName", firstName);
-        user.put("lastName", lastName);
-        user.put("enabled", true);
-        user.put("emailVerified", true);
-        user.put("requiredActions", List.of());
-        user.put("attributes", Map.of("profileId", List.of(profileId.toString()),
-                "googleSubject", List.of(googleSubject)));
-        String keycloakId;
-        try {
-            ResponseEntity<Void> response = restTemplate.postForEntity(adminUrl + "/users",
-                    new HttpEntity<>(user, headers), Void.class);
-            String location = response.getHeaders().getFirst("Location");
-            if (location == null || location.endsWith("/")) {
-                throw new IllegalStateException("Keycloak user ID qaytmadi");
-            }
-            keycloakId = location.substring(location.lastIndexOf('/') + 1);
-        } catch (HttpClientErrorException.Conflict ex) {
-            // Oldingi urinish yaratilgandan keyin uzilgan bo'lishi mumkin.
-            // Faqat aynan shu Google identity va lokal userga tegishli akkaunt tiklanadi.
-            java.net.URI uri = UriComponentsBuilder.fromUriString(adminUrl + "/users")
-                    .queryParam("username", email).queryParam("exact", true).build().encode().toUri();
-            List<?> matches = restTemplate.exchange(uri, HttpMethod.GET,
-                    new HttpEntity<>(headers), List.class).getBody();
-            Map<?, ?> match = matches != null && matches.size() == 1 && matches.get(0) instanceof Map<?, ?> value
-                    ? value : Map.of();
-            Map<?, ?> attributes = match.get("attributes") instanceof Map<?, ?> value ? value : Map.of();
-            if (!List.of(googleSubject).equals(attributes.get("googleSubject"))
-                    || !List.of(profileId.toString()).equals(attributes.get("profileId"))
-                    || !Boolean.TRUE.equals(match.get("enabled")) || !(match.get("id") instanceof String)) {
-                throw new BadCredentialsException("Keycloak akkaunti band. Mavjud akkauntga kirib Google'ni bog'lang");
-            }
-            keycloakId = (String) match.get("id");
-        }
-        createRoleIfNotExists(role, adminToken);
-        assignRoleToUser(keycloakId, role, adminToken, headers);
-        return keycloakId;
-    }
 
     @Override
     public TokenResponseDTO getToken(String username, String password) {

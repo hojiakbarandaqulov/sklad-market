@@ -17,6 +17,7 @@ public class JobApplicationDTO {
     private String fullName;
     private String phone;
     private String email;
+    private String comment;
     private Long regionId;
     private BigDecimal expectedSalary;
     private String coverLetter;

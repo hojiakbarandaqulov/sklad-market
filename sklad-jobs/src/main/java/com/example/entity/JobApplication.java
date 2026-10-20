@@ -43,6 +43,9 @@ public class JobApplication extends BaseEntity {
     private BigDecimal expectedSalary;
 
     @Column(columnDefinition = "TEXT")
+    private String comment;
+
+    @Column(columnDefinition = "TEXT")
     private String coverLetter;
 
     // Tizimda yaratilgan Resume yozuvining ID si; fayl ID si emas.

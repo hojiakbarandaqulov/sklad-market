@@ -13,9 +13,6 @@ public interface KeycloakService {
 
     String createUser(String firstName, String lastName, String username, String password, Roles role);
 
-    String createGoogleUser(String firstName, String lastName, String email, String googleSubject,
-                            Long profileId, Roles role);
-
     void deleteUser(String username);
 
     void addProfileIdAttribute(String keycloakId, Long profileId,

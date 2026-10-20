@@ -19,11 +19,14 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication,L
         "and a.chatThreadId is null and (a.chatNextAttemptAt is null or a.chatNextAttemptAt<=:now) order by a.id")
     java.util.List<Long> findPendingChats(@Param("now") java.time.Instant now,Pageable pageable);
     boolean existsByVacancyIdAndCandidateIdAndDeletedFalse(Long vacancyId,Long candidateId);
+
     @EntityGraph(attributePaths="vacancy")
     @Query("select a from JobApplication a where a.candidateId = :candidateId and a.deleted = false and (:status is null or a.status = :status)")
     Page<JobApplication> findMyApplications(@Param("candidateId") Long candidateId,@Param("status") ApplicationStatus status,Pageable pageable);
+
     @EntityGraph(attributePaths="vacancy")
     Optional<JobApplication> findByIdAndCandidateIdAndDeletedFalse(Long id,Long candidateId);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select a from JobApplication a where a.id = :id and a.candidateId = :candidateId and a.deleted = false")
     Optional<JobApplication> findOwnedForUpdate(@Param("id") Long id,@Param("candidateId") Long candidateId);

@@ -88,6 +88,3 @@ springdoc:
   swagger-ui:
     config-url: /swagger/auth/v3/api-docs/swagger-config
     url: /swagger/auth/v3/api-docs
-
-google:
-  client-id: ${GOOGLE_CLIENT_ID:212242476039-tmsco0qjlq5n666glqm9akn9ee49u32b.apps.googleusercontent.com}
