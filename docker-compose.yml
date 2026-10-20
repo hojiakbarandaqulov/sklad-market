@@ -190,7 +190,7 @@
         SERVER_PORT: 8081
         SPRING_APPLICATION_NAME: auth-service
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_auth
-#        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-212242476039-tmsco0qjlq5n666glqm9akn9ee49u32b.apps.googleusercontent.com}
 
     user-service:
       <<: *internal-service

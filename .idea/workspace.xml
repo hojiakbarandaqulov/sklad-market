@@ -11,11 +11,17 @@
       <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/GoogleLoginController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/dto/auth/GoogleLoginRequest.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleLoginService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleProfileService.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleLoginServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleProfileServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/GoogleLoginTokenConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/GoogleLoginTokenConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/JOBS_CHAT_AND_ROADMAP_UZ.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/SKLAD_JOBS_API_DOCUMENTATION_UZ.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/VACANCY_FAVORITES_API_UZ.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,8 +128,8 @@
         <option value="HTTP Request" />
         <option value="Dockerfile" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Record" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -148,6 +154,7 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="SYNC" />
+    <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -1109,7 +1116,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/feature/ai-chat-memory" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>

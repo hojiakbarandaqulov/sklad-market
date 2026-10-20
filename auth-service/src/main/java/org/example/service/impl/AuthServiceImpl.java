@@ -145,6 +145,9 @@ public class AuthServiceImpl implements AuthService {
             throw new AppBadException(messageService.getMessage("username.not.found", language));
         }
         Users profile = optional.get();
+        if (profile.getPassword() == null) {
+            throw new AppBadException("Bu akkauntga Google orqali kiring");
+        }
         LocalDateTime timestamp = LocalDateTime.now();
         if (profile.getLockedUntil() != null && profile.getLockedUntil().isAfter(timestamp)) {
             long minutesLeft = ChronoUnit.MINUTES.between(LocalDateTime.now(), profile.getLockedUntil()) + 1;
