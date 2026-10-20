@@ -1,7 +1,8 @@
 package org.example.service.impl;
 
 import jakarta.ws.rs.core.MediaType;
-import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.example.dto.TokenResponseDTO;
 import org.example.dto.auth.GoogleLoginRequest;
 import org.example.entity.Users;
@@ -21,12 +22,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 
 @Service
 public class GoogleLoginServiceImpl implements GoogleLoginService {
+
+    private static final Logger log = LoggerFactory.getLogger(GoogleLoginServiceImpl.class);
 
     private final RestTemplate restTemplate;
     @Qualifier("googleIdTokenDecoder")
@@ -176,13 +180,26 @@ public class GoogleLoginServiceImpl implements GoogleLoginService {
 
             return tokens;
         } catch (HttpClientErrorException e) {
-            // Keycloak javobidagi token yoki maxfiy ma'lumot chiqarilmaydi.
+            logExchangeFailure(e);
             throw new AppBadException(
                     "Google akkauntini bog‘lash yoki "
                             + "Keycloak token-exchange sozlamalarini tekshiring");
+        } catch (HttpServerErrorException e) {
+            logExchangeFailure(e);
+            throw new IllegalStateException("Keycloak bilan bog'lanib bo'lmadi");
         } catch (RestClientException e) {
+            // Never log the exception message/body: it may contain credentials.
+            log.warn("GOOGLE_TOKEN_EXCHANGE_UNAVAILABLE client_id={} issuer=google-login exception={}",
+                    clientId, e.getClass().getSimpleName());
             throw new IllegalStateException(
                     "Keycloak bilan bog‘lanib bo‘lmadi");
         }
+    }
+
+    private void logExchangeFailure(org.springframework.web.client.HttpStatusCodeException exception) {
+        GoogleTokenExchangeFailure failure = GoogleTokenExchangeFailure.from(
+                exception.getStatusCode().value(), exception.getResponseBodyAsString());
+        log.warn("GOOGLE_TOKEN_EXCHANGE_REJECTED client_id={} issuer=google-login status={} oauth_error={} reason={}",
+                clientId, failure.status(), failure.oauthError(), failure.reason());
     }
 }
