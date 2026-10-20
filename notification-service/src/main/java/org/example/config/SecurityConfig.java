@@ -14,9 +14,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+@org.springframework.context.annotation.Import(uz.sklad.security.MarketJwtConfiguration.class)
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private uz.sklad.security.DirectGoogleAuthenticationManagerResolver directGoogleResolver;
 
     @Value("${server.domain}")
     private String domain;
@@ -34,11 +37,18 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(auth2 -> auth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(auth2 -> {
+                    if (directGoogleResolver != null) {
+                        auth2.authenticationManagerResolver(directGoogleResolver);
+                    } else {
+                        auth2.jwt(org.springframework.security.config.Customizer.withDefaults());
+                    }
+                });
         return http.build();
     }
 

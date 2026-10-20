@@ -49,8 +49,10 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'com.h2database:h2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -62,4 +64,14 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// Shared servlet JWT support is compiled into each independently built service.
+sourceSets {
+    main {
+        java {
+            srcDir(file('../shared-security/src/main/java').exists()
+                    ? '../shared-security/src/main/java' : 'shared-security/src/main/java')
+        }
+    }
 }

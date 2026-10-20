@@ -8,20 +8,66 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;">
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/GoogleLoginController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/dto/auth/GoogleLoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleLoginService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleProfileService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleLoginServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleProfileServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/GoogleIdentityInternalController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/dto/auth/GoogleLoginResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/exp/handle/GoogleAuthenticationExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleIdentityService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleIdentityServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile-service" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile-service" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ai-service/src/main/java/org/example/security/AiSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/ai-service/src/main/java/org/example/security/AiSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/AppConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/GoogleLoginTokenConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/GoogleLoginTokenConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/GoogleLoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/GoogleLoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/entity/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/entity/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleLoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleLoginService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleProfileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/GoogleProfileService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/KeycloakService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/KeycloakService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleLoginServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleLoginServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleProfileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleProfileServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/GoogleTokenExchangeFailure.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/KeycloakServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/KeycloakServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/location-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/location-service/src/main/java/com/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notification-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/notification-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sklad-jobs/JOBS_CHAT_AND_ROADMAP_UZ.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/sklad-jobs/SKLAD_JOBS_API_DOCUMENTATION_UZ.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/sklad-jobs/VACANCY_FAVORITES_API_UZ.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

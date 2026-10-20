@@ -20,10 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@org.springframework.context.annotation.Import(uz.sklad.security.MarketJwtConfiguration.class)
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private uz.sklad.security.DirectGoogleAuthenticationManagerResolver directGoogleResolver;
 
     @Value("${server.domain}")
     private String domain;
@@ -43,13 +46,19 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ← QO'SHISH
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/api/v1/attach/**").permitAll()
                         .requestMatchers("/internal/attach/**").permitAll()
                         .anyRequest().authenticated()
-                ).oauth2ResourceServer(auth2 -> auth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+                ).oauth2ResourceServer(auth2 -> {
+                    if (directGoogleResolver != null) {
+                        auth2.authenticationManagerResolver(directGoogleResolver);
+                    } else {
+                        auth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()));
+                    }
+                });
         return http.build();
     }
 

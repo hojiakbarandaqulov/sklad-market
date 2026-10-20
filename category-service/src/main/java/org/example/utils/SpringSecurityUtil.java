@@ -12,9 +12,11 @@ public class SpringSecurityUtil {
     public static Long getProfileId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        if (authentication instanceof uz.sklad.security.GoogleAuthenticationToken google) {
+            return google.getIdentity().profileId();
+        }
         if (authentication instanceof JwtAuthenticationToken jwtAuth) {
             Jwt jwt = jwtAuth.getToken();
-            log.info("Token claims: {}", jwt.getClaims());
             return jwt.getClaim("profileId"); // ← endi tokendan olish mumkin
         }
         return null;

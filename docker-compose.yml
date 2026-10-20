@@ -1,5 +1,8 @@
   x-common-env: &common-env
     SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+    AUTH_GOOGLE_DIRECT_ENABLED: ${AUTH_GOOGLE_DIRECT_ENABLED:-true}
+    GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    AUTH_GOOGLE_RESOLVE_URL: ${AUTH_GOOGLE_RESOLVE_URL:-http://127.0.0.1:8081/internal/auth/google/resolve}
     JAVA_OPTS: ${JAVA_OPTS:--Xms128m -Xmx512m}
     TZ: ${TZ:-Asia/Tashkent}
 

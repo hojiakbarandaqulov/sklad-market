@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Locale;
@@ -26,7 +27,10 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Bean
     public RestTemplate restTemplate(){
-        return new RestTemplate();
+        SimpleClientHttpRequestFactory requests = new SimpleClientHttpRequestFactory();
+        requests.setConnectTimeout(3000);
+        requests.setReadTimeout(8000);
+        return new RestTemplate(requests);
     }
 
     @Bean
