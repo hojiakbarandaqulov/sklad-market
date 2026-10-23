@@ -2,6 +2,7 @@ package com.example.entity;
 
 import com.example.entity.base.BaseEntity;
 import com.example.enums.ExperienceLevel;
+import com.example.enums.JobType;
 import com.example.enums.VacancyStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +24,10 @@ public class Vacancy extends BaseEntity {
     private Long categoryId;
     private BigDecimal price;
     private String employmentType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "job_type", length = 32)
+    private JobType jobType;
     private String workSchedule;
     private String shortDescription;
     private Long viewsCountCache = 0L;

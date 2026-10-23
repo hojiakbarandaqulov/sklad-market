@@ -25,6 +25,8 @@ public final class VacancySpecifications {
             if (f.getSalaryMax() != null) predicates.add(cb.lessThanOrEqualTo(root.get("price"), f.getSalaryMax()));
             if (f.getExperienceLevel() != null)
                 predicates.add(cb.equal(root.get("experienceLevel"), f.getExperienceLevel()));
+            if (f.getJobType() != null)
+                predicates.add(cb.equal(root.get("jobType"), f.getJobType()));
             if (f.getEmploymentType() != null && !f.getEmploymentType().isBlank())
                 predicates.add(cb.equal(cb.lower(root.get("employmentType")), f.getEmploymentType().trim().toLowerCase(Locale.ROOT)));
             if (f.getWorkSchedule() != null && !f.getWorkSchedule().isBlank())

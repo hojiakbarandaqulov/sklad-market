@@ -109,6 +109,12 @@ public class VacancySearchServiceImpl implements VacancySearchService {
                                 .value(filter.getExperienceLevel().name())));
                     }
 
+                    if (filter.getJobType() != null) {
+                        b.filter(f -> f.term(t -> t
+                                .field("jobType")
+                                .value(filter.getJobType().name())));
+                    }
+
                     if (filter.getEmploymentType() != null
                             && !filter.getEmploymentType().isBlank()) {
 

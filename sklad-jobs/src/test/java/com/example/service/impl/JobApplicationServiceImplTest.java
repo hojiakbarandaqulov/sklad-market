@@ -138,10 +138,10 @@ class JobApplicationServiceImplTest {
         when(apps.findForChat(9001L)).thenReturn(Optional.of(application));
         when(vacancies.findByIdAndDeletedFalse(100L)).thenReturn(Optional.of(application.getVacancy()));
         when(companies.getOwnedCompanyIds(25L)).thenReturn(List.of(99L));
-        assertThrows(org.springframework.security.access.AccessDeniedException.class,()->service.applicationStatusResponse(9001L,ApplicationResponseStatus.ACCEPTED,AppLanguage.UZ));
+        assertThrows(org.springframework.security.access.AccessDeniedException.class,()->service.applicationStatusResponse(9001L,ApplicationResponseStatus.ACCEPTED,"",AppLanguage.UZ));
         assertThrows(org.springframework.security.access.AccessDeniedException.class,()->service.getApplicationVacancy(100L,GetNewApplicationStatus.NEW,1,20));
         verify(apps,never()).save(any());
         when(companies.getOwnedCompanyIds(25L)).thenReturn(List.of(42L));
-        assertEquals(ApplicationStatus.ACCEPTED,service.applicationStatusResponse(9001L,ApplicationResponseStatus.ACCEPTED,AppLanguage.UZ).getStatus());
+        assertEquals(ApplicationStatus.ACCEPTED,service.applicationStatusResponse(9001L,ApplicationResponseStatus.ACCEPTED,"",AppLanguage.UZ).getStatus());
         assertNotNull(application.getFirstResponseAt());
     }}

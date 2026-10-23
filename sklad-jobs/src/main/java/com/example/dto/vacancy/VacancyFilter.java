@@ -1,6 +1,7 @@
 package com.example.dto.vacancy;
 
 import com.example.enums.ExperienceLevel;
+import com.example.enums.JobType;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,8 @@ public class VacancyFilter {
     private ExperienceLevel experienceLevel;
     @Size(max = 255)
     private String employmentType;
+
+    private JobType jobType;
     @Size(max = 255)
     private String workSchedule;
     @Min(1)

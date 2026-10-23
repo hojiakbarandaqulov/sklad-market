@@ -22,6 +22,7 @@ public final class VacancyDocumentMapper {
                 .categoryId(vacancy.getCategoryId())
                 .price(vacancy.getPrice())
                 .employmentType(vacancy.getEmploymentType())
+                .jobType(vacancy.getJobType())
                 .workSchedule(vacancy.getWorkSchedule())
                 .shortDescription(vacancy.getShortDescription())
                 .viewsCountCache(vacancy.getViewsCountCache() == null ? 0L : vacancy.getViewsCountCache())

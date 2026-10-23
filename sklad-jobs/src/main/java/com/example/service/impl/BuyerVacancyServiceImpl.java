@@ -40,6 +40,8 @@ public class BuyerVacancyServiceImpl implements BuyerVacancyService {
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
         vacancy.setEmploymentType(request.getEmploymentType());
+        // Preserve selections when an older client does not send the new field.
+        if (request.getJobType() != null) vacancy.setJobType(request.getJobType());
         vacancy.setWorkSchedule(request.getWorkSchedule());
         vacancy.setShortDescription(request.getShortDescription());
         vacancy.setRegionId(request.getRegionId());

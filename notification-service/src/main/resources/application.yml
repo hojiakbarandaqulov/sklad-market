@@ -1,4 +1,4 @@
-server:
+  server:
   url: ${server.domain}:${server.port}
 
 spring:

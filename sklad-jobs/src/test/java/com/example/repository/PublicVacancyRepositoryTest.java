@@ -40,6 +40,25 @@ class PublicVacancyRepositoryTest {
         for (Vacancy v : new Vacancy[]{draft,closed,deleted})
             assertTrue(repository.findByIdAndVacancyStatusAndDeletedFalse(v.getId(),VacancyStatus.PUBLISHED).isEmpty());
     }
+    @Test void jobTypeFiltersDoNotHideLegacyRowsUnlessATypeIsSelected() {
+        Vacancy legacy = save("Legacy", VacancyStatus.PUBLISHED, false, 42, 1, "100");
+        Vacancy permanent = save("Permanent", VacancyStatus.PUBLISHED, false, 42, 1, "100");
+        permanent.setJobType(JobType.PERMANENT);
+        repository.saveAndFlush(permanent);
+        Vacancy temporary = save("Temporary", VacancyStatus.PUBLISHED, false, 42, 1, "100");
+        temporary.setJobType(JobType.TEMPORARY);
+        repository.saveAndFlush(temporary);
+        Vacancy hidden = save("Hidden", VacancyStatus.DRAFT, false, 42, 1, "100");
+        hidden.setJobType(JobType.PERMANENT);
+        repository.saveAndFlush(hidden);
+        var filter = new VacancyFilter();
+        assertEquals(3, repository.findAll(VacancySpecifications.published(filter)).size());
+        filter.setJobType(JobType.PERMANENT);
+        assertEquals(java.util.List.of(permanent.getId()), repository.findAll(VacancySpecifications.published(filter)).stream().map(Vacancy::getId).toList());
+        filter.setJobType(JobType.TEMPORARY);
+        assertEquals(java.util.List.of(temporary.getId()), repository.findAll(VacancySpecifications.published(filter)).stream().map(Vacancy::getId).toList());
+        assertNull(repository.findById(legacy.getId()).orElseThrow().getJobType());
+    }
     @Test void combinesFiltersAndSearchesCaseInsensitively() {
         Vacancy wanted=save("Java developer",VacancyStatus.PUBLISHED,false,42,1,"150");
         save("Java developer",VacancyStatus.PUBLISHED,false,43,1,"150");

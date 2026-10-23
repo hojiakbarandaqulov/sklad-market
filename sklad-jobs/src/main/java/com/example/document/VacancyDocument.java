@@ -2,6 +2,7 @@ package com.example.document;
 
 
 import com.example.enums.ExperienceLevel;
+import com.example.enums.JobType;
 import com.example.enums.VacancyStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,9 @@ public class VacancyDocument {
 
     @Field(type = FieldType.Text)
     private String employmentType;
+
+    @Field(type = FieldType.Keyword)
+    private JobType jobType;
 
     @Field(type = FieldType.Text)
     private String workSchedule;

@@ -1,6 +1,7 @@
 package com.example.dto.vacancy;
 
 import com.example.enums.ExperienceLevel;
+import com.example.enums.JobType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -16,6 +17,8 @@ public class VacancyRequest {
     private BigDecimal price;
     @NotNull(message = "{validation.employment.type.required}")
     private String employmentType;
+
+    private JobType jobType;
     @NotNull(message = "{validation.work.schedule.required}")
     private String workSchedule;
     @NotNull(message = "{validation.short.description.required}")

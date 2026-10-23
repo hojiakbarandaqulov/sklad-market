@@ -82,6 +82,8 @@ public class VacancyServiceImpl implements VacancyService {
         vacancyEntity.setPositionName(vacancyUpdate.getPositionName());
         vacancyEntity.setPrice(vacancyUpdate.getPrice());
         vacancyEntity.setEmploymentType(vacancyUpdate.getEmploymentType());
+        // Older clients omit jobType; keep the existing selection.
+        if (vacancyUpdate.getJobType() != null) vacancyEntity.setJobType(vacancyUpdate.getJobType());
         vacancyEntity.setWorkSchedule(vacancyUpdate.getWorkSchedule());
         vacancyEntity.setShortDescription(vacancyUpdate.getShortDescription());
         vacancyEntity.setRegionId(vacancyUpdate.getRegionId());
@@ -331,6 +333,7 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
         vacancy.setEmploymentType(request.getEmploymentType());
+        vacancy.setJobType(request.getJobType());
         vacancy.setWorkSchedule(request.getWorkSchedule());
         vacancy.setShortDescription(request.getShortDescription());
         vacancy.setRegionId(request.getRegionId());
@@ -367,6 +370,7 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
         vacancy.setEmploymentType(request.getEmploymentType());
+        vacancy.setJobType(request.getJobType());
         vacancy.setWorkSchedule(request.getWorkSchedule());
         vacancy.setShortDescription(request.getShortDescription());
         vacancy.setRegionId(request.getRegionId());
@@ -387,6 +391,7 @@ public class VacancyServiceImpl implements VacancyService {
         vacancy.setPositionName(request.getPositionName());
         vacancy.setPrice(request.getPrice());
         vacancy.setEmploymentType(request.getEmploymentType());
+        vacancy.setJobType(request.getJobType());
         vacancy.setWorkSchedule(request.getWorkSchedule());
         vacancy.setShortDescription(request.getShortDescription());
         vacancy.setRegionId(request.getRegionId());
@@ -431,6 +436,7 @@ public class VacancyServiceImpl implements VacancyService {
         dto.setPositionName(document.getPositionName());
         dto.setPrice(document.getPrice());
         dto.setEmploymentType(document.getEmploymentType());
+        dto.setJobType(document.getJobType());
         dto.setWorkSchedule(document.getWorkSchedule());
         dto.setShortDescription(document.getShortDescription());
         dto.setVacancyStatus(document.getVacancyStatus());
