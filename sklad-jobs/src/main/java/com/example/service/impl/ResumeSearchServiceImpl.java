@@ -57,7 +57,7 @@ public class ResumeSearchServiceImpl implements ResumeSearchService {
                 b.filter(f -> f.term(t -> t.field("categoryId").value(categoryId)));
             }
             if (query != null && !query.isBlank()) {
-                b.must(m -> m.match(t -> t.field("title").query(query.trim()).operator(Operator.And)));
+                b.must(m -> m.matchBoolPrefix(t -> t.field("title").query(query.trim()).operator(Operator.And)));
             }
             return b;
         })).withPageable(pageable).withTrackTotalHits(true).build();

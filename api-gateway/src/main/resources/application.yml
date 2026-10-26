@@ -20,6 +20,7 @@ spring:
               - GET
               - POST
               - PUT
+              - PATCH
               - DELETE
               - OPTIONS
             allowedHeaders:
@@ -97,6 +98,19 @@ spring:
           uri: lb://ai-service
           predicates:
             - Path=/api/v1/ai,/api/v1/ai/**
+
+        # Sklad Control
+        - id: sklad-control
+          uri: lb://sklad-control
+          predicates:
+            - Path=/api/v1/control,/api/v1/control/**
+
+        - id: sklad-control-swagger
+          uri: lb://sklad-control
+          predicates:
+            - Path=/swagger/control/**
+          filters:
+            - StripPrefix=2
 
         # SkladJobs
         - id: sklad-jobs

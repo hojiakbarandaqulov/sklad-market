@@ -102,6 +102,22 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public ProductResponse create(CreateProductRequest request, AppLanguage language) {
+        return createCard(request, language, null, true);
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse createForControl(CreateProductRequest request, String key, boolean visible, AppLanguage language) {
+        validateCompanyOwnership(request.getCompanyId(), requiredSellerId(language), language);
+        // Slug bazada unique: Control'da saqlash uzilib qolsa, qayta urinish avvalgi kartani oladi.
+        String slug = "control-" + UUID.nameUUIDFromBytes(
+                (request.getCompanyId() + ":" + key).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        Optional<Product> existing = productRepository.findBySlugAndDeletedAtIsNull(slug);
+        if (existing.isPresent()) return toResponse(existing.get());
+        return createCard(request, language, slug, visible);
+    }
+
+    private ProductResponse createCard(CreateProductRequest request, AppLanguage language, String controlSlug, boolean visible) {
         Long sellerId = requiredSellerId(language);
         validateCompanyOwnership(request.getCompanyId(), sellerId, language);
         validateCategory(request.getCategoryId(), language);
@@ -110,8 +126,10 @@ public class ProductServiceImpl implements ProductService {
         Product product = new Product();
         applyCommonFields(product, request, language);
         product.setSellerId(sellerId);
-        product.setSlug(generateUniqueSlug(request.getName()));
-        product.setModerationStatus(ProductModerationStatus.PENDING);
+        product.setSlug(controlSlug == null ? generateUniqueSlug(request.getName()) : controlSlug);
+        product.setIsActive(visible);
+        // Ombor uchun yashirin karta moderatsiya navbatiga tushmaydi.
+        product.setModerationStatus(visible ? ProductModerationStatus.PENDING : ProductModerationStatus.ARCHIVED);
         product.setMinProduct(request.getMinProduct());
         product.setWholeSale(request.getWholeSale());
         product.setRetail(request.getRetail());
@@ -135,6 +153,57 @@ public class ProductServiceImpl implements ProductService {
         productSearchService.index(toDocument(saved));
 
         return toResponse(saved);
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse updateForControl(Long id, CreateProductRequest request, AppLanguage language) {
+        Product product = getOwnedProduct(id, language);
+        // Ombor bog'lanishi buzilmasligi uchun kartani boshqa kompaniyaga ko'chirmaymiz.
+        if (!Objects.equals(product.getCompanyId(), request.getCompanyId()))
+            throw new AppBadException(messageService.getMessage("company.not.owned", language));
+        validateCategory(request.getCategoryId(), language);
+        validatePickupBranch(request.getCompanyId(), request.getPickupAvailable(), request.getPickupBranchId(), language);
+        applyCommonFields(product, request, language);
+        product.setMinProduct(request.getMinProduct());
+        product.setWholeSale(request.getWholeSale());
+        product.setRetail(request.getRetail());
+        product.setPhone(request.getPhone());
+        // Tahrirlangan tasdiqlangan karta yana moderatsiyadan o'tadi.
+        if (product.getModerationStatus() == ProductModerationStatus.APPROVED)
+            product.setModerationStatus(ProductModerationStatus.PENDING);
+        Product saved = productRepository.saveAndFlush(product);
+        productSearchService.index(toDocument(saved));
+        return toResponse(saved);
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse visibilityForControl(Long id, boolean visible, AppLanguage language) {
+        Product product = getOwnedProduct(id, language);
+        // APPROVED + inactive — administrator bloklagan holat; sotuvchi uni qayta yoqa olmaydi.
+        boolean blocked = product.getModerationStatus() == ProductModerationStatus.APPROVED
+                && !Boolean.TRUE.equals(product.getIsActive());
+        if (visible && blocked)
+            throw new AppBadException(messageService.getMessage("product.control.blocked", language));
+        product.setIsActive(visible);
+        if (!visible && !blocked) product.setModerationStatus(ProductModerationStatus.ARCHIVED);
+        // Arxivdan qaytish APPROVED bermaydi: qayta moderatsiya talab qilinadi.
+        if (visible && product.getModerationStatus() == ProductModerationStatus.ARCHIVED)
+            product.setModerationStatus(ProductModerationStatus.PENDING);
+        Product saved = productRepository.saveAndFlush(product);
+        productSearchService.index(toDocument(saved));
+        return toResponse(saved);
+    }
+
+    @Override
+    public List<ProductResponse> cardsForControl(Long companyId, List<Long> ids, AppLanguage language) {
+        validateCompanyOwnership(companyId, requiredSellerId(language), language);
+        if (ids.size() > 100) throw new AppBadException("At most 100 product IDs are allowed");
+        // Sahifadagi kartalar bitta so'rov bilan olinadi; begona kompaniya kartalari qaytarilmaydi.
+        return productRepository.findAllById(ids).stream()
+                .filter(p -> p.getDeletedAt() == null && companyId.equals(p.getCompanyId()))
+                .map(this::toResponse).toList();
     }
 
     @Transactional
@@ -259,6 +328,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDetailResponse getPublicDetail(String slug, String sessionId, AppLanguage language) {
         Product product = productRepository.findBySlugAndModerationStatusAndDeletedAtIsNull(slug, ProductModerationStatus.APPROVED)
+                .filter(p -> Boolean.TRUE.equals(p.getIsActive()))
                 .orElseThrow(() -> new AppBadException(messageService.getMessage("product.not.found", language)));
 
         CompanySummaryResponse company = companyClient.getSummary(product.getCompanyId());
@@ -373,7 +443,11 @@ public class ProductServiceImpl implements ProductService {
         int resolvedPage = normalizePage(page, language);
         int resolvedPerPage = normalizePerPage(perPage, language);
         Pageable pageable = PageRequest.of(resolvedPage - 1, resolvedPerPage, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<Product> all = productRepository.findByDeletedAtIsNull(pageable);
+        // Bu URL ommaviy: ombor uchun yashirilgan va moderatsiyadagi kartalarni chiqarmaymiz.
+        Specification<Product> publicCards = notDeleted().and((root, query, cb) -> cb.and(
+                cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
+                cb.isTrue(root.get("isActive"))));
+        Page<Product> all = productRepository.findAll(publicCards, pageable);
 
         return ProductListResponse.builder()
                 .items(all.getContent().stream().map(this::toResponse).collect(Collectors.toList()))
@@ -419,6 +493,20 @@ public class ProductServiceImpl implements ProductService {
                 .isActive(product.getIsActive())
                 .primaryImageUrl(primaryImageUrl)
                 .build();
+    }
+
+    @Override
+    public List<Long> matchingControlCards(Long companyId, String q, Long categoryId, AppLanguage language) {
+        validateCompanyOwnership(companyId, requiredSellerId(language), language);
+        Specification<Product> spec = (root, query, cb) -> cb.and(
+                cb.equal(root.get("companyId"), companyId), cb.isNull(root.get("deletedAt")));
+        if (categoryId != null) spec = spec.and((root, query, cb) -> cb.equal(root.get("categoryId"), categoryId));
+        if (StringUtils.hasText(q)) {
+            String text = q.strip().toLowerCase(Locale.ROOT)
+                    .replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
+            spec = spec.and((root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + text + "%", '\\'));
+        }
+        return productRepository.findAll(spec).stream().map(Product::getId).toList();
     }
 
     private BigDecimal normalizePrice(PriceType priceType, BigDecimal price) {

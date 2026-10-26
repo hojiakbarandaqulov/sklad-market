@@ -415,6 +415,24 @@
         SPRING_APPLICATION_NAME: sklad-jobs
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_sklad
 
+    sklad-control:
+      <<: *internal-service
+      build:
+        context: .
+        dockerfile: Dockerfile-service
+        args:
+          SERVICE_DIR: sklad-control
+      container_name: sklad-control
+      depends_on:
+        - discovery-service
+        - keycloak
+      environment:
+        <<: *common-env
+        SERVER_ADDRESS: 127.0.0.1
+        SERVER_PORT: 8094
+        SPRING_APPLICATION_NAME: sklad-control
+        SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_control
+
     ai-service:
           <<: *internal-service
           build:

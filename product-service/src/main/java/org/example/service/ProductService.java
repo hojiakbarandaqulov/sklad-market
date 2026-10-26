@@ -19,6 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
+    List<Long> matchingControlCards(Long companyId, String q, Long categoryId, AppLanguage language);
+    // Control bitta karta yaratadi; bir xil kalit bilan qayta urinish nusxa yaratmaydi.
+    ProductResponse createForControl(CreateProductRequest request, String key, boolean visible, AppLanguage language);
+    ProductResponse updateForControl(Long id, CreateProductRequest request, AppLanguage language);
+    ProductResponse visibilityForControl(Long id, boolean visible, AppLanguage language);
+    List<ProductResponse> cardsForControl(Long companyId, List<Long> ids, AppLanguage language);
     ProductResponse create(CreateProductRequest request, AppLanguage language);
 
     List<ProductImageResponse> uploadImages(Long productId, List<MultipartFile> files, AppLanguage language);

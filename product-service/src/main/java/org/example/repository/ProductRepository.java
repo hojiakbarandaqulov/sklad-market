@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
+    Optional<Product> findBySlugAndDeletedAtIsNull(String slug);
     interface CompanyProductCount {
         Long getCompanyId();
         Long getProductCount();
