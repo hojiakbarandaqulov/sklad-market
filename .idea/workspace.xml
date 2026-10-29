@@ -7,25 +7,7 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add">
-      <change afterPath="$PROJECT_DIR$/sklad-control/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryEntityMappingTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/LiquibaseRollbackTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/SkladControlApplicationTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/StockAdjustmentApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/StockReservationApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/WarehouseCrudTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/test/resources/application-test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
