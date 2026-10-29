@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+    <!-- H2'da Liquibase TEXT ni CLOB qiladi, Hibernate TEXT esa VARCHAR kutadi. -->
+    <property name="operationReasonType" value="VARCHAR" dbms="h2"/>
+    <property name="operationReasonType" value="TEXT" dbms="postgresql"/>
+
+    <changeSet id="002-create-inventory_products" author="sklad">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="inventory_products"/></not></preConditions>
+        <createTable tableName="inventory_products">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="BIGINT"></column>
+            <column name="modified_by" type="BIGINT"></column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="catalog_card_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sku" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="inventory_products" columnNames="company_id,sku" constraintName="uk_inventory_products_company_sku"/>
+        <addUniqueConstraint tableName="inventory_products" columnNames="company_id,catalog_card_id" constraintName="uk_inventory_products_company_card"/>
+        <createIndex tableName="inventory_products" indexName="idx_inventory_products_company_status"><column name="company_id"/><column name="status"/></createIndex>
+        <rollback><dropTable tableName="inventory_products"/></rollback>
+    </changeSet>
+
+    <changeSet id="002-create-warehouse_stocks" author="sklad">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="warehouse_stocks"/></not></preConditions>
+        <createTable tableName="warehouse_stocks">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="BIGINT"></column>
+            <column name="modified_by" type="BIGINT"></column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="warehouse_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="inventory_product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="on_hand" type="DECIMAL(19,3)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reserved" type="DECIMAL(19,3)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="minimum_stock" type="DECIMAL(19,3)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="BIGINT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="warehouse_stocks" baseColumnNames="warehouse_id" referencedTableName="warehouses" referencedColumnNames="id" constraintName="fk_stock_warehouse"/>
+        <addForeignKeyConstraint baseTableName="warehouse_stocks" baseColumnNames="inventory_product_id" referencedTableName="inventory_products" referencedColumnNames="id" constraintName="fk_stock_product"/>
+        <addUniqueConstraint tableName="warehouse_stocks" columnNames="warehouse_id,inventory_product_id" constraintName="uk_warehouse_stocks_warehouse_product"/>
+        <createIndex tableName="warehouse_stocks" indexName="idx_warehouse_stocks_inventory_product"><column name="inventory_product_id"/></createIndex>
+        <sql>ALTER TABLE warehouse_stocks ADD CONSTRAINT chk_stock_balance CHECK (on_hand &gt;= 0 AND reserved &gt;= 0 AND reserved &lt;= on_hand AND minimum_stock &gt;= 0)</sql>
+        <rollback><dropTable tableName="warehouse_stocks"/></rollback>
+    </changeSet>
+
+    <changeSet id="002-create-stock_reservations" author="sklad">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="stock_reservations"/></not></preConditions>
+        <createTable tableName="stock_reservations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="BIGINT"></column>
+            <column name="modified_by" type="BIGINT"></column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="company_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order_id" type="BIGINT"></column>
+            <column name="idempotency_key" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(20)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="committed_at" type="TIMESTAMP WITH TIME ZONE"></column>
+            <column name="released_at" type="TIMESTAMP WITH TIME ZONE"></column>
+            <column name="version" type="BIGINT" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="stock_reservations" columnNames="company_id,order_id" constraintName="uk_stock_reservations_company_order"/>
+        <addUniqueConstraint tableName="stock_reservations" columnNames="company_id,idempotency_key" constraintName="uk_stock_reservations_company_key"/>
+        <createIndex tableName="stock_reservations" indexName="idx_stock_reservations_company_status"><column name="company_id"/><column name="status"/></createIndex>
+        <createIndex tableName="stock_reservations" indexName="idx_stock_reservations_status_expiry"><column name="status"/><column name="expires_at"/></createIndex>
+        <rollback><dropTable tableName="stock_reservations"/></rollback>
+    </changeSet>
+
+    <changeSet id="002-create-stock_reservation_item" author="sklad">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="stock_reservation_item"/></not></preConditions>
+        <createTable tableName="stock_reservation_item">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="BIGINT"></column>
+            <column name="modified_by" type="BIGINT"></column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reservation_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stock_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="DECIMAL(19,3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="stock_reservation_item" baseColumnNames="reservation_id" referencedTableName="stock_reservations" referencedColumnNames="id" constraintName="fk_item_reservation"/>
+        <addForeignKeyConstraint baseTableName="stock_reservation_item" baseColumnNames="stock_id" referencedTableName="warehouse_stocks" referencedColumnNames="id" constraintName="fk_item_stock"/>
+        <addUniqueConstraint tableName="stock_reservation_item" columnNames="reservation_id,stock_id" constraintName="uk_stock_reservation_items_reservation_stock"/>
+        <createIndex tableName="stock_reservation_item" indexName="idx_stock_reservation_items_stock"><column name="stock_id"/></createIndex>
+        <sql>ALTER TABLE stock_reservation_item ADD CONSTRAINT chk_reservation_quantity CHECK (quantity &gt; 0)</sql>
+        <rollback><dropTable tableName="stock_reservation_item"/></rollback>
+    </changeSet>
+
+    <changeSet id="002-create-stock_operations" author="sklad">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="stock_operations"/></not></preConditions>
+        <createTable tableName="stock_operations">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_date" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="BIGINT"></column>
+            <column name="modified_by" type="BIGINT"></column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stock_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity_change" type="DECIMAL(19,3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity_before" type="DECIMAL(19,3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity_after" type="DECIMAL(19,3)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reason" type="${operationReasonType}"></column>
+            <column name="order_id" type="BIGINT"></column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="stock_operations" baseColumnNames="stock_id" referencedTableName="warehouse_stocks" referencedColumnNames="id" constraintName="fk_operation_stock"/>
+        <createIndex tableName="stock_operations" indexName="idx_stock_operations_stock_created"><column name="stock_id"/><column name="created_date"/></createIndex>
+        <createIndex tableName="stock_operations" indexName="idx_stock_operations_order"><column name="order_id"/></createIndex>
+        <sql>ALTER TABLE stock_operations ADD CONSTRAINT chk_operation_balance CHECK (quantity_before &gt;= 0 AND quantity_after &gt;= 0 AND quantity_after = quantity_before + quantity_change)</sql>
+        <rollback><dropTable tableName="stock_operations"/></rollback>
+    </changeSet>
+</databaseChangeLog>
+

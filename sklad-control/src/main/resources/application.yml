@@ -1,0 +1,47 @@
+server:
+  port: ${SERVER_PORT:8094}
+  domain: ${SERVER_DOMAIN:http://localhost}
+  url: ${SWAGGER_SERVER_URL:${server.domain}:${server.port}}
+
+spring:
+  application:
+    name: sklad-control
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 3000
+            readTimeout: 8000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://127.0.0.1:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    ip-address: ${SERVER_IP:127.0.0.1}
+    instance-id: ${spring.application.name}:${server.port}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
