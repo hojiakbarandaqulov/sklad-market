@@ -1,0 +1,23 @@
+server:
+  domain: http://localhost
+
+spring:
+  datasource:
+    url: ${CONTROL_TEST_DB_URL:jdbc:h2:mem:sklad-control-tests;MODE=PostgreSQL;DB_CLOSE_DELAY=-1}
+    username: ${CONTROL_TEST_DB_USERNAME:sa}
+    password: ${CONTROL_TEST_DB_PASSWORD:}
+    driver-class-name: ${CONTROL_TEST_DB_DRIVER:org.h2.Driver}
+  jpa:
+    show-sql: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak.example.test/realms/market-realm
+  cloud:
+    discovery:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false
