@@ -9,4 +9,5 @@
     <include file="changes/001-create-warehouses.xml" relativeToChangelogFile="true"/>
     <include file="changes/002-create-inventory-and-reservations.xml" relativeToChangelogFile="true"/>
     <include file="changes/003-reservation-workflow.xml" relativeToChangelogFile="true"/>
+    <include file="changes/004-stock-operation-adjustment-fields.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

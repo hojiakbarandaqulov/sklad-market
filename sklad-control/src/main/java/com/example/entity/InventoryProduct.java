@@ -30,7 +30,6 @@ public class InventoryProduct extends BaseEntity {
     @Column(name = "company_id", nullable = false)
     private Long companyId;
 
-    // Hozir product-service'dagi Product.id saqlanadi; boshqa baza bilan JPA bog'lanishi qo'yilmaydi.
     @NotNull
     @Positive
     @Column(name = "catalog_card_id", nullable = false)
