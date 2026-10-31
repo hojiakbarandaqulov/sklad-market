@@ -8,28 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add">
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/SkladControl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/controller/ControlStatisticsInternalController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/statistics/ControlStatisticsDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/ControlStatisticsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/ControlStatisticsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/controller/SellerDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/controller/SellerDashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/dashboard/SellerDashboardResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/dashboard/SellerDashboardResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/SellerDashboardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/SellerDashboardServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/config/client/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/config/client/ProductClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/InventoryProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/InventoryProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockOperationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockOperationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseStockRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseStockRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockOperationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockOperationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_en.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_uz.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/SkladControlFeignConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/dashboard/internal/ControlStatisticsResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/exp/AppServiceUnavailableException.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
