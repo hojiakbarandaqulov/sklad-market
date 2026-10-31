@@ -5,6 +5,7 @@ import com.example.dto.stockOperation.RezervRequest;
 import com.example.dto.stockOperation.RezervResponse;
 import com.example.dto.stockOperation.AdjustmentRequest;
 import com.example.dto.stockOperation.AdjustmentResponse;
+import com.example.dto.stockOperation.WriteOffResponse;
 import com.example.enums.AppLanguage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,13 @@ public class StockOperation {
                                                  @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language){
         RezervResponse rezervResponse=  stockOperationService.rezervAdd(rezervRequest,language);
         return ApiResponse.successResponse(rezervResponse);
+    }
+
+
+    @PostMapping("write-offs")
+    public ApiResponse<WriteOffResponse> writeOffs(@RequestBody @Valid RezervRequest rezervRequest,
+                                                 @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language){
+        WriteOffResponse response = stockOperationService.writeOffs(rezervRequest, language);
+        return ApiResponse.successResponse(response);
     }
 }

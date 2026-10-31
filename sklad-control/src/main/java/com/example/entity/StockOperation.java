@@ -47,7 +47,7 @@ public class StockOperation extends BaseEntity {
     @NotNull
     @PositiveOrZero
     @Digits(integer = 16, fraction = 3)
-    @Column(name = "quantity_before", nullable = false, precision = 19, scale = 3)
+    @Column(nullable = false, precision = 19, scale = 3)
     private BigDecimal quantityBefore;
 
     @NotNull
