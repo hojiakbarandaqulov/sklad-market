@@ -19,4 +19,11 @@ public interface InventoryProductRepository extends JpaRepository<InventoryProdu
 
     @Query("select p from InventoryProduct p where p.companyId=:companyId and p.catalogCardId=:productId and p.deleted=false")
     List<InventoryProduct> findByCard(@Param("companyId") Long companyId, @Param("productId") Long productId);
+
+    @Query("""
+            select count(p) from InventoryProduct p
+            where p.companyId=:companyId and p.deleted=false
+            and p.status=com.example.enums.InventoryProductStatus.ACTIVE
+            """)
+    Long findByCountDeletedFalse(@Param("companyId") Long companyId);
 }

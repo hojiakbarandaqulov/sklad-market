@@ -5,6 +5,7 @@ import org.example.config.clent.ChatClient;
 import org.example.config.clent.CompanyClient;
 import org.example.config.clent.LeadClient;
 import org.example.config.clent.ProductClient;
+import org.example.config.clent.SkladControl;
 import org.example.dto.dashboard.SellerDashboardProductResponse;
 import org.example.dto.dashboard.SellerDashboardResponse;
 import org.example.dto.dashboard.SellerDashboardSummaryResponse;
@@ -14,6 +15,9 @@ import org.example.dto.dashboard.internal.ChatSellerStatsResponse;
 import org.example.dto.dashboard.internal.LeadSellerStatsResponse;
 import org.example.dto.dashboard.internal.MonthlyCountResponse;
 import org.example.dto.dashboard.internal.ProductSellerStatsResponse;
+import org.example.dto.dashboard.internal.ControlStatisticsResponse;
+import org.example.exp.AppServiceUnavailableException;
+import feign.FeignException;
 import org.example.exp.AppBadException;
 import org.example.service.SellerDashboardService;
 import org.example.utils.SpringSecurityUtil;
@@ -23,6 +27,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +47,7 @@ public class SellerDashboardServiceImpl implements SellerDashboardService {
     private final ProductClient productClient;
     private final LeadClient leadClient;
     private final ChatClient chatClient;
+    private final SkladControl skladControl;
 
     @Override
     public SellerDashboardResponse getDashboard(Long companyId, Integer months) {
@@ -51,15 +57,15 @@ public class SellerDashboardServiceImpl implements SellerDashboardService {
         }
 
         int normalizedMonths = normalizeMonths(months);
-        List<Long> ownedCompanyIds = safeList(companyClient.getOwnedCompanyIds(sellerId));
+        List<Long> ownedCompanyIds = safeList(companyClient.getOwnedCompanyIds(sellerId)).stream().distinct().toList();
+
+        if (companyId != null && !ownedCompanyIds.contains(companyId)) {
+            throw new AppBadException("Selected company does not belong to the seller");
+        }
 
         // Sellerda hali kompaniya bo'lmasa, frontend bo'sh dashboard olsa kifoya.
         if (ownedCompanyIds.isEmpty()) {
             return emptyDashboard(normalizedMonths);
-        }
-
-        if (companyId != null && !ownedCompanyIds.contains(companyId)) {
-            throw new AppBadException("Selected company does not belong to the seller");
         }
 
         List<Long> targetCompanyIds = companyId == null ? ownedCompanyIds : List.of(companyId);
@@ -99,6 +105,7 @@ public class SellerDashboardServiceImpl implements SellerDashboardService {
         response.setSummary(summary);
         response.setTrend(trend);
         response.setRecentProducts(recentProducts);
+        response.setWarehouse(warehouseStatistics(targetCompanyIds, companyId));
         return response;
     }
 
@@ -126,7 +133,54 @@ public class SellerDashboardServiceImpl implements SellerDashboardService {
         response.setSummary(summary);
         response.setTrend(trend);
         response.setRecentProducts(List.of());
+        response.setWarehouse(new ControlStatisticsResponse(null, 0L, 0L, 0L, 0L, List.of()));
         return response;
+    }
+
+    private ControlStatisticsResponse warehouseStatistics(List<Long> companyIds, Long selectedCompanyId) {
+        long products = 0, lowStock = 0, outOfStock = 0, reservedProducts = 0;
+        List<ControlStatisticsResponse.RecentOperationResponse> recentOperations = new ArrayList<>();
+        for (Long companyId : companyIds) {
+            ControlStatisticsResponse statistics;
+            try {
+                var response = skladControl.getStatistics(companyId);
+                statistics = response == null ? null : response.getData();
+                if (response == null || !Boolean.TRUE.equals(response.getSuccess())
+                        || statistics == null || !Objects.equals(companyId, statistics.companyId())
+                        || !validCount(statistics.productsCount()) || !validCount(statistics.lowStockCount())
+                        || !validCount(statistics.outOfStockCount()) || !validCount(statistics.reservedProductsCount())
+                        || statistics.recentOperations() == null) {
+                    throw warehouseUnavailable();
+                }
+            } catch (FeignException exception) {
+                // Servis ishlamasa haqiqiy qoldiqni nol deb ko'rsatmaymiz.
+                throw warehouseUnavailable();
+            }
+            products += statistics.productsCount();
+            lowStock += statistics.lowStockCount();
+            outOfStock += statistics.outOfStockCount();
+            reservedProducts += statistics.reservedProductsCount();
+            for (var operation : statistics.recentOperations()) {
+                if (operation == null || operation.id() == null || operation.createdDate() == null)
+                    throw warehouseUnavailable();
+                recentOperations.add(operation.withCompanyId(companyId));
+            }
+        }
+        // Har kompaniyadan olingan tarix birlashtiriladi va umumiy eng yangi 10 tasi qaytariladi.
+        var latest = recentOperations.stream()
+                .sorted(Comparator.comparing(ControlStatisticsResponse.RecentOperationResponse::createdDate)
+                        .thenComparing(ControlStatisticsResponse.RecentOperationResponse::id).reversed())
+                .limit(10).toList();
+        return new ControlStatisticsResponse(selectedCompanyId, products, lowStock, outOfStock,
+                reservedProducts, latest);
+    }
+
+    private boolean validCount(Long count) {
+        return count != null && count >= 0;
+    }
+
+    private AppServiceUnavailableException warehouseUnavailable() {
+        return new AppServiceUnavailableException("Warehouse statistics service unavailable");
     }
 
     // Har service o'zining oyma-oy statistikani qaytaradi, biz esa ularni bitta chartga tekislaymiz.

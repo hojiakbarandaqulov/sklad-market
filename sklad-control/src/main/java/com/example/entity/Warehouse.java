@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "warehouses", indexes = {
+@Table(indexes = {
         @Index(name = "idx_warehouses_company_status", columnList = "company_id,status")
 })
 public class Warehouse extends BaseEntity {

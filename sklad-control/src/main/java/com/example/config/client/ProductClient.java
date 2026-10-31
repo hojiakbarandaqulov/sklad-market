@@ -9,11 +9,13 @@ import java.util.List;
 /** Foydalanuvchi JWT'si uzatiladi; product-service egalikni yana tekshiradi. */
 @FeignClient(name = "product-service", configuration = CompanyFeignConfig.class)
 public interface ProductClient {
+
     @GetMapping("/internal/control/products/matching")
     ApiResponse<List<Long>> matching(@RequestParam("companyId") Long companyId,
             @RequestParam(value="q",required=false) String q,
             @RequestParam(value="categoryId",required=false) Long categoryId,
             @RequestHeader("Accept-Language") String language);
+
     @PostMapping("/internal/control/products")
     ApiResponse<JsonNode> create(@RequestBody ProductCardRequest request, @RequestParam("key") String key,
             @RequestParam("visible") boolean visible, @RequestHeader("Accept-Language") String language);

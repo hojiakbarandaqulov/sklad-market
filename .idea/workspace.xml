@@ -8,10 +8,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/clent/SkladControl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/controller/ControlStatisticsInternalController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/statistics/ControlStatisticsDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/ControlStatisticsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/ControlStatisticsServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/InventoryProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/InventoryProduct.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/controller/SellerDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/controller/SellerDashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/dashboard/SellerDashboardResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/dashboard/SellerDashboardResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/SellerDashboardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/service/impl/SellerDashboardServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/config/client/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/config/client/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/InventoryProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/InventoryProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockOperationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockOperationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseStockRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseStockRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockOperationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockOperationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_en.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_uz.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,8 +135,8 @@
         <option value="Dockerfile" />
         <option value="Enum" />
         <option value="Record" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -172,107 +190,107 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "CidrDebugProfileConversion": "true",
-    "Docker.docker-compose.yml.minio: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor": "Run",
-    "Docker.docker-compouse.yml: Compose Deployment.executor": "Run",
-    "Gradle.Build api-gateway.executor": "Run",
-    "Gradle.Build auth-service.executor": "Run",
-    "Gradle.Build category-service.executor": "Run",
-    "Gradle.Build chat-service.executor": "Run",
-    "Gradle.Build company-servcie.executor": "Run",
-    "Gradle.Build company-service.executor": "Run",
-    "Gradle.Build discovery-service.executor": "Run",
-    "Gradle.Build file-service.executor": "Run",
-    "Gradle.Build lead-service.executor": "Run",
-    "Gradle.Build notification-service.executor": "Run",
-    "Gradle.Build product-service.executor": "Run",
-    "Gradle.Build report-service.executor": "Run",
-    "Gradle.Build reposrt-service.executor": "Run",
-    "Gradle.Build user-service.executor": "Run",
-    "Gradle.ai-service [build].executor": "Run",
-    "Gradle.ai-service [clean].executor": "Run",
-    "Gradle.ai-service [jar].executor": "Run",
-    "Gradle.auth-service [build].executor": "Run",
-    "Gradle.category-service [bootJar].executor": "Run",
-    "Gradle.category-service [build].executor": "Run",
-    "Gradle.category-service [clean].executor": "Run",
-    "Gradle.category-service [jar].executor": "Run",
-    "Gradle.company-service [build].executor": "Run",
-    "Gradle.company-service [clean].executor": "Run",
-    "Gradle.product-service [build].executor": "Run",
-    "Gradle.sklad-jobs [bootJar].executor": "Run",
-    "Gradle.sklad-jobs [build].executor": "Run",
-    "Gradle.sklad-jobs [clean].executor": "Run",
-    "Gradle.sklad-jobs [dependencies].executor": "Run",
-    "Gradle.sklad-jobs [jar].executor": "Run",
-    "Gradle.user-service [buildDependents].executor": "Run",
-    "Gradle.user-service [build].executor": "Run",
-    "HTTP Request.attach | #2.executor": "Run",
-    "HTTP Request.attach | attach upload.executor": "Run",
-    "HTTP Request.auth | #1.executor": "Run",
-    "HTTP Request.auth | #2.executor": "Run",
-    "HTTP Request.auth | #3.executor": "Run",
-    "HTTP Request.generated-requests | #47.executor": "Run",
-    "HTTP Request.generated-requests | #48.executor": "Run",
-    "HTTP Request.generated-requests | #49.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.RadMigrateCodeStyle": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "SHELLCHECK.PATH": "C:\\Users\\User\\AppData\\Roaming\\JetBrains\\IntelliJIdea2026.2\\plugins\\Shell Script\\shellcheck.exe",
-    "Spring Boot.ApiGatewayApplication.executor": "Run",
-    "Spring Boot.AuthServiceApplication.executor": "Run",
-    "Spring Boot.CategoryServiceApplication.executor": "Run",
-    "Spring Boot.ChatServiceApplication.executor": "Run",
-    "Spring Boot.CompanyServiceApplication.executor": "Run",
-    "Spring Boot.DiscoveryServiceApplication.executor": "Run",
-    "Spring Boot.FileServiceApplication.executor": "Run",
-    "Spring Boot.LeadServiceApplication.executor": "Run",
-    "Spring Boot.NotificationServiceApplication.executor": "Run",
-    "Spring Boot.ProductServiceApplication.executor": "Run",
-    "Spring Boot.ReportServiceApplication.executor": "Run",
-    "Spring Boot.UserServiceApplication.executor": "Run",
-    "cidr.known.project.marker": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "extract.method.default.visibility": "private",
-    "git-widget-placeholder": "main",
-    "go.import.settings.migrated": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "jdk.selected.JAVA_MODULE": "17",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/JavaProject/Microservice/Skalad-market/sklad-jobs/src/main/java/com/example",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.jshint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.jshint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "vcs.Git",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;CidrDebugProfileConversion&quot;: &quot;true&quot;,
+    &quot;Docker.docker-compose.yml.minio: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.docker-compouse.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build auth-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build category-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build chat-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-servcie.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build company-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build discovery-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build file-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build lead-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build notification-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build product-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build report-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build reposrt-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build user-service.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ai-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ai-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.ai-service [jar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.auth-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [bootJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.category-service [jar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.company-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.product-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [bootJar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [dependencies].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.sklad-jobs [jar].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [buildDependents].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.attach | attach upload.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #1.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #2.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.auth | #3.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #47.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #48.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.generated-requests | #49.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;SHELLCHECK.PATH&quot;: &quot;C:\\Users\\User\\AppData\\Roaming\\JetBrains\\IntelliJIdea2026.2\\plugins\\Shell Script\\shellcheck.exe&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CategoryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ChatServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CompanyServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.DiscoveryServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.FileServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LeadServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ReportServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/sklad-jobs/src/main/java/com/example&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>

@@ -20,7 +20,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "stock_reservations", uniqueConstraints = {
+@Table(uniqueConstraints = {
         @UniqueConstraint(name = "uk_stock_reservations_company_order", columnNames = {"company_id", "order_id"}),
         @UniqueConstraint(name = "uk_stock_reservations_company_key", columnNames = {"company_id", "idempotency_key"})
 }, indexes = {
@@ -40,7 +40,7 @@ public class StockReservation extends BaseEntity {
     // Bir xil so'rov qayta kelganda ikkinchi rezerv yaratilmasligi uchun kelgan kalit saqlanadi.
     @NotBlank
     @Size(max = 128)
-    @Column(name = "idempotency_key", nullable = false, length = 128)
+    @Column(nullable = false, length = 128)
     private String idempotencyKey;
 
     @NotNull
@@ -49,13 +49,11 @@ public class StockReservation extends BaseEntity {
     private ReservationStatus status = ReservationStatus.ACTIVE;
 
     @NotNull
-    @Column(name = "expires_at", nullable = false)
+    @Column(nullable = false)
     private Instant expiresAt;
 
-    @Column(name = "committed_at")
     private Instant committedAt;
 
-    @Column(name = "released_at")
     private Instant releasedAt;
 
     // Jo'natish va bekor qilish so'rovlari bir vaqtda bitta rezervni ikki xil yakunlamasligi uchun.

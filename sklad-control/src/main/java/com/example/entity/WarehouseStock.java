@@ -19,8 +19,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "warehouse_stocks",
-        uniqueConstraints = @UniqueConstraint(name = "uk_warehouse_stocks_warehouse_product", columnNames = {"warehouse_id", "inventory_product_id"}),
+@Table(uniqueConstraints = @UniqueConstraint(name = "uk_warehouse_stocks_warehouse_product", columnNames = {"warehouse_id", "inventory_product_id"}),
         indexes = @Index(name = "idx_warehouse_stocks_inventory_product", columnList = "inventory_product_id"))
 @Check(constraints = "on_hand >= 0 AND reserved >= 0 AND reserved <= on_hand AND minimum_stock >= 0")
 public class WarehouseStock extends BaseEntity {

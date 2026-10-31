@@ -1,6 +1,7 @@
 package org.example.exp.handle;
 
 import org.example.exp.AppBadException;
+import org.example.exp.AppServiceUnavailableException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -54,6 +55,12 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, Object>> handleAuthentication(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(errorBody(e.getMessage(), Map.of()));
+    }
+
+    @ExceptionHandler(AppServiceUnavailableException.class)
+    public ResponseEntity<Map<String, Object>> handleServiceUnavailable(AppServiceUnavailableException e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
                 .body(errorBody(e.getMessage(), Map.of()));
     }
 
