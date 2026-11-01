@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.*;
 
 public interface InventoryProductRepository extends JpaRepository<InventoryProduct, Long>, JpaSpecificationExecutor<InventoryProduct> {
+    List<InventoryProduct> findByCompanyIdAndCatalogCardIdInAndDeletedFalse(Long companyId, Collection<Long> productIds);
+
     @Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from InventoryProduct p where p.id=:id and p.deleted=false")
     Optional<InventoryProduct> lockPresent(@Param("id") Long id);

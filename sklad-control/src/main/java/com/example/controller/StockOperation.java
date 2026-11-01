@@ -6,6 +6,10 @@ import com.example.dto.stockOperation.RezervResponse;
 import com.example.dto.stockOperation.AdjustmentRequest;
 import com.example.dto.stockOperation.AdjustmentResponse;
 import com.example.dto.stockOperation.WriteOffResponse;
+import com.example.dto.stockOperation.StockOperationDTO;
+import com.example.dto.stockOperation.StockOperationFilter;
+import com.example.service.ControlQueryService;
+import org.springframework.data.domain.PageImpl;
 import com.example.enums.AppLanguage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +24,13 @@ import org.springframework.web.bind.annotation.*;
 public class StockOperation {
 
     private final StockOperationService stockOperationService;
+    private final ControlQueryService queryService;
+
+    @GetMapping
+    public ApiResponse<PageImpl<StockOperationDTO>> list(@Valid @ModelAttribute StockOperationFilter filter,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(queryService.operations(filter, language));
+    }
 
     // Sanash natijasidagi qoldiqni o'rnatadi va farqni tarixga yozadi.
     @PostMapping("/adjustments")

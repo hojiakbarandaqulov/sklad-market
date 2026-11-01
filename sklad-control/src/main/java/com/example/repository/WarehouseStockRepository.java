@@ -73,6 +73,26 @@ public interface WarehouseStockRepository extends JpaRepository<WarehouseStock, 
             """)
     List<CompanyStockBalance> getCompanyStockBalances(@Param("companyId") Long companyId);
 
+    @Query("""
+            select p.catalogCardId as productId, sum(ws.onHand - ws.reserved) as availableQuantity
+            from WarehouseStock ws
+            join ws.warehouse w
+            join ws.inventoryProduct p
+            where w.companyId=:companyId and p.companyId=:companyId
+              and p.catalogCardId in :productIds
+              and ws.deleted=false and w.deleted=false and p.deleted=false
+              and w.status=com.example.enums.WarehouseStatus.ACTIVE
+              and p.status=com.example.enums.InventoryProductStatus.ACTIVE
+            group by p.catalogCardId
+            """)
+    List<AvailabilityBalance> availabilityBalances(@Param("companyId") Long companyId,
+                                                 @Param("productIds") List<Long> productIds);
+
+    interface AvailabilityBalance {
+        Long getProductId();
+        BigDecimal getAvailableQuantity();
+    }
+
     interface CompanyStockBalance {
         Long getProductId();
         BigDecimal getAvailable();

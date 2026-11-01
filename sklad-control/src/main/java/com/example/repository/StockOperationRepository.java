@@ -2,6 +2,10 @@ package com.example.repository;
 
 import com.example.entity.StockOperation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +16,11 @@ import java.util.Optional;
 /**
  * Boshlang'ich kirim ham tarixda qoladi; qoldiqni jurnalsiz yozmaymiz.
  */
-public interface StockOperationRepository extends JpaRepository<StockOperation, Long> {
+public interface StockOperationRepository extends JpaRepository<StockOperation, Long>, JpaSpecificationExecutor<StockOperation> {
+    @Override
+    @EntityGraph(attributePaths = {"stock", "stock.warehouse", "stock.inventoryProduct"})
+    Page<StockOperation> findAll(Specification<StockOperation> specification, Pageable pageable);
+
     @Query(
             "select o from StockOperation o where o.companyId=:companyId and o.idempotencyKey=:key")
     Optional<StockOperation> findByRequestKey(
