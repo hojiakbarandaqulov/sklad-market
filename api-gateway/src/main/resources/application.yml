@@ -73,6 +73,13 @@ spring:
           uri: lb://order-service
           predicates:
             - Path=/api/v1/orders,/api/v1/orders/**
+        - id: order-service-swagger
+          uri: lb://order-service
+          predicates:
+            - Path=/swagger/order/swagger-ui.html,/swagger/order/swagger-ui/**,/swagger/order/v3/api-docs,/swagger/order/v3/api-docs/**
+          filters:
+            - RemoveRequestHeader=X-Forwarded-Prefix
+            - StripPrefix=2
         # Chat REST
         - id: chat-service
           uri: lb://chat-service

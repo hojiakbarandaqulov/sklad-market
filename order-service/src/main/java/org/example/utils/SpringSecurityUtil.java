@@ -1,22 +1,44 @@
 package org.example.utils;
 
+import org.example.exp.OrderException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.example.exp.OrderException;
 
 public final class SpringSecurityUtil {
-    private SpringSecurityUtil() { }
+
+    private SpringSecurityUtil() {
+    }
+
     public static Long getProfileId() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth instanceof JwtAuthenticationToken jwt && auth.isAuthenticated()) {
-            Object value = jwt.getToken().getClaim("profileId");
-            try { long id = Long.parseLong(String.valueOf(value)); if (id > 0) return id; }
-            catch (NumberFormatException ignored) { }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication instanceof JwtAuthenticationToken jwtAuthentication
+                && authentication.isAuthenticated()) {
+            Object profileIdClaim = jwtAuthentication.getToken().getClaim("profileId");
+
+            try {
+                long profileId = Long.parseLong(String.valueOf(profileIdClaim));
+
+                if (profileId > 0) {
+                    return profileId;
+                }
+            } catch (NumberFormatException ignored) {
+                // Raqamga aylantirib bo'lmaydigan claim foydalanuvchi ID'si sifatida qabul qilinmaydi.
+            }
         }
+
         throw new OrderException(403, "Token ichida profileId yo'q");
     }
+
     public static boolean isSeller() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_SELLER"));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            return false;
+        }
+
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_SELLER"));
     }
 }

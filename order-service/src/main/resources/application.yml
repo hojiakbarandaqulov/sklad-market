@@ -1,6 +1,7 @@
 server:
   port: ${SERVER_PORT:8095}
   domain: ${SERVER_DOMAIN:http://localhost}
+  forward-headers-strategy: framework
 spring:
   application:
     name: order-service
@@ -33,6 +34,8 @@ eureka:
     ip-address: ${SERVER_IP:127.0.0.1}
     instance-id: ${spring.application.name}:${server.port}
 order:
+  swagger:
+    server-url: ${ORDER_SWAGGER_SERVER_URL:/}
   reservation-ttl: ${ORDER_RESERVATION_TTL:PT24H}
   service-auth:
     token-url: ${ORDER_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
@@ -43,3 +46,12 @@ management:
     web:
       exposure:
         include: health
+
+springdoc:
+  paths-to-match:
+    - /api/v1/orders
+    - /api/v1/orders/**
+  swagger-ui:
+    disable-swagger-default-url: true
+    tags-sorter: alpha
+    operations-sorter: method

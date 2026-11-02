@@ -8,61 +8,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add">
-      <change afterPath="$PROJECT_DIR$/order-service/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/ORDER_API_UZ.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/settings.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/OrderServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ControlClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ProductClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/ClientConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/OrderController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/ApiResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderCreateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/Order.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/OrderItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/enums/OrderStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/OrderException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/mapper/OrderMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/repository/OrderRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/ServiceTokenService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/ServiceTokenServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/job/OrderRecoveryJob.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/resources/db/changelog/master.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/service/ServiceTokenServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/test/resources/application-test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules/order-service.main.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/ORDER_CODE_GUIDE_UZ.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/SwaggerConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/repository/OrderSpecification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/utils/OrderRequestUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderSwaggerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/resources/application-local.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/resources/application-prod.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockReservationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockReservationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/StockReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/StockReservationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockReservationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockReservationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/ORDER_API_UZ.md" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/ORDER_API_UZ.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ControlClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ControlClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/ClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/ClientConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderCreateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/OrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/enums/OrderStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/enums/OrderStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/OrderException.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/OrderException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/mapper/OrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/mapper/OrderMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/repository/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/ServiceTokenServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/ServiceTokenServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/job/OrderRecoveryJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/job/OrderRecoveryJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/utils/SpringSecurityUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

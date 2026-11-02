@@ -1,42 +1,94 @@
 package org.example.exp.handle;
 
-import org.springframework.http.*;
+import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.example.exp.OrderException;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.CannotAcquireLockException;
-import lombok.extern.slf4j.Slf4j;
-import java.util.*;
 
-@RestControllerAdvice @Slf4j
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
+
+@RestControllerAdvice
+@Slf4j
 public class ExceptionHandleController extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
-    ResponseEntity<Object> validation(jakarta.validation.ConstraintViolationException e) {
-        return error(400, "So'rov maydonlari noto'g'ri", Map.of());
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception) {
+        return buildErrorResponse(400, "So'rov maydonlari noto'g'ri", Map.of());
     }
+
     @ExceptionHandler(OrderException.class)
-    ResponseEntity<Object> business(OrderException e) { return error(e.getStatus(), e.getMessage(), Map.of()); }
+    public ResponseEntity<Object> handleOrderException(OrderException exception) {
+        return buildErrorResponse(exception.getStatus(), exception.getMessage(), Map.of());
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
-    ResponseEntity<Object> forbidden(AccessDeniedException e) { return error(403, "Bu amalga ruxsat yo'q", Map.of()); }
+    public ResponseEntity<Object> handleAccessDenied(AccessDeniedException exception) {
+        return buildErrorResponse(403, "Bu amalga ruxsat yo'q", Map.of());
+    }
+
     @ExceptionHandler({DataIntegrityViolationException.class, CannotAcquireLockException.class})
-    ResponseEntity<Object> conflict(RuntimeException e) { return error(409, "So'rov to'qnashuvi. Avvalgi kalit bilan qayta yuboring", Map.of()); }
-    @Override protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
-            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        var fields = new LinkedHashMap<String, String>();
-        e.getBindingResult().getFieldErrors().forEach(f -> fields.putIfAbsent(f.getField(), f.getDefaultMessage()));
-        return error(400, "So'rov maydonlari noto'g'ri", fields);
+    public ResponseEntity<Object> handleDataConflict(RuntimeException exception) {
+        return buildErrorResponse(
+                409,
+                "So'rov to'qnashuvi. Avvalgi kalit bilan qayta yuboring",
+                Map.of()
+        );
     }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException exception,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request
+    ) {
+        Map<String, String> fieldErrors = new LinkedHashMap<>();
+
+        exception.getBindingResult().getFieldErrors().forEach(fieldError ->
+                fieldErrors.putIfAbsent(fieldError.getField(), fieldError.getDefaultMessage()));
+
+        return buildErrorResponse(400, "So'rov maydonlari noto'g'ri", fieldErrors);
+    }
+
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<Object> unexpected(RuntimeException e) {
-        String trace = UUID.randomUUID().toString();
-        log.error("Order xatosi, trace_id={}", trace, e);
-        return ResponseEntity.internalServerError().body(Map.of("success", false, "message", "Ichki xatolik", "trace_id", trace));
+    public ResponseEntity<Object> handleUnexpectedException(RuntimeException exception) {
+        String traceId = UUID.randomUUID().toString();
+        log.error("Order xatosi, trace_id={}", traceId, exception);
+
+        Map<String, Object> body = Map.of(
+                "success", false,
+                "message", "Ichki xatolik",
+                "trace_id", traceId
+        );
+
+        return ResponseEntity.internalServerError().body(body);
     }
-    private ResponseEntity<Object> error(int status, String message, Map<String, String> fields) {
-        return ResponseEntity.status(status).body(Map.of("success", false, "message", message, "errors", fields, "trace_id", UUID.randomUUID().toString()));
+
+    private ResponseEntity<Object> buildErrorResponse(
+            int status,
+            String message,
+            Map<String, String> fieldErrors
+    ) {
+        // trace_id orqali frontenddagi xabarni server logidagi xatolik bilan topish mumkin.
+        Map<String, Object> body = Map.of(
+                "success", false,
+                "message", message,
+                "errors", fieldErrors,
+                "trace_id", UUID.randomUUID().toString()
+        );
+
+        return ResponseEntity.status(status).body(body);
     }
 }
