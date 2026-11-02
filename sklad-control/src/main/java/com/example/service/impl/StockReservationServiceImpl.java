@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.config.client.CompanyClient;
 import com.example.dto.reservation.ReservationCreateRequest;
 import com.example.dto.reservation.ReservationDTO;
+import com.example.dto.reservation.OrderReservationRequest;
 import com.example.entity.*;
 import com.example.enums.*;
 import com.example.exp.*;
@@ -36,6 +37,105 @@ public class StockReservationServiceImpl implements StockReservationService {
     private final ResourceBundleService messages;
     private final Clock clock;
     private final EntityManager entityManager;
+    private final InventoryProductRepository inventoryProducts;
+
+    // Faqat ishonchli Order service-account uchun; oddiy BUYER/SELLER bu yo'ldan foydalana olmaydi.
+    public ReservationDTO reserveOrder(Long orderId, OrderReservationRequest request) {
+        requireOrderService();
+        var requested = new TreeMap<Long, java.math.BigDecimal>();
+        for (var item : request.items())
+            if (requested.putIfAbsent(item.productId(), item.quantity()) != null)
+                throw bad("reservation.items.duplicate", AppLanguage.UZ);
+        var existing = reservations.lockOrder(request.companyId(), orderId);
+        if (existing.isPresent()) return replayOrder(existing.get(), request, requested);
+
+        // Ombor -> mahsulot -> qoldiq: arxivlash va parallel buyurtmalar ham shu qulflar bilan muvofiqlashadi.
+        Set<Long> activeWarehouses = new HashSet<>();
+        for (Long id : warehouses.companyIds(request.companyId())) {
+            var warehouse = warehouses.lockPresent(id).orElse(null);
+            if (warehouse == null) continue;
+            entityManager.refresh(warehouse, LockModeType.PESSIMISTIC_WRITE);
+            if (!Boolean.TRUE.equals(warehouse.getDeleted()) && warehouse.getStatus() == WarehouseStatus.ACTIVE)
+                activeWarehouses.add(id);
+        }
+        existing = reservations.lockOrder(request.companyId(), orderId);
+        if (existing.isPresent()) return replayOrder(existing.get(), request, requested);
+        Instant expires = request.expiresAt().truncatedTo(ChronoUnit.MICROS);
+        if (!expires.isAfter(clock.instant())) throw bad("reservation.expiry.invalid", AppLanguage.UZ);
+        if (activeWarehouses.isEmpty()) throw conflict("reservation.stock.insufficient", AppLanguage.UZ);
+
+        var tracked = inventoryProducts.findByCompanyIdAndCatalogCardIdInAndDeletedFalse(request.companyId(), requested.keySet())
+                .stream().sorted(Comparator.comparing(InventoryProduct::getId)).toList();
+        Set<Long> marketIds = new HashSet<>();
+        List<Long> inventoryIds = new ArrayList<>();
+        for (var product : tracked) {
+            var locked = inventoryProducts.lockPresent(product.getId()).orElseThrow(() -> missing("control.product.missing", AppLanguage.UZ));
+            entityManager.refresh(locked, LockModeType.PESSIMISTIC_WRITE);
+            if (Boolean.TRUE.equals(locked.getDeleted()) || locked.getStatus() != InventoryProductStatus.ACTIVE
+                    || !request.companyId().equals(locked.getCompanyId()) || !marketIds.add(locked.getCatalogCardId()))
+                throw conflict("reservation.stock.inactive", AppLanguage.UZ);
+            inventoryIds.add(locked.getId());
+        }
+        if (!marketIds.equals(requested.keySet())) throw conflict("reservation.stock.insufficient", AppLanguage.UZ);
+        var remaining = new TreeMap<>(requested);
+        var allocation = new LinkedHashMap<WarehouseStock, java.math.BigDecimal>();
+        // Eng kichik qoldiq ID'sidan boshlab deterministik taqsimlash. Xaridor ombor ID'sini bilmaydi.
+        for (var candidate : stocks.forProducts(inventoryIds).stream().sorted(Comparator.comparing(WarehouseStock::getId)).toList()) {
+            if (!activeWarehouses.contains(candidate.getWarehouse().getId())) continue;
+            var stock = lockStock(candidate.getId(), AppLanguage.UZ);
+            Long productId = stock.getInventoryProduct().getCatalogCardId();
+            var needed = remaining.get(productId);
+            if (needed == null || needed.signum() <= 0 || stock.getAvailable().signum() <= 0) continue;
+            var quantity = needed.min(stock.getAvailable());
+            allocation.put(stock, quantity); remaining.put(productId, needed.subtract(quantity));
+        }
+        if (remaining.values().stream().anyMatch(q -> q.signum() > 0)) throw conflict("reservation.stock.insufficient", AppLanguage.UZ);
+        var reservation = new StockReservation();
+        reservation.setCompanyId(request.companyId()); reservation.setOrderId(orderId);
+        reservation.setIdempotencyKey("order:" + orderId); reservation.setExpiresAt(expires);
+        reservation.setReason("Buyurtma #" + orderId); reservation.setCreatedBy(request.buyerId()); reservation.setModifiedBy(request.buyerId());
+        reservations.saveAndFlush(reservation);
+        var allocated = new ArrayList<StockReservationItem>();
+        allocation.forEach((stock, quantity) -> {
+            stock.setReserved(stock.getReserved().add(quantity)); stock.setModifiedBy(request.buyerId());
+            var item = new StockReservationItem(); item.setStock(stock); item.setReservation(reservation); item.setQuantity(quantity);
+            item.setCreatedBy(request.buyerId()); item.setModifiedBy(request.buyerId()); allocated.add(items.save(item));
+        });
+        return dto(reservation, allocated);
+    }
+
+    private ReservationDTO replayOrder(StockReservation reservation, OrderReservationRequest request,
+            Map<Long, java.math.BigDecimal> requested) {
+        var allocated = items.forReservation(reservation.getId());
+        var original = new TreeMap<Long, java.math.BigDecimal>();
+        allocated.forEach(i -> original.merge(i.getStock().getInventoryProduct().getCatalogCardId(), i.getQuantity(), java.math.BigDecimal::add));
+        boolean same = Objects.equals(reservation.getCreatedBy(), request.buyerId())
+                && reservation.getExpiresAt().equals(request.expiresAt().truncatedTo(ChronoUnit.MICROS))
+                && original.keySet().equals(requested.keySet())
+                && original.entrySet().stream().allMatch(e -> e.getValue().compareTo(requested.get(e.getKey())) == 0);
+        if (!same) throw conflict("reservation.key.conflict", AppLanguage.UZ);
+        expireIfDue(reservation, allocated, null, AppLanguage.UZ);
+        return dto(reservation, allocated);
+    }
+
+    public ReservationDTO orderReservation(Long companyId, Long orderId, String action) {
+        requireOrderService();
+        var reservation = reservations.lockOrder(companyId, orderId).orElseThrow(() -> missing("reservation.missing", AppLanguage.UZ));
+        entityManager.refresh(reservation, LockModeType.PESSIMISTIC_WRITE);
+        var allocated = items.forReservation(reservation.getId());
+        expireIfDue(reservation, allocated, null, AppLanguage.UZ);
+        if ("COMMIT".equals(action)) {
+            if (reservation.getStatus() == ReservationStatus.ACTIVE) finish(reservation, allocated, ReservationStatus.COMMITTED, null, AppLanguage.UZ);
+            // Yakuniy haqiqiy holat qaytariladi: Order ham shu holat bilan sinxronlashadi.
+        } else if ("RELEASE".equals(action)) {
+            if (reservation.getStatus() == ReservationStatus.ACTIVE) finish(reservation, allocated, ReservationStatus.RELEASED, null, AppLanguage.UZ);
+        } else if (!"GET".equals(action)) throw bad("reservation.request.invalid", AppLanguage.UZ);
+        return dto(reservation, allocated);
+    }
+
+    private void requireOrderService() {
+        if (!SpringSecurityUtil.hasRole("CONTROL_ORDER_WRITE")) throw new AccessDeniedException("Order service-account talab qilinadi");
+    }
 
     @Override
     public ReservationDTO create(ReservationCreateRequest request, AppLanguage language) {

@@ -433,6 +433,31 @@
         SPRING_APPLICATION_NAME: sklad-control
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_control
 
+    order-service:
+      <<: *internal-service
+      build:
+        context: .
+        dockerfile: Dockerfile-service
+        args:
+          SERVICE_DIR: order-service
+      container_name: order-service
+      depends_on:
+        - discovery-service
+        - keycloak
+        - product-service
+        - company-service
+        - sklad-control
+      environment:
+        <<: *common-env
+        SERVER_ADDRESS: 127.0.0.1
+        SERVER_PORT: 8095
+        SPRING_APPLICATION_NAME: order-service
+        SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_order
+        ORDER_CLIENT_ID: ${ORDER_CLIENT_ID:-order-service}
+        ORDER_CLIENT_SECRET: ${ORDER_CLIENT_SECRET:-hFJsvoEDED3sxC00Y3sfmSQtZjgvrrvU}
+        ORDER_TOKEN_URL: ${KEYCLOAK_TOKEN_URL:-http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
+        ORDER_RESERVATION_TTL: ${ORDER_RESERVATION_TTL:-PT24H}
+
     ai-service:
           <<: *internal-service
           build:

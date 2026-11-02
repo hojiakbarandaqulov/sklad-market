@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StockReservationRepository extends JpaRepository<StockReservation, Long>, JpaSpecificationExecutor<StockReservation> {
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select r from StockReservation r where r.companyId=:companyId and r.orderId=:orderId and r.deleted=false")
+    Optional<StockReservation> lockOrder(@Param("companyId") Long companyId, @Param("orderId") Long orderId);
     Optional<StockReservation> findByCompanyIdAndIdempotencyKey(Long companyId, String idempotencyKey);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

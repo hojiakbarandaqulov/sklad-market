@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+    <changeSet id="001-order-workflow" author="sklad">
+        <createTable tableName="market_orders">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="version" type="BIGINT"><constraints nullable="false"/></column>
+            <column name="buyer_id" type="BIGINT"><constraints nullable="false"/></column>
+            <column name="company_id" type="BIGINT"><constraints nullable="false"/></column>
+            <column name="idempotency_key" type="VARCHAR(128)"><constraints nullable="false"/></column>
+            <column name="request_hash" type="VARCHAR(64)"><constraints nullable="false"/></column>
+            <column name="status" type="VARCHAR(20)"><constraints nullable="false"/></column>
+            <column name="currency" type="VARCHAR(10)"><constraints nullable="false"/></column>
+            <column name="total_amount" type="DECIMAL(38,6)"><constraints nullable="false"/></column>
+            <column name="delivery_address" type="VARCHAR(2000)"></column>
+            <column name="note" type="VARCHAR(2000)"></column>
+            <column name="reservation_id" type="BIGINT"></column>
+            <column name="expires_at" type="TIMESTAMP WITH TIME ZONE"><constraints nullable="false"/></column>
+            <column name="created_at" type="TIMESTAMP WITH TIME ZONE"><constraints nullable="false"/></column>
+            <column name="updated_at" type="TIMESTAMP WITH TIME ZONE"><constraints nullable="false"/></column>
+            <column name="shipped_at" type="TIMESTAMP WITH TIME ZONE"></column>
+            <column name="cancelled_at" type="TIMESTAMP WITH TIME ZONE"></column>
+            <column name="failure_reason" type="VARCHAR(1000)"></column>
+        </createTable>
+        <addUniqueConstraint tableName="market_orders" columnNames="buyer_id,idempotency_key" constraintName="uk_order_buyer_key"/>
+        <createIndex tableName="market_orders" indexName="idx_orders_buyer_date"><column name="buyer_id"/><column name="created_at"/></createIndex>
+        <createIndex tableName="market_orders" indexName="idx_orders_company_date"><column name="company_id"/><column name="created_at"/></createIndex>
+        <createIndex tableName="market_orders" indexName="idx_orders_recovery"><column name="status"/><column name="updated_at"/></createIndex>
+        <createTable tableName="market_order_items">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints nullable="false" primaryKey="true"/></column>
+            <column name="order_id" type="BIGINT"><constraints nullable="false"/></column>
+            <column name="product_id" type="BIGINT"><constraints nullable="false"/></column>
+            <column name="product_name" type="VARCHAR(1000)"><constraints nullable="false"/></column>
+            <column name="quantity" type="DECIMAL(19,3)"><constraints nullable="false"/></column>
+            <column name="unit_price" type="DECIMAL(19,3)"><constraints nullable="false"/></column>
+            <column name="line_amount" type="DECIMAL(38,6)"><constraints nullable="false"/></column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="market_order_items" baseColumnNames="order_id" referencedTableName="market_orders" referencedColumnNames="id" constraintName="fk_order_items_order"/>
+        <addUniqueConstraint tableName="market_order_items" columnNames="order_id,product_id" constraintName="uk_order_product"/>
+        <rollback><dropTable tableName="market_order_items"/><dropTable tableName="market_orders"/></rollback>
+    </changeSet>
+</databaseChangeLog>

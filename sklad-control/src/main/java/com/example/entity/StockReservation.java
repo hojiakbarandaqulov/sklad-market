@@ -20,7 +20,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(uniqueConstraints = {
+@Table(name = "stock_reservations", uniqueConstraints = {
         @UniqueConstraint(name = "uk_stock_reservations_company_order", columnNames = {"company_id", "order_id"}),
         @UniqueConstraint(name = "uk_stock_reservations_company_key", columnNames = {"company_id", "idempotency_key"})
 }, indexes = {

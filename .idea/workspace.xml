@@ -8,9 +8,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add">
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/config/SkladControlFeignConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/dto/dashboard/internal/ControlStatisticsResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/report-service/src/main/java/org/example/exp/AppServiceUnavailableException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/ORDER_API_UZ.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/OrderServiceApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ControlClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ProductClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/ClientConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/OrderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderCreateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/Order.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/entity/OrderItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/enums/OrderStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/OrderException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/mapper/OrderMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/repository/OrderRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/ServiceTokenService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/ServiceTokenServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/job/OrderRecoveryJob.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/utils/SpringSecurityUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/main/resources/db/changelog/master.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/service/ServiceTokenServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/order-service/src/test/resources/application-test.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/resources/application-local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/resources/application-local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/StockReservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/Warehouse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/entity/WarehouseStock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockReservationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/StockReservationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/repository/WarehouseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/StockReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/StockReservationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockReservationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/StockReservationServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +107,9 @@
       <ProjectState />
     </projectState>
     <projectState path="$PROJECT_DIR$/notification-service">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/order-service">
       <ProjectState />
     </projectState>
     <projectState path="$PROJECT_DIR$/product-service">
@@ -251,7 +306,7 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/sklad-jobs/src/main/java/com/example&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/sklad-control&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -284,11 +339,11 @@
       <recent name="com.example.dto.vacancy" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-control" />
+      <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-jobs" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-jobs\src\main\java\com\example" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-jobs\src\main\java\com\example\config\clent" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\category-service\src\main\java\org\example" />
-      <recent name="D:\JavaProject\Microservice\Skalad-market\category-service\src\main\resources" />
-      <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-jobs\src\main\java\com\example\entity" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\JavaProject\Microservice\Skalad-market\location-service\src\main\java\com\example" />
@@ -530,6 +585,13 @@
     <configuration name="NotificationServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="notification-service.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.NotificationServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OrderServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="order-service.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.OrderServiceApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

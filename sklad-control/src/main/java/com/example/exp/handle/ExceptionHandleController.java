@@ -38,7 +38,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorBody(messageService.getMessage("validation.failed"), errors), headers, status);
     }
 
-    @ExceptionHandler({AppBadException.class, IllegalArgumentException.class})
+    @ExceptionHandler({AppBadException.class, IllegalArgumentException.class, jakarta.validation.ConstraintViolationException.class})
     public ResponseEntity<Map<String, Object>> handleBadRequest(RuntimeException exception) {
         return ResponseEntity.badRequest().body(errorBody(exception.getMessage(), Map.of()));
     }

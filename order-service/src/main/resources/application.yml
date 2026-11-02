@@ -1,0 +1,45 @@
+server:
+  port: ${SERVER_PORT:8095}
+  domain: ${SERVER_DOMAIN:http://localhost}
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 3000
+            readTimeout: 8000
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://127.0.0.1:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    ip-address: ${SERVER_IP:127.0.0.1}
+    instance-id: ${spring.application.name}:${server.port}
+order:
+  reservation-ttl: ${ORDER_RESERVATION_TTL:PT24H}
+  service-auth:
+    token-url: ${ORDER_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
+    client-id: ${ORDER_CLIENT_ID:order-service}
+    client-secret: ${ORDER_CLIENT_SECRET:}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

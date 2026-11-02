@@ -13,7 +13,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/lead-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lead-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/location-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/location-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/notification-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/notification-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/order-service/order-service.iml" filepath="$PROJECT_DIR$/order-service/order-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/product-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/product-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/report-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/report-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sklad-control.main.iml" filepath="$PROJECT_DIR$/.idea/modules/sklad-control.main.iml" />
