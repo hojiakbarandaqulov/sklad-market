@@ -1,5 +1,47 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  domain: ${SERVER_DOMAIN:https://skladmarket.uz}
+  port: ${SERVER_PORT:8095}
+  url: ${SWAGGER_SERVER_URL:https://skladmarket.uz}
+
 spring:
+  application:
+    name: order-service
+
+  # DATABASE
   datasource:
-    url: ${ORDER_DB_URL:jdbc:postgresql://127.0.0.1:5432/skalad_market_order}
+    url: ${ORDER_DB_URL:jdbc:postgresql://${DB_HOST:127.0.0.1}:${DB_PORT:5432}/${DB_NAME:skalad_market_order}}
     username: ${DB_USERNAME:sklad_user}
-    password: ${DB_PASSWORD:}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://127.0.0.1:8761/eureka/}
+  instance:
+    prefer-ip-address: true
+    ip-address: ${SERVER_IP:127.0.0.1}
+    instance-id: ${spring.application.name}:${server.port}
+
+order:
+  service-auth:
+    token-url: ${ORDER_TOKEN_URL:${KEYCLOAK_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}}
+
+springdoc:
+  swagger-ui:
+    config-url: /swagger/order/v3/api-docs/swagger-config
+    url: /swagger/order/v3/api-docs

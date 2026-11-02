@@ -1,23 +1,22 @@
 server:
-  port: ${SERVER_PORT:8095}
-  domain: ${SERVER_DOMAIN:http://localhost}
-  forward-headers-strategy: framework
+  url: ${server.domain}:${server.port}
+
 spring:
   application:
     name: order-service
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:local}
+    active: ${SPRING_PROFILES_ACTIVE:prod}
+
+  # Jadvallarni Liquibase yaratadi, Hibernate ularning mosligini tekshiradi.
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/master.xml
+
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: validate
-  liquibase:
-    change-log: classpath:db/changelog/master.xml
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://127.0.0.1:9090/realms/market-realm}
+
   cloud:
     openfeign:
       client:
@@ -25,6 +24,8 @@ spring:
           default:
             connectTimeout: 3000
             readTimeout: 8000
+
+# Eureka Client
 eureka:
   client:
     service-url:
@@ -33,20 +34,24 @@ eureka:
     prefer-ip-address: true
     ip-address: ${SERVER_IP:127.0.0.1}
     instance-id: ${spring.application.name}:${server.port}
+
+# Buyurtma va servislararo autentifikatsiya
 order:
   swagger:
     server-url: ${ORDER_SWAGGER_SERVER_URL:/}
   reservation-ttl: ${ORDER_RESERVATION_TTL:PT24H}
   service-auth:
-    token-url: ${ORDER_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
+    token-url: ${ORDER_TOKEN_URL:${KEYCLOAK_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}}
     client-id: ${ORDER_CLIENT_ID:order-service}
     client-secret: ${ORDER_CLIENT_SECRET:}
+
 management:
   endpoints:
     web:
       exposure:
         include: health
 
+# Swagger hujjati faqat Order API'larini ko'rsatadi.
 springdoc:
   paths-to-match:
     - /api/v1/orders
