@@ -43,7 +43,7 @@ order:
   service-auth:
     token-url: ${ORDER_TOKEN_URL:${KEYCLOAK_TOKEN_URL:http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}}
     client-id: ${ORDER_CLIENT_ID:order-service}
-    client-secret: ${ORDER_CLIENT_SECRET:}
+    client-secret: ${ORDER_CLIENT_SECRET:hFJsvoEDED3sxC00Y3sfmSQtZjgvrrvU}
 
 management:
   endpoints:
