@@ -496,6 +496,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Long> matchingControlCardsBySaleStatus(Long companyId, SaleStatus saleStatus, AppLanguage language) {
+        Objects.requireNonNull(saleStatus, "saleStatus");
+        validateCompanyOwnership(companyId, requiredSellerId(language), language);
+        Specification<Product> spec = (root, query, cb) -> {
+            var salePredicate = saleStatus == SaleStatus.ON_SALE
+                    ? cb.and(cb.isTrue(root.get("isActive")),
+                            cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED))
+                    : cb.or(cb.isFalse(root.get("isActive")), cb.isNull(root.get("isActive")),
+                            cb.notEqual(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
+                            cb.isNull(root.get("moderationStatus")));
+            return cb.and(cb.equal(root.get("companyId"), companyId),
+                    cb.isNull(root.get("deletedAt")), salePredicate);
+        };
+        return productRepository.findAll(spec).stream().map(Product::getId).toList();
+    }
+
+    @Override
     public List<Long> matchingControlCards(Long companyId, String q, Long categoryId, AppLanguage language) {
         validateCompanyOwnership(companyId, requiredSellerId(language), language);
         Specification<Product> spec = (root, query, cb) -> cb.and(

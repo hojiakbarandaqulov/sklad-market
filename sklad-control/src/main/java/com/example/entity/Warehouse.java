@@ -30,7 +30,8 @@ public class Warehouse extends BaseEntity {
     private Long companyBranchId;
 
     @NotBlank
-    @Column(nullable = false)
+    @Size(max = 160)
+    @Column(nullable = false, length = 160)
     private String name;
 
     @Positive
@@ -41,6 +42,6 @@ public class Warehouse extends BaseEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private WarehouseStatus status = WarehouseStatus.ACTIVE;
 }

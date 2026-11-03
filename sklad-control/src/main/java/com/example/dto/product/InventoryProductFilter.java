@@ -1,5 +1,6 @@
 package com.example.dto.product;
 import com.example.enums.InventoryProductStatus;
+import com.example.enums.SaleStatus;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ public class InventoryProductFilter {
     @Positive private Long categoryId;
     @Size(max=160) private String q;
     private InventoryProductStatus status;
+    private SaleStatus saleStatus;
     // ALL, LOW, OUT, AVAILABLE qoldiq holatlari.
     @Pattern(regexp="ALL|LOW|OUT|AVAILABLE") private String stockState = "ALL";
     @Min(1) private int page=1;

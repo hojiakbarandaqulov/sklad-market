@@ -14,7 +14,8 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      # Sxemani Liquibase yaratadi; Hibernate faqat entity bilan mosligini tekshiradi.
+      ddl-auto: validate
   security:
     oauth2:
       resourceserver:

@@ -32,7 +32,8 @@ import java.math.BigDecimal;
 public class StockOperation extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "stock_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_operation_stock"))
     private WarehouseStock stock;
 
     @NotNull

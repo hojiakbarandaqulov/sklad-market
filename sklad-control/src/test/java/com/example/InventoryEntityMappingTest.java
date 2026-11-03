@@ -26,10 +26,11 @@ import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.*;
 
-// Liquibase yozilmaydi: entity bog'lanishlari faqat alohida vaqtinchalik H2 bazasida tekshiriladi.
+// Jadvalni haqiqiy Liquibase fayllari yaratadi; Hibernate uni entity'lardan qayta yaratmaydi.
 @DataJpaTest(properties = {
-        "spring.liquibase.enabled=false",
-        "spring.jpa.hibernate.ddl-auto=create-drop",
+        "spring.liquibase.enabled=true",
+        "spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.xml",
+        "spring.jpa.hibernate.ddl-auto=validate",
         "spring.jpa.show-sql=false",
         "spring.datasource.url=jdbc:h2:mem:control-entity-mappings;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
         "spring.datasource.username=sa",

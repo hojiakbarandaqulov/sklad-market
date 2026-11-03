@@ -18,17 +18,21 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(name = "uk_stock_reservation_items_reservation_stock", columnNames = {"reservation_id", "stock_id"}),
+@Table(name = "stock_reservation_item",
+        uniqueConstraints = @UniqueConstraint(name = "uk_stock_reservation_items_reservation_stock", columnNames = {"reservation_id", "stock_id"}),
         indexes = @Index(name = "idx_stock_reservation_items_stock", columnList = "stock_id"))
+@Check(constraints = "quantity > 0")
 public class StockReservationItem extends BaseEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "reservation_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_item_reservation"))
     private StockReservation reservation;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "stock_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_item_stock"))
     private WarehouseStock stock;
 
     @Positive

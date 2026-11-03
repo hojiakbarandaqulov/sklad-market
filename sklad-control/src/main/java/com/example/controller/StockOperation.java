@@ -13,7 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import com.example.enums.AppLanguage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.service.StockOperationService;
+import com.example.service.StockOperationService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

@@ -2,12 +2,14 @@ package org.example.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
 import org.example.dto.product.CreateProductRequest;
 import org.example.dto.product.ProductResponse;
 import org.example.enums.AppLanguage;
+import org.example.enums.SaleStatus;
 import org.example.service.ProductService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +24,13 @@ import java.util.List;
 @RequestMapping("/internal/control/products")
 public class ControlProductInternalController {
     private final ProductService service;
+
+    @GetMapping("/matching-sale")
+    public ApiResponse<List<Long>> matchingBySaleStatus(@RequestParam @Positive Long companyId,
+            @RequestParam SaleStatus saleStatus,
+            @RequestHeader(value="Accept-Language",defaultValue="UZ") AppLanguage language) {
+        return ApiResponse.successResponse(service.matchingControlCardsBySaleStatus(companyId, saleStatus, language));
+    }
 
     @GetMapping("/matching")
     public ApiResponse<List<Long>> matching(@RequestParam Long companyId,

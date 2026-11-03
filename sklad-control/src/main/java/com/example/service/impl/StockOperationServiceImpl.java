@@ -30,7 +30,7 @@ import com.example.utils.SpringSecurityUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
-import org.example.service.StockOperationService;
+import com.example.service.StockOperationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

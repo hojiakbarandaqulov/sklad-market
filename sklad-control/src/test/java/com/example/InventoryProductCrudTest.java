@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /** Haqiqiy controller, JPA va transaction; faqat tashqi servislar hamda JWT decoder almashtiriladi. */
 @SpringBootTest(properties={
-    "spring.liquibase.enabled=false","spring.jpa.hibernate.ddl-auto=create-drop",
+    "spring.liquibase.enabled=true","spring.jpa.hibernate.ddl-auto=validate",
     "spring.datasource.url=jdbc:h2:mem:control-products;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
     "spring.datasource.username=sa","spring.datasource.password=","spring.datasource.driver-class-name=org.h2.Driver"
 })
@@ -199,5 +199,97 @@ class InventoryProductCrudTest {
             .contentType("application/json").content("{\"showInMarket\":true}")).andExpect(status().isForbidden());
         mvc.perform(post("/api/v1/control/products/"+id+"/archive").header("Authorization","Bearer seller")).andExpect(status().isForbidden());
         mvc.perform(post("/api/v1/control/products/"+id+"/restore").header("Authorization","Bearer seller")).andExpect(status().isForbidden());
+    }
+
+    @Test void saleFilterRunsBeforePaginationAndCombinesWithInventoryStatusAndCompany() throws Exception {
+        saleProduct(100L, "ON-1", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        saleProduct(200L, "HIDDEN", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        saleProduct(300L, "ON-2", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        saleProduct(500L, "ARCHIVED", 1L, com.example.enums.InventoryProductStatus.ARCHIVED);
+        saleProduct(900L, "FOREIGN", 2L, com.example.enums.InventoryProductStatus.ACTIVE);
+        stubSaleCards();
+        when(cards.matchingBySaleStatus(1L, com.example.enums.SaleStatus.ON_SALE, "UZ"))
+                .thenReturn(ApiResponse.successResponse(List.of(100L, 300L, 500L, 900L)));
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1").param("status", "ACTIVE").param("saleStatus", "ON_SALE")
+                .param("page", "1").param("perPage", "1"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.totalElements").value(2))
+                .andExpect(jsonPath("$.data.totalPages").value(2))
+                .andExpect(jsonPath("$.data.content[0].productId").value(300));
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1").param("status", "ACTIVE").param("saleStatus", "ON_SALE")
+                .param("page", "2").param("perPage", "1"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.totalElements").value(2))
+                .andExpect(jsonPath("$.data.content[0].productId").value(100));
+    }
+
+    @Test void emptySaleMatchesReturnAnEmptyPageWithoutFetchingCards() throws Exception {
+        saleProduct(100L, "ON-1", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        when(cards.matchingBySaleStatus(1L, com.example.enums.SaleStatus.ON_SALE, "UZ"))
+                .thenReturn(ApiResponse.successResponse(List.of()));
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1").param("saleStatus", "ON_SALE"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.totalElements").value(0))
+                .andExpect(jsonPath("$.data.content").isEmpty());
+        verify(cards, never()).cards(anyLong(), anyList(), anyString());
+    }
+
+    @Test void offSaleFilterAndSkuSearchAreAppliedTogether() throws Exception {
+        saleProduct(100L, "MATCH-ON", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        saleProduct(200L, "MATCH-OFF", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        saleProduct(300L, "OTHER-OFF", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        stubSaleCards();
+        when(cards.matchingBySaleStatus(1L, com.example.enums.SaleStatus.OFF_SALE, "UZ"))
+                .thenReturn(ApiResponse.successResponse(List.of(200L, 300L)));
+        when(cards.matching(1L, "MATCH", null, "UZ"))
+                .thenReturn(ApiResponse.successResponse(List.of()));
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1").param("saleStatus", "OFF_SALE").param("q", "MATCH"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.totalElements").value(1))
+                .andExpect(jsonPath("$.data.content[0].productId").value(200));
+    }
+
+    @Test void omittedSaleFilterKeepsExistingListBehavior() throws Exception {
+        saleProduct(100L, "ACTIVE", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        saleProduct(200L, "ARCHIVED", 1L, com.example.enums.InventoryProductStatus.ARCHIVED);
+        stubSaleCards();
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.totalElements").value(2));
+        verify(cards, never()).matchingBySaleStatus(anyLong(), any(), anyString());
+    }
+
+    @Test void invalidSaleStatusAndForeignCompanyAreRejectedBeforeRemoteSaleLookup() throws Exception {
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1").param("saleStatus", "ACTIVE"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "2").param("saleStatus", "ON_SALE"))
+                .andExpect(status().isForbidden());
+        verifyNoInteractions(cards);
+    }
+
+    @Test void saleLookupFailureDoesNotFallBackToUnfilteredProducts() throws Exception {
+        saleProduct(100L, "ON-1", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        when(cards.matchingBySaleStatus(1L, com.example.enums.SaleStatus.ON_SALE, "UZ")).thenReturn(null);
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1").param("saleStatus", "ON_SALE"))
+                .andExpect(status().isServiceUnavailable());
+        verify(cards, never()).cards(anyLong(), anyList(), anyString());
+    }
+
+    private void saleProduct(Long cardId, String sku, Long companyId, com.example.enums.InventoryProductStatus status) {
+        var product = new InventoryProduct();
+        product.setCompanyId(companyId); product.setCatalogCardId(cardId);
+        product.setSku(sku); product.setStatus(status);
+        products.saveAndFlush(product);
+    }
+
+    private void stubSaleCards() {
+        when(cards.cards(eq(1L), anyList(), anyString())).thenAnswer(call -> {
+            List<Long> ids = call.getArgument(1);
+            return ApiResponse.successResponse(ids.stream().map(id -> (JsonNode) json.createObjectNode()
+                    .put("id", id).put("companyId", 1L)).toList());
+        });
     }
 }

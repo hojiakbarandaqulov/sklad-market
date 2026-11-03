@@ -11,6 +11,7 @@ import org.example.entity.Product;
 import org.example.entity.ProductImage;
 import org.example.enums.AppLanguage;
 import org.example.enums.ProductModerationStatus;
+import org.example.enums.SaleStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
+    List<Long> matchingControlCardsBySaleStatus(Long companyId, SaleStatus saleStatus, AppLanguage language);
     List<Long> matchingControlCards(Long companyId, String q, Long categoryId, AppLanguage language);
     // Control bitta karta yaratadi; bir xil kalit bilan qayta urinish nusxa yaratmaydi.
     ProductResponse createForControl(CreateProductRequest request, String key, boolean visible, AppLanguage language);

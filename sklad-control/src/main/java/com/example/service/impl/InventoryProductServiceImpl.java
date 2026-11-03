@@ -49,6 +49,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         // Egalik tekshiruvi mavjud WarehouseService orqali qayta ishlatiladi.
         warehouseService.get(request.getWarehouseId(), language);
         Warehouse warehouse = warehouses.lockPresent(request.getWarehouseId()).orElseThrow(() -> missing(language));
+
         if (!warehouse.getCompanyId().equals(request.getCompanyId())) throw bad("control.product.company", language);
         if (warehouse.getStatus() != WarehouseStatus.ACTIVE) throw conflict("control.warehouse.inactive", language);
         if ((request.getProductId() == null) == (request.getProduct() == null))
@@ -130,6 +131,13 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         Specification<InventoryProduct> spec = (root, query, cb) -> cb.and(cb.equal(root.get("companyId"), filter.getCompanyId()), cb.isFalse(root.get("deleted")));
         if (filter.getStatus() != null)
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), filter.getStatus()));
+        if (filter.getSaleStatus() != null) {
+            List<Long> ids = remote(() -> client.matchingBySaleStatus(filter.getCompanyId(),
+                    filter.getSaleStatus(), language.name()), language);
+            // Filtr sahifalashdan oldin qo'llanadi: totalElements/totalPages ham to'g'ri qoladi.
+            spec = spec.and((root, query, cb) -> ids.isEmpty()
+                    ? cb.disjunction() : root.get("catalogCardId").in(ids));
+        }
         if (filter.getCategoryId() != null) {
             List<Long> ids = remote(() -> client.matching(filter.getCompanyId(), null, filter.getCategoryId(), language.name()), language);
             spec = spec.and((root, query, cb) -> root.get("catalogCardId").in(ids));

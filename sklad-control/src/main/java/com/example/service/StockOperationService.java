@@ -1,6 +1,5 @@
-package org.example.service;
+package com.example.service;
 
-import com.example.dto.ApiResponse;
 import com.example.dto.stockOperation.RezervRequest;
 import com.example.dto.stockOperation.RezervResponse;
 import com.example.dto.stockOperation.AdjustmentRequest;

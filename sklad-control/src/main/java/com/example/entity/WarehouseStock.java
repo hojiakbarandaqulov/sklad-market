@@ -24,12 +24,14 @@ import java.math.BigDecimal;
 @Check(constraints = "on_hand >= 0 AND reserved >= 0 AND reserved <= on_hand AND minimum_stock >= 0")
 public class WarehouseStock extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "warehouse_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_stock_warehouse"))
     private Warehouse warehouse;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "inventory_product_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_stock_product"))
     private InventoryProduct inventoryProduct;
 
     @Column(nullable = false, precision = 19, scale = 3)
