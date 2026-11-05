@@ -103,8 +103,9 @@ Customer API xatolari `success: false`, `message`, `errors`, `trace_id` bilan qa
 413 — katta fayl, 502 — file-service bilan aloqa yoki javob xatosi.
 
 `company-service`, `file-service`, `api-gateway` birga yangilanadi.
-`V4__add_customers.sql` migratsiyasi qo'shilgan. Loyihadagi amaldagi Flyway o'chirilgan,
-`ddl-auto: update` konfiguratsiyasida yangi entity jadvalni yaratadi.
+Flyway yoqilgan. `V3__create_company_reviews.sql` bazada avval bajarilgan asl holatida saqlanadi.
+`V4__add_customers.sql` mijozlar jadvalini, `V5__add_company_region.sql` region ustuni va indeksini yaratadi.
+Avval bajarilgan migratsiyalar o'zgartirilmaydi; keyingi sxema o'zgarishlari yangi versiyaga chiqariladi.
 Shartnoma download endpointi kompaniya egaligini tekshiradi. Amaldagi umumiy file-service
 `/api/v1/attach/open/{id}` endpointi public, shu sabab xom attach ID'ni maxfiy token deb hisoblamaslik kerak.
 Customer response saqlash xizmatining attach ID va public URL'ini chiqarmaydi.
