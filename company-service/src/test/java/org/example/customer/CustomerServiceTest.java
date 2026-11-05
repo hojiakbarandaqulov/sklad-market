@@ -12,6 +12,7 @@ import org.example.exp.CustomerException;
 import org.example.repository.CompanyRepository;
 import org.example.repository.CustomerRepository;
 import org.example.service.CustomerService;
+import org.example.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ class CustomerServiceTest {
     private final CustomerRepository customers = mock(CustomerRepository.class);
     private final CompanyRepository companies = mock(CompanyRepository.class);
     private final FileClient files = mock(FileClient.class);
-    private final CustomerService service = new CustomerService(customers, companies, files);
+    private final CustomerService service = new CustomerServiceImpl(customers, companies, files);
     private Company company;
     private Customer customer;
     private final MockMultipartFile pdf = new MockMultipartFile("file", "contract.pdf", "application/pdf", "%PDF-1.7".getBytes());

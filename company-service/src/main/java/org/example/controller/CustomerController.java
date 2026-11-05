@@ -29,7 +29,7 @@ public class CustomerController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Mijoz yaratish", description = "companyId, name, contractNumber, phone, paymentTermDays form maydonlari. file ixtiyoriy, 2 MB gacha.")
-    public ApiResponse<CustomerResponse> create(@Valid @ModelAttribute CustomerCreateRequest request,
+    public ApiResponse<CustomerResponse> create(@Valid CustomerCreateRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(service.create(request, file, language));
