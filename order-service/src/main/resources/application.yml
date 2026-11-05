@@ -28,12 +28,8 @@ spring:
 # Eureka Client
 eureka:
   client:
-    service-url:
-      defaultZone: ${EUREKA_DEFAULT_ZONE:http://127.0.0.1:8761/eureka/}
-  instance:
-    prefer-ip-address: true
-    ip-address: ${SERVER_IP:127.0.0.1}
-    instance-id: ${spring.application.name}:${server.port}
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
 
 # Buyurtma va servislararo autentifikatsiya
 order:
