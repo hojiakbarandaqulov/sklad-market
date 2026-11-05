@@ -56,4 +56,5 @@ public class WarehouseStock extends BaseEntity {
     public BigDecimal getAvailable() {
         return onHand.subtract(reserved);
     }
+
 }

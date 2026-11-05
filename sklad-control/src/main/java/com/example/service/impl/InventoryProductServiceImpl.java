@@ -71,8 +71,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
             if (request.getProductId() != null) {
                 card = oneCard(request.getCompanyId(), request.getProductId(), language);
             } else {
-                card = remote(() -> client.create(request.getProduct(), sku, false, language.name()), language);
-                validateCard(card, request.getCompanyId(), null, language);
+                card = remote("create", () -> client.create(request.getProduct(), sku, false, language.name()), language);
+                validateCard("create", card, request.getCompanyId(), null, language);
             }
             Long cardId = card.get("id").asLong();
             if (!products.findByCard(request.getCompanyId(), cardId).isEmpty())
@@ -116,8 +116,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         }
         Long remoteId = product.getCatalogCardId();
         // Yakuniy ko'rinishni faqat lokal yozuvlar tayyor bo'lgandan keyin o'zgartiramiz.
-        card = remote(() -> client.visibility(remoteId, request.getShowInMarket(), language.name()), language);
-        validateCard(card, product.getCompanyId(), remoteId, language);
+        card = remote("visibility", () -> client.visibility(remoteId, request.getShowInMarket(), language.name()), language);
+        validateCard("visibility", card, product.getCompanyId(), remoteId, language);
         return dto(product, card, stocks.forProducts(List.of(productId)));
     }
 
@@ -132,19 +132,19 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         if (filter.getStatus() != null)
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), filter.getStatus()));
         if (filter.getSaleStatus() != null) {
-            List<Long> ids = remote(() -> client.matchingBySaleStatus(filter.getCompanyId(),
+            List<Long> ids = remote("matching-sale", () -> client.matchingBySaleStatus(filter.getCompanyId(),
                     filter.getSaleStatus(), language.name()), language);
             // Filtr sahifalashdan oldin qo'llanadi: totalElements/totalPages ham to'g'ri qoladi.
             spec = spec.and((root, query, cb) -> ids.isEmpty()
                     ? cb.disjunction() : root.get("catalogCardId").in(ids));
         }
         if (filter.getCategoryId() != null) {
-            List<Long> ids = remote(() -> client.matching(filter.getCompanyId(), null, filter.getCategoryId(), language.name()), language);
+            List<Long> ids = remote("matching-category", () -> client.matching(filter.getCompanyId(), null, filter.getCategoryId(), language.name()), language);
             spec = spec.and((root, query, cb) -> root.get("catalogCardId").in(ids));
         }
         if (StringUtils.hasText(filter.getQ())) {
             String search = filter.getQ().strip().toLowerCase(Locale.ROOT).replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
-            List<Long> ids = remote(() -> client.matching(filter.getCompanyId(), filter.getQ(), null, language.name()), language);
+            List<Long> ids = remote("matching-name", () -> client.matching(filter.getCompanyId(), filter.getQ(), null, language.name()), language);
             spec = spec.and((root, query, cb) -> cb.or(root.get("catalogCardId").in(ids), cb.like(cb.lower(root.get("sku")), "%" + search + "%", '\\')));
         }
         if (filter.getWarehouseId() != null || !"ALL".equals(filter.getStockState())) {
@@ -175,16 +175,16 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         Page<InventoryProduct> page = products.findAll(spec, pageable);
         if (page.isEmpty()) return new PageImpl<>(List.of(), pageable, page.getTotalElements());
         List<InventoryProduct> rows = page.getContent();
-        List<JsonNode> cards = remote(() -> client.cards(filter.getCompanyId(), rows.stream().map(InventoryProduct::getCatalogCardId).distinct().toList(), language.name()), language);
+        List<JsonNode> cards = remote("cards", () -> client.cards(filter.getCompanyId(), rows.stream().map(InventoryProduct::getCatalogCardId).distinct().toList(), language.name()), language);
         Map<Long, JsonNode> byId = new HashMap<>();
         for (JsonNode card : cards) {
-            validateCard(card, filter.getCompanyId(), null, language);
+            validateCard("cards", card, filter.getCompanyId(), null, language);
             byId.put(card.get("id").asLong(), card);
         }
         List<WarehouseStock> balances = stocks.forProducts(rows.stream().map(InventoryProduct::getId).toList());
         List<InventoryProductDTO> result = rows.stream().map(p -> {
             JsonNode card = byId.get(p.getCatalogCardId());
-            if (card == null) throw unavailable(language);
+            if (card == null) throw unavailable("cards", "requested card missing from response", language);
             return dto(p, card, balances.stream().filter(s -> s.getInventoryProduct().getId().equals(p.getId())).filter(s -> filter.getWarehouseId() == null || filter.getWarehouseId().equals(s.getWarehouse().getId())).toList());
         }).toList();
         return new PageImpl<>(result, pageable, page.getTotalElements());
@@ -204,14 +204,18 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         if (request.getProduct() == null && request.getShowInMarket() == null)
             throw bad("warehouse.patch.empty", language);
         JsonNode card = card(product, language);
+        String responseOperation = "cards";
         if (request.getProduct() != null) {
             if (!product.getCompanyId().equals(request.getProduct().getCompanyId()))
                 throw bad("control.product.company", language);
-            card = remote(() -> client.update(product.getCatalogCardId(), request.getProduct(), language.name()), language);
+            card = remote("update", () -> client.update(product.getCatalogCardId(), request.getProduct(), language.name()), language);
+            responseOperation = "update";
         }
-        if (request.getShowInMarket() != null)
-            card = remote(() -> client.visibility(product.getCatalogCardId(), request.getShowInMarket(), language.name()), language);
-        validateCard(card, product.getCompanyId(), product.getCatalogCardId(), language);
+        if (request.getShowInMarket() != null) {
+            card = remote("visibility", () -> client.visibility(product.getCatalogCardId(), request.getShowInMarket(), language.name()), language);
+            responseOperation = "visibility";
+        }
+        validateCard(responseOperation, card, product.getCompanyId(), product.getCatalogCardId(), language);
         product.setModifiedBy(actor(language));
         products.saveAndFlush(product);
         return dto(product, card, stocks.forProducts(List.of(id)));
@@ -222,8 +226,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     public InventoryProductDTO archive(Long id, AppLanguage language) {
         InventoryProduct product = owned(id, true, language);
         if (stocks.hasBalance(id)) throw conflict("control.product.balance", language);
-        JsonNode card = remote(() -> client.visibility(product.getCatalogCardId(), false, language.name()), language);
-        validateCard(card, product.getCompanyId(), product.getCatalogCardId(), language);
+        JsonNode card = remote("visibility", () -> client.visibility(product.getCatalogCardId(), false, language.name()), language);
+        validateCard("visibility", card, product.getCompanyId(), product.getCatalogCardId(), language);
         product.setStatus(InventoryProductStatus.ARCHIVED);
         product.setModifiedBy(actor(language));
         products.saveAndFlush(product);
@@ -278,22 +282,26 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     }
 
     private JsonNode oneCard(Long companyId, Long id, AppLanguage language) {
-        List<JsonNode> result = remote(() -> client.cards(companyId, List.of(id), language.name()), language);
+        List<JsonNode> result = remote("cards", () -> client.cards(companyId, List.of(id), language.name()), language);
         if (result.size() != 1) throw bad("control.product.card.missing", language);
-        validateCard(result.get(0), companyId, id, language);
+        validateCard("cards", result.get(0), companyId, id, language);
         return result.get(0);
     }
 
-    private void validateCard(JsonNode card, Long companyId, Long id, AppLanguage language) {
-        if (card == null || !card.path("id").canConvertToLong() || card.path("id").asLong() <= 0 || !card.path("companyId").canConvertToLong() || card.path("companyId").asLong() != companyId || (id != null && card.path("id").asLong() != id))
-            throw unavailable(language);
+    private void validateCard(String operation, JsonNode card, Long companyId, Long id, AppLanguage language) {
+        if (card == null || !card.path("id").canConvertToLong() || card.path("id").asLong() <= 0
+                || !card.path("companyId").canConvertToLong() || card.path("companyId").asLong() != companyId
+                || (id != null && card.path("id").asLong() != id)) {
+            throw unavailable(operation, "invalid product card identity", language);
+        }
     }
 
-    private <T> T remote(Supplier<ApiResponse<T>> action, AppLanguage language) {
+    private <T> T remote(String operation, Supplier<ApiResponse<T>> action, AppLanguage language) {
         try {
             ApiResponse<T> response = action.get();
-            if (response == null || !Boolean.TRUE.equals(response.getSuccess()) || response.getData() == null)
-                throw unavailable(language);
+            if (response == null) throw unavailable(operation, "empty response", language);
+            if (!Boolean.TRUE.equals(response.getSuccess())) throw unavailable(operation, "unsuccessful response", language);
+            if (response.getData() == null) throw unavailable(operation, "missing response data", language);
             return response.getData();
         } catch (FeignException e) {
             if (e.status() == 401 || e.status() == 403)
@@ -301,7 +309,10 @@ public class InventoryProductServiceImpl implements InventoryProductService {
             if (e.status() == 400 || e.status() == 404 || e.status() == 422)
                 throw bad("control.product.remote.invalid", language);
             if (e.status() == 409) throw conflict("control.product.retry", language);
-            throw unavailable(language);
+            Throwable cause = e.getCause() == null ? e : e.getCause();
+            // Feign xabarida so'rov URL'i yoki javob tanasi bo'lishi mumkin. Faqat status va xato turini yozamiz.
+            String status = e.status() < 0 ? "no HTTP response" : String.valueOf(e.status());
+            throw unavailable(operation, "upstream_status=" + status + ", error=" + cause.getClass().getSimpleName(), language);
         }
     }
 
@@ -321,7 +332,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         return new AppNotFoundException(messages.getMessage("control.product.missing", language));
     }
 
-    private AppServiceUnavailableException unavailable(AppLanguage language) {
-        return new AppServiceUnavailableException(messages.getMessage("control.product.unavailable", language));
+    private AppServiceUnavailableException unavailable(String operation, String reason, AppLanguage language) {
+        return new AppServiceUnavailableException(messages.getMessage("control.product.unavailable", language),
+                "service=product-service, operation=" + operation + ", " + reason);
     }
 }

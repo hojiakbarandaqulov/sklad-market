@@ -73,8 +73,9 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AppServiceUnavailableException.class)
     public ResponseEntity<Map<String, Object>> handleServiceUnavailable(AppServiceUnavailableException exception) {
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(errorBody(exception.getMessage(), Map.of()));
+        Map<String, Object> body = errorBody(exception.getMessage(), Map.of());
+        log.warn("Sklad Control dependency failure, trace_id={}, {}", body.get("trace_id"), exception.getDiagnostic());
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(body);
     }
 
     @ExceptionHandler(RuntimeException.class)

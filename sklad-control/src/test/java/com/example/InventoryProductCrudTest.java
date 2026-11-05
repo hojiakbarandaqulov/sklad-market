@@ -8,10 +8,14 @@ import com.example.enums.WarehouseStatus;
 import com.example.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import feign.FeignException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -191,6 +195,27 @@ class InventoryProductCrudTest {
             .contentType("application/json").content(existing())).andExpect(status().isServiceUnavailable());
         assertThat(products.count()).isZero(); assertThat(stocks.count()).isZero(); assertThat(operations.count()).isZero();
     }
+
+    @Test
+    @ExtendWith(OutputCaptureExtension.class)
+    void upstreamFailureLogsOperationStatusAndResponseTraceId(CapturedOutput output) throws Exception {
+        FeignException failure = mock(FeignException.class);
+        when(failure.status()).thenReturn(500);
+        when(failure.getMessage()).thenReturn("private upstream response");
+        when(cards.visibility(eq(100L), anyBoolean(), anyString())).thenThrow(failure);
+
+        String body = mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
+                        .contentType("application/json").content(existing()))
+                .andExpect(status().isServiceUnavailable())
+                .andReturn().getResponse().getContentAsString();
+        String traceId = json.readTree(body).path("trace_id").asText();
+
+        assertThat(traceId).isNotBlank();
+        assertThat(output.getAll()).contains("trace_id=" + traceId
+                + ", service=product-service, operation=visibility, upstream_status=500");
+        assertThat(output.getAll()).doesNotContain("private upstream response", "Bearer seller");
+    }
+
     @Test void ownershipIsCheckedForReadUpdateArchiveAndRestore() throws Exception {
         Long id=create();
         var product=products.findById(id).orElseThrow(); product.setCompanyId(2L); products.saveAndFlush(product);

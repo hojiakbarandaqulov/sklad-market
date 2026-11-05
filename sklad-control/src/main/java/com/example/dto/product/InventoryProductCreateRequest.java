@@ -20,7 +20,6 @@ public class InventoryProductCreateRequest {
     @Positive
     private Long warehouseId;
     @NotBlank
-    @Size(max = 100)
     private String sku;
     @Positive
     private Long productId;

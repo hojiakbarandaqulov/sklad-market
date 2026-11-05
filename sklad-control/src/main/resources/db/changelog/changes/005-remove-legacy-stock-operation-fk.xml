@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.29.xsd">
+
+    <changeSet id="005-remove-legacy-stock-operation-fk" author="sklad" dbms="postgresql">
+        <comment>Eski Hibernate mapping yaratgan warehouse_stock bog'lanishini olib tashlaydi.</comment>
+        <sql splitStatements="false"><![CDATA[
+DO $migration$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_catalog.pg_constraint AS fk
+        WHERE fk.conname = 'fkdu5bxgwuimvx2o9q75n89epuh'
+          AND fk.contype = 'f'
+          AND fk.conrelid = 'stock_operations'::regclass
+          AND fk.confrelid = to_regclass('warehouse_stock')
+    ) THEN
+        RETURN;
+    END IF;
+
+    LOCK TABLE stock_operations IN ACCESS EXCLUSIVE MODE;
+
+    -- Jurnalning warehouse_stocks(id) bilan to'g'ri bog'lanishi saqlanishi shart.
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_catalog.pg_constraint AS fk
+        JOIN pg_catalog.pg_attribute AS operation_column
+          ON operation_column.attrelid = fk.conrelid AND operation_column.attname = 'stock_id'
+        JOIN pg_catalog.pg_attribute AS stock_column
+          ON stock_column.attrelid = fk.confrelid AND stock_column.attname = 'id'
+        WHERE fk.conname = 'fk_operation_stock'
+          AND fk.contype = 'f'
+          AND fk.convalidated
+          AND fk.conrelid = 'stock_operations'::regclass
+          AND fk.confrelid = 'warehouse_stocks'::regclass
+          AND fk.conkey = ARRAY[operation_column.attnum]
+          AND fk.confkey = ARRAY[stock_column.attnum]
+    ) THEN
+        RAISE EXCEPTION 'Cannot remove the legacy stock foreign key: the validated fk_operation_stock is missing';
+    END IF;
+
+    ALTER TABLE stock_operations DROP CONSTRAINT IF EXISTS fkdu5bxgwuimvx2o9q75n89epuh;
+END;
+$migration$;
+        ]]></sql>
+    </changeSet>
+</databaseChangeLog>
