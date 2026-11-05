@@ -52,7 +52,7 @@ spring:
         - id: company-service
           uri: lb://company-service
           predicates:
-            - Path=/api/v1/companies,/api/v1/companies/**,/api/v1/admin/companies,/api/v1/admin/companies/**,/api/v1/company-favorites,/api/v1/company-favorites/**
+            - Path=/api/v1/companies,/api/v1/companies/**,/api/v1/admin/companies,/api/v1/admin/companies/**,/api/v1/company-favorites,/api/v1/company-favorites/**,/api/v1/customers,/api/v1/customers/**
         #Category
         - id: category-service
           uri: lb://category-service

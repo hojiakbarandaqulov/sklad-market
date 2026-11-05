@@ -6,6 +6,10 @@ import org.example.enums.AppLanguage;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -19,4 +23,11 @@ public interface FileClient {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ApiResponse<AttachDto> upload(@RequestPart(value = "file") MultipartFile file,
                                   @RequestHeader("Accept-Language") String language);
+
+    @GetMapping("/internal/attach/open/{id}")
+    ResponseEntity<byte[]> open(@PathVariable("id") String id);
+
+    @DeleteMapping("/api/v1/attach/delete/{id}")
+    ApiResponse<Boolean> delete(@PathVariable("id") String id,
+                                @RequestHeader("Accept-Language") String language);
 }

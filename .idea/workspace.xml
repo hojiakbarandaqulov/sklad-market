@@ -7,7 +7,41 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
+      <change afterPath="$PROJECT_DIR$/company-service/CUSTOMER_API_UZ.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/PRODUCT_COUNT_API_UZ.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CustomerController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerCreateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerListResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/entity/Customer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/exp/CustomerException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/exp/handle/CustomerExceptionHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CustomerRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CustomerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/resources/db/migration/V3__add_company_region.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/main/resources/db/migration/V4__add_customers.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerFileClientTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerRepositoryTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerServiceTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/service/CompanyProductCountTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/FileClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/config/internal/FileClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_en.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-service/src/main/java/org/example/utils/FileTypeValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/utils/FileTypeValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/file-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

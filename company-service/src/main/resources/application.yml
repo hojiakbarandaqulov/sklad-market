@@ -6,6 +6,10 @@ spring:
     name: company-service
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:prod}
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 3MB
 
   # Flyway
   flyway:
