@@ -34,7 +34,7 @@ public class OrderFilter {
     @Schema(description = "Bir sahifadagi buyurtmalar soni, 1–100", defaultValue = "20", example = "20")
     private int perPage = 20;
 
-    @AssertTrue(message = "dateFrom dateTo dan katta bo'lmasin")
+    @AssertTrue(message = "{order.date.range}")
     @Schema(hidden = true)
     public boolean isDateRangeValid() {
         return dateFrom == null || dateTo == null || !dateFrom.isAfter(dateTo);

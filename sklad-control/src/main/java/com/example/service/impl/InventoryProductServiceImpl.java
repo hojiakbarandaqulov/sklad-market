@@ -43,6 +43,14 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     private final ResourceBundleService messages;
 
     @Override
+    public boolean hasCatalogLink(Long companyId, Long productId, AppLanguage language) {
+        if (!SpringSecurityUtil.hasRole("ADMIN") && !SpringSecurityUtil.hasRole("SUPER_ADMIN")) {
+            authorizeCompany(companyId, language);
+        }
+        return !products.findByCard(companyId, productId).isEmpty();
+    }
+
+    @Override
     @Transactional
     public InventoryProductDTO create(InventoryProductCreateRequest request, AppLanguage language) {
         Long actor = actor(language);
@@ -184,8 +192,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         List<WarehouseStock> balances = stocks.forProducts(rows.stream().map(InventoryProduct::getId).toList());
         List<InventoryProductDTO> result = rows.stream().map(p -> {
             JsonNode card = byId.get(p.getCatalogCardId());
-            if (card == null) throw unavailable("cards", "requested card missing from response", language);
-            return dto(p, card, balances.stream().filter(s -> s.getInventoryProduct().getId().equals(p.getId())).filter(s -> filter.getWarehouseId() == null || filter.getWarehouseId().equals(s.getWarehouse().getId())).toList());
+            return readableDto(p, card, balances.stream().filter(s -> s.getInventoryProduct().getId().equals(p.getId())).filter(s -> filter.getWarehouseId() == null || filter.getWarehouseId().equals(s.getWarehouse().getId())).toList(), language);
         }).toList();
         return new PageImpl<>(result, pageable, page.getTotalElements());
     }
@@ -193,7 +200,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     @Override
     public InventoryProductDTO get(Long id, AppLanguage language) {
         InventoryProduct product = owned(id, false, language);
-        return dto(product, card(product, language), stocks.forProducts(List.of(id)));
+        return readableDto(product, optionalCard(product, language), stocks.forProducts(List.of(id)), language);
     }
 
     @Override
@@ -226,12 +233,15 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     public InventoryProductDTO archive(Long id, AppLanguage language) {
         InventoryProduct product = owned(id, true, language);
         if (stocks.hasBalance(id)) throw conflict("control.product.balance", language);
-        JsonNode card = remote("visibility", () -> client.visibility(product.getCatalogCardId(), false, language.name()), language);
-        validateCard("visibility", card, product.getCompanyId(), product.getCatalogCardId(), language);
+        JsonNode card = optionalCard(product, language);
+        if (card != null) {
+            card = remote("visibility", () -> client.visibility(product.getCatalogCardId(), false, language.name()), language);
+            validateCard("visibility", card, product.getCompanyId(), product.getCatalogCardId(), language);
+        }
         product.setStatus(InventoryProductStatus.ARCHIVED);
         product.setModifiedBy(actor(language));
         products.saveAndFlush(product);
-        return dto(product, card, stocks.forProducts(List.of(id)));
+        return readableDto(product, card, stocks.forProducts(List.of(id)), language);
     }
 
     @Override
@@ -281,6 +291,25 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         return oneCard(product.getCompanyId(), product.getCatalogCardId(), language);
     }
 
+    private JsonNode optionalCard(InventoryProduct product, AppLanguage language) {
+        List<JsonNode> cards = remote("cards", () -> client.cards(product.getCompanyId(),
+                List.of(product.getCatalogCardId()), language.name()), language);
+        if (cards.isEmpty()) return null;
+        if (cards.size() != 1) throw unavailable("cards", "invalid card count", language);
+        validateCard("cards", cards.get(0), product.getCompanyId(), product.getCatalogCardId(), language);
+        return cards.get(0);
+    }
+
+    private InventoryProductDTO readableDto(InventoryProduct product, JsonNode card,
+            List<WarehouseStock> balances, AppLanguage language) {
+        InventoryProductDTO result = dto(product, card, balances);
+        if (card == null) {
+            // Retain the inventory ID, SKU and balances; never restore or publish a missing card.
+            result.setCatalogCardUnavailableReason(messages.getMessage("control.product.card.unavailable", language));
+        }
+        return result;
+    }
+
     private JsonNode oneCard(Long companyId, Long id, AppLanguage language) {
         List<JsonNode> result = remote("cards", () -> client.cards(companyId, List.of(id), language.name()), language);
         if (result.size() != 1) throw bad("control.product.card.missing", language);
@@ -317,7 +346,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     }
 
     private InventoryProductDTO dto(InventoryProduct product, JsonNode card, List<WarehouseStock> balances) {
-        return InventoryProductDTO.builder().id(product.getId()).companyId(product.getCompanyId()).productId(product.getCatalogCardId()).sku(product.getSku()).status(product.getStatus()).product(card).stocks(balances.stream().map(s -> InventoryProductDTO.StockDTO.builder().warehouseId(s.getWarehouse().getId()).warehouseName(s.getWarehouse().getName()).onHand(s.getOnHand()).reserved(s.getReserved()).available(s.getAvailable()).minimumStock(s.getMinimumStock()).build()).toList()).build();
+        return InventoryProductDTO.builder().id(product.getId()).companyId(product.getCompanyId()).productId(product.getCatalogCardId()).sku(product.getSku()).status(product.getStatus()).product(card).catalogCardAvailable(card != null).stocks(balances.stream().map(s -> InventoryProductDTO.StockDTO.builder().warehouseId(s.getWarehouse().getId()).warehouseName(s.getWarehouse().getName()).onHand(s.getOnHand()).reserved(s.getReserved()).available(s.getAvailable()).minimumStock(s.getMinimumStock()).build()).toList()).build();
     }
 
     private AppBadException bad(String key, AppLanguage language) {

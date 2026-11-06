@@ -15,6 +15,9 @@ public class InventoryProductDTO {
     private String sku;
     private InventoryProductStatus status;
     private JsonNode product;
+    private boolean catalogCardAvailable;
+    @lombok.Setter
+    private String catalogCardUnavailableReason;
     private List<StockDTO> stocks;
 
     @Getter @Builder

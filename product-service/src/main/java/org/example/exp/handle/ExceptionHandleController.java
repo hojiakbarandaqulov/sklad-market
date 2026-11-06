@@ -21,6 +21,10 @@ import java.util.UUID;
 
 @RestControllerAdvice
 public class ExceptionHandleController extends ResponseEntityExceptionHandler {
+    @ExceptionHandler(org.example.exp.ProductDeletionException.class)
+    public ResponseEntity<Map<String, Object>> handleDeletion(org.example.exp.ProductDeletionException e) {
+        return ResponseEntity.status(e.getStatus()).body(errorBody(e.getMessage(), Map.of()));
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

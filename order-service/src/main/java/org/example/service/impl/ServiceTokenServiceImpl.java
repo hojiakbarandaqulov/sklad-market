@@ -53,7 +53,7 @@ public class ServiceTokenServiceImpl implements ServiceTokenService {
         }
 
         if (clientSecret.isBlank()) {
-            throw new OrderException(503, "Order service-account sozlanmagan",
+            throw new OrderException(503, "order.service.credentials",
                     "operation=keycloak.token failure=missing_client_secret");
         }
 

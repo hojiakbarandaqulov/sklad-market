@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import jakarta.validation.Valid;
+import org.example.enums.AppLanguage;
 import org.example.dto.ApiResponse;
 import org.example.dto.order.*;
 import jakarta.validation.constraints.Positive;
@@ -36,14 +37,16 @@ public class OrderController {
     @Operation(summary = "Buyurtma yaratish va mahsulotlarni rezervlash",
             description = "BUYER yoki SELLER. Bitta kompaniya va bitta valyuta. Narx backenddan olinadi. "
                     + "Aloqa uzilganda aynan shu idempotencyKey bilan takrorlang. Qoldiq yetishmasa 409, bog'liq xizmat ishlamasa 503.")
-    public ApiResponse<OrderResponse> create(@Valid @RequestBody OrderCreateRequest request) {
+    public ApiResponse<OrderResponse> create(@Valid @RequestBody OrderCreateRequest request,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(orderService.create(request));
     }
 
     @GetMapping
     @Operation(summary = "Xaridorning o'z buyurtmalari",
             description = "Xaridor token ichidagi profileId orqali aniqlanadi. companyId ixtiyoriy. page 1 dan boshlanadi, perPage 1–100.")
-    public ApiResponse<Page<OrderResponse>> buyer(@Valid @ParameterObject @ModelAttribute OrderFilter filter) {
+    public ApiResponse<Page<OrderResponse>> buyer(@Valid @ParameterObject @ModelAttribute OrderFilter filter,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(orderService.getBuyerOrders(filter));
     }
 
@@ -52,7 +55,8 @@ public class OrderController {
     @Operation(summary = "Sotuvchiga kelgan buyurtmalar",
             description = "SELLER. companyId majburiy; foydalanuvchi shu faol kompaniyaning egasi bo'lishi kerak. "
                     + "status va sana oralig'i bilan filtrlash mumkin.")
-    public ApiResponse<Page<OrderResponse>> seller(@Valid @ParameterObject @ModelAttribute OrderFilter filter) {
+    public ApiResponse<Page<OrderResponse>> seller(@Valid @ParameterObject @ModelAttribute OrderFilter filter,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(orderService.getSellerOrders(filter));
     }
 
@@ -61,7 +65,8 @@ public class OrderController {
             description = "Buyurtmani yaratgan xaridor yoki kompaniyaning SELLER egasi ko'radi. Yakunlanmagan holat Control bilan sinxronlanadi.")
     public ApiResponse<OrderResponse> get(
             @Parameter(description = "Order buyurtma ID'si", example = "10")
-            @PathVariable("id") @Positive Long orderId
+            @PathVariable("id") @Positive Long orderId,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
         return ApiResponse.successResponse(orderService.get(orderId));
     }
@@ -73,7 +78,8 @@ public class OrderController {
                     + "Takroriy so'rov qoldiqni qayta kamaytirmaydi. Mos bo'lmagan holat 409.")
     public ApiResponse<OrderResponse> ship(
             @Parameter(description = "Order buyurtma ID'si", example = "10")
-            @PathVariable("id") @Positive Long orderId
+            @PathVariable("id") @Positive Long orderId,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
         return ApiResponse.successResponse(orderService.ship(orderId));
     }
@@ -84,7 +90,8 @@ public class OrderController {
                     + "Jo'natilgan yoki jo'natilayotgan buyurtmani bekor qilish 409 qaytaradi.")
     public ApiResponse<OrderResponse> cancel(
             @Parameter(description = "Order buyurtma ID'si", example = "10")
-            @PathVariable("id") @Positive Long orderId
+            @PathVariable("id") @Positive Long orderId,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
         return ApiResponse.successResponse(orderService.cancel(orderId));
     }

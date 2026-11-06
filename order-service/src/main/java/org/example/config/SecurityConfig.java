@@ -35,7 +35,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             CorsConfigurationSource corsConfigurationSource,
-            JwtAuthenticationConverter jwtAuthenticationConverter
+            JwtAuthenticationConverter jwtAuthenticationConverter,
+            org.example.service.ResourceBundleService messageService,
+            org.springframework.web.servlet.LocaleResolver localeResolver,
+            com.fasterxml.jackson.databind.ObjectMapper objectMapper
     ) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
@@ -55,8 +58,23 @@ public class SecurityConfig {
                 .requestMatchers("/actuator/health").permitAll()
                 .anyRequest().authenticated());
 
-        http.oauth2ResourceServer(resourceServer -> resourceServer.jwt(jwt ->
-                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
+        org.springframework.security.web.AuthenticationEntryPoint entryPoint = (request, response, exception) -> {
+            response.setStatus(401);
+            response.setContentType("application/json;charset=UTF-8");
+            response.setHeader("WWW-Authenticate", "Bearer");
+            objectMapper.writeValue(response.getWriter(), Map.of("success", false, "message",
+                    messageService.getMessage("order.authentication.required", localeResolver.resolveLocale(request))));
+        };
+        org.springframework.security.web.access.AccessDeniedHandler deniedHandler = (request, response, exception) -> {
+            response.setStatus(403);
+            response.setContentType("application/json;charset=UTF-8");
+            objectMapper.writeValue(response.getWriter(), Map.of("success", false, "message",
+                    messageService.getMessage("order.access.denied", localeResolver.resolveLocale(request))));
+        };
+        http.exceptionHandling(errors -> errors.authenticationEntryPoint(entryPoint).accessDeniedHandler(deniedHandler));
+        http.oauth2ResourceServer(resourceServer -> resourceServer
+                .authenticationEntryPoint(entryPoint).accessDeniedHandler(deniedHandler)
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
 
         return http.build();
     }

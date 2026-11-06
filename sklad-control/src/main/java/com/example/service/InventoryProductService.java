@@ -4,6 +4,7 @@ import com.example.enums.AppLanguage;
 import org.springframework.data.domain.PageImpl;
 
 public interface InventoryProductService {
+    boolean hasCatalogLink(Long companyId, Long productId, AppLanguage language);
     InventoryProductDTO create(InventoryProductCreateRequest request, AppLanguage language);
     PageImpl<InventoryProductDTO> list(InventoryProductFilter filter, AppLanguage language);
     InventoryProductDTO get(Long id, AppLanguage language);

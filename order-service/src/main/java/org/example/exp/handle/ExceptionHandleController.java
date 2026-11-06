@@ -1,5 +1,7 @@
 package org.example.exp.handle;
 
+import org.example.service.ResourceBundleService;
+import lombok.RequiredArgsConstructor;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.exp.OrderException;
@@ -21,11 +23,13 @@ import java.util.UUID;
 
 @RestControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class ExceptionHandleController extends ResponseEntityExceptionHandler {
+    private final ResourceBundleService messageService;
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException exception) {
-        return buildErrorResponse(400, "So'rov maydonlari noto'g'ri", Map.of());
+        return buildErrorResponse(400, "order.validation.failed", Map.of());
     }
 
     @ExceptionHandler(OrderException.class)
@@ -41,14 +45,14 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDenied(AccessDeniedException exception) {
-        return buildErrorResponse(403, "Bu amalga ruxsat yo'q", Map.of());
+        return buildErrorResponse(403, "order.access.denied", Map.of());
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class, CannotAcquireLockException.class})
     public ResponseEntity<Object> handleDataConflict(RuntimeException exception) {
         return buildErrorResponse(
                 409,
-                "So'rov to'qnashuvi. Avvalgi kalit bilan qayta yuboring",
+                "order.request.conflict",
                 Map.of()
         );
     }
@@ -65,7 +69,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
         exception.getBindingResult().getFieldErrors().forEach(fieldError ->
                 fieldErrors.putIfAbsent(fieldError.getField(), fieldError.getDefaultMessage()));
 
-        return buildErrorResponse(400, "So'rov maydonlari noto'g'ri", fieldErrors);
+        return buildErrorResponse(400, "order.validation.failed", fieldErrors);
     }
 
     @ExceptionHandler(RuntimeException.class)
@@ -75,11 +79,18 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
 
         Map<String, Object> body = Map.of(
                 "success", false,
-                "message", "Ichki xatolik",
+                "message", messageService.getMessage("order.internal.error"),
                 "trace_id", traceId
         );
 
         return ResponseEntity.internalServerError().body(body);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body,
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        return buildErrorResponse(status.value(), status.is5xxServerError()
+                ? "order.internal.error" : "order.validation.failed", Map.of());
     }
 
     private ResponseEntity<Object> buildErrorResponse(
@@ -99,7 +110,7 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
         // trace_id orqali frontenddagi xabarni server logidagi xatolik bilan topish mumkin.
         Map<String, Object> body = Map.of(
                 "success", false,
-                "message", message,
+                "message", messageService.getMessage(message),
                 "errors", fieldErrors,
                 "trace_id", traceId
         );

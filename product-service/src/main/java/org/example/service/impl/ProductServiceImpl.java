@@ -94,6 +94,7 @@ public class ProductServiceImpl implements ProductService {
     private final ViewAsyncService viewAsyncService;
     private final ResourceBundleService messageService;
     private final FileClient fileClient;
+    private final org.example.client.ControlInventoryClient controlInventoryClient;
 
     @Value("${app.media.base-url}")
     private String mediaBaseUrl;
@@ -432,6 +433,26 @@ public class ProductServiceImpl implements ProductService {
             validateCompanyOwnership(product.getCompanyId(), requiredSellerId(language), language);
         }
 
+        var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken jwt)) {
+            throw new org.springframework.security.access.AccessDeniedException("JWT required");
+        }
+        Boolean linked;
+        try {
+            linked = controlInventoryClient.linked(product.getId(), product.getCompanyId(),
+                    "Bearer " + jwt.getToken().getTokenValue(), language.name());
+        } catch (feign.FeignException exception) {
+            throw new org.example.exp.ProductDeletionException(503,
+                    messageService.getMessage("product.delete.control.unavailable", language));
+        }
+        if (linked == null) {
+            throw new org.example.exp.ProductDeletionException(503,
+                    messageService.getMessage("product.delete.control.unavailable", language));
+        }
+        if (linked) {
+            throw new org.example.exp.ProductDeletionException(409,
+                    messageService.getMessage("product.delete.inventory.linked", language));
+        }
         product.setDeletedAt(LocalDateTime.now());
         product.setIsActive(Boolean.FALSE);
         productRepository.save(product);

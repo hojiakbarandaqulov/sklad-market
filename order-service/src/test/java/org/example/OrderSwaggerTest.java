@@ -46,6 +46,11 @@ class OrderSwaggerTest {
         assertThat(paths.path("/api/v1/orders/{id}/ship").path("post").path("summary").asText()).contains("jo'natish");
         var filters = new HashSet<String>();
         paths.path("/api/v1/orders").path("get").path("parameters").forEach(p -> {
+            if (p.path("in").asText().equals("header")) {
+                assertThat(p.path("name").asText()).isEqualTo("Accept-Language");
+                assertThat(p.path("schema").path("default").asText()).isEqualTo("UZ");
+                return;
+            }
             assertThat(p.path("in").asText()).isEqualTo("query"); filters.add(p.path("name").asText());
         });
         assertThat(filters).containsExactlyInAnyOrder("companyId", "status", "dateFrom", "dateTo", "page", "perPage");

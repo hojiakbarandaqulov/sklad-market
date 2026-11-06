@@ -9,9 +9,19 @@
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ControlClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ControlClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/ProductClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/exp/handle/ExceptionHandleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_en.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/test/java/org/example/service/impl/ControlProductIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/test/java/org/example/service/impl/ControlProductIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/product/InventoryProductDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/product/InventoryProductDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/InventoryProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/InventoryProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_en.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/resources/messages/message_uz.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

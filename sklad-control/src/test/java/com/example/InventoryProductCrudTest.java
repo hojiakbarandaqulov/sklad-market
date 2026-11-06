@@ -86,6 +86,56 @@ class InventoryProductCrudTest {
         assertThat(operations.findAll().get(0).getQuantityChange()).isEqualByComparingTo("1.125");
         assertThat(products.findAll().get(0).getCreatedBy()).isEqualTo(42L);
     }
+
+    @Test void missingCardKeepsInventoryBalancesAndPaginationButBlocksPublishing() throws Exception {
+        Long id = create();
+        saleProduct(200L, "OTHER", 1L, com.example.enums.InventoryProductStatus.ARCHIVED);
+        when(cards.cards(eq(1L), anyList(), anyString())).thenReturn(ApiResponse.successResponse(List.of()));
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .param("companyId", "1").param("status", "ACTIVE"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.totalElements").value(1))
+                .andExpect(jsonPath("$.data.content[0].id").value(id))
+                .andExpect(jsonPath("$.data.content[0].catalogCardAvailable").value(false))
+                .andExpect(jsonPath("$.data.content[0].catalogCardUnavailableReason").isNotEmpty())
+                .andExpect(jsonPath("$.data.content[0].stocks[0].onHand").value(1.125));
+        mvc.perform(get("/api/v1/control/products/" + id).header("Authorization", "Bearer seller"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.catalogCardAvailable").value(false))
+                .andExpect(jsonPath("$.data.sku").value("ST-1"));
+        clearInvocations(cards);
+        mvc.perform(patch("/api/v1/control/products/" + id).header("Authorization", "Bearer seller")
+                .contentType("application/json").content("{\"showInMarket\":true}"))
+                .andExpect(status().isBadRequest());
+        verify(cards, never()).visibility(anyLong(), anyBoolean(), anyString());
+        assertThat(stocks.findAll().getFirst().getOnHand()).isEqualByComparingTo("1.125");
+        assertThat(operations.count()).isEqualTo(1);
+    }
+
+    @Test void missingCardDoesNotHideHealthyCardOrTurnTransportFailureIntoSuccess() throws Exception {
+        create();
+        saleProduct(200L, "MISSING", 1L, com.example.enums.InventoryProductStatus.ACTIVE);
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller").param("companyId", "1"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.totalElements").value(2))
+                .andExpect(jsonPath("$.data.content[0].catalogCardAvailable").value(false))
+                .andExpect(jsonPath("$.data.content[1].catalogCardAvailable").value(true));
+        when(cards.cards(eq(1L), anyList(), anyString())).thenReturn(null);
+        mvc.perform(get("/api/v1/control/products").header("Authorization", "Bearer seller").param("companyId", "1"))
+                .andExpect(status().isServiceUnavailable());
+    }
+
+    @Test void linkedCardsIncludeArchivedInventoryAndOwnershipIsChecked() throws Exception {
+        Long id = create();
+        var row = products.findById(id).orElseThrow();
+        row.setStatus(com.example.enums.InventoryProductStatus.ARCHIVED);
+        products.saveAndFlush(row);
+        mvc.perform(get("/internal/control/product-links/100").param("companyId", "1").header("Authorization", "Bearer seller"))
+                .andExpect(status().isOk()).andExpect(content().string("true"));
+        mvc.perform(get("/internal/control/product-links/200").param("companyId", "1").header("Authorization", "Bearer seller"))
+                .andExpect(status().isOk()).andExpect(content().string("false"));
+        mvc.perform(get("/internal/control/product-links/100").param("companyId", "2").header("Authorization", "Bearer seller"))
+                .andExpect(status().isForbidden());
+        mvc.perform(get("/internal/control/product-links/100").param("companyId", "1"))
+                .andExpect(status().isUnauthorized());
+    }
     @Test void retryDoesNotDuplicateCardStockOrOpeningOperation() throws Exception {
         Long first=create();
         assertThat(create()).isEqualTo(first);

@@ -33,6 +33,7 @@ class ControlProductIntegrationTest {
     @Mock ViewAsyncService views;
     @Mock ResourceBundleService messages;
     @Mock FileClient files;
+    @Mock ControlInventoryClient control;
     @InjectMocks ProductServiceImpl service;
     Product product;
     @BeforeEach void setup() {
@@ -47,6 +48,36 @@ class ControlProductIntegrationTest {
         product.setModerationStatus(ProductModerationStatus.PENDING); product.setSlug("stable-slug");
     }
     @AfterEach void cleanup() { SecurityContextHolder.clearContext(); }
+    @Test void linkedProductCannotBeDeletedOrRemovedFromSearch() {
+        when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
+        when(control.linked(100L, 1L, "Bearer seller", "UZ")).thenReturn(true);
+        assertThatThrownBy(() -> service.delete(100L, AppLanguage.UZ))
+                .isInstanceOfSatisfying(org.example.exp.ProductDeletionException.class, e -> assertThat(e.getStatus()).isEqualTo(409));
+        assertThat(product.getDeletedAt()).isNull();
+        verify(repository, never()).save(any());
+        verifyNoInteractions(search);
+    }
+
+    @Test void unlinkedProductCanBeDeletedButUnknownReferenceStatusFailsClosed() {
+        when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
+        when(control.linked(100L, 1L, "Bearer seller", "UZ")).thenReturn(null);
+        assertThatThrownBy(() -> service.delete(100L, AppLanguage.UZ))
+                .isInstanceOfSatisfying(org.example.exp.ProductDeletionException.class, e -> assertThat(e.getStatus()).isEqualTo(503));
+        assertThat(product.getDeletedAt()).isNull();
+        when(control.linked(100L, 1L, "Bearer seller", "UZ")).thenReturn(false);
+        service.delete(100L, AppLanguage.UZ);
+        assertThat(product.getDeletedAt()).isNotNull();
+        verify(search).delete(100L);
+    }
+
+    @Test void inventoryServiceOutageDoesNotDeleteTheProduct() {
+        when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
+        when(control.linked(100L, 1L, "Bearer seller", "UZ")).thenThrow(mock(feign.FeignException.class));
+        assertThatThrownBy(() -> service.delete(100L, AppLanguage.UZ))
+                .isInstanceOfSatisfying(org.example.exp.ProductDeletionException.class, e -> assertThat(e.getStatus()).isEqualTo(503));
+        verify(repository, never()).save(any());
+        verifyNoInteractions(search);
+    }
     @Test void retryUsesOriginalCardWithoutPublishingOrCreatingAgain() {
         String slug="control-"+UUID.nameUUIDFromBytes("1:ST-1".getBytes(StandardCharsets.UTF_8));
         when(repository.findBySlugAndDeletedAtIsNull(slug)).thenReturn(Optional.of(product));

@@ -1,5 +1,7 @@
 package org.example.mapper;
 
+import org.example.service.ResourceBundleService;
+import lombok.RequiredArgsConstructor;
 import org.example.dto.order.OrderResponse;
 import org.example.entity.Order;
 import org.example.entity.OrderItem;
@@ -9,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class OrderMapper {
+    private final ResourceBundleService messageService;
 
     public OrderResponse toResponse(Order order) {
         List<OrderResponse.Item> items = new ArrayList<>();
@@ -33,7 +37,7 @@ public class OrderMapper {
                 order.getUpdatedAt(),
                 order.getShippedAt(),
                 order.getCancelledAt(),
-                order.getFailureReason(),
+                order.getFailureReason() == null ? null : messageService.getMessage(order.getFailureReason()),
                 items
         );
     }
