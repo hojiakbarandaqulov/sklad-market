@@ -22,7 +22,7 @@ public class OrderException extends RuntimeException {
     public static OrderException unavailable(String diagnostic) {
         return new OrderException(
                 503,
-                "Bog'liq xizmat vaqtincha ishlamayapti. Shu so'rovni qayta yuboring.",
+                "order.dependency.unavailable",
                 diagnostic
         );
     }

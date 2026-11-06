@@ -28,7 +28,7 @@ public final class SpringSecurityUtil {
             }
         }
 
-        throw new OrderException(403, "Token ichida profileId yo'q");
+        throw new OrderException(403, "order.profile.required");
     }
 
     public static boolean isSeller() {

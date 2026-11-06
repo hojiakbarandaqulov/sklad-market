@@ -253,6 +253,28 @@ class OrderApiTest {
         return json.writeValueAsString(Map.of("companyId", 1, "idempotencyKey", key, "items", List.of(
                 Map.of("productId", 100, "quantity", 2), Map.of("productId", 101, "quantity", 2))));
     }
+    @Test void dependencyForbiddenStays503AndMessagesFollowLanguage() throws Exception {
+        when(products.get(100L)).thenThrow(failure(403));
+        for (String lang : List.of("UZ", "RU", "en-US,en;q=0.9")) {
+            var result = call(post("/api/v1/orders").header("Accept-Language", lang)
+                    .content(payload("localized-" + lang, "2")), "buyer", 503);
+            String message = json.readTree(result.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))
+                    .path("message").asText();
+            assertThat(message).startsWith(lang.equals("UZ") ? "Bog'liq" : lang.equals("RU") ? "Зависимый" : "A dependent");
+            assertThat(message).doesNotContain("upstream_status", "product.order-summary");
+        }
+    }
+
+    @Test void authenticationAndValidationAreLocalized() throws Exception {
+        var anonymous = call(get("/api/v1/orders").header("Accept-Language", "RU"), null, 401);
+        assertThat(anonymous.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8)).contains("Требуется авторизация");
+        var forbidden = call(get("/api/v1/orders").header("Accept-Language", "EN"), "no-profile", 403);
+        assertThat(forbidden.getResponse().getContentAsString()).contains("Token has no valid profileId");
+        var invalid = call(post("/api/v1/orders").header("Accept-Language", "RU").content("{}"), "buyer", 400);
+        assertThat(invalid.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))
+                .contains("Некорректные поля", "Значение обязательно");
+    }
+
     private MvcResult call(MockHttpServletRequestBuilder request, String token, int expected) throws Exception {
         request.contentType("application/json"); if(token != null) request.header("Authorization", "Bearer " + token);
         var result = mvc.perform(request).andReturn();

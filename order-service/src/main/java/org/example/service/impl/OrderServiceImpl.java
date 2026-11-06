@@ -111,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
         Long sellerId = SpringSecurityUtil.getProfileId();
 
         if (filter.getCompanyId() == null) {
-            throw new OrderException(400, "companyId majburiy");
+            throw new OrderException(400, "order.company.required");
         }
 
         requireActiveCompanyOwner(filter.getCompanyId(), sellerId);
@@ -135,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
         OrderResponse response = resume(orderId);
 
         if (response.status() != OrderStatus.SHIPPED) {
-            throw conflict("Rezerv muddati tugagan yoki buyurtma bekor qilingan");
+            throw conflict("order.reservation.expired");
         }
 
         return response;
@@ -214,7 +214,7 @@ public class OrderServiceImpl implements OrderService {
             String requestHash
     ) {
         if (idempotencyKey.isEmpty()) {
-            throw new OrderException(400, "idempotencyKey bo'sh bo'lmasin");
+            throw new OrderException(400, "order.idempotency.required");
         }
 
         Instant createdAt = clock.instant().truncatedTo(ChronoUnit.MICROS);
@@ -245,7 +245,7 @@ public class OrderServiceImpl implements OrderService {
 
         for (OrderCreateRequest.Item requestedItem : sortedItems) {
             if (!addedProductIds.add(requestedItem.productId())) {
-                throw new OrderException(400, "Bitta productId ni takror yubormang");
+                throw new OrderException(400, "order.product.duplicate");
             }
 
             ProductClient.ProductSnapshot product = callRemoteService(
@@ -280,12 +280,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if (!companyId.equals(product.companyId())) {
-            throw new OrderException(400, "Bitta buyurtmada faqat bitta kompaniya mahsulotlari bo'lsin");
+            throw new OrderException(400, "order.company.mixed");
         }
 
         if (!product.orderable() || product.price() == null
                 || product.price().signum() <= 0 || product.currency() == null) {
-            throw conflict("Mahsulot sotuvda emas yoki qat'iy sotuv narxi belgilanmagan");
+            throw conflict("order.product.unavailable");
         }
 
         BigDecimal price = product.price();
@@ -293,14 +293,14 @@ public class OrderServiceImpl implements OrderService {
         boolean tooManyIntegerDigits = price.precision() - price.scale() > 16;
 
         if (tooManyDecimalPlaces || tooManyIntegerDigits) {
-            throw conflict("Mahsulot narxi ruxsat etilgan aniqlikdan oshgan");
+            throw conflict("order.price.precision");
         }
 
         if (product.minimumQuantity() != null) {
             BigDecimal minimumQuantity = BigDecimal.valueOf(product.minimumQuantity());
 
             if (requestedItem.quantity().compareTo(minimumQuantity) < 0) {
-                throw new OrderException(400, "Mahsulotning minimal buyurtma miqdoriga rioya qiling");
+                throw new OrderException(400, "order.quantity.minimum");
             }
         }
     }
@@ -311,7 +311,7 @@ public class OrderServiceImpl implements OrderService {
             ProductClient.ProductSnapshot product
     ) {
         if (order.getCurrency() != null && !order.getCurrency().equals(product.currency())) {
-            throw new OrderException(400, "Bitta buyurtmada valyuta bir xil bo'lsin");
+            throw new OrderException(400, "order.currency.mixed");
         }
 
         if (companySellerId != null && !companySellerId.equals(product.sellerId())) {
@@ -358,7 +358,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             if (!SpringSecurityUtil.isSeller()) {
-                throw new OrderException(403, "Buyurtma sizga tegishli emas");
+                throw new OrderException(403, "order.order.not.owned");
             }
 
             requireActiveCompanyOwner(order.getCompanyId(), profileId);
@@ -375,7 +375,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             if (order.getStatus() != OrderStatus.RESERVED) {
-                throw conflict("Bu holatdagi buyurtmani jo'natib bo'lmaydi");
+                throw conflict("order.order.ship.invalid");
             }
 
             order.setStatus(OrderStatus.SHIPPING);
@@ -394,7 +394,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             if (currentStatus != OrderStatus.RESERVED) {
-                throw conflict("Jo'natilgan yoki jo'natilayotgan buyurtmani bekor qilib bo'lmaydi");
+                throw conflict("order.order.cancel.invalid");
             }
 
             order.setStatus(OrderStatus.CANCELLING);
@@ -518,7 +518,7 @@ public class OrderServiceImpl implements OrderService {
         boolean isExpired = !order.getExpiresAt().isAfter(clock.instant());
 
         order.setStatus(isExpired ? OrderStatus.EXPIRED : OrderStatus.REJECTED);
-        order.setFailureReason("Mahsulot qoldig'i yetarli emas yoki rezerv yaratib bo'lmadi");
+        order.setFailureReason("order.stock.unavailable");
         order.setUpdatedAt(clock.instant());
     }
 
@@ -536,12 +536,12 @@ public class OrderServiceImpl implements OrderService {
 
     private Order findOrder(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderException(404, "Buyurtma topilmadi"));
+                .orElseThrow(() -> new OrderException(404, "order.order.not.found"));
     }
 
     private Order findOrderForUpdate(Long orderId) {
         return orderRepository.lock(orderId)
-                .orElseThrow(() -> new OrderException(404, "Buyurtma topilmadi"));
+                .orElseThrow(() -> new OrderException(404, "order.order.not.found"));
     }
 
     private void requireActiveCompanyOwner(Long companyId, Long profileId) {
@@ -555,11 +555,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if (!ownership.exists()) {
-            throw new OrderException(404, "Kompaniya topilmadi");
+            throw new OrderException(404, "order.company.not.found");
         }
 
         if (!ownership.owner() || !ownership.active()) {
-            throw new OrderException(403, "Faol kompaniya egasigagina ruxsat beriladi");
+            throw new OrderException(403, "order.company.owner.required");
         }
     }
 
@@ -568,7 +568,7 @@ public class OrderServiceImpl implements OrderService {
             return remoteCall.get();
         } catch (FeignException exception) {
             if (exception.status() == 404) {
-                throw new OrderException(404, "Mahsulot yoki kompaniya topilmadi");
+                throw new OrderException(404, "order.resource.not.found");
             }
 
             throw dependencyUnavailable(operation, exception);
@@ -584,7 +584,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void validateSameRequest(Order order, String requestHash) {
         if (!requestHash.equals(order.getRequestHash())) {
-            throw conflict("Kalit boshqa buyurtma uchun ishlatilgan");
+            throw conflict("order.idempotency.conflict");
         }
     }
 
