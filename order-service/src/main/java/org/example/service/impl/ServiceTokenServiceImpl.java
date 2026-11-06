@@ -11,6 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -52,7 +53,8 @@ public class ServiceTokenServiceImpl implements ServiceTokenService {
         }
 
         if (clientSecret.isBlank()) {
-            throw new OrderException(503, "Order service-account sozlanmagan");
+            throw new OrderException(503, "Order service-account sozlanmagan",
+                    "operation=keycloak.token failure=missing_client_secret");
         }
 
         TokenResponse response = requestNewToken();
@@ -79,15 +81,19 @@ public class ServiceTokenServiceImpl implements ServiceTokenService {
                     .body(form)
                     .retrieve()
                     .body(TokenResponse.class);
+        } catch (RestClientResponseException exception) {
+            throw OrderException.unavailable("operation=keycloak.token upstream_status="
+                    + exception.getStatusCode().value());
         } catch (RestClientException exception) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=keycloak.token failure="
+                    + exception.getClass().getSimpleName());
         }
     }
 
     private void validateTokenResponse(TokenResponse response) {
         if (response == null || response.accessToken() == null
                 || response.accessToken().isBlank() || response.expiresIn() <= 0) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=keycloak.token failure=invalid_response");
         }
     }
 

@@ -6,16 +6,24 @@ import lombok.Getter;
 public class OrderException extends RuntimeException {
 
     private final int status;
+    // Faqat server logi uchun; frontend javobiga qo'shilmaydi.
+    private final String diagnostic;
 
     public OrderException(int status, String message) {
-        super(message);
-        this.status = status;
+        this(status, message, null);
     }
 
-    public static OrderException unavailable() {
+    public OrderException(int status, String message, String diagnostic) {
+        super(message);
+        this.status = status;
+        this.diagnostic = diagnostic;
+    }
+
+    public static OrderException unavailable(String diagnostic) {
         return new OrderException(
                 503,
-                "Bog'liq xizmat vaqtincha ishlamayapti. Shu so'rovni qayta yuboring."
+                "Bog'liq xizmat vaqtincha ishlamayapti. Shu so'rovni qayta yuboring.",
+                diagnostic
         );
     }
 }

@@ -172,7 +172,9 @@ public class OrderServiceImpl implements OrderService {
             try {
                 resume(orderId);
             } catch (RuntimeException exception) {
-                log.warn("Buyurtma sinxronlash kechiktirildi, orderId={}", orderId);
+                String diagnostic = exception instanceof OrderException orderException
+                        ? orderException.getDiagnostic() : exception.getClass().getSimpleName();
+                log.warn("Buyurtma sinxronlash kechiktirildi, orderId={}, diagnostic={}", orderId, diagnostic);
                 postponeRecovery(orderId);
             }
         }
@@ -247,6 +249,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             ProductClient.ProductSnapshot product = callRemoteService(
+                    "product.order-summary",
                     () -> productClient.get(requestedItem.productId())
             );
 
@@ -273,7 +276,7 @@ public class OrderServiceImpl implements OrderService {
         if (product == null || !requestedItem.productId().equals(product.id())
                 || product.companyId() == null || product.sellerId() == null
                 || product.name() == null || product.name().isBlank()) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=product.order-summary failure=invalid_response");
         }
 
         if (!companyId.equals(product.companyId())) {
@@ -312,7 +315,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if (companySellerId != null && !companySellerId.equals(product.sellerId())) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=product.order-summary failure=seller_mismatch");
         }
     }
 
@@ -417,7 +420,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             // Tarmoq xatosida yakuniy holatni taxmin qilmaymiz; saqlangan niyat keyin qayta tekshiriladi.
-            throw OrderException.unavailable();
+            throw dependencyUnavailable("control.reservation." + order.getStatus(), exception);
         }
 
         validateControlResponse(order, controlResponse);
@@ -460,7 +463,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void validateControlResponse(Order order, ControlClient.Envelope response) {
         if (response == null || !response.success() || response.data() == null) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=control.reservation failure=invalid_response");
         }
 
         ControlClient.Reservation reservation = response.data();
@@ -468,7 +471,7 @@ public class OrderServiceImpl implements OrderService {
         if (reservation.id() == null || reservation.id() <= 0
                 || !order.getCompanyId().equals(reservation.companyId())
                 || !order.getId().equals(reservation.orderId())) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=control.reservation failure=identity_mismatch");
         }
     }
 
@@ -478,7 +481,7 @@ public class OrderServiceImpl implements OrderService {
                 || order.getStatus() == OrderStatus.CANCELLING;
 
         if (isFinishingOrder && newStatus == OrderStatus.RESERVED) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=control.reservation failure=unfinished_transition");
         }
 
         order.setReservationId(reservation.id());
@@ -500,7 +503,7 @@ public class OrderServiceImpl implements OrderService {
             case "COMMITTED" -> OrderStatus.SHIPPED;
             case "RELEASED" -> OrderStatus.CANCELLED;
             case "EXPIRED" -> OrderStatus.EXPIRED;
-            default -> throw OrderException.unavailable();
+            default -> throw OrderException.unavailable("operation=control.reservation failure=unknown_status");
         };
     }
 
@@ -543,11 +546,12 @@ public class OrderServiceImpl implements OrderService {
 
     private void requireActiveCompanyOwner(Long companyId, Long profileId) {
         CompanyClient.Ownership ownership = callRemoteService(
+                "company.ownership-check",
                 () -> companyClient.ownership(companyId, profileId)
         );
 
         if (ownership == null || !companyId.equals(ownership.companyId())) {
-            throw OrderException.unavailable();
+            throw OrderException.unavailable("operation=company.ownership-check failure=invalid_response");
         }
 
         if (!ownership.exists()) {
@@ -559,7 +563,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private <T> T callRemoteService(Supplier<T> remoteCall) {
+    private <T> T callRemoteService(String operation, Supplier<T> remoteCall) {
         try {
             return remoteCall.get();
         } catch (FeignException exception) {
@@ -567,8 +571,15 @@ public class OrderServiceImpl implements OrderService {
                 throw new OrderException(404, "Mahsulot yoki kompaniya topilmadi");
             }
 
-            throw OrderException.unavailable();
+            throw dependencyUnavailable(operation, exception);
         }
+    }
+
+    private OrderException dependencyUnavailable(String operation, FeignException exception) {
+        // -1 odatda HTTP javobi kelmagan tarmoq xatosini bildiradi.
+        return OrderException.unavailable("operation=" + operation
+                + " upstream_status=" + exception.status()
+                + " failure=" + exception.getClass().getSimpleName());
     }
 
     private void validateSameRequest(Order order, String requestHash) {

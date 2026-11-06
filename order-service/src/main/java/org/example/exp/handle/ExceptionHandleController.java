@@ -30,7 +30,13 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(OrderException.class)
     public ResponseEntity<Object> handleOrderException(OrderException exception) {
-        return buildErrorResponse(exception.getStatus(), exception.getMessage(), Map.of());
+        String traceId = UUID.randomUUID().toString();
+        if (exception.getStatus() >= 500) {
+            // Token, header va bog'liq servisning javob matnini logga yozmaymiz.
+            log.warn("Order so'rovi bajarilmadi, trace_id={}, status={}, diagnostic={}",
+                    traceId, exception.getStatus(), exception.getDiagnostic());
+        }
+        return buildErrorResponse(exception.getStatus(), exception.getMessage(), Map.of(), traceId);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
@@ -81,12 +87,21 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
             String message,
             Map<String, String> fieldErrors
     ) {
+        return buildErrorResponse(status, message, fieldErrors, UUID.randomUUID().toString());
+    }
+
+    private ResponseEntity<Object> buildErrorResponse(
+            int status,
+            String message,
+            Map<String, String> fieldErrors,
+            String traceId
+    ) {
         // trace_id orqali frontenddagi xabarni server logidagi xatolik bilan topish mumkin.
         Map<String, Object> body = Map.of(
                 "success", false,
                 "message", message,
                 "errors", fieldErrors,
-                "trace_id", UUID.randomUUID().toString()
+                "trace_id", traceId
         );
 
         return ResponseEntity.status(status).body(body);

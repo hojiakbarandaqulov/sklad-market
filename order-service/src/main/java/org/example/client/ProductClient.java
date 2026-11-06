@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
 
-@FeignClient(name = "product-service", url = "${PRODUCT_SERVICE_URL:}")
+@FeignClient(name = "product-service")
 public interface ProductClient {
 
     @GetMapping("/internal/products/{id}/order-summary")

@@ -15,7 +15,7 @@
     SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-localhost:9092}
 
     KEYCLOAK_ISSUER_URI: ${KEYCLOAK_ISSUER_URI:-http://localhost:9090/realms/market-realm}
-    KEYCLOAK_TOKEN_URL: ${KEYCLOAK_TOKEN_URL:-http://localhost:9090/realms/market-realm/protocol/openid-connect/token}
+    KEYCLOAK_TOKEN_URL: ${KEYCLOAK_TOKEN_URL:-${KEYCLOAK_ISSUER_URI:-http://localhost:9090/realms/market-realm}/protocol/openid-connect/token}
     KEYCLOAK_ADMIN_URL: ${KEYCLOAK_ADMIN_URL:-http://localhost:9090/admin/realms/market-realm}
     KEYCLOAK_MASTER_TOKEN_URL: ${KEYCLOAK_MASTER_TOKEN_URL:-http://127.0.0.1:9090/realms/master/protocol/openid-connect/token}
     KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-market-backend}
@@ -455,7 +455,7 @@
         SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/skalad_market_order
         ORDER_CLIENT_ID: ${ORDER_CLIENT_ID:-order-service}
         ORDER_CLIENT_SECRET: ${ORDER_CLIENT_SECRET:-hFJsvoEDED3sxC00Y3sfmSQtZjgvrrvU}
-        ORDER_TOKEN_URL: ${KEYCLOAK_TOKEN_URL:-http://127.0.0.1:9090/realms/market-realm/protocol/openid-connect/token}
+        ORDER_TOKEN_URL: ${ORDER_TOKEN_URL:-${KEYCLOAK_TOKEN_URL:-${KEYCLOAK_ISSUER_URI:-http://localhost:9090/realms/market-realm}/protocol/openid-connect/token}}
         ORDER_RESERVATION_TTL: ${ORDER_RESERVATION_TTL:-PT24H}
 
     ai-service:
