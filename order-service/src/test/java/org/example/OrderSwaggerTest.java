@@ -31,7 +31,10 @@ class OrderSwaggerTest {
         JsonNode spec = json.readTree(response.getResponse().getContentAsString());
         assertThat(spec.path("info").path("title").asText()).isEqualTo("Order — Buyurtmalar API");
         var paths = spec.path("paths");
-        assertThat(paths.size()).isEqualTo(5);
+        assertThat(paths.size()).isEqualTo(8);
+        assertThat(paths.path("/api/v1/orders/{id}/checkout").has("get")).isTrue();
+        assertThat(paths.path("/api/v1/orders/{id}/complete-sale").has("post")).isTrue();
+        assertThat(paths.path("/api/v1/orders/{id}/invoice").has("get")).isTrue();
         assertThat(paths.path("/api/v1/orders").has("get")).isTrue();
         assertThat(paths.path("/api/v1/orders").has("post")).isTrue();
         assertThat(paths.path("/api/v1/orders/seller").has("get")).isTrue();

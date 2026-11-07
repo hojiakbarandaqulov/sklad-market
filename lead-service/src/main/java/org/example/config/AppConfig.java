@@ -14,6 +14,17 @@ import java.util.Locale;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
+    @Bean
+    public org.springframework.web.servlet.LocaleResolver localeResolver() {
+        var resolver=new org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver();
+        resolver.setSupportedLocales(java.util.List.of(Locale.forLanguageTag("uz"),Locale.forLanguageTag("ru"),Locale.ENGLISH));
+        resolver.setDefaultLocale(Locale.forLanguageTag("uz")); return resolver;
+    }
+    @Override
+    public org.springframework.validation.Validator getValidator() {
+        var validator=new org.springframework.validation.beanvalidation.LocalValidatorFactoryBean();
+        validator.setValidationMessageSource(messageSource()); return validator;
+    }
 
     @Bean
     public MessageSource messageSource() {

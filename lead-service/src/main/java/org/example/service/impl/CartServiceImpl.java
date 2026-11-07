@@ -130,7 +130,7 @@ public class CartServiceImpl implements CartService {
                 leadItem.setProductId(groupItem.getProductId());
                 leadItem.setProductNameSnapshot(groupItem.getProductNameSnapshot());
                 leadItem.setPriceSnapshot(groupItem.getPriceSnapshot());
-                leadItem.setQuantity(groupItem.getQuantity());
+                leadItem.setQuantity(java.math.BigDecimal.valueOf(groupItem.getQuantity()));
                 leadItemRepository.save(leadItem);
 
                 groupItem.setDeleted(true);

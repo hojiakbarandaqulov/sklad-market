@@ -6,6 +6,8 @@ import com.example.dto.reservation.OrderReservationRequest;
 import com.example.enums.AppLanguage;
 
 public interface StockReservationService {
+    ReservationDTO completeOrder(Long orderId, com.example.dto.reservation.OrderSaleRequest request);
+    java.util.List<java.util.Map<String,Object>> orderAvailability(Long companyId, Long orderId);
     ReservationDTO reserveOrder(Long orderId, OrderReservationRequest request);
     ReservationDTO orderReservation(Long companyId, Long orderId, String action);
     ReservationDTO create(ReservationCreateRequest request, AppLanguage language);

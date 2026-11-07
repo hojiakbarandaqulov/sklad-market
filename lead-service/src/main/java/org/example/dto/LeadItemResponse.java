@@ -13,5 +13,5 @@ public class LeadItemResponse {
     private Long productId;
     private String productNameSnapshot;
     private BigDecimal priceSnapshot;
-    private Integer quantity;
+    private BigDecimal quantity;
 }

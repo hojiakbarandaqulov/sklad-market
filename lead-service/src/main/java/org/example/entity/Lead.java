@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @Setter
 public class Lead extends BaseEntity {
     private Long buyerId;
+    private Long acceptedOrderId;
     private Long sellerId;
     private Long companyId;
     @Enumerated(EnumType.STRING)

@@ -81,6 +81,31 @@ class OrderReservationApiTest {
         assertThat(data(call(post(root(11)+"/commit?companyId=1"), 200)).path("status").asText()).isEqualTo("RELEASED");
     }
 
+    @Test void checkoutIncludesOwnReserveAndSaleCanReduceQuantityExactlyOnce() throws Exception {
+        call(post(root(41)).content(payload("6.125")),200);
+        var availability=call(get(root(41)+"/availability?companyId=1"),200);
+        var line=json.readTree(availability.getResponse().getContentAsString()).get(0);
+        assertThat(line.path("maxSaleQuantity").decimalValue()).isEqualByComparingTo("7.250");
+        assertThat(line.path("reservedQuantity").decimalValue()).isEqualByComparingTo("6.125");
+        String sale="{\"companyId\":1,\"items\":[{\"productId\":100,\"quantity\":3}]}";
+        call(post(root(41)+"/complete").content(sale),200);
+        call(post(root(41)+"/complete").content(sale),200);
+        balance(firstStock,"0","0"); balance(secondStock,"4.250","0");
+        assertThat(operations.count()).isEqualTo(2);
+        call(post(root(41)+"/complete").content(sale.replace("quantity\":3","quantity\":4")),409);
+        balance(secondStock,"4.250","0");
+    }
+
+    @Test void saleShortageRollsBackReallocationAndIncreaseUsesOnlyFreeStock() throws Exception {
+        call(post(root(42)).content(payload("2")),200);
+        String sale="{\"companyId\":1,\"items\":[{\"productId\":100,\"quantity\":20}]}";
+        call(post(root(42)+"/complete").content(sale),409);
+        balance(firstStock,"2.500","2"); balance(secondStock,"4.750","0");
+        assertThat(operations.count()).isZero();
+        call(post(root(42)+"/complete").content(sale.replace("quantity\":20","quantity\":5")),200);
+        balance(firstStock,"0","0"); balance(secondStock,"2.250","0");
+    }
+
     @Test void insufficientAnyProductRollsBackWholeReservation() throws Exception {
         stock(warehouse(1L), product(1L, 101L, "SKU-101"), "1");
         var request = json.readTree(payload("2"));

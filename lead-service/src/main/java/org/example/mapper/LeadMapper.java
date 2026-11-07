@@ -17,6 +17,7 @@ public class LeadMapper {
         return LeadResponse.builder()
                 .id(lead.getId())
                 .buyerId(lead.getBuyerId())
+                .acceptedOrderId(lead.getAcceptedOrderId())
                 .sellerId(lead.getSellerId())
                 .companyId(lead.getCompanyId())
                 .source(lead.getSource())

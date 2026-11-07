@@ -137,6 +137,94 @@ public class StockReservationServiceImpl implements StockReservationService {
         if (!SpringSecurityUtil.hasRole("CONTROL_ORDER_WRITE")) throw new AccessDeniedException("Order service-account talab qilinadi");
     }
 
+    public java.util.List<java.util.Map<String,Object>> orderAvailability(Long companyId, Long orderId) {
+        requireOrderService();
+        var reservation = reservations.lockOrder(companyId, orderId)
+                .orElseThrow(() -> missing("reservation.missing", AppLanguage.UZ));
+        var allocated = items.forReservation(reservation.getId());
+        var own = new TreeMap<Long, java.math.BigDecimal>();
+        allocated.forEach(i -> own.merge(i.getStock().getInventoryProduct().getCatalogCardId(),
+                reservation.getStatus() == ReservationStatus.ACTIVE ? i.getQuantity() : java.math.BigDecimal.ZERO,
+                java.math.BigDecimal::add));
+        var tracked = inventoryProducts.findByCompanyIdAndCatalogCardIdInAndDeletedFalse(companyId, own.keySet());
+        var free = new TreeMap<Long, java.math.BigDecimal>();
+        for (var stock : stocks.forProducts(tracked.stream().map(InventoryProduct::getId).toList())) {
+            if (stock.getWarehouse().getStatus() == WarehouseStatus.ACTIVE
+                    && !Boolean.TRUE.equals(stock.getWarehouse().getDeleted())
+                    && stock.getInventoryProduct().getStatus() == InventoryProductStatus.ACTIVE) {
+                free.merge(stock.getInventoryProduct().getCatalogCardId(), stock.getAvailable(), java.math.BigDecimal::add);
+            }
+        }
+        return own.entrySet().stream().map(e -> java.util.Map.<String,Object>of("productId", e.getKey(),
+                "reservedQuantity", e.getValue(), "availableQuantity", free.getOrDefault(e.getKey(), java.math.BigDecimal.ZERO),
+                "maxSaleQuantity", free.getOrDefault(e.getKey(), java.math.BigDecimal.ZERO).add(e.getValue()))).toList();
+    }
+
+    public ReservationDTO completeOrder(Long orderId, com.example.dto.reservation.OrderSaleRequest request) {
+        requireOrderService();
+        var active = new HashSet<Long>();
+        for (Long id : warehouses.companyIds(request.companyId())) {
+            var warehouse = warehouses.lockPresent(id).orElse(null);
+            if (warehouse != null) {
+                entityManager.refresh(warehouse, LockModeType.PESSIMISTIC_WRITE);
+                if (warehouse.getStatus() == WarehouseStatus.ACTIVE) active.add(id);
+            }
+        }
+        var requested = new TreeMap<Long, java.math.BigDecimal>();
+        for (var item : request.items()) {
+            if (requested.putIfAbsent(item.productId(), item.quantity()) != null)
+                throw bad("reservation.items.duplicate", AppLanguage.UZ);
+        }
+        var tracked = inventoryProducts.findByCompanyIdAndCatalogCardIdInAndDeletedFalse(request.companyId(), requested.keySet());
+        var reservation = reservations.lockOrder(request.companyId(), orderId)
+                .orElseThrow(() -> missing("reservation.missing", AppLanguage.UZ));
+        entityManager.refresh(reservation, LockModeType.PESSIMISTIC_WRITE);
+        var allocated = items.forReservation(reservation.getId());
+        var original = new TreeMap<Long, java.math.BigDecimal>();
+        allocated.forEach(i -> original.merge(i.getStock().getInventoryProduct().getCatalogCardId(), i.getQuantity(), java.math.BigDecimal::add));
+        if (!original.keySet().equals(requested.keySet())) throw conflict("reservation.key.conflict", AppLanguage.UZ);
+        if (reservation.getStatus() == ReservationStatus.COMMITTED) {
+            if (original.entrySet().stream().anyMatch(e -> e.getValue().compareTo(requested.get(e.getKey())) != 0))
+                throw conflict("reservation.key.conflict", AppLanguage.UZ);
+            return dto(reservation, allocated);
+        }
+        expireIfDue(reservation, allocated, null, AppLanguage.UZ);
+        if (reservation.getStatus() != ReservationStatus.ACTIVE) return dto(reservation, allocated);
+        for (var row : tracked.stream().sorted(Comparator.comparing(InventoryProduct::getId)).toList()) {
+            var locked = inventoryProducts.lockPresent(row.getId()).orElseThrow(() -> missing("control.product.missing", AppLanguage.UZ));
+            entityManager.refresh(locked, LockModeType.PESSIMISTIC_WRITE);
+            if (locked.getStatus() != InventoryProductStatus.ACTIVE) throw conflict("reservation.stock.inactive", AppLanguage.UZ);
+        }
+        // Release this order's old allocation and allocate the final quantities in ONE transaction.
+        // Any shortage rolls back the release as well; other orders' reserves are never consumed.
+        for (var item : allocated) {
+            var stock = lockStock(item.getStock().getId(), AppLanguage.UZ);
+            if (stock.getReserved().compareTo(item.getQuantity()) < 0) throw conflict("reservation.balance.invalid", AppLanguage.UZ);
+            stock.setReserved(stock.getReserved().subtract(item.getQuantity()));
+        }
+        items.deleteAll(allocated);
+        items.flush();
+        var remaining = new TreeMap<>(requested);
+        var finalItems = new ArrayList<StockReservationItem>();
+        for (var candidate : stocks.forProducts(tracked.stream().map(InventoryProduct::getId).toList())) {
+            if (!active.contains(candidate.getWarehouse().getId())) continue;
+            var stock = lockStock(candidate.getId(), AppLanguage.UZ);
+            Long productId = stock.getInventoryProduct().getCatalogCardId();
+            var needed = remaining.get(productId);
+            if (needed == null || needed.signum() <= 0 || stock.getAvailable().signum() <= 0) continue;
+            var quantity = needed.min(stock.getAvailable());
+            stock.setReserved(stock.getReserved().add(quantity));
+            var item = new StockReservationItem();
+            item.setReservation(reservation); item.setStock(stock); item.setQuantity(quantity);
+            item.setCreatedBy(reservation.getCreatedBy()); item.setModifiedBy(reservation.getCreatedBy());
+            finalItems.add(items.save(item)); remaining.put(productId, needed.subtract(quantity));
+        }
+        if (remaining.values().stream().anyMatch(q -> q.signum() > 0)) throw conflict("reservation.stock.insufficient", AppLanguage.UZ);
+        stocks.flush();
+        finish(reservation, finalItems, ReservationStatus.COMMITTED, reservation.getCreatedBy(), AppLanguage.UZ);
+        return dto(reservation, finalItems);
+    }
+
     @Override
     public ReservationDTO create(ReservationCreateRequest request, AppLanguage language) {
         Long actor = authorize(request.companyId(), language);

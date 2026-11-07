@@ -31,6 +31,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class OrderApiTest {
+    @MockitoBean SellerWorkflowClient leadWorkflow;
+    @MockitoBean SaleCustomerClient saleCustomers;
+    @MockitoBean SaleFileClient saleFiles;
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
     @Autowired OrderRepository orders;
@@ -45,6 +48,7 @@ class OrderApiTest {
     Map<Long, String> remoteStates;
 
     @BeforeEach void setup() {
+        jdbc.update("DELETE FROM order_invoices");
         orders.deleteAll(); remoteStates = new ConcurrentHashMap<>();
         when(clock.instant()).thenReturn(now);
         when(decoder.decode("buyer")).thenReturn(token("buyer", 7L, "BUYER"));
@@ -273,6 +277,83 @@ class OrderApiTest {
         var invalid = call(post("/api/v1/orders").header("Accept-Language", "RU").content("{}"), "buyer", 400);
         assertThat(invalid.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))
                 .contains("Некорректные поля", "Значение обязательно");
+    }
+
+    @Test void sellerSaleIssuesImmutableInvoiceAndRetriesDoNotCommitTwice() throws Exception {
+        long id=create("sale-new","2");
+        when(control.availability(id,1L)).thenReturn(List.of(new ControlClient.Availability(100L,new BigDecimal("2"),new BigDecimal("5"),new BigDecimal("7"))));
+        call(get(root(id)+"/checkout"),"buyer",403);
+        assertThat(data(call(get(root(id)+"/checkout"),"seller",200)).path("availability").get(0).path("maxSaleQuantity").asInt()).isEqualTo(7);
+        when(control.complete(eq(id),any())).thenAnswer(c -> { remoteStates.put(id,"COMMITTED"); return reservation(id); });
+        String sale=salePayload("sale-1");
+        var invoice=data(call(post(root(id)+"/complete-sale").content(sale),"seller",200));
+        assertThat(invoice.path("totalAmount").decimalValue()).isEqualByComparingTo("15000");
+        call(post(root(id)+"/complete-sale").content(sale),"seller",200);
+        verify(control,times(1)).complete(eq(id),any());
+        assertThat(data(call(get(root(id)+"/invoice"),"buyer",200))).isEqualTo(invoice);
+        call(get(root(id)+"/invoice"),"stranger",403);
+        call(post(root(id)+"/complete-sale").content(sale.replace("15000","16000")),"seller",409);
+        assertThat(data(call(get(root(id)),"buyer",200)).path("status").asText()).isEqualTo("SHIPPED");
+    }
+
+    @Test void lostSaleResponseRetriesSavedIntentAndRejectsOrdinaryShipping() throws Exception {
+        long id=create("sale-lost","2");
+        var first=new AtomicBoolean(true);
+        when(control.complete(eq(id),any())).thenAnswer(c -> {
+            remoteStates.put(id,"COMMITTED"); if(first.getAndSet(false)) throw failure(503); return reservation(id);
+        });
+        call(post(root(id)+"/complete-sale").content(salePayload("lost-key")),"seller",503);
+        assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.FINALIZING);
+        call(post(root(id)+"/ship"),"seller",409);
+        call(post(root(id)+"/cancel"),"buyer",409);
+        call(post(root(id)+"/complete-sale").content(salePayload("lost-key")),"seller",200);
+        verify(control,times(2)).complete(eq(id),any());
+        verify(control,never()).commit(eq(id),anyLong());
+    }
+
+    @Test void creditNeedsOwnedContractAndBadDeliveryAndForeignOwnerFail() throws Exception {
+        long id=create("sale-invalid","2");
+        String request=salePayload("credit-key").replace("CASH","CREDIT");
+        var denied=call(post(root(id)+"/complete-sale").header("Accept-Language","RU").content(request),"seller",409);
+        assertThat(denied.getResponse().getContentAsString(StandardCharsets.UTF_8)).contains("Для продажи в долг");
+        call(post(root(id)+"/complete-sale").content(salePayload("x")),"stranger",403);
+        call(post(root(id)+"/complete-sale").content(salePayload("x").replace("PICKUP","DELIVERY")),"seller",400);
+        verify(control,never()).complete(anyLong(),any());
+    }
+
+    @Test void contractCreditStoresDueDateAndDefiniteStockFailureAllowsANewAttempt() throws Exception {
+        long id=create("credit-success","2");
+        when(saleCustomers.get(5L,"Bearer seller")).thenReturn(new SaleCustomerClient.Envelope(true,
+                new SaleCustomerClient.Customer(5L,1L,"Buyer","123","CONTRACT-1",30)));
+        when(control.complete(eq(id),any())).thenThrow(failure(409));
+        String request=salePayload("first-attempt").replace("CASH","CREDIT").replace("\"buyerName\"","\"customerId\":5,\"buyerName\"");
+        call(post(root(id)+"/complete-sale").content(request),"seller",409);
+        assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.RESERVED);
+        when(control.complete(eq(id),any())).thenAnswer(c -> {remoteStates.put(id,"COMMITTED");return reservation(id);});
+        call(post(root(id)+"/complete-sale").content(request),"seller",409);
+        var invoice=data(call(post(root(id)+"/complete-sale").content(request.replace("first-attempt","second-attempt")),"seller",200));
+        assertThat(invoice.path("contractNumber").asText()).isEqualTo("CONTRACT-1");
+        assertThat(invoice.path("paymentStatus").asText()).isEqualTo("UNPAID");
+        assertThat(invoice.path("paymentDueDate").asText()).isEqualTo("2026-12-02");
+    }
+
+    @Test void sellerAcceptsLeadForActualBuyerAndCannotIncreaseRequestedQuantity() throws Exception {
+        when(leadWorkflow.lead(11L,"Bearer seller")).thenReturn(new SellerWorkflowClient.LeadEnvelope(true,
+                new SellerWorkflowClient.Lead(11L,7L,42L,1L,"NEW","Buyer","123",null,"Lead note",
+                        List.of(new SellerWorkflowClient.Item(100L,BigDecimal.TEN,"Steel",BigDecimal.TEN)))));
+        String request="{\"idempotencyKey\":\"accept-11\",\"buyerAgreementConfirmed\":true,\"items\":[{\"productId\":100,\"quantity\":2}]}";
+        var response=data(call(post("/internal/orders/leads/11/accept").content(request),"seller",200));
+        assertThat(response.path("buyerId").asLong()).isEqualTo(7L);
+        call(post("/internal/orders/leads/11/accept").content(request),"seller",200);
+        assertThat(orders.count()).isEqualTo(1);
+        call(post("/internal/orders/leads/11/accept").content(request.replace("quantity\":2","quantity\":11")),"seller",409);
+        call(post("/internal/orders/leads/11/accept").content(request.replace("Confirmed\":true","Confirmed\":false")),"seller",409);
+        var saved=orders.findByLeadId(11L).orElseThrow(); saved.setStatus(OrderStatus.SHIPPED); orders.saveAndFlush(saved);
+        call(post("/internal/orders/leads/11/accept").content(request),"seller",200);
+    }
+
+    private String salePayload(String key) {
+        return "{\"idempotencyKey\":\""+key+"\",\"paymentMethod\":\"CASH\",\"buyerName\":\"Buyer\",\"deliveryMethod\":\"PICKUP\",\"items\":[{\"productId\":100,\"quantity\":1,\"unitPrice\":15000}]}";
     }
 
     private MvcResult call(MockHttpServletRequestBuilder request, String token, int expected) throws Exception {

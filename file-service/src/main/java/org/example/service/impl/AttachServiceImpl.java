@@ -64,6 +64,14 @@ public class AttachServiceImpl implements AttachService {
             entity.setPath(bucketName + "/" + key);
             entity.setMimeType(mimeType);
             entity.setCreatedDate(LocalDateTime.now());
+            var authentication=org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            if (authentication instanceof org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken jwt) {
+                Object profile=jwt.getToken().getClaims().get("profileId");
+                try {
+                    long owner=Long.parseLong(String.valueOf(profile));
+                    if(owner>0) entity.setCreatedBy(owner);
+                } catch(NumberFormatException ignored) { /* Unidentified uploads cannot be attached to sales. */ }
+            }
             attachRepository.save(entity);
 
             AttachDto dto = new AttachDto();

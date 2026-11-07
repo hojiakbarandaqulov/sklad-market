@@ -15,5 +15,6 @@ public class LeadItem extends BaseEntity {
     private Long productId;
     private String productNameSnapshot;
     private BigDecimal priceSnapshot;
-    private Integer quantity;
+    @jakarta.persistence.Column(precision=19,scale=3)
+    private BigDecimal quantity;
 }

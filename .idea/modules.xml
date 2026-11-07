@@ -10,7 +10,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/chat-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/chat-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/company-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/company-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/file-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/file-service.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lead-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/lead-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/location-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/location-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/notification-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/notification-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/order-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/order-service.main.iml" />

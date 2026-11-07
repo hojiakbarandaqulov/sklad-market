@@ -17,8 +17,9 @@ public class LeadCreateRequest {
     private LeadSource source;
     private List<Long> productIds;
     private Long productId;
-    @Min(1)
-    private Integer quantity;
+    @jakarta.validation.constraints.Positive
+    @jakarta.validation.constraints.Digits(integer=16,fraction=3)
+    private java.math.BigDecimal quantity;
     @NotBlank
     private String contactName;
     @NotBlank

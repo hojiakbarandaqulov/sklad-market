@@ -24,6 +24,8 @@ public class Order {
 
     @Column(nullable = false)
     private Long buyerId;
+    @Column(unique=true)
+    private Long leadId;
 
     @Column(nullable = false)
     private Long companyId;

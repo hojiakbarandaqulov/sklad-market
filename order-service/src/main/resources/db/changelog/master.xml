@@ -40,4 +40,5 @@
         <addUniqueConstraint tableName="market_order_items" columnNames="order_id,product_id" constraintName="uk_order_product"/>
         <rollback><dropTable tableName="market_order_items"/><dropTable tableName="market_orders"/></rollback>
     </changeSet>
+    <include file="002-sale-workflow.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

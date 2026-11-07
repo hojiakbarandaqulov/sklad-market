@@ -64,7 +64,7 @@ public class LeadServiceImpl implements LeadService {
         lead.setComment(request.getComment());
         Lead savedLead = leadRepository.save(lead);
 
-        int quantity = request.getQuantity() == null ? 1 : request.getQuantity();
+        java.math.BigDecimal quantity = request.getQuantity() == null ? java.math.BigDecimal.ONE : request.getQuantity();
         for (ProductInternalSummaryResponse product : products) {
             LeadItem item = new LeadItem();
             item.setLeadId(savedLead.getId());
@@ -119,8 +119,10 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public Boolean cancel(Long id, AppLanguage language) {
-        Lead lead = findLead(id, language);
+        Lead lead = leadRepository.lockPresent(id).orElseThrow(() -> new AppBadException(messageService.getMessage("lead.not.found", language)));
+        if (lead.getStatus() == LeadStatus.ACCEPTED) throw new AppBadException(messageService.getMessage("lead.accept.invalid", language));
         if (!requireProfileId(language).equals(lead.getBuyerId())) {
             throw new AppBadException(messageService.getMessage("lead.forbidden", language));
         }
@@ -130,8 +132,11 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public LeadResponse updateStatus(Long id, LeadStatusUpdateRequest request, AppLanguage language) {
-        Lead lead = findLead(id, language);
+        Lead lead = leadRepository.lockPresent(id).orElseThrow(() -> new AppBadException(messageService.getMessage("lead.not.found",language)));
+        if (lead.getStatus()==LeadStatus.ACCEPTED || request.getStatus()==LeadStatus.ACCEPTED)
+            throw new AppBadException(messageService.getMessage("lead.accept.invalid",language));
         if (!requireProfileId(language).equals(lead.getSellerId())) {
             throw new AppBadException(messageService.getMessage("lead.forbidden", language));
         }

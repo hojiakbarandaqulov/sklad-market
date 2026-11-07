@@ -16,6 +16,7 @@ import java.util.List;
 public class LeadResponse {
     private Long id;
     private Long buyerId;
+    private Long acceptedOrderId;
     private Long sellerId;
     private Long companyId;
     private LeadSource source;

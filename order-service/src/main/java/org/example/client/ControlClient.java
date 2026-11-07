@@ -13,6 +13,12 @@ import java.util.List;
 
 @FeignClient(name = "sklad-control")
 public interface ControlClient {
+    @GetMapping("/internal/control/orders/{orderId}/reservation/availability")
+    List<Availability> availability(@PathVariable("orderId") Long orderId, @RequestParam("companyId") Long companyId);
+    @PostMapping("/internal/control/orders/{orderId}/reservation/complete")
+    Envelope complete(@PathVariable("orderId") Long orderId, @RequestBody SaleReservationRequest request);
+    record Availability(Long productId, BigDecimal reservedQuantity, BigDecimal availableQuantity, BigDecimal maxSaleQuantity) {}
+    record SaleReservationRequest(Long companyId, List<Item> items) {}
 
     @PostMapping("/internal/control/orders/{orderId}/reservation")
     Envelope reserve(@PathVariable Long orderId, @RequestBody ReserveRequest request);

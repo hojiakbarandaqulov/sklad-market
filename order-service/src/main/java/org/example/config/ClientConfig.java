@@ -12,6 +12,7 @@ public class ClientConfig {
     public RequestInterceptor serviceAuthorization(ServiceTokenService serviceTokenService) {
         // Feign ichki so'rovga Order service-account tokenini qo'shadi.
         return requestTemplate -> {
+            if (requestTemplate.headers().keySet().stream().anyMatch("Authorization"::equalsIgnoreCase)) return;
             String accessToken = serviceTokenService.token();
             requestTemplate.header("Authorization", "Bearer " + accessToken);
         };

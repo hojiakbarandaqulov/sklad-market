@@ -404,6 +404,7 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderResponse synchronizeWithControl(Long orderId) {
         Order order = findOrderForUpdate(orderId);
+        if (order.getStatus() == OrderStatus.FINALIZING) return orderMapper.toResponse(order);
 
         if (isFinalStatus(order.getStatus())) {
             return orderMapper.toResponse(order);
@@ -596,5 +597,46 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderException conflict(String message) {
         return new OrderException(409, message);
+    }
+
+    public OrderResponse acceptLead(Long leadId, org.example.dto.order.LeadAcceptRequest request,
+            org.example.client.SellerWorkflowClient.Lead lead) {
+        requireActiveCompanyOwner(lead.companyId(), SpringSecurityUtil.getProfileId());
+        var originals = new java.util.TreeMap<Long, BigDecimal>();
+        if (lead.items() == null || lead.items().isEmpty()) throw conflict("sale.lead.invalid");
+        for (var item : lead.items()) {
+            if (item.productId() == null || item.quantity() == null || item.quantity().signum() <= 0
+                    || originals.putIfAbsent(item.productId(), item.quantity()) != null)
+                throw conflict("sale.lead.invalid");
+        }
+        var accepted = new java.util.TreeMap<Long, BigDecimal>();
+        for (var item : request.items()) {
+            if (accepted.putIfAbsent(item.productId(), item.quantity()) != null) throw conflict("order.product.duplicate");
+            var original = originals.get(item.productId());
+            if (original == null || item.quantity().compareTo(original) > 0) throw conflict("sale.quantity.invalid");
+            if (item.quantity().compareTo(original) < 0 && !request.buyerAgreementConfirmed()) throw conflict("sale.agreement.required");
+        }
+        if (!accepted.keySet().equals(originals.keySet())) throw conflict("sale.quantity.invalid");
+        var create = new OrderCreateRequest(lead.companyId(), "lead:" + leadId,
+                lead.deliveryAddress(), lead.comment(), request.items());
+        String hash = OrderRequestUtils.createRequestHash(create);
+        var existing = orderRepository.findByLeadId(leadId);
+        Long id;
+        if (existing.isPresent()) {
+            validateSameRequest(existing.get(), hash); id = existing.get().getId();
+        } else {
+            if (!java.util.Set.of("NEW", "VIEWED", "CONTACTED").contains(lead.status())) throw conflict("sale.lead.invalid");
+            var order = prepareOrder(create, lead.buyerId(), create.idempotencyKey(), hash);
+            order.setLeadId(leadId);
+            try { id = transactionTemplate.execute(tx -> orderRepository.saveAndFlush(order).getId()); }
+            catch (DataIntegrityViolationException ex) {
+                var saved = orderRepository.findByLeadId(leadId).orElseThrow(() -> ex);
+                validateSameRequest(saved, hash); id = saved.getId();
+            }
+        }
+        var response = resume(id);
+        if (!java.util.Set.of(OrderStatus.RESERVED,OrderStatus.FINALIZING,OrderStatus.SHIPPED).contains(response.status()))
+            throw conflict("sale.lead.unreserved");
+        return response;
     }
 }

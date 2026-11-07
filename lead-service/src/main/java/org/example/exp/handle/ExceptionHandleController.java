@@ -20,7 +20,13 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestControllerAdvice
+@lombok.RequiredArgsConstructor
 public class ExceptionHandleController extends ResponseEntityExceptionHandler {
+    private final org.example.service.ResourceBundleService messages;
+    @ExceptionHandler(org.example.exp.LeadAcceptanceException.class)
+    public ResponseEntity<Map<String,Object>> handleAccept(org.example.exp.LeadAcceptanceException e) {
+        return ResponseEntity.status(e.getStatus()).body(errorBody(e.getMessage(),Map.of()));
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
@@ -32,7 +38,8 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         }
 
-        return new ResponseEntity<>(errorBody("Validation failed", errors), headers, status);
+        return new ResponseEntity<>(errorBody(messages.getMessage("validation.failed",
+                org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage()), errors), headers, status);
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
