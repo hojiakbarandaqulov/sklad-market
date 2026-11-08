@@ -35,17 +35,19 @@ public class ExceptionHandleController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(OrderException.class)
     public ResponseEntity<Object> handleOrderException(OrderException exception) {
         String traceId = UUID.randomUUID().toString();
-        if (exception.getStatus() >= 500) {
-            // Token, header va bog'liq servisning javob matnini logga yozmaymiz.
-            log.warn("Order so'rovi bajarilmadi, trace_id={}, status={}, diagnostic={}",
-                    traceId, exception.getStatus(), exception.getDiagnostic());
-        }
+        // Token, header va bog'liq servisning javob matnini logga yozmaymiz.
+        log.warn("Order so'rovi bajarilmadi, trace_id={}, status={}, diagnostic={}",
+                traceId, exception.getStatus(), exception.getDiagnostic());
         return buildErrorResponse(exception.getStatus(), exception.getMessage(), Map.of(), traceId);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Object> handleAccessDenied(AccessDeniedException exception) {
-        return buildErrorResponse(403, "order.access.denied", Map.of());
+        String key = exception.getMessage();
+        if (key == null || key.isBlank() || "Access Denied".equals(key)) {
+            key = "order.access.denied";
+        }
+        return buildErrorResponse(403, key, Map.of());
     }
 
     @ExceptionHandler({DataIntegrityViolationException.class, CannotAcquireLockException.class})

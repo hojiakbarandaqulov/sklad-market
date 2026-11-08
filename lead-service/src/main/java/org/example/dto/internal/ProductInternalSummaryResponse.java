@@ -15,6 +15,7 @@ public class ProductInternalSummaryResponse {
     private String name;
     private String slug;
     private BigDecimal price;
+    private Long minimumQuantity;
     private Currency currency;
     private String primaryImage;
 }

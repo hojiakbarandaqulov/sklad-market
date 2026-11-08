@@ -1,4 +1,5 @@
 package org.example.service.impl;
+import org.example.exp.AppServiceUnavailableException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.example.exp.OrderException;
@@ -53,7 +54,7 @@ public class ServiceTokenServiceImpl implements ServiceTokenService {
         }
 
         if (clientSecret.isBlank()) {
-            throw new OrderException(503, "order.service.credentials",
+            throw new AppServiceUnavailableException("order.service.credentials",
                     "operation=keycloak.token failure=missing_client_secret");
         }
 

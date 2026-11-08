@@ -39,7 +39,7 @@ public class OrderController {
                     + "Aloqa uzilganda aynan shu idempotencyKey bilan takrorlang. Qoldiq yetishmasa 409, bog'liq xizmat ishlamasa 503.")
     public ApiResponse<OrderResponse> create(@Valid @RequestBody OrderCreateRequest request,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(orderService.create(request));
+        return ApiResponse.successResponse(orderService.create(request, language));
     }
 
     @GetMapping
@@ -47,7 +47,7 @@ public class OrderController {
             description = "Xaridor token ichidagi profileId orqali aniqlanadi. companyId ixtiyoriy. page 1 dan boshlanadi, perPage 1–100.")
     public ApiResponse<Page<OrderResponse>> buyer(@Valid @ParameterObject @ModelAttribute OrderFilter filter,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(orderService.getBuyerOrders(filter));
+        return ApiResponse.successResponse(orderService.getBuyerOrders(filter, language));
     }
 
     @GetMapping("/seller")
@@ -57,7 +57,7 @@ public class OrderController {
                     + "status va sana oralig'i bilan filtrlash mumkin.")
     public ApiResponse<Page<OrderResponse>> seller(@Valid @ParameterObject @ModelAttribute OrderFilter filter,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(orderService.getSellerOrders(filter));
+        return ApiResponse.successResponse(orderService.getSellerOrders(filter, language));
     }
 
     @GetMapping("/{id}")
@@ -68,7 +68,7 @@ public class OrderController {
             @PathVariable("id") @Positive Long orderId,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
-        return ApiResponse.successResponse(orderService.get(orderId));
+        return ApiResponse.successResponse(orderService.get(orderId, language));
     }
 
     @PostMapping("/{id}/ship")
@@ -81,7 +81,7 @@ public class OrderController {
             @PathVariable("id") @Positive Long orderId,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
-        return ApiResponse.successResponse(orderService.ship(orderId));
+        return ApiResponse.successResponse(orderService.ship(orderId, language));
     }
 
     @PostMapping("/{id}/cancel")
@@ -93,6 +93,6 @@ public class OrderController {
             @PathVariable("id") @Positive Long orderId,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
-        return ApiResponse.successResponse(orderService.cancel(orderId));
+        return ApiResponse.successResponse(orderService.cancel(orderId, language));
     }
 }

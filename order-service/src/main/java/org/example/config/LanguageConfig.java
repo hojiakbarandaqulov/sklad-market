@@ -15,7 +15,7 @@ import java.util.Locale;
 public class LanguageConfig implements WebMvcConfigurer {
     @Bean
     public static org.springframework.context.support.ResourceBundleMessageSource messageSource() {
-        var source = new org.springframework.context.support.ResourceBundleMessageSource();
+        org.springframework.context.support.ResourceBundleMessageSource source = new org.springframework.context.support.ResourceBundleMessageSource();
         source.setBasenames("messages/message");
         source.setDefaultEncoding("UTF-8");
         source.setDefaultLocale(Locale.forLanguageTag("uz"));

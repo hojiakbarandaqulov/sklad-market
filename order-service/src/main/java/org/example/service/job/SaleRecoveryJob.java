@@ -11,5 +11,5 @@ import org.springframework.stereotype.Component;
 public class SaleRecoveryJob {
     private final OrderSaleService service;
     @Scheduled(fixedDelayString="${order.recovery.delay-ms:30000}")
-    public void recover() { service.recover(); }
+    public void recover() { service.recover(org.example.enums.AppLanguage.UZ); }
 }

@@ -19,6 +19,6 @@ public class OrderRecoveryJob {
             initialDelayString = "${order.recovery.delay-ms:60000}"
     )
     public void synchronize() {
-        orderService.recover();
+        orderService.recover(org.example.enums.AppLanguage.UZ);
     }
 }

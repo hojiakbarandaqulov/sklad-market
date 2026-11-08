@@ -31,6 +31,7 @@ public class LeadServiceImpl implements LeadService {
     private final ResourceBundleService messageService;
     private final ProductClient client;
     private final LeadMapper leadMapper;
+    private final LeadQuantityValidator quantities;
 
     @Override
     public LeadResponse create(LeadCreateRequest request, AppLanguage language) {
@@ -51,6 +52,9 @@ public class LeadServiceImpl implements LeadService {
                 .map(client::getById)
                 .toList();
 
+        java.math.BigDecimal quantity = request.getQuantity() == null ? java.math.BigDecimal.ONE : request.getQuantity();
+        products.forEach(product -> quantities.validate(product, quantity, language));
+
         Lead lead = new Lead();
         lead.setBuyerId(buyerId);
         lead.setSellerId(products.get(0).getSellerId());
@@ -64,7 +68,6 @@ public class LeadServiceImpl implements LeadService {
         lead.setComment(request.getComment());
         Lead savedLead = leadRepository.save(lead);
 
-        java.math.BigDecimal quantity = request.getQuantity() == null ? java.math.BigDecimal.ONE : request.getQuantity();
         for (ProductInternalSummaryResponse product : products) {
             LeadItem item = new LeadItem();
             item.setLeadId(savedLead.getId());

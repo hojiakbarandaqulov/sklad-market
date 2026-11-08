@@ -20,8 +20,7 @@ public class OrderException extends RuntimeException {
     }
 
     public static OrderException unavailable(String diagnostic) {
-        return new OrderException(
-                503,
+        return new AppServiceUnavailableException(
                 "order.dependency.unavailable",
                 diagnostic
         );

@@ -3,6 +3,8 @@ package com.example.service.impl;
 import com.example.config.client.ProductClient;
 import com.example.config.client.CompanyClient;
 import com.example.dto.ApiResponse;
+import com.example.dto.internal.CompanyOwnershipResponse;
+import com.example.dto.warehouse.WarehouseDTO;
 import com.example.dto.product.*;
 import com.example.entity.*;
 import com.example.enums.*;
@@ -56,24 +58,24 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         Long actor = actor(language);
         // Egalik tekshiruvi mavjud WarehouseService orqali qayta ishlatiladi.
         warehouseService.get(request.getWarehouseId(), language);
-        Warehouse warehouse = warehouses.lockPresent(request.getWarehouseId()).orElseThrow(() -> missing(language));
+        Warehouse warehouse = warehouses.lockPresent(request.getWarehouseId()).orElseThrow(() -> new AppNotFoundException(messages.getMessage("control.product.missing", language)));
 
-        if (!warehouse.getCompanyId().equals(request.getCompanyId())) throw bad("control.product.company", language);
-        if (warehouse.getStatus() != WarehouseStatus.ACTIVE) throw conflict("control.warehouse.inactive", language);
+        if (!warehouse.getCompanyId().equals(request.getCompanyId())) throw new AppBadException(messages.getMessage("control.product.company", language));
+        if (warehouse.getStatus() != WarehouseStatus.ACTIVE) throw new AppConflictException(messages.getMessage("control.warehouse.inactive", language));
         if ((request.getProductId() == null) == (request.getProduct() == null))
-            throw bad("control.product.card.required", language);
+            throw new AppBadException(messages.getMessage("control.product.card.required", language));
         if (request.getProduct() != null && !request.getCompanyId().equals(request.getProduct().getCompanyId()))
-            throw bad("control.product.company", language);
+            throw new AppBadException(messages.getMessage("control.product.company", language));
         String sku = request.getSku().strip();
-        if (sku.isEmpty()) throw bad("control.product.sku", language);
+        if (sku.isEmpty()) throw new AppBadException(messages.getMessage("control.product.sku", language));
         InventoryProduct product = products.findBySku(request.getCompanyId(), sku).orElse(null);
         JsonNode card;
         if (product != null) {
-            product = products.lockPresent(product.getId()).orElseThrow(() -> missing(language));
+            product = products.lockPresent(product.getId()).orElseThrow(() -> new AppNotFoundException(messages.getMessage("control.product.missing", language)));
             if (product.getStatus() != InventoryProductStatus.ACTIVE)
-                throw conflict("control.product.archived", language);
+                throw new AppConflictException(messages.getMessage("control.product.archived", language));
             if (request.getProductId() != null && !product.getCatalogCardId().equals(request.getProductId()))
-                throw conflict("control.product.sku", language);
+                throw new AppConflictException(messages.getMessage("control.product.sku", language));
             card = card(product, language);
         } else {
             if (request.getProductId() != null) {
@@ -84,7 +86,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
             }
             Long cardId = card.get("id").asLong();
             if (!products.findByCard(request.getCompanyId(), cardId).isEmpty())
-                throw conflict("control.product.duplicate", language);
+                throw new AppConflictException(messages.getMessage("control.product.duplicate", language));
             product = new InventoryProduct();
             product.setCompanyId(request.getCompanyId());
             // Hozir catalogCardId mavjud Product.id ni bildiradi; nusxa karta yaratmaymiz.
@@ -133,8 +135,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     public PageImpl<InventoryProductDTO> list(InventoryProductFilter filter, AppLanguage language) {
         authorizeCompany(filter.getCompanyId(), language);
         if (filter.getWarehouseId() != null) {
-            var warehouse = warehouseService.get(filter.getWarehouseId(), language);
-            if (!warehouse.getCompanyId().equals(filter.getCompanyId())) throw bad("control.product.company", language);
+            WarehouseDTO warehouse = warehouseService.get(filter.getWarehouseId(), language);
+            if (!warehouse.getCompanyId().equals(filter.getCompanyId())) throw new AppBadException(messages.getMessage("control.product.company", language));
         }
         Specification<InventoryProduct> spec = (root, query, cb) -> cb.and(cb.equal(root.get("companyId"), filter.getCompanyId()), cb.isFalse(root.get("deleted")));
         if (filter.getStatus() != null)
@@ -207,14 +209,14 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     @Transactional
     public InventoryProductDTO update(Long id, InventoryProductUpdateRequest request, AppLanguage language) {
         InventoryProduct product = owned(id, true, language);
-        if (product.getStatus() != InventoryProductStatus.ACTIVE) throw conflict("control.product.archived", language);
+        if (product.getStatus() != InventoryProductStatus.ACTIVE) throw new AppConflictException(messages.getMessage("control.product.archived", language));
         if (request.getProduct() == null && request.getShowInMarket() == null)
-            throw bad("warehouse.patch.empty", language);
+            throw new AppBadException(messages.getMessage("warehouse.patch.empty", language));
         JsonNode card = card(product, language);
         String responseOperation = "cards";
         if (request.getProduct() != null) {
             if (!product.getCompanyId().equals(request.getProduct().getCompanyId()))
-                throw bad("control.product.company", language);
+                throw new AppBadException(messages.getMessage("control.product.company", language));
             card = remote("update", () -> client.update(product.getCatalogCardId(), request.getProduct(), language.name()), language);
             responseOperation = "update";
         }
@@ -232,7 +234,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     @Transactional
     public InventoryProductDTO archive(Long id, AppLanguage language) {
         InventoryProduct product = owned(id, true, language);
-        if (stocks.hasBalance(id)) throw conflict("control.product.balance", language);
+        if (stocks.hasBalance(id)) throw new AppConflictException(messages.getMessage("control.product.balance", language));
         JsonNode card = optionalCard(product, language);
         if (card != null) {
             card = remote("visibility", () -> client.visibility(product.getCatalogCardId(), false, language.name()), language);
@@ -258,8 +260,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
 
     private InventoryProduct owned(Long id, boolean lock, AppLanguage language) {
         actor(language);
-        if (id == null || id <= 0) throw bad("control.product.id", language);
-        InventoryProduct product = (lock ? products.lockPresent(id) : products.findPresent(id)).orElseThrow(() -> missing(language));
+        if (id == null || id <= 0) throw new AppBadException(messages.getMessage("control.product.id", language));
+        InventoryProduct product = (lock ? products.lockPresent(id) : products.findPresent(id)).orElseThrow(() -> new AppNotFoundException(messages.getMessage("control.product.missing", language)));
         authorizeCompany(product.getCompanyId(), language);
         return product;
     }
@@ -267,7 +269,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     private void authorizeCompany(Long companyId, AppLanguage language) {
         Long userId = actor(language);
         try {
-            var company = companies.ownershipCheck(companyId, userId);
+            CompanyOwnershipResponse company = companies.ownershipCheck(companyId, userId);
             if (company == null || !Objects.equals(company.getCompanyId(), companyId))
                 throw new AppServiceUnavailableException(messages.getMessage("warehouse.company.service.unavailable", language));
             if (!company.isExists())
@@ -312,7 +314,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
 
     private JsonNode oneCard(Long companyId, Long id, AppLanguage language) {
         List<JsonNode> result = remote("cards", () -> client.cards(companyId, List.of(id), language.name()), language);
-        if (result.size() != 1) throw bad("control.product.card.missing", language);
+        if (result.size() != 1) throw new AppBadException(messages.getMessage("control.product.card.missing", language));
         validateCard("cards", result.get(0), companyId, id, language);
         return result.get(0);
     }
@@ -336,8 +338,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
             if (e.status() == 401 || e.status() == 403)
                 throw new AccessDeniedException(messages.getMessage("auth.access.denied", language));
             if (e.status() == 400 || e.status() == 404 || e.status() == 422)
-                throw bad("control.product.remote.invalid", language);
-            if (e.status() == 409) throw conflict("control.product.retry", language);
+                throw new AppBadException(messages.getMessage("control.product.remote.invalid", language));
+            if (e.status() == 409) throw new AppConflictException(messages.getMessage("control.product.retry", language));
             Throwable cause = e.getCause() == null ? e : e.getCause();
             // Feign xabarida so'rov URL'i yoki javob tanasi bo'lishi mumkin. Faqat status va xato turini yozamiz.
             String status = e.status() < 0 ? "no HTTP response" : String.valueOf(e.status());
@@ -349,17 +351,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         return InventoryProductDTO.builder().id(product.getId()).companyId(product.getCompanyId()).productId(product.getCatalogCardId()).sku(product.getSku()).status(product.getStatus()).product(card).catalogCardAvailable(card != null).stocks(balances.stream().map(s -> InventoryProductDTO.StockDTO.builder().warehouseId(s.getWarehouse().getId()).warehouseName(s.getWarehouse().getName()).onHand(s.getOnHand()).reserved(s.getReserved()).available(s.getAvailable()).minimumStock(s.getMinimumStock()).build()).toList()).build();
     }
 
-    private AppBadException bad(String key, AppLanguage language) {
-        return new AppBadException(messages.getMessage(key, language));
-    }
 
-    private AppConflictException conflict(String key, AppLanguage language) {
-        return new AppConflictException(messages.getMessage(key, language));
-    }
 
-    private AppNotFoundException missing(AppLanguage language) {
-        return new AppNotFoundException(messages.getMessage("control.product.missing", language));
-    }
 
     private AppServiceUnavailableException unavailable(String operation, String reason, AppLanguage language) {
         return new AppServiceUnavailableException(messages.getMessage("control.product.unavailable", language),

@@ -4,6 +4,7 @@ import org.example.service.ResourceBundleService;
 import lombok.RequiredArgsConstructor;
 import org.example.dto.order.OrderResponse;
 import org.example.entity.Order;
+import org.example.enums.AppLanguage;
 import org.example.entity.OrderItem;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class OrderMapper {
     private final ResourceBundleService messageService;
 
-    public OrderResponse toResponse(Order order) {
+    public OrderResponse toResponse(Order order, AppLanguage language) {
         List<OrderResponse.Item> items = new ArrayList<>();
 
         for (OrderItem orderItem : order.getItems()) {
@@ -37,7 +38,7 @@ public class OrderMapper {
                 order.getUpdatedAt(),
                 order.getShippedAt(),
                 order.getCancelledAt(),
-                order.getFailureReason() == null ? null : messageService.getMessage(order.getFailureReason()),
+                order.getFailureReason() == null ? null : messageService.getMessage(order.getFailureReason(), language),
                 items
         );
     }

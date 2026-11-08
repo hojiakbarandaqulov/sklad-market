@@ -28,6 +28,13 @@ class OrderProductInternalControllerTest {
         assertThat(response.price()).isEqualByComparingTo("12500.125"); assertThat(response.minimumQuantity()).isEqualTo(2L);
         assertThat(response.companyId()).isEqualTo(1L);
     }
+    @Test void leadAndCartSummaryIncludesTheSameMinimumAsOrderSummary() {
+        var leadSummary = new ProductInternalController(products,
+                mock(org.example.service.AdminProductService.class),
+                mock(org.example.service.InternalProductStatsService.class));
+        var summary = leadSummary.summary(100L);
+        assertThat(summary.getMinimumQuantity()).isEqualTo(controller.summary(100L).getBody().minimumQuantity());
+    }
     @Test void inactiveUnapprovedAndNegotiableProductsCannotBeOrdered() {
         product.setIsActive(false); assertThat(controller.summary(100L).getBody().orderable()).isFalse();
         product.setIsActive(true); product.setModerationStatus(ProductModerationStatus.PENDING);

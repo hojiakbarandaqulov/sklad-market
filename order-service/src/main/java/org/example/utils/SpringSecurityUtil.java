@@ -1,4 +1,5 @@
 package org.example.utils;
+import org.springframework.security.access.AccessDeniedException;
 
 import org.example.exp.OrderException;
 import org.springframework.security.core.Authentication;
@@ -28,7 +29,7 @@ public final class SpringSecurityUtil {
             }
         }
 
-        throw new OrderException(403, "order.profile.required");
+        throw new AccessDeniedException("order.profile.required");
     }
 
     public static boolean isSeller() {

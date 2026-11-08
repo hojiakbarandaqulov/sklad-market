@@ -21,11 +21,15 @@ import java.util.UUID;
 
 @RestControllerAdvice
 @lombok.RequiredArgsConstructor
+@lombok.extern.slf4j.Slf4j
 public class ExceptionHandleController extends ResponseEntityExceptionHandler {
     private final org.example.service.ResourceBundleService messages;
     @ExceptionHandler(org.example.exp.LeadAcceptanceException.class)
     public ResponseEntity<Map<String,Object>> handleAccept(org.example.exp.LeadAcceptanceException e) {
-        return ResponseEntity.status(e.getStatus()).body(errorBody(e.getMessage(),Map.of()));
+        Map<String, Object> body = errorBody(e.getMessage(), e.getErrors());
+        log.warn("Lead acceptance failed, trace_id={}, status={}, upstream_trace_id={}",
+                body.get("trace_id"), e.getStatus(), e.getUpstreamTraceId());
+        return ResponseEntity.status(e.getStatus()).body(body);
     }
 
     @Override

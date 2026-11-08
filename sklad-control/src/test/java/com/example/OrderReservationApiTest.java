@@ -74,6 +74,14 @@ class OrderReservationApiTest {
         assertThat(data(call(post(root(10)+"/release?companyId=1"), 200)).path("status").asText()).isEqualTo("COMMITTED");
     }
 
+    @Test void internalReservationErrorsFollowTheLanguageHeader() throws Exception {
+        MvcResult response = call(post(root(90)).header("Accept-Language", "RU")
+                .content(payload("1000")), 409);
+        assertThat(response.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))
+                .contains("Недостаточно");
+        assertThat(reservations.count()).isZero();
+    }
+
     @Test void releaseIsIdempotentAndDoesNotReducePhysicalStock() throws Exception {
         call(post(root(11)).content(payload("3")), 200);
         call(post(root(11)+"/release?companyId=1"), 200); call(post(root(11)+"/release?companyId=1"), 200);

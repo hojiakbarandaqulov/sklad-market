@@ -58,6 +58,7 @@ public class ProductInternalController {
                 .name(product.getName())
                 .slug(product.getSlug())
                 .price(product.getPrice())
+                .minimumQuantity(product.getMinProduct())
                 .currency(product.getCurrency() == null ? null : product.getCurrency().name())
                 .primaryImage(primaryImageUrl)
                 .build();

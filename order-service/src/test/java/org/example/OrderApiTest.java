@@ -61,15 +61,15 @@ class OrderApiTest {
         when(products.get(101L)).thenReturn(product(101L, 1L, "UZS", "4000", true));
         when(companies.ownership(anyLong(), anyLong())).thenAnswer(call ->
                 new CompanyClient.Ownership(call.getArgument(0), true, Objects.equals(call.getArgument(1), 42L), true));
-        when(control.reserve(anyLong(), any())).thenAnswer(call -> {
+        when(control.reserve(anyLong(), any(), anyString())).thenAnswer(call -> {
             Long id = call.getArgument(0); remoteStates.putIfAbsent(id, "ACTIVE"); return reservation(id);
         });
-        when(control.get(anyLong(), anyLong())).thenAnswer(call -> reservation(call.getArgument(0)));
-        when(control.commit(anyLong(), anyLong())).thenAnswer(call -> {
+        when(control.get(anyLong(), anyLong(), anyString())).thenAnswer(call -> reservation(call.getArgument(0)));
+        when(control.commit(anyLong(), anyLong(), anyString())).thenAnswer(call -> {
             Long id = call.getArgument(0); remoteStates.computeIfPresent(id, (k,v) -> v.equals("ACTIVE") ? "COMMITTED" : v);
             return reservation(id);
         });
-        when(control.release(anyLong(), anyLong())).thenAnswer(call -> {
+        when(control.release(anyLong(), anyLong(), anyString())).thenAnswer(call -> {
             Long id = call.getArgument(0); remoteStates.computeIfPresent(id, (k,v) -> v.equals("ACTIVE") ? "RELEASED" : v);
             return reservation(id);
         });
@@ -83,7 +83,7 @@ class OrderApiTest {
         assertThat(data.path("items").get(0).path("unitPrice").decimalValue()).isEqualByComparingTo("12500.125");
         verify(control).reserve(eq(data.path("id").asLong()), argThat(r -> r.companyId().equals(1L)
                 && r.buyerId().equals(7L) && r.items().getFirst().productId().equals(100L)
-                && r.expiresAt().equals(now.plus(Duration.ofDays(1)))));
+                && r.expiresAt().equals(now.plus(Duration.ofDays(1)))), anyString());
     }
 
     @Test void retryKeepsOriginalPriceAndOrderAndRejectsDifferentRequestWithSameKey() throws Exception {
@@ -92,7 +92,7 @@ class OrderApiTest {
         assertThat(create("retry", "2.000")).isEqualTo(id);
         assertThat(orders.count()).isEqualTo(1);
         verify(products, times(1)).get(100L);
-        verify(control, times(1)).reserve(eq(id), any());
+        verify(control, times(1)).reserve(eq(id), any(), anyString());
         call(post("/api/v1/orders").content(payload("retry", "3")), "buyer", 409);
     }
 
@@ -102,7 +102,7 @@ class OrderApiTest {
         call(post(root(id) + "/ship"), "stranger", 403);
         assertThat(data(call(post(root(id) + "/ship"), "seller", 200)).path("status").asText()).isEqualTo("SHIPPED");
         call(post(root(id) + "/ship"), "seller", 200);
-        verify(control, times(1)).commit(id, 1L);
+        verify(control, times(1)).commit(id, 1L, "UZ");
         call(post(root(id) + "/cancel"), "buyer", 409);
     }
 
@@ -112,7 +112,7 @@ class OrderApiTest {
         call(post(root(id) + "/cancel"), "stranger", 403);
         assertThat(data(call(post(root(id) + "/cancel"), "buyer", 200)).path("status").asText()).isEqualTo("CANCELLED");
         call(post(root(id) + "/cancel"), "seller", 200);
-        verify(control, times(1)).release(id, 1L);
+        verify(control, times(1)).release(id, 1L, "UZ");
         call(post(root(id) + "/ship"), "seller", 409);
     }
 
@@ -138,26 +138,26 @@ class OrderApiTest {
         call(post("/api/v1/orders").content(payload("hidden", "2")), "buyer", 409);
         when(products.get(100L)).thenReturn(new ProductClient.ProductSnapshot(100L, 1L, 42L, "Steel", new BigDecimal("100"), "UZS", 5L, true));
         call(post("/api/v1/orders").content(payload("min", "2")), "buyer", 400);
-        assertThat(orders.count()).isZero(); verify(control, never()).reserve(anyLong(), any());
+        assertThat(orders.count()).isZero(); verify(control, never()).reserve(anyLong(), any(), anyString());
     }
 
     @Test void missingCompanyVerificationFailsClosed() throws Exception {
         when(companies.ownership(1L, 42L)).thenReturn(null);
         call(post("/api/v1/orders").content(payload("company", "2")), "buyer", 503);
-        assertThat(orders.count()).isZero(); verify(control, never()).reserve(anyLong(), any());
+        assertThat(orders.count()).isZero(); verify(control, never()).reserve(anyLong(), any(), anyString());
     }
 
     @Test void insufficientStockPersistsRejectedOrderWithoutReportingSuccess() throws Exception {
-        when(control.reserve(anyLong(), any())).thenThrow(failure(409));
+        when(control.reserve(anyLong(), any(), anyString())).thenThrow(failure(409));
         call(post("/api/v1/orders").content(payload("insufficient", "2")), "buyer", 409);
         assertThat(orders.findAll().getFirst().getStatus()).isEqualTo(OrderStatus.REJECTED);
         call(post("/api/v1/orders").content(payload("insufficient", "2")), "buyer", 409);
-        verify(control, times(1)).reserve(anyLong(), any());
+        verify(control, times(1)).reserve(anyLong(), any(), anyString());
     }
 
     @Test void lostReserveResponseLeavesDurableIntentAndRetriesSameOrderId() throws Exception {
         AtomicBoolean first = new AtomicBoolean(true);
-        when(control.reserve(anyLong(), any())).thenAnswer(call -> {
+        when(control.reserve(anyLong(), any(), anyString())).thenAnswer(call -> {
             Long id = call.getArgument(0); remoteStates.putIfAbsent(id, "ACTIVE");
             if (first.getAndSet(false)) throw failure(503);
             return reservation(id);
@@ -165,7 +165,7 @@ class OrderApiTest {
         call(post("/api/v1/orders").content(payload("timeout", "2")), "buyer", 503);
         var saved = orders.findAll().getFirst(); assertThat(saved.getStatus()).isEqualTo(OrderStatus.RESERVING);
         assertThat(create("timeout", "2")).isEqualTo(saved.getId());
-        assertThat(orders.count()).isEqualTo(1); verify(control, times(2)).reserve(eq(saved.getId()), any());
+        assertThat(orders.count()).isEqualTo(1); verify(control, times(2)).reserve(eq(saved.getId()), any(), anyString());
     }
 
     @Test void lostCommitResponseIsRecoveredWithoutCreatingAnotherOrder() throws Exception {
@@ -174,32 +174,32 @@ class OrderApiTest {
             remoteStates.put(id, "COMMITTED");
             if (first.getAndSet(false)) throw failure(503);
             return reservation(id);
-        }).when(control).commit(id, 1L);
+        }).when(control).commit(id, 1L, "UZ");
         call(post(root(id) + "/ship"), "seller", 503);
         assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.SHIPPING);
-        service.recover();
+        service.recover(org.example.enums.AppLanguage.UZ);
         assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.SHIPPED);
         call(post(root(id) + "/ship"), "seller", 200);
-        verify(control, times(2)).commit(id, 1L);
+        verify(control, times(2)).commit(id, 1L, "UZ");
     }
 
     @Test void lostReleaseResponseIsRecoveredAndExpiryCannotBeShipped() throws Exception {
         long id = create("release-timeout", "2"); AtomicBoolean first = new AtomicBoolean(true);
         doAnswer(call -> {
             remoteStates.put(id, "RELEASED"); if (first.getAndSet(false)) throw failure(503); return reservation(id);
-        }).when(control).release(id, 1L);
+        }).when(control).release(id, 1L, "UZ");
         call(post(root(id) + "/cancel"), "buyer", 503);
         assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.CANCELLING);
-        service.recover();
+        service.recover(org.example.enums.AppLanguage.UZ);
         assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.CANCELLED);
         long expired = create("expired", "1"); remoteStates.put(expired, "EXPIRED");
         call(post(root(expired) + "/ship"), "seller", 409);
         assertThat(orders.findById(expired).orElseThrow().getStatus()).isEqualTo(OrderStatus.EXPIRED);
-        verify(control, never()).commit(expired, 1L);
+        verify(control, never()).commit(expired, 1L, "UZ");
     }
 
     @Test void malformedOrMismatchedControlResponseDoesNotInventSuccess() throws Exception {
-        when(control.reserve(anyLong(), any())).thenReturn(new ControlClient.Envelope(true,
+        when(control.reserve(anyLong(), any(), anyString())).thenReturn(new ControlClient.Envelope(true,
                 new ControlClient.Reservation(1L, 999L, 99L, "ACTIVE")));
         call(post("/api/v1/orders").content(payload("mismatch", "1")), "buyer", 503);
         assertThat(orders.findAll().getFirst().getStatus()).isEqualTo(OrderStatus.RESERVING);
@@ -269,6 +269,23 @@ class OrderApiTest {
         }
     }
 
+    @Test void serviceUsesExplicitLanguageWithoutAnHttpRequest() {
+        org.springframework.context.i18n.LocaleContextHolder.setLocale(Locale.ENGLISH);
+        try {
+            assertThatThrownBy(() -> service.resume(Long.MAX_VALUE, org.example.enums.AppLanguage.RU))
+                    .isInstanceOf(org.example.exp.AppNotFoundException.class)
+                    .hasMessage("Заказ не найден");
+        } finally {
+            org.springframework.context.i18n.LocaleContextHolder.resetLocaleContext();
+        }
+    }
+
+    @Test void reservationRequestForwardsTheSelectedLanguage() throws Exception {
+        call(post("/api/v1/orders").header("Accept-Language", "RU")
+                .content(payload("russian-reservation", "2")), "buyer", 200);
+        verify(control).reserve(anyLong(), any(), eq("RU"));
+    }
+
     @Test void authenticationAndValidationAreLocalized() throws Exception {
         var anonymous = call(get("/api/v1/orders").header("Accept-Language", "RU"), null, 401);
         assertThat(anonymous.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8)).contains("Требуется авторизация");
@@ -281,15 +298,15 @@ class OrderApiTest {
 
     @Test void sellerSaleIssuesImmutableInvoiceAndRetriesDoNotCommitTwice() throws Exception {
         long id=create("sale-new","2");
-        when(control.availability(id,1L)).thenReturn(List.of(new ControlClient.Availability(100L,new BigDecimal("2"),new BigDecimal("5"),new BigDecimal("7"))));
+        when(control.availability(id,1L, "UZ")).thenReturn(List.of(new ControlClient.Availability(100L,new BigDecimal("2"),new BigDecimal("5"),new BigDecimal("7"))));
         call(get(root(id)+"/checkout"),"buyer",403);
         assertThat(data(call(get(root(id)+"/checkout"),"seller",200)).path("availability").get(0).path("maxSaleQuantity").asInt()).isEqualTo(7);
-        when(control.complete(eq(id),any())).thenAnswer(c -> { remoteStates.put(id,"COMMITTED"); return reservation(id); });
+        when(control.complete(eq(id),any(), anyString())).thenAnswer(c -> { remoteStates.put(id,"COMMITTED"); return reservation(id); });
         String sale=salePayload("sale-1");
         var invoice=data(call(post(root(id)+"/complete-sale").content(sale),"seller",200));
         assertThat(invoice.path("totalAmount").decimalValue()).isEqualByComparingTo("15000");
         call(post(root(id)+"/complete-sale").content(sale),"seller",200);
-        verify(control,times(1)).complete(eq(id),any());
+        verify(control,times(1)).complete(eq(id),any(), anyString());
         assertThat(data(call(get(root(id)+"/invoice"),"buyer",200))).isEqualTo(invoice);
         call(get(root(id)+"/invoice"),"stranger",403);
         call(post(root(id)+"/complete-sale").content(sale.replace("15000","16000")),"seller",409);
@@ -299,7 +316,7 @@ class OrderApiTest {
     @Test void lostSaleResponseRetriesSavedIntentAndRejectsOrdinaryShipping() throws Exception {
         long id=create("sale-lost","2");
         var first=new AtomicBoolean(true);
-        when(control.complete(eq(id),any())).thenAnswer(c -> {
+        when(control.complete(eq(id),any(), anyString())).thenAnswer(c -> {
             remoteStates.put(id,"COMMITTED"); if(first.getAndSet(false)) throw failure(503); return reservation(id);
         });
         call(post(root(id)+"/complete-sale").content(salePayload("lost-key")),"seller",503);
@@ -307,8 +324,8 @@ class OrderApiTest {
         call(post(root(id)+"/ship"),"seller",409);
         call(post(root(id)+"/cancel"),"buyer",409);
         call(post(root(id)+"/complete-sale").content(salePayload("lost-key")),"seller",200);
-        verify(control,times(2)).complete(eq(id),any());
-        verify(control,never()).commit(eq(id),anyLong());
+        verify(control,times(2)).complete(eq(id),any(), anyString());
+        verify(control,never()).commit(eq(id),anyLong(), anyString());
     }
 
     @Test void creditNeedsOwnedContractAndBadDeliveryAndForeignOwnerFail() throws Exception {
@@ -318,18 +335,18 @@ class OrderApiTest {
         assertThat(denied.getResponse().getContentAsString(StandardCharsets.UTF_8)).contains("Для продажи в долг");
         call(post(root(id)+"/complete-sale").content(salePayload("x")),"stranger",403);
         call(post(root(id)+"/complete-sale").content(salePayload("x").replace("PICKUP","DELIVERY")),"seller",400);
-        verify(control,never()).complete(anyLong(),any());
+        verify(control,never()).complete(anyLong(),any(), anyString());
     }
 
     @Test void contractCreditStoresDueDateAndDefiniteStockFailureAllowsANewAttempt() throws Exception {
         long id=create("credit-success","2");
         when(saleCustomers.get(5L,"Bearer seller")).thenReturn(new SaleCustomerClient.Envelope(true,
                 new SaleCustomerClient.Customer(5L,1L,"Buyer","123","CONTRACT-1",30)));
-        when(control.complete(eq(id),any())).thenThrow(failure(409));
+        when(control.complete(eq(id),any(), anyString())).thenThrow(failure(409));
         String request=salePayload("first-attempt").replace("CASH","CREDIT").replace("\"buyerName\"","\"customerId\":5,\"buyerName\"");
         call(post(root(id)+"/complete-sale").content(request),"seller",409);
         assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.RESERVED);
-        when(control.complete(eq(id),any())).thenAnswer(c -> {remoteStates.put(id,"COMMITTED");return reservation(id);});
+        when(control.complete(eq(id),any(), anyString())).thenAnswer(c -> {remoteStates.put(id,"COMMITTED");return reservation(id);});
         call(post(root(id)+"/complete-sale").content(request),"seller",409);
         var invoice=data(call(post(root(id)+"/complete-sale").content(request.replace("first-attempt","second-attempt")),"seller",200));
         assertThat(invoice.path("contractNumber").asText()).isEqualTo("CONTRACT-1");
@@ -350,6 +367,32 @@ class OrderApiTest {
         call(post("/internal/orders/leads/11/accept").content(request.replace("Confirmed\":true","Confirmed\":false")),"seller",409);
         var saved=orders.findByLeadId(11L).orElseThrow(); saved.setStatus(OrderStatus.SHIPPED); orders.saveAndFlush(saved);
         call(post("/internal/orders/leads/11/accept").content(request),"seller",200);
+    }
+
+    @Test void pressMinimumRejectsOneUnitBeforeReservationAndAcceptsFiftyWithoutIncreasingOriginalLead() throws Exception {
+        when(products.get(60L)).thenReturn(new ProductClient.ProductSnapshot(60L, 1L, 42L, "press",
+                new BigDecimal("14000"), "UZS", 50L, true));
+        when(leadWorkflow.lead(60L, "Bearer seller")).thenReturn(new SellerWorkflowClient.LeadEnvelope(true,
+                new SellerWorkflowClient.Lead(60L, 7L, 42L, 1L, "NEW", "Buyer", "123", null, null,
+                        List.of(new SellerWorkflowClient.Item(60L, BigDecimal.ONE, "press", new BigDecimal("14000"))))));
+        String body = "{\"idempotencyKey\":\"press-accept\",\"buyerAgreementConfirmed\":false,\"items\":[{\"productId\":60,\"quantity\":1.000}]}";
+        var rejected = call(post("/internal/orders/leads/60/accept").content(body), "seller", 400);
+        assertThat(json.readTree(rejected.getResponse().getContentAsString()).path("message").asText())
+                .isEqualTo("Mahsulotning minimal buyurtma miqdoriga rioya qiling");
+        assertThat(orders.count()).isZero();
+        verifyNoInteractions(control);
+        // Existing one-unit leads cannot be silently inflated to the minimum.
+        call(post("/internal/orders/leads/60/accept").content(body.replace("1.000", "50")), "seller", 409);
+
+        when(leadWorkflow.lead(61L, "Bearer seller")).thenReturn(new SellerWorkflowClient.LeadEnvelope(true,
+                new SellerWorkflowClient.Lead(61L, 7L, 42L, 1L, "NEW", "Buyer", "123", null, null,
+                        List.of(new SellerWorkflowClient.Item(60L, new BigDecimal("50"), "press", new BigDecimal("14000"))))));
+        var accepted = data(call(post("/internal/orders/leads/61/accept").content(body.replace("1.000", "50.000")), "seller", 200));
+        assertThat(accepted.path("buyerId").asLong()).isEqualTo(7L);
+        assertThat(accepted.path("status").asText()).isEqualTo("RESERVED");
+        verify(control).reserve(anyLong(), argThat(request -> request.buyerId().equals(7L)
+                && request.items().size() == 1 && request.items().getFirst().productId().equals(60L)
+                && request.items().getFirst().quantity().compareTo(new BigDecimal("50")) == 0), eq("UZ"));
     }
 
     private String salePayload(String key) {

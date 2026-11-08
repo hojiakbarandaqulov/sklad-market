@@ -37,6 +37,7 @@ public class CartServiceImpl implements CartService {
     private final CompanyClient companyClient;
     private final LeadMapper leadMapper;
     private final ResourceBundleService messageService;
+    private final LeadQuantityValidator quantities;
 
     @Override
     public CartResponse getCart(AppLanguage language) {
@@ -102,6 +103,9 @@ public class CartServiceImpl implements CartService {
 
         Map<String, List<CartItem>> grouped = new LinkedHashMap<>();
         for (CartItem item : items) {
+            // Recheck current limits before saving any leads, including old cart entries.
+            quantities.validate(productClient.getById(item.getProductId()),
+                    java.math.BigDecimal.valueOf(item.getQuantity()), language);
             String key = item.getSellerId() + ":" + item.getCompanyId();
             grouped.computeIfAbsent(key, ignored -> new ArrayList<>()).add(item);
         }
