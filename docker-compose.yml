@@ -299,7 +299,7 @@
       <<: *internal-service
       build:
         context: .
-        dockerfile: Dockerfile-service
+        dockerfile: Dockerfile-chat-service
         args:
           SERVICE_DIR: chat-service
       container_name: chat-service
