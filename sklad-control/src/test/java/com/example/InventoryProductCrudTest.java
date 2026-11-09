@@ -212,12 +212,35 @@ class InventoryProductCrudTest {
             .header("Authorization","Bearer seller")).andExpect(status().isOk())
             .andExpect(jsonPath("$.data.totalElements").value(1));
     }
-    @Test void newCardUsesStableSkuAndStartsHidden() throws Exception {
-        String body=existing().replace("\"productId\":100","\"product\":{\"companyId\":1,\"categoryId\":5,\"name\":\"Polat\","
+    private String newCardBody() {
+        return existing().replace("\"productId\":100","\"product\":{\"companyId\":1,\"categoryId\":5,\"name\":\"Polat\","
             +"\"description\":\"Tavsif\",\"priceType\":\"FIXED\",\"price\":12,\"currency\":\"UZS\",\"minProduct\":1,\"phone\":\"99890\"}");
+    }
+
+    @Test void newCardUsesStableSkuAndStartsHidden() throws Exception {
         mvc.perform(post("/api/v1/control/products").header("Authorization","Bearer seller")
-            .contentType("application/json").content(body)).andExpect(status().isOk());
+            .contentType("application/json").content(newCardBody())).andExpect(status().isOk());
         verify(cards).create(any(),eq("ST-1"),eq(false),eq("UZ"));
+    }
+
+    @Test void newCardWithShowInMarketIsSubmittedForModeration() throws Exception {
+        var body = (com.fasterxml.jackson.databind.node.ObjectNode) json.readTree(newCardBody());
+        body.put("showInMarket", true);
+        mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .contentType("application/json").content(body.toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.product.status").value("PENDING"));
+        verify(cards).create(any(), eq("ST-1"), eq(false), eq("UZ"));
+        verify(cards).visibility(100L, true, "UZ");
+    }
+
+    @Test void createRejectsActiveCardWhenHidingWasRequested() throws Exception {
+        when(cards.visibility(100L, false, "UZ")).thenReturn(ApiResponse.successResponse(
+                json.readTree("{\"id\":100,\"companyId\":1,\"status\":\"APPROVED\",\"isActive\":true}")));
+        mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .contentType("application/json").content(withMarketVisibility(false)))
+                .andExpect(status().isServiceUnavailable());
+        assertThat(products.count()).isZero();
     }
     @Test void archivedWarehouseRejectsCreationBeforeRemoteCall() throws Exception {
         var warehouse=warehouses.findById(warehouseId).orElseThrow();

@@ -171,9 +171,11 @@ public class ProductServiceImpl implements ProductService {
         product.setRetail(request.getRetail());
         product.setPhone(request.getPhone());
         // Tahrirlangan tasdiqlangan karta yana moderatsiyadan o'tadi.
-        if (product.getModerationStatus() == ProductModerationStatus.APPROVED
-                && Boolean.TRUE.equals(product.getIsActive()))
+        if (product.getModerationStatus() == ProductModerationStatus.REJECTED || product.getModerationStatus() == ProductModerationStatus.APPROVED
+                && Boolean.TRUE.equals(product.getIsActive())) {
             product.setModerationStatus(ProductModerationStatus.PENDING);
+            product.setRejectReason(null);
+        }
         Product saved = productRepository.saveAndFlush(product);
         productSearchService.index(toDocument(saved));
         return toResponse(saved);
@@ -401,9 +403,10 @@ public class ProductServiceImpl implements ProductService {
         applyCommonFields(product, request, language);
         product.setSlug(generateUniqueSlug(request.getName()));
 
-        if (product.getModerationStatus() == ProductModerationStatus.APPROVED
+        if (product.getModerationStatus() == ProductModerationStatus.REJECTED || product.getModerationStatus() == ProductModerationStatus.APPROVED
                 && Boolean.TRUE.equals(product.getIsActive())) {
             product.setModerationStatus(ProductModerationStatus.PENDING);
+            product.setRejectReason(null);
         }
         Product save = productRepository.save(product);
         productSearchService.index(toDocument(save));
@@ -534,10 +537,10 @@ public class ProductServiceImpl implements ProductService {
         Specification<Product> spec = (root, query, cb) -> {
             var salePredicate = saleStatus == SaleStatus.ON_SALE
                     ? cb.and(cb.isTrue(root.get("isActive")),
-                            cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED))
+                    cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED))
                     : cb.or(cb.isFalse(root.get("isActive")), cb.isNull(root.get("isActive")),
-                            cb.notEqual(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
-                            cb.isNull(root.get("moderationStatus")));
+                    cb.notEqual(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
+                    cb.isNull(root.get("moderationStatus")));
             return cb.and(cb.equal(root.get("companyId"), companyId),
                     cb.isNull(root.get("deletedAt")), salePredicate);
         };

@@ -329,12 +329,11 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         JsonNode card = remote("visibility", () -> client.visibility(cardId, visible, language.name()), language);
         validateCard("visibility", card, product.getCompanyId(), cardId, language);
 
-        if (visible) {
-            boolean pending = "PENDING".equals(card.path("status").asText());
-            JsonNode active = card.path("isActive");
-            if (!pending || !active.isBoolean() || !active.booleanValue()) {
-                throw unavailable("visibility", "product was not submitted for moderation", language);
-            }
+        JsonNode active = card.path("isActive");
+        if (!active.isBoolean() || active.booleanValue() != visible
+                || (visible && !"PENDING".equals(card.path("status").asText()))) {
+            throw unavailable("visibility", visible ? "product was not submitted for moderation"
+                    : "product was not hidden", language);
         }
         return card;
     }
