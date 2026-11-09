@@ -66,6 +66,9 @@ class InventoryProductCrudTest {
         card=json.readTree("{\"id\":100,\"companyId\":1,\"name\":\"Polat\",\"status\":\"PENDING\",\"isActive\":false}");
         when(cards.cards(eq(1L),anyList(),anyString())).thenReturn(ApiResponse.successResponse(List.of(card)));
         when(cards.visibility(eq(100L),anyBoolean(),anyString())).thenReturn(ApiResponse.successResponse(card));
+        JsonNode publishedCard = json.readTree(
+                "{\"id\":100,\"companyId\":1,\"status\":\"APPROVED\",\"isActive\":true}");
+        when(cards.visibility(eq(100L),eq(true),anyString())).thenReturn(ApiResponse.successResponse(publishedCard));
         when(cards.create(any(),anyString(),anyBoolean(),anyString())).thenReturn(ApiResponse.successResponse(card));
         when(cards.update(anyLong(),any(),anyString())).thenReturn(ApiResponse.successResponse(card));
         when(cards.matching(eq(1L),any(),any(),anyString())).thenReturn(ApiResponse.successResponse(List.of(100L)));
@@ -143,6 +146,39 @@ class InventoryProductCrudTest {
         assertThat(stocks.count()).isEqualTo(1);
         assertThat(operations.count()).isEqualTo(1);
         verify(cards,never()).create(any(),anyString(),anyBoolean(),anyString());
+        verify(cards,never()).visibility(anyLong(),anyBoolean(),anyString());
+    }
+
+    @Test void createWithShowInMarketReturnsPublishedCard() throws Exception {
+        mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .contentType("application/json").content(withMarketVisibility(true)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.product.status").value("APPROVED"))
+                .andExpect(jsonPath("$.data.product.isActive").value(true));
+        verify(cards).visibility(100L, true, "UZ");
+    }
+
+    @Test void createWithExplicitFalseStillHidesExistingCard() throws Exception {
+        create();
+        mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .contentType("application/json").content(withMarketVisibility(false)))
+                .andExpect(status().isOk());
+        verify(cards).visibility(100L, false, "UZ");
+        assertThat(operations.count()).isEqualTo(1);
+    }
+
+    @Test void createRejectsAnUnpublishedCardWhenPublicationWasRequested() throws Exception {
+        when(cards.visibility(100L, true, "UZ")).thenReturn(ApiResponse.successResponse(card));
+        mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
+                .contentType("application/json").content(withMarketVisibility(true)))
+                .andExpect(status().isServiceUnavailable());
+        assertThat(products.count()).isZero();
+        assertThat(stocks.count()).isZero();
+    }
+
+    private String withMarketVisibility(boolean visible) {
+        String body = existing();
+        return body.substring(0, body.length() - 1) + ",\"showInMarket\":" + visible + "}";
     }
     @Test void sameCardInSecondWarehouseReusesInventoryProduct() throws Exception {
         Long id=create();
@@ -242,7 +278,7 @@ class InventoryProductCrudTest {
     @Test void badRemoteResponseRollsBackLocalRows() throws Exception {
         when(cards.visibility(eq(100L),anyBoolean(),anyString())).thenReturn(null);
         mvc.perform(post("/api/v1/control/products").header("Authorization","Bearer seller")
-            .contentType("application/json").content(existing())).andExpect(status().isServiceUnavailable());
+            .contentType("application/json").content(withMarketVisibility(true))).andExpect(status().isServiceUnavailable());
         assertThat(products.count()).isZero(); assertThat(stocks.count()).isZero(); assertThat(operations.count()).isZero();
     }
 
@@ -255,7 +291,7 @@ class InventoryProductCrudTest {
         when(cards.visibility(eq(100L), anyBoolean(), anyString())).thenThrow(failure);
 
         String body = mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
-                        .contentType("application/json").content(existing()))
+                        .contentType("application/json").content(withMarketVisibility(true)))
                 .andExpect(status().isServiceUnavailable())
                 .andReturn().getResponse().getContentAsString();
         String traceId = json.readTree(body).path("trace_id").asText();

@@ -1,5 +1,7 @@
 package com.example.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -33,6 +35,7 @@ public class InventoryProductCreateRequest {
     @DecimalMin("0")
     @Digits(integer = 16, fraction = 3)
     private BigDecimal minimumStock = BigDecimal.ZERO;
-    @NotNull
-    private Boolean showInMarket = false;
+    // Maydon yuborilmasa, mavjud kartaning sotuv holati saqlanadi.
+    @JsonSetter(nulls = Nulls.FAIL)
+    private Boolean showInMarket;
 }

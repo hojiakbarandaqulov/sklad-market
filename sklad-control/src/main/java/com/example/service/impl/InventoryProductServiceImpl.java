@@ -126,10 +126,11 @@ public class InventoryProductServiceImpl implements InventoryProductService {
                 operations.saveAndFlush(operation);
             }
         }
-        Long remoteId = product.getCatalogCardId();
-        // Yakuniy ko'rinishni faqat lokal yozuvlar tayyor bo'lgandan keyin o'zgartiramiz.
-        card = remote("visibility", () -> client.visibility(remoteId, request.getShowInMarket(), language.name()), language);
-        validateCard("visibility", card, product.getCompanyId(), remoteId, language);
+        Boolean showInMarket = request.getShowInMarket();
+        // Qoldiq yozilgach, faqat sotuvchi yuborgan ko'rinishni qo'llaymiz.
+        if (showInMarket != null) {
+            card = changeVisibility(product, showInMarket, language);
+        }
         return dto(product, card, stocks.forProducts(List.of(productId)));
     }
 
@@ -217,18 +218,16 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         if (request.getProduct() == null && request.getShowInMarket() == null)
             throw new AppBadException(messages.getMessage("warehouse.patch.empty", language));
         JsonNode card = card(product, language);
-        String responseOperation = "cards";
         if (request.getProduct() != null) {
             if (!product.getCompanyId().equals(request.getProduct().getCompanyId()))
                 throw new AppBadException(messages.getMessage("control.product.company", language));
             card = remote("update", () -> client.update(product.getCatalogCardId(), request.getProduct(), language.name()), language);
-            responseOperation = "update";
+            validateCard("update", card, product.getCompanyId(), product.getCatalogCardId(), language);
         }
-        if (request.getShowInMarket() != null) {
-            card = remote("visibility", () -> client.visibility(product.getCatalogCardId(), request.getShowInMarket(), language.name()), language);
-            responseOperation = "visibility";
+        Boolean showInMarket = request.getShowInMarket();
+        if (showInMarket != null) {
+            card = changeVisibility(product, showInMarket, language);
         }
-        validateCard(responseOperation, card, product.getCompanyId(), product.getCatalogCardId(), language);
         product.setModifiedBy(actor(language));
         products.saveAndFlush(product);
         return dto(product, card, stocks.forProducts(List.of(id)));
@@ -323,6 +322,21 @@ public class InventoryProductServiceImpl implements InventoryProductService {
             throw new AppBadException(messages.getMessage("control.product.card.missing", language));
         validateCard("cards", result.get(0), companyId, id, language);
         return result.get(0);
+    }
+
+    private JsonNode changeVisibility(InventoryProduct product, boolean visible, AppLanguage language) {
+        Long cardId = product.getCatalogCardId();
+        JsonNode card = remote("visibility", () -> client.visibility(cardId, visible, language.name()), language);
+        validateCard("visibility", card, product.getCompanyId(), cardId, language);
+
+        if (visible) {
+            boolean approved = "APPROVED".equals(card.path("status").asText());
+            JsonNode active = card.path("isActive");
+            if (!approved || !active.isBoolean() || !active.booleanValue()) {
+                throw unavailable("visibility", "product was not approved and activated", language);
+            }
+        }
+        return card;
     }
 
     private void validateCard(String operation, JsonNode card, Long companyId, Long id, AppLanguage language) {
