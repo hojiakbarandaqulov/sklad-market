@@ -196,7 +196,7 @@ public class ProductServiceImpl implements ProductService {
             if (restricted) {
                 throw new AppBadException(messageService.getMessage("product.control.rejected", language));
             }
-            product.setModerationStatus(ProductModerationStatus.APPROVED);
+            product.setModerationStatus(ProductModerationStatus.PENDING);
         } else if (!blocked && !restricted) {
             product.setModerationStatus(ProductModerationStatus.ARCHIVED);
         }

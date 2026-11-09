@@ -96,14 +96,14 @@ class ControlProductIntegrationTest {
         assertThat(response.getStatus()).isEqualTo(ProductModerationStatus.ARCHIVED);
         assertThat(response.getSlug()).startsWith("control-");
     }
-    @Test void showingAnArchivedControlProductApprovesAndIndexesIt() {
+    @Test void showingAnArchivedControlProductSubmitsItForModeration() {
         product.setModerationStatus(ProductModerationStatus.ARCHIVED);
         when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
         when(repository.saveAndFlush(any())).thenAnswer(call -> call.getArgument(0));
         var result=service.visibilityForControl(100L,true,AppLanguage.UZ);
         assertThat(result.getIsActive()).isTrue();
-        assertThat(result.getStatus()).isEqualTo(ProductModerationStatus.APPROVED);
-        verify(search).index(argThat(document -> "APPROVED".equals(document.getModerationStatus())));
+        assertThat(result.getStatus()).isEqualTo(ProductModerationStatus.PENDING);
+        verify(search).index(argThat(document -> "PENDING".equals(document.getModerationStatus())));
     }
 
     @Test void hidingRejectedCardPreservesModerationRestriction() {

@@ -252,8 +252,9 @@ public class OrderSaleService {
                 request.buyerName().strip(), request.buyerPhone(), request.deliveryMethod(),
                 request.deliveryMethod() == SaleRequest.DeliveryMethod.DELIVERY ? request.deliveryAddress() : null,
                 request.paymentMethod(), request.paymentMethod() == SaleRequest.PaymentMethod.CREDIT ? "UNPAID" : "DECLARED_PAID",
-                customer == null ? null : customer.id(), customer == null ? null : customer.contractNumber(), due, request.attachmentId(),
-                total, clock.instant(), snapshots, companyName(order.getCompanyId()));
+                customer == null ? null : customer.id(), companyName(order.getCompanyId()),
+                customer == null ? null : customer.contractNumber(), due, request.attachmentId(),
+                total, clock.instant(), snapshots);
     }
 
     private String companyName(Long companyId) {

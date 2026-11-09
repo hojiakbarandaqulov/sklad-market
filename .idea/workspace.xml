@@ -8,10 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="notification service yml config fix">
-      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/SaleAttachmentInternalController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/test/java/org/example/controller/SaleAttachmentInternalControllerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/test/java/org/example/fileservice/FileServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/file-service/src/test/java/org/example/utils/ContractFileTypeValidatorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/SaleRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/SaleRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderSaleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderSaleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/test/java/org/example/service/impl/ControlProductIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/test/java/org/example/service/impl/ControlProductIntegrationTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

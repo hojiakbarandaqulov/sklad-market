@@ -330,10 +330,10 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         validateCard("visibility", card, product.getCompanyId(), cardId, language);
 
         if (visible) {
-            boolean approved = "APPROVED".equals(card.path("status").asText());
+            boolean pending = "PENDING".equals(card.path("status").asText());
             JsonNode active = card.path("isActive");
-            if (!approved || !active.isBoolean() || !active.booleanValue()) {
-                throw unavailable("visibility", "product was not approved and activated", language);
+            if (!pending || !active.isBoolean() || !active.booleanValue()) {
+                throw unavailable("visibility", "product was not submitted for moderation", language);
             }
         }
         return card;

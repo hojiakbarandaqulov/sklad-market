@@ -67,7 +67,7 @@ class InventoryProductCrudTest {
         when(cards.cards(eq(1L),anyList(),anyString())).thenReturn(ApiResponse.successResponse(List.of(card)));
         when(cards.visibility(eq(100L),anyBoolean(),anyString())).thenReturn(ApiResponse.successResponse(card));
         JsonNode publishedCard = json.readTree(
-                "{\"id\":100,\"companyId\":1,\"status\":\"APPROVED\",\"isActive\":true}");
+                "{\"id\":100,\"companyId\":1,\"status\":\"PENDING\",\"isActive\":true}");
         when(cards.visibility(eq(100L),eq(true),anyString())).thenReturn(ApiResponse.successResponse(publishedCard));
         when(cards.create(any(),anyString(),anyBoolean(),anyString())).thenReturn(ApiResponse.successResponse(card));
         when(cards.update(anyLong(),any(),anyString())).thenReturn(ApiResponse.successResponse(card));
@@ -153,7 +153,7 @@ class InventoryProductCrudTest {
         mvc.perform(post("/api/v1/control/products").header("Authorization", "Bearer seller")
                 .contentType("application/json").content(withMarketVisibility(true)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.product.status").value("APPROVED"))
+                .andExpect(jsonPath("$.data.product.status").value("PENDING"))
                 .andExpect(jsonPath("$.data.product.isActive").value(true));
         verify(cards).visibility(100L, true, "UZ");
     }
