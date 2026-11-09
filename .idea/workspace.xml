@@ -8,10 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="notification service yml config fix">
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderSaleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderSaleService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/main/java/org/example/controller/SaleAttachmentInternalController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/test/java/org/example/controller/SaleAttachmentInternalControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/test/java/org/example/fileservice/FileServiceApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/file-service/src/test/java/org/example/utils/ContractFileTypeValidatorTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
