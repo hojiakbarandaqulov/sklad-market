@@ -171,7 +171,8 @@ public class ProductServiceImpl implements ProductService {
         product.setRetail(request.getRetail());
         product.setPhone(request.getPhone());
         // Tahrirlangan tasdiqlangan karta yana moderatsiyadan o'tadi.
-        if (product.getModerationStatus() == ProductModerationStatus.APPROVED)
+        if (product.getModerationStatus() == ProductModerationStatus.APPROVED
+                && Boolean.TRUE.equals(product.getIsActive()))
             product.setModerationStatus(ProductModerationStatus.PENDING);
         Product saved = productRepository.saveAndFlush(product);
         productSearchService.index(toDocument(saved));
@@ -185,13 +186,22 @@ public class ProductServiceImpl implements ProductService {
         // APPROVED + inactive — administrator bloklagan holat; sotuvchi uni qayta yoqa olmaydi.
         boolean blocked = product.getModerationStatus() == ProductModerationStatus.APPROVED
                 && !Boolean.TRUE.equals(product.getIsActive());
-        if (visible && blocked)
-            throw new AppBadException(messageService.getMessage("product.control.blocked", language));
+        // Eski oqim rad etilgan kartani arxivlagan bo'lsa ham, moderatsiya sababi saqlangan.
+        boolean restricted = product.getModerationStatus() == ProductModerationStatus.REJECTED
+                || StringUtils.hasText(product.getRejectReason());
+        if (visible) {
+            if (blocked) {
+                throw new AppBadException(messageService.getMessage("product.control.blocked", language));
+            }
+            if (restricted) {
+                throw new AppBadException(messageService.getMessage("product.control.rejected", language));
+            }
+            product.setModerationStatus(ProductModerationStatus.APPROVED);
+        } else if (!blocked && !restricted) {
+            product.setModerationStatus(ProductModerationStatus.ARCHIVED);
+        }
         product.setIsActive(visible);
-        if (!visible && !blocked) product.setModerationStatus(ProductModerationStatus.ARCHIVED);
-        // Arxivdan qaytish APPROVED bermaydi: qayta moderatsiya talab qilinadi.
-        if (visible && product.getModerationStatus() == ProductModerationStatus.ARCHIVED)
-            product.setModerationStatus(ProductModerationStatus.PENDING);
+
         Product saved = productRepository.saveAndFlush(product);
         productSearchService.index(toDocument(saved));
         return toResponse(saved);
@@ -391,7 +401,8 @@ public class ProductServiceImpl implements ProductService {
         applyCommonFields(product, request, language);
         product.setSlug(generateUniqueSlug(request.getName()));
 
-        if (product.getModerationStatus() == ProductModerationStatus.APPROVED) {
+        if (product.getModerationStatus() == ProductModerationStatus.APPROVED
+                && Boolean.TRUE.equals(product.getIsActive())) {
             product.setModerationStatus(ProductModerationStatus.PENDING);
         }
         Product save = productRepository.save(product);

@@ -60,8 +60,10 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         warehouseService.get(request.getWarehouseId(), language);
         Warehouse warehouse = warehouses.lockPresent(request.getWarehouseId()).orElseThrow(() -> new AppNotFoundException(messages.getMessage("control.product.missing", language)));
 
-        if (!warehouse.getCompanyId().equals(request.getCompanyId())) throw new AppBadException(messages.getMessage("control.product.company", language));
-        if (warehouse.getStatus() != WarehouseStatus.ACTIVE) throw new AppConflictException(messages.getMessage("control.warehouse.inactive", language));
+        if (!warehouse.getCompanyId().equals(request.getCompanyId()))
+            throw new AppBadException(messages.getMessage("control.product.company", language));
+        if (warehouse.getStatus() != WarehouseStatus.ACTIVE)
+            throw new AppConflictException(messages.getMessage("control.warehouse.inactive", language));
         if ((request.getProductId() == null) == (request.getProduct() == null))
             throw new AppBadException(messages.getMessage("control.product.card.required", language));
         if (request.getProduct() != null && !request.getCompanyId().equals(request.getProduct().getCompanyId()))
@@ -136,7 +138,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         authorizeCompany(filter.getCompanyId(), language);
         if (filter.getWarehouseId() != null) {
             WarehouseDTO warehouse = warehouseService.get(filter.getWarehouseId(), language);
-            if (!warehouse.getCompanyId().equals(filter.getCompanyId())) throw new AppBadException(messages.getMessage("control.product.company", language));
+            if (!warehouse.getCompanyId().equals(filter.getCompanyId()))
+                throw new AppBadException(messages.getMessage("control.product.company", language));
         }
         Specification<InventoryProduct> spec = (root, query, cb) -> cb.and(cb.equal(root.get("companyId"), filter.getCompanyId()), cb.isFalse(root.get("deleted")));
         if (filter.getStatus() != null)
@@ -209,7 +212,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     @Transactional
     public InventoryProductDTO update(Long id, InventoryProductUpdateRequest request, AppLanguage language) {
         InventoryProduct product = owned(id, true, language);
-        if (product.getStatus() != InventoryProductStatus.ACTIVE) throw new AppConflictException(messages.getMessage("control.product.archived", language));
+        if (product.getStatus() != InventoryProductStatus.ACTIVE)
+            throw new AppConflictException(messages.getMessage("control.product.archived", language));
         if (request.getProduct() == null && request.getShowInMarket() == null)
             throw new AppBadException(messages.getMessage("warehouse.patch.empty", language));
         JsonNode card = card(product, language);
@@ -234,7 +238,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     @Transactional
     public InventoryProductDTO archive(Long id, AppLanguage language) {
         InventoryProduct product = owned(id, true, language);
-        if (stocks.hasBalance(id)) throw new AppConflictException(messages.getMessage("control.product.balance", language));
+        if (stocks.hasBalance(id))
+            throw new AppConflictException(messages.getMessage("control.product.balance", language));
         JsonNode card = optionalCard(product, language);
         if (card != null) {
             card = remote("visibility", () -> client.visibility(product.getCatalogCardId(), false, language.name()), language);
@@ -303,7 +308,7 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     }
 
     private InventoryProductDTO readableDto(InventoryProduct product, JsonNode card,
-            List<WarehouseStock> balances, AppLanguage language) {
+                                            List<WarehouseStock> balances, AppLanguage language) {
         InventoryProductDTO result = dto(product, card, balances);
         if (card == null) {
             // Retain the inventory ID, SKU and balances; never restore or publish a missing card.
@@ -314,7 +319,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
 
     private JsonNode oneCard(Long companyId, Long id, AppLanguage language) {
         List<JsonNode> result = remote("cards", () -> client.cards(companyId, List.of(id), language.name()), language);
-        if (result.size() != 1) throw new AppBadException(messages.getMessage("control.product.card.missing", language));
+        if (result.size() != 1)
+            throw new AppBadException(messages.getMessage("control.product.card.missing", language));
         validateCard("cards", result.get(0), companyId, id, language);
         return result.get(0);
     }
@@ -331,7 +337,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         try {
             ApiResponse<T> response = action.get();
             if (response == null) throw unavailable(operation, "empty response", language);
-            if (!Boolean.TRUE.equals(response.getSuccess())) throw unavailable(operation, "unsuccessful response", language);
+            if (!Boolean.TRUE.equals(response.getSuccess()))
+                throw unavailable(operation, "unsuccessful response", language);
             if (response.getData() == null) throw unavailable(operation, "missing response data", language);
             return response.getData();
         } catch (FeignException e) {
@@ -339,7 +346,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
                 throw new AccessDeniedException(messages.getMessage("auth.access.denied", language));
             if (e.status() == 400 || e.status() == 404 || e.status() == 422)
                 throw new AppBadException(messages.getMessage("control.product.remote.invalid", language));
-            if (e.status() == 409) throw new AppConflictException(messages.getMessage("control.product.retry", language));
+            if (e.status() == 409)
+                throw new AppConflictException(messages.getMessage("control.product.retry", language));
             Throwable cause = e.getCause() == null ? e : e.getCause();
             // Feign xabarida so'rov URL'i yoki javob tanasi bo'lishi mumkin. Faqat status va xato turini yozamiz.
             String status = e.status() < 0 ? "no HTTP response" : String.valueOf(e.status());
@@ -350,8 +358,6 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     private InventoryProductDTO dto(InventoryProduct product, JsonNode card, List<WarehouseStock> balances) {
         return InventoryProductDTO.builder().id(product.getId()).companyId(product.getCompanyId()).productId(product.getCatalogCardId()).sku(product.getSku()).status(product.getStatus()).product(card).catalogCardAvailable(card != null).stocks(balances.stream().map(s -> InventoryProductDTO.StockDTO.builder().warehouseId(s.getWarehouse().getId()).warehouseName(s.getWarehouse().getName()).onHand(s.getOnHand()).reserved(s.getReserved()).available(s.getAvailable()).minimumStock(s.getMinimumStock()).build()).toList()).build();
     }
-
-
 
 
     private AppServiceUnavailableException unavailable(String operation, String reason, AppLanguage language) {

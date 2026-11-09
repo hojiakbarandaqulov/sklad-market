@@ -96,13 +96,39 @@ class ControlProductIntegrationTest {
         assertThat(response.getStatus()).isEqualTo(ProductModerationStatus.ARCHIVED);
         assertThat(response.getSlug()).startsWith("control-");
     }
-    @Test void restoringVisibilityNeverApprovesAnArchivedProduct() {
+    @Test void showingAnArchivedControlProductApprovesAndIndexesIt() {
         product.setModerationStatus(ProductModerationStatus.ARCHIVED);
         when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
         when(repository.saveAndFlush(any())).thenAnswer(call -> call.getArgument(0));
         var result=service.visibilityForControl(100L,true,AppLanguage.UZ);
         assertThat(result.getIsActive()).isTrue();
-        assertThat(result.getStatus()).isEqualTo(ProductModerationStatus.PENDING);
+        assertThat(result.getStatus()).isEqualTo(ProductModerationStatus.APPROVED);
+        verify(search).index(argThat(document -> "APPROVED".equals(document.getModerationStatus())));
+    }
+
+    @Test void hidingRejectedCardPreservesModerationRestriction() {
+        product.setModerationStatus(ProductModerationStatus.REJECTED);
+        when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
+        when(repository.saveAndFlush(any())).thenReturn(product);
+        var hidden = service.visibilityForControl(100L, false, AppLanguage.UZ);
+        assertThat(hidden.getStatus()).isEqualTo(ProductModerationStatus.REJECTED);
+        assertThatThrownBy(() -> service.visibilityForControl(100L, true, AppLanguage.UZ))
+                .isInstanceOf(AppBadException.class);
+        verify(repository).saveAndFlush(product);
+    }
+
+    @Test void editingBlockedCardPreservesItsBlock() {
+        product.setModerationStatus(ProductModerationStatus.APPROVED);
+        product.setIsActive(false);
+        when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
+        when(repository.saveAndFlush(any())).thenReturn(product);
+        var category = new CategoryValidationResponse();
+        category.setExists(true);
+        category.setActive(true);
+        when(categories.validate(5L)).thenReturn(category);
+        service.updateForControl(100L, request(), AppLanguage.UZ);
+        assertThatThrownBy(() -> service.visibilityForControl(100L, true, AppLanguage.UZ))
+                .isInstanceOf(AppBadException.class);
     }
     @Test void controlUpdateCannotMoveCardToAnotherCompany() {
         when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
