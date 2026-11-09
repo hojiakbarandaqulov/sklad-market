@@ -10,7 +10,8 @@ public record InvoiceResponse(String number, Long orderId, Long companyId, Long 
                               SaleRequest.DeliveryMethod deliveryMethod, String deliveryAddress,
                               SaleRequest.PaymentMethod paymentMethod, String paymentStatus, Long customerId,
                               String contractNumber, LocalDate paymentDueDate, String attachmentId,
-                              BigDecimal totalAmount, Instant issuedAt, List<Item> items) {
+                              BigDecimal totalAmount, Instant issuedAt, List<Item> items,
+                              @lombok.With String companyName) {
     public record Item(Long productId, String productName, BigDecimal quantity,
                        BigDecimal unitPrice, BigDecimal lineAmount) {
     }

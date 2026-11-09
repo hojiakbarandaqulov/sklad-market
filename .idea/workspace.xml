@@ -7,11 +7,11 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="sklad control module add&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/product/InventoryProductCreateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/product/InventoryProductCreateRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" afterDir="false" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="notification service yml config fix">
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/client/CompanyClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderSaleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderSaleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1124,7 +1124,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="company branch finish commit" />
     <MESSAGE value="chat service bug" />
     <MESSAGE value="company service bug" />
     <MESSAGE value="product service bug" />
@@ -1149,7 +1148,8 @@
     <MESSAGE value="vacancy moderation&#10;&#10;Signed-off-by: User &lt;hojiakbarandaqulov5@gmail.com&gt;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;" />
     <MESSAGE value="sklad control module add" />
     <MESSAGE value="sklad control module add&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="sklad control module add&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;" />
+    <MESSAGE value="notification service yml config fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="notification service yml config fix" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

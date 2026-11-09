@@ -125,7 +125,11 @@ public class OrderSaleService {
         authorized(id, false, language);
         OrderInvoice invoice = invoices.findById(id).filter(i -> "ISSUED".equals(i.getStatus()))
                 .orElseThrow(() -> new AppNotFoundException(messageService.getMessage("sale.invoice.missing", language)));
-        return read(invoice.getPayload());
+        InvoiceResponse response = read(invoice.getPayload());
+        if (response.companyName() == null || response.companyName().isBlank()) {
+            return response.withCompanyName(companyName(response.companyId()));
+        }
+        return response;
     }
 
     // Invoked on the caller's retry and by the recovery job. No caller identity is
@@ -249,7 +253,20 @@ public class OrderSaleService {
                 request.deliveryMethod() == SaleRequest.DeliveryMethod.DELIVERY ? request.deliveryAddress() : null,
                 request.paymentMethod(), request.paymentMethod() == SaleRequest.PaymentMethod.CREDIT ? "UNPAID" : "DECLARED_PAID",
                 customer == null ? null : customer.id(), customer == null ? null : customer.contractNumber(), due, request.attachmentId(),
-                total, clock.instant(), snapshots);
+                total, clock.instant(), snapshots, companyName(order.getCompanyId()));
+    }
+
+    private String companyName(Long companyId) {
+        try {
+            CompanyClient.Summary company = companies.summary(companyId);
+            return company != null && companyId.equals(company.id()) ? company.name() : null;
+        } catch (FeignException ex) {
+            log.warn("Invoice company lookup failed, companyId={}, status={}", companyId, ex.status());
+            return null;
+        } catch (AppServiceUnavailableException ex) {
+            log.warn("Invoice company lookup unavailable, companyId={}", companyId);
+            return null;
+        }
     }
 
     private SaleCustomerClient.Customer customer(Long id, Long companyId, String auth, AppLanguage language) {

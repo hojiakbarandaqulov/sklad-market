@@ -303,7 +303,9 @@ class OrderApiTest {
         assertThat(data(call(get(root(id)+"/checkout"),"seller",200)).path("availability").get(0).path("maxSaleQuantity").asInt()).isEqualTo(7);
         when(control.complete(eq(id),any(), anyString())).thenAnswer(c -> { remoteStates.put(id,"COMMITTED"); return reservation(id); });
         String sale=salePayload("sale-1");
+        when(companies.summary(1L)).thenReturn(new CompanyClient.Summary(1L, "METAL SYSTEM"));
         var invoice=data(call(post(root(id)+"/complete-sale").content(sale),"seller",200));
+        assertThat(invoice.path("companyName").asText()).isEqualTo("METAL SYSTEM");
         assertThat(invoice.path("totalAmount").decimalValue()).isEqualByComparingTo("15000");
         call(post(root(id)+"/complete-sale").content(sale),"seller",200);
         verify(control,times(1)).complete(eq(id),any(), anyString());

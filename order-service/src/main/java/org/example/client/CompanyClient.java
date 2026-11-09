@@ -8,6 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "company-service")
 public interface CompanyClient {
 
+    @GetMapping("/internal/companies/{id}/summary")
+    Summary summary(@PathVariable("id") Long id);
+
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties(ignoreUnknown = true)
+    record Summary(Long id, String name) {}
+
     @GetMapping("/internal/companies/{id}/ownership-check")
     Ownership ownership(@PathVariable Long id, @RequestParam Long sellerId);
 
