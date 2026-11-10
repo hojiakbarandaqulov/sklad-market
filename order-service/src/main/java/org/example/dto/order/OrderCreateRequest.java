@@ -28,6 +28,12 @@ public record OrderCreateRequest(
         @Size(max = 2000)
         String deliveryAddress,
 
+        @Schema(description = "Geografik uzunlik, -180 dan 180 gacha", example = "69.240073", requiredMode = Schema.RequiredMode.REQUIRED)
+        BigDecimal longitude,
+
+        @Schema(description = "Geografik kenglik, -90 dan 90 gacha", example = "41.299496", requiredMode = Schema.RequiredMode.REQUIRED)
+        BigDecimal latitude,
+
         @Schema(description = "Buyurtmaga izoh, ixtiyoriy", example = "Yetkazishdan oldin qo'ng'iroq qiling")
         @Size(max = 2000)
         String note,

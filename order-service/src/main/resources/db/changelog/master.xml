@@ -41,4 +41,5 @@
         <rollback><dropTable tableName="market_order_items"/><dropTable tableName="market_orders"/></rollback>
     </changeSet>
     <include file="002-sale-workflow.xml" relativeToChangelogFile="true"/>
+    <include file="003-order-coordinates.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

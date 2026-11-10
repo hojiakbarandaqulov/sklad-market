@@ -31,6 +31,12 @@ public final class OrderRequestUtils {
         appendText(requestContent, normalizeText(request.deliveryAddress()));
         appendText(requestContent, normalizeText(request.note()));
 
+        if (request.longitude() != null && request.latitude() != null) {
+            requestContent.append("coordinates;");
+            appendText(requestContent, request.longitude().stripTrailingZeros().toPlainString());
+            appendText(requestContent, request.latitude().stripTrailingZeros().toPlainString());
+        }
+
         List<OrderCreateRequest.Item> sortedItems = new ArrayList<>(request.items());
         sortedItems.sort(Comparator.comparing(OrderCreateRequest.Item::productId));
 

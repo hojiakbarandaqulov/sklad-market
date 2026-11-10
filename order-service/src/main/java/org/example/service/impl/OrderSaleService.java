@@ -16,6 +16,7 @@ import org.example.exp.AppServiceUnavailableException;
 import org.example.exp.OrderException;
 import org.example.repository.*;
 import org.example.utils.SpringSecurityUtil;
+import org.example.utils.OrderRequestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -177,7 +178,12 @@ public class OrderSaleService {
             order.setStatus(OrderStatus.SHIPPED);
             order.setShippedAt(clock.instant());
             order.setUpdatedAt(clock.instant());
-            order.setDeliveryAddress(invoice.deliveryAddress());
+            String deliveryAddress = OrderRequestUtils.normalizeText(invoice.deliveryAddress());
+            if (!Objects.equals(order.getDeliveryAddress(), deliveryAddress) || deliveryAddress == null) {
+                order.setLongitude(null);
+                order.setLatitude(null);
+            }
+            order.setDeliveryAddress(deliveryAddress);
             plan.setStatus("ISSUED");
             return invoice;
         });

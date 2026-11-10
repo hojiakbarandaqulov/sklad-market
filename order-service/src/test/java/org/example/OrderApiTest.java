@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.*;
 import feign.*;
 import org.example.client.*;
 import org.example.enums.OrderStatus;
+import org.example.entity.Order;
 import org.example.repository.OrderRepository;
 import org.example.service.OrderService;
 import org.junit.jupiter.api.*;
@@ -79,6 +80,11 @@ class OrderApiTest {
         var data = data(call(post("/api/v1/orders").content(payload("new", "2.125")), "buyer", 200));
         assertThat(data.path("status").asText()).isEqualTo("RESERVED");
         assertThat(data.path("buyerId").asLong()).isEqualTo(7);
+        Order savedOrder = orders.findById(data.path("id").asLong()).orElseThrow();
+        assertThat(savedOrder.getLongitude()).isEqualByComparingTo("69.240073");
+        assertThat(savedOrder.getLatitude()).isEqualByComparingTo("41.299496");
+        assertThat(data.path("longitude").decimalValue()).isEqualByComparingTo("69.240073");
+        assertThat(data.path("latitude").decimalValue()).isEqualByComparingTo("41.299496");
         assertThat(data.path("totalAmount").decimalValue()).isEqualByComparingTo("26562.765625");
         assertThat(data.path("items").get(0).path("unitPrice").decimalValue()).isEqualByComparingTo("12500.125");
         verify(control).reserve(eq(data.path("id").asLong()), argThat(r -> r.companyId().equals(1L)
@@ -94,6 +100,15 @@ class OrderApiTest {
         verify(products, times(1)).get(100L);
         verify(control, times(1)).reserve(eq(id), any(), anyString());
         call(post("/api/v1/orders").content(payload("retry", "3")), "buyer", 409);
+        call(post("/api/v1/orders").content(payload("retry", "2").replace("69.240073", "69.240074")), "buyer", 409);
+    }
+
+    @Test void createRejectsMissingOrOutOfRangeCoordinates() throws Exception {
+        String request = payload("coordinates", "2");
+        call(post("/api/v1/orders").content(request.replace("69.240073", "null")), "buyer", 400);
+        call(post("/api/v1/orders").content(request.replace("41.299496", "90.0000001")), "buyer", 400);
+        call(post("/api/v1/orders").content(request.replace("69.240073", "69.24007301")), "buyer", 400);
+        assertThat(orders.count()).isZero();
     }
 
     @Test void sellerCanShipAndRetryButBuyerAndOtherSellerCannot() throws Exception {
@@ -251,10 +266,12 @@ class OrderApiTest {
     }
     private String payload(String key, String qty) throws Exception {
         return json.writeValueAsString(Map.of("companyId", 1, "idempotencyKey", key, "deliveryAddress", "Toshkent",
+                "longitude", new BigDecimal("69.240073"), "latitude", new BigDecimal("41.299496"),
                 "items", List.of(Map.of("productId", 100, "quantity", new BigDecimal(qty)))));
     }
     private String twoItems(String key) throws Exception {
-        return json.writeValueAsString(Map.of("companyId", 1, "idempotencyKey", key, "items", List.of(
+        return json.writeValueAsString(Map.of("companyId", 1, "idempotencyKey", key,
+                "longitude", new BigDecimal("69.240073"), "latitude", new BigDecimal("41.299496"), "items", List.of(
                 Map.of("productId", 100, "quantity", 2), Map.of("productId", 101, "quantity", 2))));
     }
     @Test void dependencyForbiddenStays503AndMessagesFollowLanguage() throws Exception {

@@ -15,6 +15,8 @@ public record OrderResponse(
         String currency,
         BigDecimal totalAmount,
         String deliveryAddress,
+        BigDecimal longitude,
+        BigDecimal latitude,
         String note,
         Long reservationId,
         Instant expiresAt,

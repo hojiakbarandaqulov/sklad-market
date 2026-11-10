@@ -100,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse create(OrderCreateRequest request, AppLanguage language) {
         Long buyerId = SpringSecurityUtil.getProfileId();
+        validateDeliveryCoordinates(request.longitude(), request.latitude(), language);
         String idempotencyKey = request.idempotencyKey().strip();
         String requestHash = OrderRequestUtils.createRequestHash(request);
 
@@ -113,6 +114,18 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return response;
+    }
+
+    private void validateDeliveryCoordinates(BigDecimal longitude, BigDecimal latitude, AppLanguage language) {
+        if (longitude == null || latitude == null) {
+            throw new AppBadException(messageService.getMessage("order.coordinates.required", language));
+        }
+        if (longitude.abs().compareTo(BigDecimal.valueOf(180)) > 0
+                || latitude.abs().compareTo(BigDecimal.valueOf(90)) > 0
+                || longitude.stripTrailingZeros().scale() > 7
+                || latitude.stripTrailingZeros().scale() > 7) {
+            throw new AppBadException(messageService.getMessage("order.coordinates.invalid", language));
+        }
     }
 
     @Override
@@ -245,6 +258,8 @@ public class OrderServiceImpl implements OrderService {
         order.setRequestHash(requestHash);
         order.setStatus(OrderStatus.RESERVING);
         order.setDeliveryAddress(OrderRequestUtils.normalizeText(request.deliveryAddress()));
+        order.setLongitude(request.longitude());
+        order.setLatitude(request.latitude());
         order.setNote(OrderRequestUtils.normalizeText(request.note()));
         order.setCreatedAt(createdAt);
         order.setUpdatedAt(createdAt);
@@ -652,7 +667,7 @@ public class OrderServiceImpl implements OrderService {
         }
         if (!accepted.keySet().equals(originals.keySet())) throw new AppConflictException(messageService.getMessage("sale.quantity.invalid", language));
         OrderCreateRequest create = new OrderCreateRequest(lead.companyId(), "lead:" + leadId,
-                lead.deliveryAddress(), lead.comment(), request.items());
+                lead.deliveryAddress(), null, null, lead.comment(), request.items());
         String hash = OrderRequestUtils.createRequestHash(create);
         Optional<Order> existing = orderRepository.findByLeadId(leadId);
         Long id;

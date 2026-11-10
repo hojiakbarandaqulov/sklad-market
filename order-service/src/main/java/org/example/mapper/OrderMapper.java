@@ -31,6 +31,8 @@ public class OrderMapper {
                 order.getCurrency(),
                 order.getTotalAmount(),
                 order.getDeliveryAddress(),
+                order.getLongitude(),
+                order.getLatitude(),
                 order.getNote(),
                 order.getReservationId(),
                 order.getExpiresAt(),

@@ -50,6 +50,12 @@ public class Order {
     @Column(length = 2000)
     private String deliveryAddress;
 
+    @Column(precision = 10, scale = 7)
+    private BigDecimal longitude;
+
+    @Column(precision = 10, scale = 7)
+    private BigDecimal latitude;
+
     @Column(length = 2000)
     private String note;
 
