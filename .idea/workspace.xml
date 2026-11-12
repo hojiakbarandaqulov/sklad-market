@@ -8,8 +8,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="notification service yml config fix">
+      <change afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/config/internal/ProductClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/CategoryCountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/TopCategoryResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/file-service/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/controller/CategoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/ApiResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/dto/ApiResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/category-service/src/main/java/org/example/service/impl/CategoryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/CartCheckoutRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/CartCheckoutRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/repository/CartItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/repository/CartItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/CartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/CartServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/LeadOrderInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/LeadOrderInternalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/OrderSaleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/OrderSaleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/InvoiceResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/SaleRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/SaleRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderSaleService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/job/SaleRecoveryJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/job/SaleRecoveryJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/utils/OrderRequestUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/utils/OrderRequestUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/UpdateProductRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,8 +140,8 @@
         <option value="Dockerfile" />
         <option value="Enum" />
         <option value="Record" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -162,6 +184,69 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0001566682003862" />
+      <entry key="S2" value="1.1119944226841172" />
+      <entry key="S5" value="1.4430696892125277" />
+      <entry key="S10" value="1.808641622624344" />
+      <entry key="S30" value="2.452783469929331" />
+      <entry key="S60" value="3.0769568441834063" />
+      <entry key="M2" value="4.267298918565361" />
+      <entry key="M5" value="6.509752261037061" />
+      <entry key="M10" value="9.420967013579958" />
+      <entry key="M15" value="12.3750924545106" />
+      <entry key="M30" value="19.333940657469817" />
+      <entry key="H1" value="26.30568927107618" />
+      <entry key="H2" value="31.385080787802227" />
+      <entry key="H4" value="34.47227581239288" />
+      <entry key="D1" value="37.37869131500741" />
+      <entry key="W1" value="37.91038603534964" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="7.851885342831246E-69" />
+      <entry key="MS500" value="2.5181996679341916E-14" />
+      <entry key="S2" value="5.813197647298755E-4" />
+      <entry key="S5" value="0.07577506036302505" />
+      <entry key="S10" value="0.3882589565052788" />
+      <entry key="S30" value="1.2453527590784976" />
+      <entry key="S60" value="2.411588367381339" />
+      <entry key="M2" value="4.805049571003443" />
+      <entry key="M5" value="9.416411274873578" />
+      <entry key="M10" value="15.849488059549957" />
+      <entry key="M15" value="22.075340566089846" />
+      <entry key="M30" value="35.56890871848059" />
+      <entry key="H1" value="48.12989579710041" />
+      <entry key="H2" value="56.90728654621565" />
+      <entry key="H4" value="62.1261710810675" />
+      <entry key="D1" value="66.97188441850344" />
+      <entry key="W1" value="67.8518718347225" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.8888426811665702" />
+      <entry key="MS500" value="0.9768615481297732" />
+      <entry key="S2" value="1.1058781295260713" />
+      <entry key="S5" value="1.5028772262471048" />
+      <entry key="S10" value="2.1574118141793384" />
+      <entry key="S30" value="3.6516137813335527" />
+      <entry key="S60" value="5.440137252604518" />
+      <entry key="M2" value="9.021976102711223" />
+      <entry key="M5" value="15.884052413953423" />
+      <entry key="M10" value="25.231482833264266" />
+      <entry key="M15" value="34.41245891560469" />
+      <entry key="M30" value="54.87094806058445" />
+      <entry key="H1" value="74.41371689849645" />
+      <entry key="H2" value="88.27938959734817" />
+      <entry key="H4" value="96.59135454492686" />
+      <entry key="D1" value="104.34930070186766" />
+      <entry key="W1" value="105.76207331649599" />
+    </decayedShown>
+  </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
   </component>
@@ -223,6 +308,7 @@
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
@@ -279,11 +365,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.example.dto.category" />
       <recent name="org.example.service" />
       <recent name="com.example.dto.stockOperation" />
       <recent name="com.example.dto" />
       <recent name="org.example.repository" />
-      <recent name="com.example.dto.vacancy" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\JavaProject\Microservice\Skalad-market\order-service" />
@@ -299,11 +385,11 @@
       <recent name="D:\JavaProject\Microservice\Skalad-market\product-service\src\main\resources\db" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.dto" />
       <recent name="com.example.service" />
       <recent name="com.example.document" />
       <recent name="org.example.dto.event" />
       <recent name="com.example.dto.vacancy" />
-      <recent name="com.example.config.clent" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.sklad-jobs [build]">
