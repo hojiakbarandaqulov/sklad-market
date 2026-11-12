@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dto.LeadCreateRequest;
+import org.example.dto.LeadQuantityUpdateRequest;
 import org.example.dto.LeadResponse;
 import org.example.dto.LeadStatusUpdateRequest;
 import org.example.dto.PagedResponse;
@@ -16,6 +17,8 @@ public interface LeadService {
     PagedResponse<LeadResponse> getSellerLeads(Long companyId, LeadStatus status, LeadSource source, int page, int perPage, AppLanguage language);
 
     LeadResponse getById(Long id, AppLanguage language);
+
+    LeadResponse updateQuantities(Long id, LeadQuantityUpdateRequest request, AppLanguage language);
 
     Boolean cancel(Long id, AppLanguage language);
 

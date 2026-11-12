@@ -10,6 +10,8 @@ import org.example.enums.AppLanguage;
 import org.example.enums.LeadSource;
 import org.example.enums.LeadStatus;
 import org.example.exp.AppBadException;
+import org.example.exp.AppConflictException;
+import org.example.exp.AppNotFoundException;
 import org.example.mapper.LeadMapper;
 import org.example.repository.LeadItemRepository;
 import org.example.repository.LeadRepository;
@@ -19,9 +21,13 @@ import org.example.utils.SpringSecurityUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -146,6 +152,37 @@ public class LeadServiceImpl implements LeadService {
         lead.setStatus(request.getStatus());
         lead.setCloseReason(request.getCloseReason());
         return leadMapper.toResponse(leadRepository.save(lead));
+    }
+
+    @Override
+    @Transactional
+    public LeadResponse updateQuantities(Long id, LeadQuantityUpdateRequest request, AppLanguage language) {
+        Long buyerId = requireProfileId(language);
+        // Sotuvchi so'rovni qabul qilayotganda ham shu lead yozuvi bloklanadi.
+        Lead lead = leadRepository.lockPresent(id)
+                .orElseThrow(() -> new AppNotFoundException(messageService.getMessage("lead.not.found", language)));
+        if (!buyerId.equals(lead.getBuyerId())) {
+            throw new AccessDeniedException(messageService.getMessage("lead.forbidden", language));
+        }
+        if (lead.getAcceptedOrderId() != null
+                || !Set.of(LeadStatus.NEW, LeadStatus.VIEWED, LeadStatus.CONTACTED).contains(lead.getStatus())) {
+            throw new AppConflictException(messageService.getMessage("lead.quantity.edit.status", language));
+        }
+
+        List<LeadItem> items = leadItemRepository.findByLeadIdAndDeletedFalse(id);
+        Set<Long> updatedProductIds = new HashSet<>();
+        for (LeadQuantityUpdateRequest.Item update : request.items()) {
+            List<LeadItem> matching = items.stream()
+                    .filter(item -> update.productId().equals(item.getProductId()))
+                    .toList();
+            if (matching.size() != 1 || !updatedProductIds.add(update.productId())) {
+                throw new AppBadException(messageService.getMessage("lead.quantity.edit.items", language));
+            }
+            quantities.validate(client.getById(update.productId()), update.quantity(), language);
+            matching.getFirst().setQuantity(update.quantity());
+        }
+
+        return leadMapper.toResponse(lead);
     }
 
     private Lead findLead(Long id, AppLanguage language) {

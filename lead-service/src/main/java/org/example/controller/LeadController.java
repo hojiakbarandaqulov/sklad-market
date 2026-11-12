@@ -40,6 +40,14 @@ public class LeadController {
         return ApiResponse.successResponse(leadService.getById(id, language));
     }
 
+    @PatchMapping("/{id}/items")
+    @PreAuthorize("hasRole('BUYER')")
+    public ApiResponse<LeadResponse> updateQuantities(@PathVariable Long id,
+            @Valid @RequestBody LeadQuantityUpdateRequest request,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(leadService.updateQuantities(id, request, language));
+    }
+
     @DeleteMapping("cancel/{id}")
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     public ApiResponse<Boolean> cancel(@PathVariable Long id,
