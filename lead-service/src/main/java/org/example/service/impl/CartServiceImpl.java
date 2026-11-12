@@ -59,6 +59,10 @@ public class CartServiceImpl implements CartService {
         ProductInternalSummaryResponse product = productClient.getById(request.getProductId());
         CompanyInternalSummaryResponse company = companyClient.getSummary(product.getCompanyId());
 
+        if (buyerId.equals(product.getSellerId())){
+            throw new AppBadException(messageService.getMessage("card.product.own", language));
+        }
+
         CartItem cartItem = cartItemRepository.findByBuyerIdAndProductIdAndDeletedFalse(buyerId, request.getProductId())
                 .orElseGet(CartItem::new);
 
