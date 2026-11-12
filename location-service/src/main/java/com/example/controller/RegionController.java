@@ -1,16 +1,16 @@
 package com.example.controller;
 
+import co.elastic.clients.elasticsearch.license.LicenseStatus;
+import com.example.dto.AddressSuggestion;
 import com.example.dto.ApiResponse;
 import com.example.dto.RegionResponse;
 import com.example.enums.AppLanguage;
+import com.example.service.AddressService;
 import com.example.service.RegionService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegionController {
 
     private final RegionService regionService;
+    private final AddressService addressService;
 
     @GetMapping
     public ApiResponse<PageImpl<RegionResponse>> getAll(
@@ -46,4 +49,11 @@ public class RegionController {
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(regionService.getById(id, language));
     }
+
+    @GetMapping("/search}")
+    public ApiResponse<List<AddressSuggestion>> regionSearch(
+            @RequestParam("q") String q) {
+        return ApiResponse.successResponse(addressService.regionSearch(q));
+    }
+
 }

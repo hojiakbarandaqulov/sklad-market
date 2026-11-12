@@ -1,20 +1,27 @@
 package com.example.service.impl;
 
+import com.example.document.RegionDocument;
+import com.example.dto.AddressSuggestion;
 import com.example.dto.RegionDTO;
 import com.example.dto.RegionResponse;
 import com.example.entity.Region;
 import com.example.enums.AppLanguage;
 import com.example.exp.AppBadException;
 import com.example.repository.RegionRepository;
+import com.example.service.RegionSearchService;
 import com.example.service.RegionService;
 import com.example.service.ResourceBundleService;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -25,6 +32,14 @@ public class RegionServiceImpl implements RegionService {
 
     private final RegionRepository regionRepository;
     private final ResourceBundleService messageService;
+    private final RegionSearchService regionSearchService;
+
+    private static final String ADDRESS_FILE = "uz-addresses/addresses.json";
+    private static final int MIN_QUERY_LENGTH = 3;
+    private static final int MAX_RESULTS = 5;
+
+    private final List<AddressSuggestion> addresses;
+
 
     @Override
     @Transactional
@@ -36,7 +51,9 @@ public class RegionServiceImpl implements RegionService {
 
         Region region = new Region();
         apply(region, request, code);
-        return toResponse(regionRepository.save(region), language);
+        Region saved = regionRepository.save(region);
+        regionSearchService.index(toDocument(saved));
+        return toResponse(saved, language);
     }
 
     @Override
@@ -49,7 +66,9 @@ public class RegionServiceImpl implements RegionService {
         }
 
         apply(region, request, code);
-        return toResponse(regionRepository.save(region), language);
+        Region saved = regionRepository.save(region);
+        regionSearchService.index(toDocument(saved));
+        return toResponse(saved, language);
     }
 
     @Override
@@ -80,10 +99,11 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public boolean existsByRegion(Long regionId) {
         Optional<Region> byIdAndDeletedFalse = regionRepository.findByIdAndDeletedFalse(regionId);
-        if (byIdAndDeletedFalse.isPresent()){
+        if (byIdAndDeletedFalse.isPresent()) {
             return true;
         }
         throw new AppBadException("region not fount");
+
     }
 
     private Region getActiveRegion(Long id, AppLanguage language) {
@@ -103,6 +123,18 @@ public class RegionServiceImpl implements RegionService {
 
     private String normalizeCode(String code) {
         return code.trim().toUpperCase(Locale.ROOT);
+    }
+
+    private RegionDocument toDocument(Region region) {
+        return RegionDocument.builder()
+                .id(region.getId().toString())
+                .code(region.getCode())
+                .nameUz(region.getNameUz())
+                .nameRu(region.getNameRu())
+                .nameEn(region.getNameEn())
+                .type(region.getType())
+                .sortOrder(region.getSortOrder())
+                .build();
     }
 
     private RegionResponse toResponse(Region region, AppLanguage language) {
