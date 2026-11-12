@@ -1,17 +1,17 @@
 package com.example.service.impl;
 
+import com.example.document.RegionDocument;
 import com.example.dto.RegionDTO;
 import com.example.dto.RegionResponse;
 import com.example.entity.Region;
 import com.example.enums.AppLanguage;
 import com.example.exp.AppBadException;
 import com.example.repository.RegionRepository;
+import com.example.service.RegionSearchService;
 import com.example.service.RegionService;
 import com.example.service.ResourceBundleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +25,7 @@ public class RegionServiceImpl implements RegionService {
 
     private final RegionRepository regionRepository;
     private final ResourceBundleService messageService;
+    private final RegionSearchService regionSearchService;
 
     @Override
     @Transactional
@@ -36,7 +37,9 @@ public class RegionServiceImpl implements RegionService {
 
         Region region = new Region();
         apply(region, request, code);
-        return toResponse(regionRepository.save(region), language);
+        Region saved = regionRepository.save(region);
+        regionSearchService.index(toDocument(saved));
+        return toResponse(saved, language);
     }
 
     @Override
@@ -49,7 +52,9 @@ public class RegionServiceImpl implements RegionService {
         }
 
         apply(region, request, code);
-        return toResponse(regionRepository.save(region), language);
+        Region saved = regionRepository.save(region);
+        regionSearchService.index(toDocument(saved));
+        return toResponse(saved, language);
     }
 
     @Override
@@ -86,6 +91,12 @@ public class RegionServiceImpl implements RegionService {
         throw new AppBadException("region not fount");
     }
 
+    @Override
+    public Page<RegionResponse> regionSearch(String q, Pageable pageable, AppLanguage language) {
+        Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.ASC, "sortOrder"));
+        return regionSearchService.search(q, pageable).map(region -> toResponse(region, language));
+    }
+
     private Region getActiveRegion(Long id, AppLanguage language) {
         return regionRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new AppBadException(
@@ -103,6 +114,18 @@ public class RegionServiceImpl implements RegionService {
 
     private String normalizeCode(String code) {
         return code.trim().toUpperCase(Locale.ROOT);
+    }
+
+    private RegionDocument toDocument(Region region) {
+        return RegionDocument.builder()
+                .id(region.getId().toString())
+                .code(region.getCode())
+                .nameUz(region.getNameUz())
+                .nameRu(region.getNameRu())
+                .nameEn(region.getNameEn())
+                .type(region.getType())
+                .sortOrder(region.getSortOrder())
+                .build();
     }
 
     private RegionResponse toResponse(Region region, AppLanguage language) {

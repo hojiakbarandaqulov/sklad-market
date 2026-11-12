@@ -7,10 +7,7 @@ import com.example.service.RegionService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,4 +43,13 @@ public class RegionController {
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(regionService.getById(id, language));
     }
+
+    @GetMapping("/search}")
+    public ApiResponse<Page<RegionResponse>> regionSearch(
+            @RequestParam("q") String q,
+            Pageable pageable,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(regionService.regionSearch(q, pageable, language));
+    }
+
 }

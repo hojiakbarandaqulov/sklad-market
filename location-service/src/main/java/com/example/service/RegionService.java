@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.RegionDTO;
 import com.example.dto.RegionResponse;
 import com.example.enums.AppLanguage;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,6 @@ public interface RegionService {
     void delete(Long id, AppLanguage language);
 
     boolean existsByRegion(Long regionId);
+
+    Page<RegionResponse> regionSearch(String q, Pageable pageable, AppLanguage language);
 }
