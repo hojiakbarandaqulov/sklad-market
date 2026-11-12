@@ -32,7 +32,7 @@ public class ProductResponse {
 
     private Boolean retail;
 
-    private Long min;
+    private Long minProduct;
 
     @JsonProperty("pickup_available")
     private Boolean pickupAvailable;

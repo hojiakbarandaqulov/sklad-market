@@ -3,6 +3,7 @@ package org.example.dto.product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.Currency;
@@ -38,6 +39,11 @@ public class UpdateProductRequest {
     private Boolean wholeSale=false;
 
     private Boolean retail=false;
+
+    @NotNull(message = "minProduct required")
+    @Positive
+    private Long minProduct;
+
 
     private BigDecimal price;
 

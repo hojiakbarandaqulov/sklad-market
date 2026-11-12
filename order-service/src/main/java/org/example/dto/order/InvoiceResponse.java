@@ -15,6 +15,8 @@ public record InvoiceResponse(String number,
                               String buyerPhone,
                               SaleRequest.DeliveryMethod deliveryMethod,
                               String deliveryAddress,
+                              BigDecimal longitude,
+                              BigDecimal latitude,
                               SaleRequest.PaymentMethod paymentMethod,
                               String paymentStatus,
                               Long customerId,
@@ -23,8 +25,6 @@ public record InvoiceResponse(String number,
                               LocalDate paymentDueDate,
                               String attachmentId,
                               BigDecimal totalAmount, Instant issuedAt, List<Item> items) {
-
-   
 
     public record Item(Long productId, String productName, BigDecimal quantity,
                        BigDecimal unitPrice, BigDecimal lineAmount) {

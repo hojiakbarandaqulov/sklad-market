@@ -3,13 +3,11 @@ package org.example.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.config.internal.FileClient;
-import org.example.dto.ApiResponse;
-import org.example.dto.CategoryTreeResponse;
+import org.example.config.internal.ProductClient;
+import org.example.dto.*;
 import org.example.dto.attach.AttachDto;
 import org.example.dto.attach.AttachInfoDto;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
-import org.example.dto.CategoryResponse;
-import org.example.dto.CategoryUpdateRequest;
 import org.example.dto.internal.CategoryInternalSummaryResponse;
 import org.example.dto.internal.CategoryInternalValidationResponse;
 import org.example.entity.Category;
@@ -26,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final org.example.service.CategorySearchService categorySearchService;
     private final FileClient fileClient;
+    private final ProductClient productClient;
     private final ModelMapper modelMapper;
     private final ResourceBundleService messageService;
 
@@ -204,6 +204,46 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<TopCategoryResponse> topCategory(Long limit, AppLanguage language) {
+        if (limit == null || limit < 1) {
+            throw new AppBadException("limit kamida 1 bo‘lishi kerak");
+        }
+        ApiResponse<List<CategoryCountResponse>> categoryCounts = productClient.getCategoryCounts();
+
+        Map<Long, Long> counts = categoryCounts.getData().stream()
+                .collect(Collectors.toMap(
+                        CategoryCountResponse::getCategoryId,
+                        CategoryCountResponse::getCount
+                ));
+
+
+        return getCategoryTree(language).stream()
+                .map(category -> {
+                    TopCategoryResponse dto = new TopCategoryResponse();
+                    dto.setId(category.getId());
+                    dto.setName(category.getName());
+                    dto.setSlug(category.getSlug());
+                    dto.setIconUrl(category.getIconUrl());
+                    dto.setProductCount(countProducts(category, counts));
+                    return dto;
+                })
+                .sorted(Comparator.comparingLong(TopCategoryResponse::getProductCount)
+                        .reversed())
+                .limit(limit)
+                .toList();
+    }
+
+    private long countProducts(CategoryTreeResponse category, Map<Long, Long> counts) {
+        long total = counts.getOrDefault(category.getId(), 0L);
+
+        for (CategoryTreeResponse child : category.getChildren()) {
+            total += countProducts(child, counts);
+        }
+
+        return total;
+    }
+
+    @Override
     public List<CategoryTreeResponse> getCategoryTree(AppLanguage language) {
         List<Category> categories = categoryRepository.findAllByIsActiveTrueOrderBySortOrderAsc();
 
@@ -254,6 +294,7 @@ public class CategoryServiceImpl implements CategoryService {
         return Stream.of(category.getNameUz(), category.getNameRu(), category.getNameEn(), category.getSlug())
                 .filter(value -> value != null && !value.isBlank()).findFirst().orElse("");
     }
+
     private CategoryResponse toCategoryResponse(Category category, AppLanguage language) {
         CategoryResponse response = new CategoryResponse();
         response.setId(category.getId());
@@ -270,6 +311,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         return response;
     }
+
     private Category saveAndIndex(Category category) {
         Category saved = categoryRepository.save(category);
         categorySearchService.index(saved);

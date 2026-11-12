@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
 import org.example.dto.order.*;
 import org.example.enums.AppLanguage;
-import org.example.service.impl.OrderSaleService;
+import org.example.service.OrderSaleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ public class OrderSaleController {
 
     @GetMapping("/{id}/checkout")
     @PreAuthorize("hasRole('SELLER')")
-    public ApiResponse<OrderSaleService.Checkout> checkout(@PathVariable Long id, @RequestParam(required = false) Long customerId,
+    public ApiResponse<CheckoutResponse> checkout(@PathVariable Long id, @RequestParam(required = false) Long customerId,
                                                            @RequestHeader("Authorization") String auth,
                                                            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(service.checkout(id, customerId, auth, language));

@@ -1,5 +1,7 @@
 package org.example.dto.order;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
@@ -9,7 +11,17 @@ import java.util.List;
 public record SaleRequest(@NotBlank @Size(max = 128) String idempotencyKey,
                           @NotNull PaymentMethod paymentMethod, @Positive Long customerId,
                           @NotBlank @Size(max = 120) String buyerName, @Size(max = 32) String buyerPhone,
-                          @NotNull DeliveryMethod deliveryMethod, @Size(max = 2000) String deliveryAddress,
+                          @NotNull DeliveryMethod deliveryMethod,
+                          @Size(max = 2000) String deliveryAddress,
+
+                          @JsonInclude(JsonInclude.Include.NON_NULL)
+                          @Schema(description = "Yetkazish nuqtasining geografik uzunligi. Latitude bilan birga yuboriladi.", example = "69.240073")
+                          BigDecimal longitude,
+
+                          @JsonInclude(JsonInclude.Include.NON_NULL)
+                          @Schema(description = "Yetkazish nuqtasining geografik kengligi. Longitude bilan birga yuboriladi.", example = "41.299496")
+                          BigDecimal latitude,
+
                           @Size(max = 255) String attachmentId,
                           @NotEmpty @Size(max = 100) List<@NotNull @Valid Item> items) {
     public enum PaymentMethod {CASH, CASHLESS, TRANSFER, CREDIT}

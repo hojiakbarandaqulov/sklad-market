@@ -1,5 +1,6 @@
 package org.example.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.clent.CompanyClient;
 import org.example.clent.ProductClient;
@@ -21,10 +22,7 @@ import org.example.service.ResourceBundleService;
 import org.example.utils.SpringSecurityUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -93,12 +91,14 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
+    @Transactional(rollbackOn = Exception.class)
     @Override
     public CartCheckoutResponse checkout(CartCheckoutRequest request, AppLanguage language) {
         Long buyerId = requireProfileId(language);
-        List<CartItem> items = getBuyerCartItems(language);
-        if (items.isEmpty()) {
-            throw new AppBadException(messageService.getMessage("cart.empty", language));
+        Set<Long> selectedIds=new LinkedHashSet<>(request.getCartItemIds());
+        List<CartItem> items = cartItemRepository.findAllByBuyerIdAndIdInAndDeletedFalse(buyerId,selectedIds);
+        if (items.size() != selectedIds.size()) {
+            throw new AppBadException(messageService.getMessage("cart.item.not.found", language));
         }
 
         Map<String, List<CartItem>> grouped = new LinkedHashMap<>();

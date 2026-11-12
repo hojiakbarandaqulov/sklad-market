@@ -338,11 +338,22 @@ class OrderApiTest {
         when(control.complete(eq(id),any(), anyString())).thenAnswer(c -> {
             remoteStates.put(id,"COMMITTED"); if(first.getAndSet(false)) throw failure(503); return reservation(id);
         });
-        call(post(root(id)+"/complete-sale").content(salePayload("lost-key")),"seller",503);
+        String sale = salePayload("lost-key").replace("\"deliveryMethod\":\"PICKUP\"",
+                "\"deliveryMethod\":\"DELIVERY\",\"buyerPhone\":\"+998901234567\","
+                        + "\"deliveryAddress\":\"Toshkent, Chilonzor\",\"longitude\":69.21,\"latitude\":41.28");
+        call(post(root(id) + "/complete-sale").content(sale.replace(",\"latitude\":41.28", "")), "seller", 400);
+        call(post(root(id) + "/complete-sale").content(sale.replace("41.28", "91")), "seller", 400);
+        call(post(root(id)+"/complete-sale").content(sale),"seller",503);
         assertThat(orders.findById(id).orElseThrow().getStatus()).isEqualTo(OrderStatus.FINALIZING);
         call(post(root(id)+"/ship"),"seller",409);
         call(post(root(id)+"/cancel"),"buyer",409);
-        call(post(root(id)+"/complete-sale").content(salePayload("lost-key")),"seller",200);
+        call(post(root(id) + "/complete-sale").content(sale.replace("69.21", "69.22")), "seller", 409);
+        JsonNode invoice = data(call(post(root(id) + "/complete-sale").content(sale.replace("69.21", "69.2100")), "seller", 200));
+        assertThat(invoice.path("longitude").decimalValue()).isEqualByComparingTo("69.21");
+        assertThat(invoice.path("latitude").decimalValue()).isEqualByComparingTo("41.28");
+        Order storedOrder = orders.findById(id).orElseThrow();
+        assertThat(storedOrder.getLongitude()).isEqualByComparingTo("69.21");
+        assertThat(storedOrder.getLatitude()).isEqualByComparingTo("41.28");
         verify(control,times(2)).complete(eq(id),any(), anyString());
         verify(control,never()).commit(eq(id),anyLong(), anyString());
     }

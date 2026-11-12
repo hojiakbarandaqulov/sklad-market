@@ -2,6 +2,7 @@ package org.example.utils;
 
 import org.example.dto.order.OrderCreateRequest;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,6 +22,13 @@ public final class OrderRequestUtils {
         }
 
         return value.strip();
+    }
+
+    public static boolean areCoordinatesValid(BigDecimal longitude, BigDecimal latitude) {
+        return longitude.abs().compareTo(BigDecimal.valueOf(180)) <= 0
+                && latitude.abs().compareTo(BigDecimal.valueOf(90)) <= 0
+                && longitude.stripTrailingZeros().scale() <= 7
+                && latitude.stripTrailingZeros().scale() <= 7;
     }
 
     public static String createRequestHash(OrderCreateRequest request) {

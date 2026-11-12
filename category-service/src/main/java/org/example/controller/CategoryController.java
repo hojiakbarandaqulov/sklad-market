@@ -1,12 +1,10 @@
 package org.example.controller;
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.dto.ApiResponse;
-import org.example.dto.CategoryTreeResponse;
+import org.example.dto.*;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
-import org.example.dto.CategoryResponse;
-import org.example.dto.CategoryUpdateRequest;
 import org.example.enums.AppLanguage;
 import org.example.service.CategoryService;
 import org.springframework.data.domain.Page;
@@ -90,6 +88,15 @@ public class CategoryController {
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language
     ) {
         return ApiResponse.successResponse(categoryService.getCategoryTree(language));
+    }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping("/top")
+    public ApiResponse<List<TopCategoryResponse>> topCategory(
+            @RequestParam(defaultValue = "8") Long limit,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ")
+            AppLanguage language) {
+        return ApiResponse.successResponse(categoryService.topCategory(limit, language));
     }
 
     @PreAuthorize("permitAll()")

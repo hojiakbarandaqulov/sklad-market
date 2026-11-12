@@ -120,10 +120,7 @@ public class OrderServiceImpl implements OrderService {
         if (longitude == null || latitude == null) {
             throw new AppBadException(messageService.getMessage("order.coordinates.required", language));
         }
-        if (longitude.abs().compareTo(BigDecimal.valueOf(180)) > 0
-                || latitude.abs().compareTo(BigDecimal.valueOf(90)) > 0
-                || longitude.stripTrailingZeros().scale() > 7
-                || latitude.stripTrailingZeros().scale() > 7) {
+        if (!OrderRequestUtils.areCoordinatesValid(longitude, latitude)) {
             throw new AppBadException(messageService.getMessage("order.coordinates.invalid", language));
         }
     }
@@ -636,6 +633,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    @Override
     public OrderResponse acceptLead(Long leadId, LeadAcceptRequest request,
             String authorization, AppLanguage language) {
         SellerWorkflowClient.LeadEnvelope envelope = callRemoteService(
@@ -647,45 +645,70 @@ public class OrderServiceImpl implements OrderService {
                     "operation=lead.details failure=invalid_response");
         }
         SellerWorkflowClient.Lead lead = envelope.data();
-        if (!SpringSecurityUtil.getProfileId().equals(lead.sellerId())) {
+        Long sellerId = SpringSecurityUtil.getProfileId();
+        if (!sellerId.equals(lead.sellerId())) {
             throw new AccessDeniedException(messageService.getMessage("order.access.denied", language));
         }
-        requireActiveCompanyOwner(lead.companyId(), SpringSecurityUtil.getProfileId(), language);
-        Map<Long, BigDecimal> originals = new TreeMap<Long, BigDecimal>();
-        if (lead.items() == null || lead.items().isEmpty()) throw new AppConflictException(messageService.getMessage("sale.lead.invalid", language));
+        requireActiveCompanyOwner(lead.companyId(), sellerId, language);
+        validateLeadItems(lead, request, language);
+        OrderCreateRequest createRequest = new OrderCreateRequest(lead.companyId(), "lead:" + leadId,
+                lead.deliveryAddress(), null, null, lead.comment(), request.items());
+        Long orderId = findOrCreateLeadOrder(lead, createRequest, language);
+        OrderResponse response = resume(orderId, language);
+        if (!Set.of(OrderStatus.RESERVED, OrderStatus.FINALIZING, OrderStatus.SHIPPED).contains(response.status())) {
+            throw new AppConflictException(messageService.getMessage("sale.lead.unreserved", language));
+        }
+        return response;
+    }
+
+    private void validateLeadItems(SellerWorkflowClient.Lead lead, LeadAcceptRequest request, AppLanguage language) {
+        if (lead.items() == null || lead.items().isEmpty()) {
+            throw new AppConflictException(messageService.getMessage("sale.lead.invalid", language));
+        }
+        Map<Long, BigDecimal> requestedQuantities = new TreeMap<>();
         for (SellerWorkflowClient.Item item : lead.items()) {
             if (item.productId() == null || item.quantity() == null || item.quantity().signum() <= 0
-                    || originals.putIfAbsent(item.productId(), item.quantity()) != null)
+                    || requestedQuantities.putIfAbsent(item.productId(), item.quantity()) != null) {
                 throw new AppConflictException(messageService.getMessage("sale.lead.invalid", language));
-        }
-        Map<Long, BigDecimal> accepted = new TreeMap<Long, BigDecimal>();
-        for (OrderCreateRequest.Item item : request.items()) {
-            if (accepted.putIfAbsent(item.productId(), item.quantity()) != null) throw new AppConflictException(messageService.getMessage("order.product.duplicate", language));
-            BigDecimal original = originals.get(item.productId());
-            if (original == null || item.quantity().compareTo(original) > 0) throw new AppConflictException(messageService.getMessage("sale.quantity.invalid", language));
-            if (item.quantity().compareTo(original) < 0 && !request.buyerAgreementConfirmed()) throw new AppConflictException(messageService.getMessage("sale.agreement.required", language));
-        }
-        if (!accepted.keySet().equals(originals.keySet())) throw new AppConflictException(messageService.getMessage("sale.quantity.invalid", language));
-        OrderCreateRequest create = new OrderCreateRequest(lead.companyId(), "lead:" + leadId,
-                lead.deliveryAddress(), null, null, lead.comment(), request.items());
-        String hash = OrderRequestUtils.createRequestHash(create);
-        Optional<Order> existing = orderRepository.findByLeadId(leadId);
-        Long id;
-        if (existing.isPresent()) {
-            validateSameRequest(existing.get(), hash, language); id = existing.get().getId();
-        } else {
-            if (!Set.of("NEW", "VIEWED", "CONTACTED").contains(lead.status())) throw new AppConflictException(messageService.getMessage("sale.lead.invalid", language));
-            Order order = prepareOrder(create, lead.buyerId(), create.idempotencyKey(), hash, language);
-            order.setLeadId(leadId);
-            try { id = transactionTemplate.execute(tx -> orderRepository.saveAndFlush(order).getId()); }
-            catch (DataIntegrityViolationException ex) {
-                Order saved = orderRepository.findByLeadId(leadId).orElseThrow(() -> ex);
-                validateSameRequest(saved, hash, language); id = saved.getId();
             }
         }
-        OrderResponse response = resume(id, language);
-        if (!Set.of(OrderStatus.RESERVED,OrderStatus.FINALIZING,OrderStatus.SHIPPED).contains(response.status()))
-            throw new AppConflictException(messageService.getMessage("sale.lead.unreserved", language));
-        return response;
+        Set<Long> acceptedProductIds = new HashSet<>();
+        for (OrderCreateRequest.Item item : request.items()) {
+            if (!acceptedProductIds.add(item.productId())) {
+                throw new AppConflictException(messageService.getMessage("order.product.duplicate", language));
+            }
+            BigDecimal requestedQuantity = requestedQuantities.get(item.productId());
+            if (requestedQuantity == null || item.quantity().compareTo(requestedQuantity) > 0) {
+                throw new AppConflictException(messageService.getMessage("sale.quantity.invalid", language));
+            }
+            if (item.quantity().compareTo(requestedQuantity) < 0 && !request.buyerAgreementConfirmed()) {
+                throw new AppConflictException(messageService.getMessage("sale.agreement.required", language));
+            }
+        }
+        if (!acceptedProductIds.equals(requestedQuantities.keySet())) {
+            throw new AppConflictException(messageService.getMessage("sale.quantity.invalid", language));
+        }
+    }
+
+    private Long findOrCreateLeadOrder(SellerWorkflowClient.Lead lead, OrderCreateRequest request, AppLanguage language) {
+        Long leadId = lead.id();
+        String hash = OrderRequestUtils.createRequestHash(request);
+        Optional<Order> existing = orderRepository.findByLeadId(leadId);
+        if (existing.isPresent()) {
+            validateSameRequest(existing.get(), hash, language);
+            return existing.get().getId();
+        }
+        if (!Set.of("NEW", "VIEWED", "CONTACTED").contains(lead.status())) {
+            throw new AppConflictException(messageService.getMessage("sale.lead.invalid", language));
+        }
+        Order order = prepareOrder(request, lead.buyerId(), request.idempotencyKey(), hash, language);
+        order.setLeadId(leadId);
+        try {
+            return transactionTemplate.execute(transaction -> orderRepository.saveAndFlush(order).getId());
+        } catch (DataIntegrityViolationException exception) {
+            Order saved = orderRepository.findByLeadId(leadId).orElseThrow(() -> exception);
+            validateSameRequest(saved, hash, language);
+            return saved.getId();
+        }
     }
 }

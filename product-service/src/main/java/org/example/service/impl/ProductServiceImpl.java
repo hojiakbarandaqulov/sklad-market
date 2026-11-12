@@ -673,6 +673,7 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(request.getDescription());
         product.setPriceType(request.getPriceType());
         product.setWholeSale(request.getWholeSale());
+        product.setMinProduct(request.getMinProduct());
         product.setRetail(request.getRetail());
         product.setPrice(normalizePrice(request.getPriceType(), request.getPrice()));
         product.setCurrency(request.getCurrency());
@@ -796,7 +797,7 @@ public class ProductServiceImpl implements ProductService {
         response.setWholeSale(product.getWholeSale());
         response.setRetail(product.getRetail());
         response.setCurrency(product.getCurrency());
-        response.setMin(product.getMinProduct());
+        response.setMinProduct(product.getMinProduct());
         response.setPickupAvailable(Boolean.TRUE.equals(product.getPickupAvailable()));
         response.setPickupBranchId(product.getPickupBranchId());
         response.setStatus(resolveStatus(product));

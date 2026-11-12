@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dto.CategoryTreeResponse;
+import org.example.dto.TopCategoryResponse;
 import org.example.dto.categoryAtribute.CategoryCreateRequest;
 import org.example.dto.CategoryResponse;
 import org.example.dto.CategoryUpdateRequest;
@@ -32,4 +33,6 @@ public interface CategoryService {
     List<CategoryTreeResponse> getCategoryTree(AppLanguage language);
 
     Category findById(Long categoryId);
+
+    List<TopCategoryResponse> topCategory(Long limit, AppLanguage language);
 }

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
 import org.example.dto.order.*;
 import org.example.enums.AppLanguage;
-import org.example.service.impl.OrderServiceImpl;
+import org.example.service.OrderService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/internal/orders/leads")
 @PreAuthorize("hasRole('SELLER')")
 public class LeadOrderInternalController {
-    private final OrderServiceImpl orders;
+    private final OrderService orders;
 
     @PostMapping("/{id}/accept")
     public ApiResponse<OrderResponse> accept(@PathVariable Long id, @Valid @RequestBody LeadAcceptRequest request,

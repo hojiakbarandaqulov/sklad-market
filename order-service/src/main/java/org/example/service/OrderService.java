@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.dto.order.OrderCreateRequest;
+import org.example.dto.order.LeadAcceptRequest;
 import org.example.enums.AppLanguage;
 import org.example.dto.order.OrderFilter;
 import org.example.dto.order.OrderResponse;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Page;
 public interface OrderService {
 
     OrderResponse create(OrderCreateRequest request, AppLanguage language);
+
+    OrderResponse acceptLead(Long leadId, LeadAcceptRequest request, String authorization, AppLanguage language);
 
     Page<OrderResponse> getBuyerOrders(OrderFilter filter, AppLanguage language);
 
