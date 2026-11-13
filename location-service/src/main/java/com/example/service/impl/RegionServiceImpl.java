@@ -34,13 +34,6 @@ public class RegionServiceImpl implements RegionService {
     private final ResourceBundleService messageService;
     private final RegionSearchService regionSearchService;
 
-    private static final String ADDRESS_FILE = "uz-addresses/addresses.json";
-    private static final int MIN_QUERY_LENGTH = 3;
-    private static final int MAX_RESULTS = 5;
-
-    private final List<AddressSuggestion> addresses;
-
-
     @Override
     @Transactional
     public RegionResponse create(RegionDTO request, AppLanguage language) {

@@ -23,5 +23,4 @@ public interface RegionService {
 
     boolean existsByRegion(Long regionId);
 
-    Page<RegionResponse> regionSearch(String q, Pageable pageable, AppLanguage language);
 }
