@@ -10,10 +10,8 @@ import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
 import org.example.dto.product.ProductSearchResponse;
 import org.example.entity.Product;
-import org.example.enums.AppLanguage;
-import org.example.enums.LocationType;
+import org.example.enums.*;
 import org.example.enums.Currency;
-import org.example.enums.ProductModerationStatus;
 import org.example.repository.ProductRepository;
 import org.example.service.BannerService;
 import org.example.service.CatalogService;
@@ -321,6 +319,56 @@ public class CatalogServiceImpl implements CatalogService {
                 .map(productService::toResponse)
                 .toList();
         return new PageImpl<>(responses, pageRequest, products.getTotalElements());
+    }
+
+    @Override
+    public PagedResponse<ProductResponse> homepageProducts(
+            CatalogTab tab, CatalogSaleType saleType, Currency currency,
+            int page, int perPage) {
+        validatePagination(page, perPage);
+
+        // Bosh sahifaga faqat tasdiqlangan, faol mahsulotlar chiqadi.
+        Specification<Product> spec = (root, query, cb) -> cb.and(
+                cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
+                cb.isTrue(root.get("isActive")),
+                cb.isNull(root.get("deletedAt"))
+        );
+
+        if (saleType != null) {
+            String field = saleType == CatalogSaleType.WHOLESALE ? "wholeSale" : "retail";
+            spec = spec.and((root, query, cb) -> cb.isTrue(root.get(field)));
+        }
+
+        // Narx bo‘yicha solishtirishda bitta valyutani olamiz.
+        Currency filterCurrency = tab == CatalogTab.TOP_PRICES && currency == null
+                ? Currency.UZS : currency;
+
+        if (filterCurrency != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("currency"), filterCurrency));
+        }
+
+        if (tab == CatalogTab.TOP_PRICES) {
+            spec = spec.and((root, query, cb) -> cb.and(
+                    cb.greaterThan(root.<BigDecimal>get("price"), BigDecimal.ZERO),
+                    root.get("priceType").in(PriceType.FIXED, PriceType.FROM_PRICE)
+            ));
+        }
+
+        Sort sort = switch (tab) {
+            case FOR_YOU -> Sort.by(Sort.Direction.DESC, "createdAt");
+            case POPULAR -> Sort.by(
+                    Sort.Direction.DESC, "viewsCountCache", "favoritesCountCache");
+            case TOP_PRICES -> Sort.by(Sort.Direction.ASC, "price");
+        };
+
+        // Qiymatlar teng bo‘lsa, sahifalash tartibi barqaror qoladi.
+        Pageable pageable = PageRequest.of(page - 1, perPage,
+                sort.and(Sort.by(Sort.Direction.DESC, "id")));
+
+        Page<ProductResponse> result = productRepository.findAll(spec, pageable)
+                .map(productService::toResponse);
+        return ServiceHelper.toPagedResponse(result);
     }
 
     private ProductDto toPopularProductResponse(Product p) {

@@ -5,8 +5,7 @@ import org.example.dto.*;
 import org.example.dto.product.ProductDto;
 import org.example.dto.product.ProductResponse;
 import org.example.dto.product.ProductSearchResponse;
-import org.example.enums.AppLanguage;
-import org.example.enums.LocationType;
+import org.example.enums.*;
 import org.example.service.CatalogService;
 import org.example.service.ProductSearchService;
 import org.springframework.data.domain.PageImpl;
@@ -119,5 +118,16 @@ public class CatalogController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("price").ascending());
         return ApiResponse.successResponse(catalogService.getProductFilterPrice(fromPrice, toPrice, pageable));
+    }
+
+    @GetMapping("/homepage/products")
+    public ApiResponse<PagedResponse<ProductResponse>> homepageProducts(
+            @RequestParam(defaultValue = "FOR_YOU") CatalogTab tab,
+            @RequestParam(required = false) CatalogSaleType saleType,
+            @RequestParam(required = false) Currency currency,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "8") int perPage) {
+        return ApiResponse.successResponse(
+                catalogService.homepageProducts(tab, saleType, currency, page, perPage));
     }
 }
