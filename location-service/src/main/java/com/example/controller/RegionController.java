@@ -1,11 +1,9 @@
 package com.example.controller;
 
-import co.elastic.clients.elasticsearch.license.LicenseStatus;
 import com.example.dto.AddressSuggestion;
 import com.example.dto.ApiResponse;
 import com.example.dto.RegionResponse;
 import com.example.enums.AppLanguage;
-import com.example.service.AddressService;
 import com.example.service.RegionService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -28,7 +26,6 @@ import java.util.List;
 public class RegionController {
 
     private final RegionService regionService;
-    private final AddressService addressService;
 
     @GetMapping
     public ApiResponse<PageImpl<RegionResponse>> getAll(
@@ -50,10 +47,10 @@ public class RegionController {
         return ApiResponse.successResponse(regionService.getById(id, language));
     }
 
-    @GetMapping("/search}")
+   /* @GetMapping("/search")
     public ApiResponse<List<AddressSuggestion>> regionSearch(
             @RequestParam("q") String q) {
         return ApiResponse.successResponse(addressService.regionSearch(q));
-    }
+    }*/
 
 }

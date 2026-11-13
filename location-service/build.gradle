@@ -32,7 +32,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
-    implementation files('libs/uz-address-data.jar')
 
 
     compileOnly 'org.projectlombok:lombok'
