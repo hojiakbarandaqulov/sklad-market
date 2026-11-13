@@ -338,8 +338,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
                 List.of(product.getCatalogCardId()), language.name()), language);
         if (cards.isEmpty()) return null;
         if (cards.size() != 1) throw unavailable("cards", "invalid card count", language);
-        validateCard("cards", cards.get(0), product.getCompanyId(), product.getCatalogCardId(), language);
-        return cards.get(0);
+        validateCard("cards", cards.getFirst(), product.getCompanyId(), product.getCatalogCardId(), language);
+        return cards.getFirst();
     }
 
     private InventoryProductDTO readableDto(InventoryProduct product, JsonNode card,
@@ -356,8 +356,8 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         List<JsonNode> result = remote("cards", () -> client.cards(companyId, List.of(id), language.name()), language);
         if (result.size() != 1)
             throw new AppBadException(messages.getMessage("control.product.card.missing", language));
-        validateCard("cards", result.get(0), companyId, id, language);
-        return result.get(0);
+        validateCard("cards", result.getFirst(), companyId, id, language);
+        return result.getFirst();
     }
 
     private JsonNode changeVisibility(InventoryProduct product, boolean visible, AppLanguage language) {
