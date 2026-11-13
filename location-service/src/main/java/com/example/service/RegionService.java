@@ -22,4 +22,6 @@ public interface RegionService {
     void delete(Long id, AppLanguage language);
 
     boolean existsByRegion(Long regionId);
+
+    Page<RegionResponse> regionSearch(String q, Pageable pageable, AppLanguage language);
 }
