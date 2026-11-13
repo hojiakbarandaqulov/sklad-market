@@ -56,4 +56,13 @@ public class InventoryProductController {
                                                     @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(service.restore(id, language));
     }
+
+    @PatchMapping("/{id}/sale-settings")
+    public ApiResponse<InventoryProductSaleSettingsResponse> saleSettings(
+            @PathVariable Long id,
+            @Valid @RequestBody InventoryProductSaleSettings request,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(service.saleSettings(id, request, language));
+    }
+
 }

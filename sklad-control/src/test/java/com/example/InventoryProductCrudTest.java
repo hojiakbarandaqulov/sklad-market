@@ -3,6 +3,7 @@ package com.example;
 import com.example.config.client.*;
 import com.example.dto.ApiResponse;
 import com.example.dto.internal.CompanyOwnershipResponse;
+import com.example.dto.internal.ProductSaleSettingsResponse;
 import com.example.entity.*;
 import com.example.enums.WarehouseStatus;
 import com.example.repository.*;
@@ -21,6 +22,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.*;
 import static org.assertj.core.api.Assertions.*;
@@ -88,6 +90,29 @@ class InventoryProductCrudTest {
         assertThat(stocks.findAll().get(0).getOnHand()).isEqualByComparingTo("1.125");
         assertThat(operations.findAll().get(0).getQuantityChange()).isEqualByComparingTo("1.125");
         assertThat(products.findAll().get(0).getCreatedBy()).isEqualTo(42L);
+    }
+
+    @Test void saleSettingsUsesCatalogIdAndPreservesFractionalPrice() throws Exception {
+        Long id = create();
+        var saleSettings = new ProductSaleSettingsResponse(100L, true, true, "FIXED",
+                new BigDecimal("50.05"), "USD", 10L, 10, new BigDecimal("45.05"), true, "APPROVED");
+        when(cards.updateSaleSettings(eq(100L), any(), eq("UZ")))
+                .thenReturn(ApiResponse.successResponse(saleSettings));
+        clearInvocations(cards);
+
+        mvc.perform(patch("/api/v1/control/products/{id}/sale-settings", id)
+                        .header("Authorization", "Bearer seller")
+                        .contentType("application/json").content("{\"discountPercent\":10}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.id").value(id))
+                .andExpect(jsonPath("$.data.productId").value(100))
+                .andExpect(jsonPath("$.data.effectivePrice").value(45.05))
+                .andExpect(jsonPath("$.data.status").value("APPROVED"));
+
+        verify(cards).updateSaleSettings(eq(100L), argThat(request ->
+                Integer.valueOf(10).equals(request.getDiscountPercent()) && request.getPrice() == null), eq("UZ"));
+        verifyNoMoreInteractions(cards);
+        assertThat(stocks.findAll().getFirst().getOnHand()).isEqualByComparingTo("1.125");
     }
 
     @Test void missingCardKeepsInventoryBalancesAndPaginationButBlocksPublishing() throws Exception {

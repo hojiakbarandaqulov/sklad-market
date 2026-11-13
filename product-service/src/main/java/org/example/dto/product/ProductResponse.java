@@ -26,6 +26,8 @@ public class ProductResponse {
     private String phone;
     private PriceType priceType;
     private BigDecimal price;
+    private Integer discountPercent;
+    private BigDecimal effectivePrice;
     private Currency currency;
 
     private Boolean wholeSale;

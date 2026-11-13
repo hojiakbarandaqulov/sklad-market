@@ -2,6 +2,7 @@ package org.example.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.client.CategoryClient;
 import org.example.client.CompanyClient;
 import org.example.client.FileClient;
@@ -25,6 +26,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +41,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private static final Set<String> ALLOWED_IMAGE_TYPES = Set.of("image/jpeg", "image/png", "image/webp", "image/jpg");
@@ -183,8 +187,83 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    public SaleSettingsResponse updateSaleSettingsForControl(Long id, SaleSettingsPatchRequest request,
+                                                            AppLanguage language) {
+        if (request.wholeSale() == null && request.retail() == null && request.priceType() == null
+                && request.price() == null && request.currency() == null && request.minProduct() == null
+                && request.discountPercent() == null && request.showInMarket() == null) {
+            throw new AppBadException(messageService.getMessage("product.sale.settings.empty", language));
+        }
+
+        Long sellerId = requiredSellerId(language);
+        Product product = productRepository.lockForSaleSettings(id)
+                .orElseThrow(() -> new AppBadException(messageService.getMessage("product.not.found", language)));
+        validateCompanyOwnership(product.getCompanyId(), sellerId, language);
+
+        boolean wholeSale = Objects.requireNonNullElse(request.wholeSale(), Boolean.TRUE.equals(product.getWholeSale()));
+        boolean retail = Objects.requireNonNullElse(request.retail(), Boolean.TRUE.equals(product.getRetail()));
+        boolean wasVisible = Boolean.TRUE.equals(product.getIsActive());
+        boolean visible = Objects.requireNonNullElse(request.showInMarket(), wasVisible);
+        PriceType priceType = request.priceType() == null ? product.getPriceType() : request.priceType();
+        BigDecimal price = normalizePrice(priceType, request.price() == null ? product.getPrice() : request.price());
+        Long minProduct = request.minProduct() == null ? product.getMinProduct() : request.minProduct();
+        int discount = Objects.requireNonNullElse(request.discountPercent(), product.getDiscountPercent());
+
+        if (priceType != PriceType.NEGOTIABLE && (price == null || price.signum() <= 0)) {
+            throw new AppBadException(messageService.getMessage("product.price.required", language));
+        }
+        if (priceType == PriceType.NEGOTIABLE && discount > 0) {
+            throw new AppBadException(messageService.getMessage("product.sale.settings.discount", language));
+        }
+        if (visible && !wholeSale && !retail) {
+            throw new AppBadException(messageService.getMessage("product.sale.settings.mode", language));
+        }
+        if (wholeSale && (minProduct == null || minProduct <= 0)) {
+            throw new AppBadException(messageService.getMessage("product.sale.settings.minimum", language));
+        }
+
+        if (visible != wasVisible) {
+            applyControlVisibility(product, visible, language);
+        }
+        product.setWholeSale(wholeSale);
+        product.setRetail(retail);
+        product.setPriceType(priceType);
+        product.setPrice(price);
+        if (request.currency() != null) {
+            product.setCurrency(request.currency());
+        }
+        product.setMinProduct(minProduct);
+        product.setDiscountPercent(discount);
+
+        Product saved = productRepository.saveAndFlush(product);
+        ProductDocument document = toDocument(saved);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                try {
+                    productSearchService.index(document);
+                } catch (RuntimeException ex) {
+                    log.error("Failed to index sale settings for product {}", id, ex);
+                }
+            }
+        });
+        return new SaleSettingsResponse(saved.getId(), saved.getWholeSale(), saved.getRetail(),
+                saved.getPriceType(), saved.getPrice(), saved.getCurrency(), saved.getMinProduct(),
+                saved.getDiscountPercent(), saved.getEffectivePrice(), visible, resolveStatus(saved));
+    }
+
+    @Override
+    @Transactional
     public ProductResponse visibilityForControl(Long id, boolean visible, AppLanguage language) {
         Product product = getOwnedProduct(id, language);
+        applyControlVisibility(product, visible, language);
+
+        Product saved = productRepository.saveAndFlush(product);
+        productSearchService.index(toDocument(saved));
+        return toResponse(saved);
+    }
+
+    private void applyControlVisibility(Product product, boolean visible, AppLanguage language) {
         // APPROVED + inactive — administrator bloklagan holat; sotuvchi uni qayta yoqa olmaydi.
         boolean blocked = product.getModerationStatus() == ProductModerationStatus.APPROVED
                 && !Boolean.TRUE.equals(product.getIsActive());
@@ -203,10 +282,6 @@ public class ProductServiceImpl implements ProductService {
             product.setModerationStatus(ProductModerationStatus.ARCHIVED);
         }
         product.setIsActive(visible);
-
-        Product saved = productRepository.saveAndFlush(product);
-        productSearchService.index(toDocument(saved));
-        return toResponse(saved);
     }
 
     @Override
@@ -794,6 +869,8 @@ public class ProductServiceImpl implements ProductService {
         response.setDescription(product.getDescription());
         response.setPriceType(product.getPriceType());
         response.setPrice(product.getPrice());
+        response.setDiscountPercent(product.getPriceType() == PriceType.NEGOTIABLE ? 0 : product.getDiscountPercent());
+        response.setEffectivePrice(product.getEffectivePrice());
         response.setWholeSale(product.getWholeSale());
         response.setRetail(product.getRetail());
         response.setCurrency(product.getCurrency());

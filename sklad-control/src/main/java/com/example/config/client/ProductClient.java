@@ -1,6 +1,8 @@
 package com.example.config.client;
 
 import com.example.dto.ApiResponse;
+import com.example.dto.internal.ProductSaleSettingsResponse;
+import com.example.dto.product.InventoryProductSaleSettings;
 import com.example.dto.product.ProductCardRequest;
 import com.example.enums.SaleStatus;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,6 +36,12 @@ public interface ProductClient {
     ApiResponse<JsonNode> update(@PathVariable("id") Long id, @RequestBody ProductCardRequest request,
                                  @RequestHeader("Accept-Language") String language);
 
+    @PatchMapping("/internal/control/products/{id}/sale-settings")
+    ApiResponse<ProductSaleSettingsResponse> updateSaleSettings(
+            @PathVariable("id") Long catalogCardId,
+            @RequestBody InventoryProductSaleSettings request,
+            @RequestHeader("Accept-Language") String language);
+
     @PostMapping("/internal/control/products/{id}/visibility")
     ApiResponse<JsonNode> visibility(@PathVariable("id") Long id, @RequestParam("visible") boolean visible,
                                      @RequestHeader("Accept-Language") String language);
@@ -41,4 +49,7 @@ public interface ProductClient {
     @GetMapping("/internal/control/products")
     ApiResponse<List<JsonNode>> cards(@RequestParam("companyId") Long companyId,
                                       @RequestParam("ids") List<Long> ids, @RequestHeader("Accept-Language") String language);
+
+
+
 }

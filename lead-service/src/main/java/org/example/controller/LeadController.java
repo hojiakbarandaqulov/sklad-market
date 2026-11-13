@@ -7,14 +7,17 @@ import org.example.enums.AppLanguage;
 import org.example.enums.LeadSource;
 import org.example.enums.LeadStatus;
 import org.example.service.LeadService;
+import org.example.service.impl.LeadOrderDisplayStatusService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/leads")
 public class LeadController {
     private final LeadService leadService;
+    private final LeadOrderDisplayStatusService orderDisplayStatuses;
 
     @PostMapping
     @PreAuthorize("hasRole('BUYER')")
@@ -29,15 +32,21 @@ public class LeadController {
                                                                @RequestParam(required = false) LeadSource source,
                                                                @RequestParam(defaultValue = "1") int page,
                                                                @RequestParam(defaultValue = "20") int perPage,
+                                                               @RequestHeader("Authorization") String authorization,
                                                                @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(leadService.getBuyerLeads(status,source, page, perPage, language));
+        PagedResponse<LeadResponse> leads = leadService.getBuyerLeads(status, source, page, perPage, language);
+        orderDisplayStatuses.applyOrderStatuses(leads.getItems(), authorization, language);
+        return ApiResponse.successResponse(leads);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('BUYER','SELLER')")
     public ApiResponse<LeadResponse> getById(@PathVariable Long id,
+                                             @RequestHeader("Authorization") String authorization,
                                              @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(leadService.getById(id, language));
+        LeadResponse lead = leadService.getById(id, language);
+        orderDisplayStatuses.applyOrderStatuses(List.of(lead), authorization, language);
+        return ApiResponse.successResponse(lead);
     }
 
     @PatchMapping("/{id}/items")
@@ -62,8 +71,11 @@ public class LeadController {
                                                                 @RequestParam(required = false) LeadSource source,
                                                                 @RequestParam(defaultValue = "1") int page,
                                                                 @RequestParam(defaultValue = "20") int perPage,
+                                                                @RequestHeader("Authorization") String authorization,
                                                                 @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
-        return ApiResponse.successResponse(leadService.getSellerLeads(companyId, status,  source, page, perPage, language));
+        PagedResponse<LeadResponse> leads = leadService.getSellerLeads(companyId, status, source, page, perPage, language);
+        orderDisplayStatuses.applyOrderStatuses(leads.getItems(), authorization, language);
+        return ApiResponse.successResponse(leads);
     }
 
     @PutMapping("/{id}/status")

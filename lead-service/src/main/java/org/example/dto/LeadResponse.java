@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.LeadSource;
 import org.example.enums.LeadStatus;
+import org.example.enums.LeadDisplayStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,12 +16,14 @@ import java.util.List;
 @Builder
 public class LeadResponse {
     private Long id;
+    private String orderNumber;
     private Long buyerId;
     private Long acceptedOrderId;
     private Long sellerId;
     private Long companyId;
     private LeadSource source;
     private LeadStatus status;
+    private LeadDisplayStatus displayStatus;
     private String contactName;
     private String contactPhone;
     private String contactEmail;

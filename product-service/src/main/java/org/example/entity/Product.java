@@ -8,9 +8,11 @@ import org.example.enums.Currency;
 import org.example.enums.PriceType;
 import org.example.enums.ProductModerationStatus;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +55,10 @@ public class Product extends BaseEntity {
 
     private BigDecimal price;
 
+    @Column(nullable = false)
+    @ColumnDefault("0")
+    private int discountPercent;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Currency currency;
@@ -83,4 +89,18 @@ public class Product extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
+    public void setPriceType(PriceType priceType) {
+        this.priceType = priceType;
+        if (priceType == PriceType.NEGOTIABLE) {
+            discountPercent = 0;
+        }
+    }
+
+    public BigDecimal getEffectivePrice() {
+        if (price == null || priceType == PriceType.NEGOTIABLE || discountPercent == 0) {
+            return priceType == PriceType.NEGOTIABLE ? null : price;
+        }
+        return price.multiply(BigDecimal.valueOf(100 - discountPercent))
+                .movePointLeft(2).setScale(2, RoundingMode.HALF_UP);
+    }
 }

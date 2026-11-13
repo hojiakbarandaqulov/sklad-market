@@ -1,6 +1,7 @@
 package com.example.service;
 import com.example.dto.product.*;
 import com.example.enums.AppLanguage;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.PageImpl;
 
 public interface InventoryProductService {
@@ -11,4 +12,6 @@ public interface InventoryProductService {
     InventoryProductDTO update(Long id, InventoryProductUpdateRequest request, AppLanguage language);
     InventoryProductDTO archive(Long id, AppLanguage language);
     InventoryProductDTO restore(Long id, AppLanguage language);
+
+    InventoryProductSaleSettingsResponse saleSettings(Long id, InventoryProductSaleSettings inventoryProductSaleSettings, AppLanguage language);
 }

@@ -4,6 +4,7 @@ import com.example.config.client.ProductClient;
 import com.example.config.client.CompanyClient;
 import com.example.dto.ApiResponse;
 import com.example.dto.internal.CompanyOwnershipResponse;
+import com.example.dto.internal.ProductSaleSettingsResponse;
 import com.example.dto.warehouse.WarehouseDTO;
 import com.example.dto.product.*;
 import com.example.entity.*;
@@ -260,6 +261,41 @@ public class InventoryProductServiceImpl implements InventoryProductService {
         product.setModifiedBy(actor(language));
         products.saveAndFlush(product);
         return dto(product, card, stocks.forProducts(List.of(id)));
+    }
+
+    @Override
+    @Transactional
+    public InventoryProductSaleSettingsResponse saleSettings(
+            Long id, InventoryProductSaleSettings request, AppLanguage language) {
+        // Mahsulot shu sotuvchiga tegishli ekanini tekshiramiz va qatorni arxivlashdan himoyalaymiz.
+        InventoryProduct product = owned(id, true, language);
+        if (product.getStatus() != InventoryProductStatus.ACTIVE) {
+            throw new AppConflictException(messages.getMessage("control.product.archived", language));
+        }
+
+        // Product Service ombor ID'sini emas, katalog kartasining ID'sini kutadi.
+        Long catalogCardId = product.getCatalogCardId();
+        ProductSaleSettingsResponse saleSettings = remote("sale-settings",
+                () -> client.updateSaleSettings(catalogCardId, request, language.name()), language);
+        if (!Objects.equals(catalogCardId, saleSettings.productId())) {
+            throw unavailable("sale-settings", "invalid product card identity", language);
+        }
+
+        // Amaldagi narxni Product Service hisoblaydi. Javobga ombordagi ID'ni qo‘shamiz.
+        InventoryProductSaleSettingsResponse response = new InventoryProductSaleSettingsResponse();
+        response.setId(product.getId());
+        response.setProductId(saleSettings.productId());
+        response.setWholeSale(saleSettings.wholeSale());
+        response.setRetail(saleSettings.retail());
+        response.setPriceType(saleSettings.priceType());
+        response.setPrice(saleSettings.price());
+        response.setCurrency(saleSettings.currency());
+        response.setMinProduct(saleSettings.minProduct());
+        response.setDiscountPercent(saleSettings.discountPercent());
+        response.setEffectivePrice(saleSettings.effectivePrice());
+        response.setShowInMarket(saleSettings.showInMarket());
+        response.setStatus(saleSettings.status());
+        return response;
     }
 
     private InventoryProduct owned(Long id, boolean lock, AppLanguage language) {

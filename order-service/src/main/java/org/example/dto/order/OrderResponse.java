@@ -9,6 +9,8 @@ import java.util.List;
 
 public record OrderResponse(
         Long id,
+        @Schema(description = "Xaridor va sotuvchi ko'radigan buyurtma raqami", example = "RQ-53")
+        String orderNumber,
         Long buyerId,
         Long companyId,
         OrderStatus status,

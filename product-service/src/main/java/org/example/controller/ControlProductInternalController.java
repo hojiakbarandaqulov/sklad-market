@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.dto.ApiResponse;
 import org.example.dto.product.CreateProductRequest;
 import org.example.dto.product.ProductResponse;
+import org.example.dto.product.SaleSettingsPatchRequest;
+import org.example.dto.product.SaleSettingsResponse;
 import org.example.enums.AppLanguage;
 import org.example.enums.SaleStatus;
 import org.example.service.ProductService;
@@ -53,6 +55,13 @@ public class ControlProductInternalController {
             @Valid @RequestBody CreateProductRequest request,
             @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
         return ApiResponse.successResponse(service.updateForControl(id, request, language));
+    }
+
+    @PatchMapping("/{id}/sale-settings")
+    public ApiResponse<SaleSettingsResponse> saleSettings(@PathVariable("id") @Positive Long id,
+            @Valid @RequestBody SaleSettingsPatchRequest request,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(service.updateSaleSettingsForControl(id, request, language));
     }
 
     @PostMapping("/{id}/visibility")

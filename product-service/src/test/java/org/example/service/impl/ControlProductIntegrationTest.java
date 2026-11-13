@@ -7,6 +7,7 @@ import org.example.enums.Currency;
 import org.example.repository.*;
 import org.example.service.*;
 import org.example.dto.product.CreateProductRequest;
+import org.example.dto.product.SaleSettingsPatchRequest;
 import org.example.exp.AppBadException;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -48,6 +51,32 @@ class ControlProductIntegrationTest {
         product.setModerationStatus(ProductModerationStatus.PENDING); product.setSlug("stable-slug");
     }
     @AfterEach void cleanup() { SecurityContextHolder.clearContext(); }
+
+    @Test void discountOnlyPatchPreservesApprovedListingAndIndexesAfterCommit() {
+        product.setPrice(new BigDecimal("50000"));
+        product.setRetail(true);
+        product.setModerationStatus(ProductModerationStatus.APPROVED);
+        when(repository.lockForSaleSettings(100L)).thenReturn(Optional.of(product));
+        when(repository.saveAndFlush(product)).thenReturn(product);
+        var request = new SaleSettingsPatchRequest(null, null, null, null, null, null, 10, true);
+
+        TransactionSynchronizationManager.initSynchronization();
+        try {
+            var result = service.updateSaleSettingsForControl(100L, request, AppLanguage.UZ);
+
+            assertThat(result.price()).isEqualByComparingTo("50000");
+            assertThat(result.effectivePrice()).isEqualByComparingTo("45000");
+            assertThat(result.status()).isEqualTo(ProductModerationStatus.APPROVED);
+            assertThat(product.getDiscountPercent()).isEqualTo(10);
+            verifyNoInteractions(search);
+
+            TransactionSynchronizationManager.getSynchronizations().forEach(TransactionSynchronization::afterCommit);
+            verify(search).index(any());
+        } finally {
+            TransactionSynchronizationManager.clearSynchronization();
+        }
+    }
+
     @Test void linkedProductCannotBeDeletedOrRemovedFromSearch() {
         when(repository.findByIdAndDeletedAtIsNull(100L)).thenReturn(Optional.of(product));
         when(control.linked(100L, 1L, "Bearer seller", "UZ")).thenReturn(true);

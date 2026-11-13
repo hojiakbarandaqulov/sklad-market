@@ -79,6 +79,7 @@ class OrderApiTest {
     @Test void createTakesServerPriceAndLinksReservationToOrder() throws Exception {
         var data = data(call(post("/api/v1/orders").content(payload("new", "2.125")), "buyer", 200));
         assertThat(data.path("status").asText()).isEqualTo("RESERVED");
+        assertThat(data.path("orderNumber").asText()).isEqualTo("ORD-" + data.path("id").asLong());
         assertThat(data.path("buyerId").asLong()).isEqualTo(7);
         Order savedOrder = orders.findById(data.path("id").asLong()).orElseThrow();
         assertThat(savedOrder.getLongitude()).isEqualByComparingTo("69.240073");
@@ -391,11 +392,21 @@ class OrderApiTest {
         String request="{\"idempotencyKey\":\"accept-11\",\"buyerAgreementConfirmed\":true,\"items\":[{\"productId\":100,\"quantity\":2}]}";
         var response=data(call(post("/internal/orders/leads/11/accept").content(request),"seller",200));
         assertThat(response.path("buyerId").asLong()).isEqualTo(7L);
+        assertThat(response.path("orderNumber").asText()).isEqualTo("RQ-11");
+        long orderId = response.path("id").asLong();
+        String statusRequest = "[" + orderId + "]";
+        assertThat(data(call(post("/internal/orders/lead-statuses").content(statusRequest), "buyer", 200))
+                .path(Long.toString(orderId)).asText()).isEqualTo("RESERVED");
+        call(post("/internal/orders/lead-statuses").content(statusRequest), "other", 403);
+        assertThat(data(call(get(root(orderId)), "buyer", 200)).path("orderNumber").asText()).isEqualTo("RQ-11");
+        assertThat(data(call(get(root(orderId)), "seller", 200)).path("orderNumber").asText()).isEqualTo("RQ-11");
         call(post("/internal/orders/leads/11/accept").content(request),"seller",200);
         assertThat(orders.count()).isEqualTo(1);
         call(post("/internal/orders/leads/11/accept").content(request.replace("quantity\":2","quantity\":11")),"seller",409);
         call(post("/internal/orders/leads/11/accept").content(request.replace("Confirmed\":true","Confirmed\":false")),"seller",409);
         var saved=orders.findByLeadId(11L).orElseThrow(); saved.setStatus(OrderStatus.SHIPPED); orders.saveAndFlush(saved);
+        assertThat(data(call(post("/internal/orders/lead-statuses").content(statusRequest), "seller", 200))
+                .path(Long.toString(orderId)).asText()).isEqualTo("SHIPPED");
         call(post("/internal/orders/leads/11/accept").content(request),"seller",200);
     }
 

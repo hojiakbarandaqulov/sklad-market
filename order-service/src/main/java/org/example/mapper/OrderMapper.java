@@ -23,8 +23,14 @@ public class OrderMapper {
             items.add(toItemResponse(orderItem));
         }
 
+        // So'rovdan yaratilgan buyurtma so'rovdagi raqamni saqlaydi.
+        String orderNumber = order.getLeadId() == null
+                ? "ORD-" + order.getId()
+                : "RQ-" + order.getLeadId();
+
         return new OrderResponse(
                 order.getId(),
+                orderNumber,
                 order.getBuyerId(),
                 order.getCompanyId(),
                 order.getStatus(),

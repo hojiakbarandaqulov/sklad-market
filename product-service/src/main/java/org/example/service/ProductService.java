@@ -6,6 +6,8 @@ import org.example.dto.product.ProductDetailResponse;
 import org.example.dto.product.ProductImageResponse;
 import org.example.dto.product.ProductListResponse;
 import org.example.dto.product.ProductResponse;
+import org.example.dto.product.SaleSettingsPatchRequest;
+import org.example.dto.product.SaleSettingsResponse;
 import org.example.dto.product.UpdateProductRequest;
 import org.example.entity.Product;
 import org.example.entity.ProductImage;
@@ -28,6 +30,8 @@ public interface ProductService {
     ProductResponse createForControl(CreateProductRequest request, String key, boolean visible, AppLanguage language);
 
     ProductResponse updateForControl(Long id, CreateProductRequest request, AppLanguage language);
+
+    SaleSettingsResponse updateSaleSettingsForControl(Long id, SaleSettingsPatchRequest request, AppLanguage language);
 
     ProductResponse visibilityForControl(Long id, boolean visible, AppLanguage language);
 

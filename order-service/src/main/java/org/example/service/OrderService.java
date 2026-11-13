@@ -6,8 +6,12 @@ import org.example.enums.AppLanguage;
 import org.example.dto.order.OrderFilter;
 import org.example.dto.order.OrderResponse;
 import org.springframework.data.domain.Page;
+import org.example.enums.OrderStatus;
+import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
+    Map<Long, OrderStatus> getLeadOrderStatuses(List<Long> orderIds, AppLanguage language);
 
     OrderResponse create(OrderCreateRequest request, AppLanguage language);
 

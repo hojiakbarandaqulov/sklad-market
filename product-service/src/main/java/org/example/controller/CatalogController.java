@@ -130,4 +130,5 @@ public class CatalogController {
         return ApiResponse.successResponse(
                 catalogService.homepageProducts(tab, saleType, currency, page, perPage));
     }
+
 }

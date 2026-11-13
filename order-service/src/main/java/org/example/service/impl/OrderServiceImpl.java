@@ -21,6 +21,7 @@ import org.example.client.SellerWorkflowClient;
 import org.example.dto.order.LeadAcceptRequest;
 import org.example.exp.AppServiceUnavailableException;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.TreeMap;
 import org.example.exp.OrderException;
 import org.example.mapper.OrderMapper;
@@ -710,5 +711,27 @@ public class OrderServiceImpl implements OrderService {
             validateSameRequest(saved, hash, language);
             return saved.getId();
         }
+    }
+
+    @Override
+    public Map<Long, OrderStatus> getLeadOrderStatuses(List<Long> orderIds, AppLanguage language) {
+        Long profileId = SpringSecurityUtil.getProfileId();
+        Set<Long> verifiedCompanies = new HashSet<>();
+        Map<Long, OrderStatus> statuses = new HashMap<>();
+        for (Order order : orderRepository.findAllById(orderIds)) {
+            if (order.getLeadId() == null) {
+                continue;
+            }
+            if (!profileId.equals(order.getBuyerId())) {
+                if (!SpringSecurityUtil.isSeller()) {
+                    throw new AccessDeniedException(messageService.getMessage("order.order.not.owned", language));
+                }
+                if (verifiedCompanies.add(order.getCompanyId())) {
+                    requireActiveCompanyOwner(order.getCompanyId(), profileId, language);
+                }
+            }
+            statuses.put(order.getId(), order.getStatus());
+        }
+        return statuses;
     }
 }
