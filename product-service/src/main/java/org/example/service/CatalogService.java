@@ -35,5 +35,5 @@ public interface CatalogService {
 
     PageImpl<ProductResponse> getLocationFilterProduct(Long regionId, int page, int perPage, AppLanguage language);
 
-    PagedResponse<ProductResponse> homepageProducts(CatalogTab tab, CatalogSaleType saleType, Currency currency, int page, int perPage);
+    PagedResponse<ProductResponse> homepageProducts(CatalogTab tab, CatalogSaleType saleType, BigDecimal fromPrice, BigDecimal toPrice, Currency currency,  AppLanguage language,int page, int perPage);
 }

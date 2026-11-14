@@ -12,10 +12,12 @@ import org.example.dto.product.ProductSearchResponse;
 import org.example.entity.Product;
 import org.example.enums.*;
 import org.example.enums.Currency;
+import org.example.exp.AppBadException;
 import org.example.repository.ProductRepository;
 import org.example.service.BannerService;
 import org.example.service.CatalogService;
 import org.example.service.ProductSearchService;
+import org.example.service.ResourceBundleService;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -32,6 +34,7 @@ public class CatalogServiceImpl implements CatalogService {
     private final ProductServiceImpl productService;
     private final BannerService bannerService;
     private final ModelMapper modelMapper;
+    private final ResourceBundleService resourceBundleService;
     private final CompanyClient companyClient;
     private final ProductSearchService productSearchService;
 
@@ -306,9 +309,9 @@ public class CatalogServiceImpl implements CatalogService {
         }
         validatePagination(page, perPage);
         PageRequest pageRequest = PageRequest.of(page - 1, perPage,
-              Sort.by("createdAt").descending()
+                Sort.by("createdAt").descending()
                         .and(Sort.by("id").descending()));
-        
+
         List<Long> companyIds = companyClient.getCompanyIdsByRegion(regionId);
         if (companyIds.isEmpty()) {
             return new PageImpl<>(List.of(), pageRequest, 0);
@@ -323,9 +326,13 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public PagedResponse<ProductResponse> homepageProducts(
-            CatalogTab tab, CatalogSaleType saleType, Currency currency,
+            CatalogTab tab, CatalogSaleType saleType, BigDecimal fromPrice, BigDecimal toPrice, Currency currency, AppLanguage language,
             int page, int perPage) {
         validatePagination(page, perPage);
+
+        if (fromPrice.compareTo(BigDecimal.ZERO) < 0 || toPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new AppBadException(resourceBundleService.getMessage("prices.negative", language));
+        }
 
         // Bosh sahifaga faqat tasdiqlangan, faol mahsulotlar chiqadi.
         Specification<Product> spec = (root, query, cb) -> cb.and(
@@ -354,6 +361,14 @@ public class CatalogServiceImpl implements CatalogService {
                     root.get("priceType").in(PriceType.FIXED, PriceType.FROM_PRICE)
             ));
         }
+        spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.between(root.<BigDecimal>get("price"), fromPrice, toPrice));
+
+        spec = spec.and((root, query, cb) ->
+                cb.greaterThanOrEqualTo(root.<BigDecimal>get("price"), fromPrice));
+
+        spec = spec.and((root, query, cb) ->
+                cb.lessThanOrEqualTo(root.<BigDecimal>get("price"), toPrice));
 
         Sort sort = switch (tab) {
             case FOR_YOU -> Sort.by(Sort.Direction.DESC, "createdAt");
@@ -419,7 +434,7 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     private PagedResponse<ProductResponse> queryProducts(String q, String category, Long regionId, String currency,
-                                                        int page, int perPage, Specification<Product> locationFilter) {
+                                                         int page, int perPage, Specification<Product> locationFilter) {
         validatePagination(page, perPage);
         Specification<Product> spec = (root, query, cb) -> cb.and(
                 cb.equal(root.get("moderationStatus"), ProductModerationStatus.APPROVED),
@@ -474,6 +489,7 @@ public class CatalogServiceImpl implements CatalogService {
             throw new IllegalArgumentException("page must be positive and perPage must be between 1 and 100");
         }
     }
+
     private boolean isVisible(Product product) {
         return product.getModerationStatus() == ProductModerationStatus.APPROVED && Boolean.TRUE.equals(product.getIsActive());
     }

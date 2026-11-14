@@ -125,10 +125,13 @@ public class CatalogController {
             @RequestParam(defaultValue = "FOR_YOU") CatalogTab tab,
             @RequestParam(required = false) CatalogSaleType saleType,
             @RequestParam(required = false) Currency currency,
+            @RequestParam(required = false) BigDecimal fromPrice,
+            @RequestParam(required = false) BigDecimal toPrice,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "8") int perPage) {
         return ApiResponse.successResponse(
-                catalogService.homepageProducts(tab, saleType, currency, page, perPage));
+                catalogService.homepageProducts(tab, saleType, fromPrice,toPrice, currency, language, page, perPage));
     }
 
 }
