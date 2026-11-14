@@ -1,7 +1,13 @@
 package org.example.service.impl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.dto.order.*;
+import org.example.entity.OrderInvoice;
 import org.example.exp.AppBadException;
 import org.example.exp.AppNotFoundException;
 import org.example.exp.AppConflictException;
+import org.example.repository.OrderInvoiceRepository;
 import org.springframework.security.access.AccessDeniedException;
 
 import feign.FeignException;
@@ -9,20 +15,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.client.CompanyClient;
 import org.example.client.ControlClient;
 import org.example.client.ProductClient;
-import org.example.dto.order.OrderCreateRequest;
-import org.example.dto.order.OrderFilter;
-import org.example.dto.order.OrderResponse;
 import org.example.entity.Order;
 import org.example.entity.OrderItem;
 import org.example.enums.OrderStatus;
 import org.example.enums.AppLanguage;
+import org.example.enums.Currency;
 import org.example.service.ResourceBundleService;
 import org.example.client.SellerWorkflowClient;
-import org.example.dto.order.LeadAcceptRequest;
 import org.example.exp.AppServiceUnavailableException;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.TreeMap;
+
+import java.time.LocalDate;
+import java.util.*;
+
 import org.example.exp.OrderException;
 import org.example.mapper.OrderMapper;
 import org.example.repository.OrderRepository;
@@ -46,12 +50,6 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.function.Supplier;
 
 @Service
@@ -62,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
     private static final Duration MAX_RESERVATION_DURATION = Duration.ofDays(30);
 
     private final OrderRepository orderRepository;
+    private final OrderInvoiceRepository orderInvoiceRepository;
     private final ProductClient productClient;
     private final CompanyClient companyClient;
     private final ControlClient controlClient;
@@ -71,9 +70,10 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final ResourceBundleService messageService;
     private final SellerWorkflowClient leads;
+    private final ObjectMapper objectMapper;
 
     public OrderServiceImpl(
-            OrderRepository orderRepository,
+            OrderRepository orderRepository, OrderInvoiceRepository orderInvoiceRepository,
             ProductClient productClient,
             CompanyClient companyClient,
             ControlClient controlClient,
@@ -82,8 +82,10 @@ public class OrderServiceImpl implements OrderService {
             OrderMapper orderMapper,
             ResourceBundleService messageService,
             SellerWorkflowClient leads,
-            @Value("${order.reservation-ttl}") Duration reservationDuration
+            @Value("${order.reservation-ttl}") Duration reservationDuration, ObjectMapper objectMapper
     ) {
+        this.orderInvoiceRepository = orderInvoiceRepository;
+        this.objectMapper = objectMapper;
         validateReservationDuration(reservationDuration);
 
         this.orderRepository = orderRepository;
@@ -206,6 +208,56 @@ public class OrderServiceImpl implements OrderService {
                 postponeRecovery(orderId, language);
             }
         }
+    }
+
+    @Override
+    public OrderCostumerDebitResponse orderCustomerDebit(Long companyId, AppLanguage language) {
+        Long profileId = SpringSecurityUtil.getProfileId();
+        requireActiveCompanyOwner(companyId,profileId,language);
+        List<OrderInvoice> issuedByCompanyId = orderInvoiceRepository.findIssuedByCompanyId(companyId);
+        Map<Long, Costumers> byCustomer = new LinkedHashMap<>();
+
+        for (OrderInvoice row : issuedByCompanyId) {
+            InvoiceResponse invoice = readInvoice(row.getPayload());
+
+            if (invoice.paymentMethod() != SaleRequest.PaymentMethod.CREDIT
+                    || !"UNPAID".equals(invoice.paymentStatus())
+                    || invoice.customerId() == null) {
+                continue;
+            }
+
+            Currency currency = Currency.valueOf(invoice.currency());
+
+            Costumers debt = byCustomer.computeIfAbsent(invoice.customerId(), customerId -> {
+                Costumers customer = new Costumers();
+                customer.setCustomerId(customerId);
+                customer.setAmountByCurrency(new EnumMap<>(Currency.class));
+                customer.setUnpaidInvoiceCount(0L);
+                return customer;
+            });
+
+            debt.getAmountByCurrency().merge(currency, invoice.totalAmount(), BigDecimal::add);
+            debt.setUnpaidInvoiceCount(debt.getUnpaidInvoiceCount() + 1);
+
+            LocalDate dueDate = invoice.paymentDueDate();
+            LocalDate nearest = debt.getNearestDueDate();
+            if (dueDate != null && (nearest == null || dueDate.isBefore(nearest))) {
+                debt.setNearestDueDate(dueDate);
+            }
+        }
+
+        return new OrderCostumerDebitResponse(companyId, new ArrayList<>(byCustomer.values()));
+    }
+
+        private InvoiceResponse readInvoice(String payload) {
+            try {
+                return objectMapper.readValue(payload, InvoiceResponse.class);
+            } catch (JsonProcessingException exception) {
+                throw new AppServiceUnavailableException(
+                        "order.dependency.unavailable",
+                        "operation=customer-debts failure=invalid_invoice_payload"
+                );
+            }
     }
 
     private Long findOrCreateOrder(

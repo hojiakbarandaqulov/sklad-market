@@ -11,10 +11,16 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.time.Clock;
 import java.util.Locale;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
+    }
 
     @Bean
     public MessageSource messageSource() {

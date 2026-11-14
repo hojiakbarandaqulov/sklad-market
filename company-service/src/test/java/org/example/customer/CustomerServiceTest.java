@@ -2,6 +2,7 @@ package org.example.customer;
 
 import feign.FeignException;
 import org.example.config.internal.FileClient;
+import org.example.config.internal.OrderClient;
 import org.example.dto.ApiResponse;
 import org.example.dto.attach.AttachDto;
 import org.example.dto.customer.CustomerCreateRequest;
@@ -12,6 +13,7 @@ import org.example.exp.CustomerException;
 import org.example.repository.CompanyRepository;
 import org.example.repository.CustomerRepository;
 import org.example.service.CustomerService;
+import org.example.service.ResourceBundleService;
 import org.example.service.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,13 +36,17 @@ class CustomerServiceTest {
     private final CustomerRepository customers = mock(CustomerRepository.class);
     private final CompanyRepository companies = mock(CompanyRepository.class);
     private final FileClient files = mock(FileClient.class);
-    private final CustomerService service = new CustomerServiceImpl(customers, companies, files);
+    private final OrderClient orderClient = mock(OrderClient.class);
+    private final ResourceBundleService messageService = mock(ResourceBundleService.class);
+    private final CustomerService service = new CustomerServiceImpl(customers, companies, files, orderClient, messageService);
     private Company company;
     private Customer customer;
     private final MockMultipartFile pdf = new MockMultipartFile("file", "contract.pdf", "application/pdf", "%PDF-1.7".getBytes());
 
     @BeforeEach
     void setup() {
+        when(messageService.getMessage(anyString(), any(AppLanguage.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
         Jwt jwt = Jwt.withTokenValue("test").header("alg", "none").claim("profileId", 10L).build();
         SecurityContextHolder.getContext().setAuthentication(new JwtAuthenticationToken(jwt));
         TransactionSynchronizationManager.initSynchronization();
@@ -94,20 +100,20 @@ class CustomerServiceTest {
         CustomerException error = assertThrows(CustomerException.class,
                 () -> service.uploadContract(101L, pdf, AppLanguage.UZ));
         assertEquals(403, error.getStatus());
-        assertThrows(CustomerException.class, () -> service.downloadContract(101L));
+        assertThrows(CustomerException.class, () -> service.downloadContract(101L, AppLanguage.UZ));
         verifyNoInteractions(files);
     }
 
     @Test
     void rejectsMissingProfile() {
         SecurityContextHolder.clearContext();
-        assertEquals(401, assertThrows(CustomerException.class, () -> service.get(101L)).getStatus());
+        assertEquals(401, assertThrows(CustomerException.class, () -> service.get(101L, AppLanguage.UZ)).getStatus());
     }
 
     @Test
     void rejectsBlockedCompanyBeforeFileAccess() {
         company.setIsBlocked(true);
-        assertEquals(403, assertThrows(CustomerException.class, () -> service.downloadContract(101L)).getStatus());
+        assertEquals(403, assertThrows(CustomerException.class, () -> service.downloadContract(101L, AppLanguage.UZ)).getStatus());
         verifyNoInteractions(files);
     }
 
@@ -165,8 +171,8 @@ class CustomerServiceTest {
     void archiveIsRepeatableAndRetainsContract() {
         customer.setContractAttachId("old-file.pdf");
         when(customers.findById(101L)).thenReturn(Optional.of(customer));
-        service.archive(101L);
-        service.archive(101L);
+        service.archive(101L, AppLanguage.UZ);
+        service.archive(101L, AppLanguage.UZ);
         assertTrue(customer.getDeleted());
         assertEquals("old-file.pdf", customer.getContractAttachId());
         verifyNoInteractions(files);

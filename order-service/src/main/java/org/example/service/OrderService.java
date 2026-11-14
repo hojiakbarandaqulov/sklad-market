@@ -1,10 +1,7 @@
 package org.example.service;
 
-import org.example.dto.order.OrderCreateRequest;
-import org.example.dto.order.LeadAcceptRequest;
+import org.example.dto.order.*;
 import org.example.enums.AppLanguage;
-import org.example.dto.order.OrderFilter;
-import org.example.dto.order.OrderResponse;
 import org.springframework.data.domain.Page;
 import org.example.enums.OrderStatus;
 import java.util.List;
@@ -32,4 +29,6 @@ public interface OrderService {
 
     // Aloqa uzilishi sabab tugamagan buyurtmalarni fon vazifasi orqali davom ettiradi.
     void recover(AppLanguage language);
+
+    OrderCostumerDebitResponse orderCustomerDebit(Long companyId, AppLanguage language);
 }

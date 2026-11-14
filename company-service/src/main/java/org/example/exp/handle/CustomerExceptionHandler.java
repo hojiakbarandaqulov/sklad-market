@@ -39,7 +39,7 @@ public class CustomerExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomerException.class)
     ResponseEntity<Object> customerError(CustomerException ex) {
-        return error(ex.getStatus(), ex.getMessage(), Map.of());
+        return errorResponse(ex.getStatus(), ex.getMessage(), Map.of());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -97,7 +97,11 @@ public class CustomerExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> error(int status, String message, Map<String, String> errors) {
-        return ResponseEntity.status(status).body(Map.of("success", false, "message", message(message),
+        return errorResponse(status, message(message), errors);
+    }
+
+    private ResponseEntity<Object> errorResponse(int status, String message, Map<String, String> errors) {
+        return ResponseEntity.status(status).body(Map.of("success", false, "message", message,
                 "errors", errors, "trace_id", UUID.randomUUID().toString()));
     }
 

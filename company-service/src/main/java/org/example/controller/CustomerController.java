@@ -41,27 +41,31 @@ public class CustomerController {
             @RequestParam(required = false) @Size(max = 255) String search,
             @RequestParam(required = false) Boolean hasContractFile,
             @RequestParam(defaultValue = "1") @Min(1) int page,
-            @RequestParam(defaultValue = "20") @Min(1) @Max(100) int perPage) {
-        return ApiResponse.successResponse(service.list(companyId, search, hasContractFile, page, perPage));
+            @RequestParam(defaultValue = "20") @Min(1) @Max(100) int perPage,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(service.list(companyId, search, hasContractFile, page, perPage, language));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Bitta mijoz tafsilotlari")
-    public ApiResponse<CustomerResponse> get(@PathVariable @Positive Long id) {
-        return ApiResponse.successResponse(service.get(id));
+    public ApiResponse<CustomerResponse> get(@PathVariable @Positive Long id,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(service.get(id, language));
     }
 
     @PatchMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Mijozni tahrirlash", description = "Faqat o'zgartiriladigan maydonlarni yuboring. phone bo'sh satr bo'lsa telefon tozalanadi.")
     public ApiResponse<CustomerResponse> update(@PathVariable @Positive Long id,
-                                                @Valid @RequestBody CustomerUpdateRequest request) {
-        return ApiResponse.successResponse(service.update(id, request));
+            @Valid @RequestBody CustomerUpdateRequest request,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return ApiResponse.successResponse(service.update(id, request, language));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Mijozni arxivlash", description = "Yozuv va shartnoma saqlanadi. Takroriy so'rov xavfsiz.")
-    public ApiResponse<ArchiveResponse> archive(@PathVariable @Positive Long id) {
-        service.archive(id);
+    public ApiResponse<ArchiveResponse> archive(@PathVariable @Positive Long id,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        service.archive(id, language);
         return ApiResponse.successResponse(new ArchiveResponse(id, true));
     }
 
@@ -75,8 +79,9 @@ public class CustomerController {
 
     @GetMapping("/{id}/contract")
     @Operation(summary = "Shartnoma faylini yuklab olish", description = "Kompaniya egaligi tekshiriladi, javob faylning o'zi.")
-    public ResponseEntity<byte[]> downloadContract(@PathVariable @Positive Long id) {
-        return service.downloadContract(id);
+    public ResponseEntity<byte[]> downloadContract(@PathVariable @Positive Long id,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage language) {
+        return service.downloadContract(id, language);
     }
 
     public record ArchiveResponse(Long id, boolean archived) {

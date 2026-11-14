@@ -3,6 +3,7 @@ package org.example.customer;
 import org.example.config.SecurityConfig;
 import org.example.controller.CustomerController;
 import org.example.dto.customer.CustomerResponse;
+import org.example.enums.AppLanguage;
 import org.example.exp.handle.CustomerExceptionHandler;
 import org.example.service.CustomerService;
 import org.junit.jupiter.api.Test;
@@ -109,7 +110,7 @@ class CustomerControllerTest {
     @ParameterizedTest
     @CsvSource({"UZ,Mijoz topilmadi", "RU,Клиент не найден", "EN,Customer not found"})
     void translatesServiceErrors(String language, String message) throws Exception {
-        when(service.get(101L)).thenThrow(new CustomerException(404, "customer.not.found"));
+        when(service.get(101L, AppLanguage.valueOf(language))).thenThrow(new CustomerException(404, message));
         mvc.perform(get("/api/v1/customers/101").header("Accept-Language", language)
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_SELLER"))))
                 .andExpect(status().isNotFound()).andExpect(jsonPath("$.message").value(message));
