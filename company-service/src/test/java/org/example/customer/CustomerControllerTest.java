@@ -104,7 +104,7 @@ class CustomerControllerTest {
     }
 
     private CustomerResponse customer() {
-        return new CustomerResponse(101L, 7L, "Baraka", "SH-1", null, 15, null, null, null);
+        return new CustomerResponse(101L, 7L, "Baraka", "SH-1", null, 15, null, null, null, null, null, null);
     }
 
     @ParameterizedTest

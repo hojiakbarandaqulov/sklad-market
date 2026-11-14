@@ -8,40 +8,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
-      <change afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadOrderDisplayStatusService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/controller/LeadOrderStatusInternalController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/product/InventoryProductSaleSettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/dto/product/InventoryProductSaleSettingsResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/clent/OrderAcceptClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/clent/OrderAcceptClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/controller/LeadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/controller/LeadController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/LeadResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/dto/LeadResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/mapper/LeadMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/mapper/LeadMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/AddressService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/location-service/src/main/java/com/example/service/impl/AddressServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/dto/order/OrderResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/mapper/OrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/mapper/OrderMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerSummary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CustomerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CustomerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CustomerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerControllerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/test/java/org/example/OrderApiTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/CatalogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ControlProductInternalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/controller/ControlProductInternalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/dto/product/ProductResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/entity/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/repository/ProductRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/ProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_en.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/src/test/java/org/example/service/impl/ControlProductIntegrationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/src/test/java/org/example/service/impl/ControlProductIntegrationTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/config/client/ProductClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/config/client/ProductClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/controller/InventoryProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/controller/InventoryProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/InventoryProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/InventoryProductService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/test/java/com/example/InventoryProductCrudTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,8 +126,8 @@
         <option value="HTTP Request" />
         <option value="Dockerfile" />
         <option value="Record" />
-        <option value="Interface" />
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -207,54 +184,54 @@
       <entry key="S10" value="1.0" />
       <entry key="S30" value="1.0" />
       <entry key="S60" value="1.0" />
-      <entry key="M2" value="1.0000000001964173" />
-      <entry key="M5" value="1.0004995429070511" />
-      <entry key="M10" value="1.0845652411963185" />
-      <entry key="M15" value="1.493669106449901" />
-      <entry key="M30" value="4.035094270864661" />
-      <entry key="H1" value="9.175772999540147" />
-      <entry key="H2" value="15.7851111064912" />
-      <entry key="H4" value="24.02573709846587" />
-      <entry key="D1" value="70.28761676535585" />
-      <entry key="W1" value="101.79405941570573" />
+      <entry key="M2" value="1.0" />
+      <entry key="M5" value="1.0000005819542521" />
+      <entry key="M10" value="1.0025166814306357" />
+      <entry key="M15" value="1.049195264028149" />
+      <entry key="M30" value="2.206704439701646" />
+      <entry key="H1" value="8.152344675024665" />
+      <entry key="H2" value="20.540433166145686" />
+      <entry key="H4" value="36.565160486468855" />
+      <entry key="D1" value="95.56641727974937" />
+      <entry key="W1" value="133.2881122347976" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="0.0" />
-      <entry key="MS500" value="0.0" />
-      <entry key="S2" value="0.0" />
-      <entry key="S5" value="5.623304864026096E-240" />
-      <entry key="S10" value="5.4666053716336704E-120" />
-      <entry key="S30" value="5.721919826716339E-40" />
-      <entry key="S60" value="6.078603291695045E-20" />
-      <entry key="M2" value="8.845909826948152E-10" />
-      <entry key="M5" value="0.002208319685706522" />
-      <entry key="M10" value="0.36505619433225234" />
-      <entry key="M15" value="2.0592406157072585" />
-      <entry key="M30" value="11.88431686652216" />
-      <entry key="H1" value="29.724745838495743" />
-      <entry key="H2" value="49.74041386251235" />
-      <entry key="H4" value="73.112143699738" />
-      <entry key="D1" value="196.0625833305965" />
-      <entry key="W1" value="273.6351841995282" />
+      <entry key="MS100" value="1.3315784190521358E-12" />
+      <entry key="MS500" value="0.004404835374970326" />
+      <entry key="S2" value="0.4033283048632377" />
+      <entry key="S5" value="1.2554281334912505" />
+      <entry key="S10" value="2.0022441962444284" />
+      <entry key="S30" value="3.69536069593345" />
+      <entry key="S60" value="4.894163760024063" />
+      <entry key="M2" value="5.795514734364517" />
+      <entry key="M5" value="6.475411366250912" />
+      <entry key="M10" value="6.735387318664414" />
+      <entry key="M15" value="6.933042195502259" />
+      <entry key="M30" value="9.97835121856098" />
+      <entry key="H1" value="26.197169152607863" />
+      <entry key="H2" value="60.84688880750351" />
+      <entry key="H4" value="105.78047874446766" />
+      <entry key="D1" value="264.94268763686085" />
+      <entry key="W1" value="359.6155941276401" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.392533832847196E-4" />
-      <entry key="MS500" value="0.16934062218567097" />
-      <entry key="S2" value="0.6414905865555269" />
-      <entry key="S5" value="0.8372904063655844" />
-      <entry key="S10" value="0.9150357404853563" />
-      <entry key="S30" value="0.9708363285203153" />
-      <entry key="S60" value="0.9853102701790514" />
-      <entry key="M2" value="0.992627962687909" />
-      <entry key="M5" value="0.9997450888413714" />
-      <entry key="M10" value="1.4475451731657303" />
-      <entry key="M15" value="3.5496831130623634" />
-      <entry key="M30" value="15.912402118568865" />
-      <entry key="H1" value="38.89187737564153" />
-      <entry key="H2" value="65.51801307580028" />
-      <entry key="H4" value="97.13181271024018" />
-      <entry key="D1" value="266.3467625675818" />
-      <entry key="W1" value="375.4285322165537" />
+      <entry key="MS100" value="1.674228758538923E-7" />
+      <entry key="MS500" value="0.0444653851731333" />
+      <entry key="S2" value="0.6537869576440625" />
+      <entry key="S5" value="1.6736593858563695" />
+      <entry key="S10" value="2.5991735393918023" />
+      <entry key="S30" value="4.502012407756372" />
+      <entry key="S60" value="5.780668733434919" />
+      <entry key="M2" value="6.732792591371514" />
+      <entry key="M5" value="7.448566530642639" />
+      <entry key="M10" value="7.724140670376786" />
+      <entry key="M15" value="7.9727722637598095" />
+      <entry key="M30" value="12.17740583867229" />
+      <entry key="H1" value="34.33829800002245" />
+      <entry key="H2" value="81.37433261737273" />
+      <entry key="H4" value="142.334417436344" />
+      <entry key="D1" value="360.50418656581854" />
+      <entry key="W1" value="492.9027381127215" />
     </decayedShown>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -349,7 +326,7 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/location-service/src/main/resources/elasticsearch&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/company-service/src/main/java/org/example/dto/orderInternal&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -375,18 +352,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
-      <recent name="com.example.dto.category" />
       <recent name="org.example.service" />
+      <recent name="com.example.dto.category" />
       <recent name="com.example.dto.stockOperation" />
       <recent name="com.example.dto" />
       <recent name="org.example.repository" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\JavaProject\Microservice\Skalad-market\company-service\src\main\java\org\example\dto\orderInternal" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\location-service\src\main\resources\elasticsearch" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\order-service" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\user-service" />
       <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-control" />
-      <recent name="D:\JavaProject\Microservice\Skalad-market\sklad-jobs" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\JavaProject\Microservice\Skalad-market\location-service\src\main\java\com\example" />
@@ -395,11 +372,11 @@
       <recent name="D:\JavaProject\Microservice\Skalad-market\product-service\src\main\resources\db" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.example.exp" />
+      <recent name="org.example.config" />
+      <recent name="org.example.enums" />
       <recent name="com.example.config" />
       <recent name="org.example.dto" />
-      <recent name="com.example.service" />
-      <recent name="com.example.document" />
-      <recent name="org.example.dto.event" />
     </key>
   </component>
   <component name="RunManager" selected="Gradle.sklad-jobs [build]">

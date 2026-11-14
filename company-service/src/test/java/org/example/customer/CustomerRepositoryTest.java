@@ -15,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest(properties = {"spring.flyway.enabled=false", "spring.jpa.hibernate.ddl-auto=create-drop",
@@ -51,6 +53,15 @@ class CustomerRepositoryTest {
         assertEquals(1, customers.search(first.getId(), "baraka", true, PageRequest.of(0, 20)).getTotalElements());
         assertEquals(1, customers.search(first.getId(), "sh-2", false, PageRequest.of(0, 20)).getTotalElements());
         assertEquals(0, customers.search(first.getId(), "%", null, PageRequest.of(0, 20)).getTotalElements());
+
+        Long debtorId = customers.search(first.getId(), "sh-2", false, PageRequest.of(0, 1))
+                .getContent().getFirst().getId();
+        assertEquals(1, customers.searchDebtors(first.getId(), "", null, List.of(debtorId),
+                PageRequest.of(0, 1)).getTotalElements());
+        assertEquals(20.0, customers.summarizeDebtors(first.getId(), "", null, List.of(debtorId))
+                .averagePaymentTermDays());
+        assertEquals(List.of(debtorId), customers.findMatchingDebtorIds(first.getId(), "sh-2", false, List.of(debtorId)));
+        assertTrue(customers.findMatchingDebtorIds(second.getId(), "", null, List.of(debtorId)).isEmpty());
     }
 
     private Company company(String name, Long owner) {

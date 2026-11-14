@@ -6,9 +6,14 @@ import org.example.config.internal.OrderClient;
 import org.example.dto.ApiResponse;
 import org.example.dto.attach.AttachDto;
 import org.example.dto.customer.CustomerCreateRequest;
+import org.example.dto.customer.CustomerListResponse;
+import org.example.dto.customer.CustomerSummary;
+import org.example.dto.orderInternal.Costumers;
+import org.example.dto.orderInternal.OrderCostumerDebitResponse;
 import org.example.entity.Company;
 import org.example.entity.Customer;
 import org.example.enums.AppLanguage;
+import org.example.enums.Currency;
 import org.example.exp.CustomerException;
 import org.example.repository.CompanyRepository;
 import org.example.repository.CustomerRepository;
@@ -19,6 +24,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -26,6 +32,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,6 +52,30 @@ class CustomerServiceTest {
     private Company company;
     private Customer customer;
     private final MockMultipartFile pdf = new MockMultipartFile("file", "contract.pdf", "application/pdf", "%PDF-1.7".getBytes());
+
+    @Test
+    void listsDebtsForTheMatchingCustomer() {
+        Costumers debt = new Costumers();
+        debt.setCustomerId(101L);
+        debt.setAmountByCurrency(Map.of(Currency.UZS, new BigDecimal("800000"), Currency.USD, BigDecimal.TEN));
+        debt.setNearestDueDate(LocalDate.of(2026, 12, 14));
+        debt.setUnpaidInvoiceCount(2L);
+        when(orderClient.orderDebit(7L, "RU", "Bearer test"))
+                .thenReturn(ApiResponse.successResponse(new OrderCostumerDebitResponse(7L, List.of(debt))));
+        when(customers.searchDebtors(eq(7L), eq(""), isNull(), anySet(), any()))
+                .thenReturn(new PageImpl<>(List.of(customer)));
+        when(customers.summarizeDebtors(eq(7L), eq(""), isNull(), anySet()))
+                .thenReturn(new CustomerSummary(1, 0, 15.0));
+        when(customers.findMatchingDebtorIds(eq(7L), eq(""), isNull(), anySet())).thenReturn(List.of(101L));
+
+        CustomerListResponse response = service.list(7L, null, null, true, 1, 20, AppLanguage.RU);
+
+        assertEquals(debt.getAmountByCurrency(), response.items().getFirst().amountByCurrency());
+        assertEquals(debt.getNearestDueDate(), response.items().getFirst().nearestDueDate());
+        assertEquals(2L, response.summary().unpaidInvoiceCount());
+        assertTrue(response.summary().debtsAvailable());
+        verify(customers, never()).search(any(), any(), any(), any());
+    }
 
     @BeforeEach
     void setup() {

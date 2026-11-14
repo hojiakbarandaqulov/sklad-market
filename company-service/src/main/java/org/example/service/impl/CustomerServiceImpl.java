@@ -8,9 +8,12 @@ import org.example.config.internal.OrderClient;
 import org.example.dto.ApiResponse;
 import org.example.dto.attach.AttachDto;
 import org.example.dto.customer.*;
+import org.example.dto.orderInternal.Costumers;
+import org.example.dto.orderInternal.OrderCostumerDebitResponse;
 import org.example.entity.Company;
 import org.example.entity.Customer;
 import org.example.enums.AppLanguage;
+import org.example.enums.Currency;
 import org.example.exp.CustomerException;
 import org.example.repository.CompanyRepository;
 import org.example.repository.CustomerRepository;
@@ -33,6 +36,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -73,26 +78,74 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerListResponse list(Long companyId, String search, Boolean hasFile, int page, int perPage, AppLanguage language) {
+    public CustomerListResponse list(Long companyId, String search, Boolean hasFile, boolean hasDebt,
+                                     int page, int perPage, AppLanguage language) {
         Company company = companies.findByIdAndDeletedAtIsNull(companyId)
                 .orElseThrow(() -> new CustomerException(404, messageService.getMessage("customer.company.not.found", language)));
         requireOwner(company, language);
-        JwtAuthenticationToken authentication =
-                (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        try {
-            orderClient.orderDebit(companyId, language.name(), "Bearer " + authentication.getToken().getTokenValue());
-        } catch (FeignException exception) {
+        Map<Long, Costumers> debts = loadDebts(companyId, language);
+        boolean debtsAvailable = debts != null;
+        if (hasDebt && !debtsAvailable) {
             throw new CustomerException(503, messageService.getMessage("customer.debt.unavailable", language));
         }
+
         String term = search == null ? "" : search.strip().toLowerCase(Locale.ROOT);
-        Page<Customer> result = customers.search(companyId, term, hasFile,
-                PageRequest.of(page - 1, perPage, Sort.by(Sort.Direction.DESC, "createdDate", "id")));
-        CustomerSummary summary = customers.summarize(companyId, term, hasFile);
-        if (summary.averagePaymentTermDays() == null) {
-            summary = new CustomerSummary(summary.customersCount(), summary.withContractFileCount(), 0.0);
+        PageRequest pageable = PageRequest.of(page - 1, perPage, Sort.by(Sort.Direction.DESC, "createdDate", "id"));
+        Page<Customer> result;
+        CustomerSummary customerTotals;
+        if (!hasDebt) {
+            result = customers.search(companyId, term, hasFile, pageable);
+            customerTotals = customers.summarize(companyId, term, hasFile);
+        } else if (debts.isEmpty()) {
+            result = Page.empty(pageable);
+            customerTotals = new CustomerSummary(0, 0, 0.0);
+        } else {
+            result = customers.searchDebtors(companyId, term, hasFile, debts.keySet(), pageable);
+            customerTotals = customers.summarizeDebtors(companyId, term, hasFile, debts.keySet());
         }
-        return new CustomerListResponse(result.getContent().stream().map(this::response).toList(),
+
+        Long unpaidInvoiceCount = null;
+        if (debtsAvailable) {
+            unpaidInvoiceCount = debts.isEmpty() ? 0L : customers.findMatchingDebtorIds(companyId, term, hasFile, debts.keySet())
+                    .stream().mapToLong(id -> debts.get(id).getUnpaidInvoiceCount()).sum();
+        }
+        CustomerSummary summary = new CustomerSummary(customerTotals.customersCount(),
+                customerTotals.withContractFileCount(), Objects.requireNonNullElse(customerTotals.averagePaymentTermDays(), 0.0),
+                unpaidInvoiceCount, debtsAvailable);
+        return new CustomerListResponse(result.getContent().stream()
+                .map(customer -> response(customer, debtsAvailable ? debts.get(customer.getId()) : null, debtsAvailable))
+                .toList(),
                 new CustomerListResponse.Meta(result.getTotalElements(), page, perPage, result.getTotalPages()), summary);
+    }
+
+    private Map<Long, Costumers> loadDebts(Long companyId, AppLanguage language) {
+        JwtAuthenticationToken authentication =
+                (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        String authorization = "Bearer " + authentication.getToken().getTokenValue();
+        ApiResponse<OrderCostumerDebitResponse> response;
+        try {
+            response = orderClient.orderDebit(companyId, language.name(), authorization);
+        } catch (FeignException exception) {
+            log.warn("Could not load customer debts, companyId={}, upstreamStatus={}, failure={}",
+                    companyId, exception.status(), exception.getClass().getSimpleName());
+            return null;
+        }
+        if (response == null || !Boolean.TRUE.equals(response.getSuccess()) || response.getData() == null
+                || !companyId.equals(response.getData().companyId()) || response.getData().costumers() == null) {
+            log.warn("Invalid customer debt response, companyId={}", companyId);
+            return null;
+        }
+
+        Map<Long, Costumers> debts = new HashMap<>();
+        for (Costumers debt : response.getData().costumers()) {
+            if (debt == null || debt.getCustomerId() == null || debt.getAmountByCurrency() == null
+                    || debt.getUnpaidInvoiceCount() == null || debt.getUnpaidInvoiceCount() <= 0
+                    || debts.putIfAbsent(debt.getCustomerId(), debt) != null) {
+                log.warn("Invalid customer debt entry, companyId={}", companyId);
+                return null;
+            }
+        }
+        return debts;
     }
 
     @Override
@@ -224,11 +277,22 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private CustomerResponse response(Customer customer) {
+        return response(customer, null, false);
+    }
+
+    private CustomerResponse response(Customer customer, Costumers debt, boolean debtsAvailable) {
         CustomerResponse.ContractFile contract = customer.getContractAttachId() == null ? null
                 : new CustomerResponse.ContractFile(customer.getContractFileName(), customer.getContractContentType(),
                     customer.getContractSizeBytes(), "/api/v1/customers/" + customer.getId() + "/contract");
+        Map<Currency, BigDecimal> amountByCurrency = null;
+        Long unpaidInvoiceCount = null;
+        if (debtsAvailable) {
+            amountByCurrency = debt == null ? Map.of() : debt.getAmountByCurrency();
+            unpaidInvoiceCount = debt == null ? 0L : debt.getUnpaidInvoiceCount();
+        }
         return new CustomerResponse(customer.getId(), customer.getCompany().getId(), customer.getName(),
                 customer.getContractNumber(), customer.getPhone(), customer.getPaymentTermDays(), contract,
-                customer.getCreatedDate(), customer.getModifiedDate());
+                customer.getCreatedDate(), customer.getModifiedDate(), amountByCurrency,
+                debt == null ? null : debt.getNearestDueDate(), unpaidInvoiceCount);
     }
 }

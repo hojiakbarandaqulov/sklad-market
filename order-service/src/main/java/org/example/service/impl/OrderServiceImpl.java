@@ -213,12 +213,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderCostumerDebitResponse orderCustomerDebit(Long companyId, AppLanguage language) {
         Long profileId = SpringSecurityUtil.getProfileId();
-        requireActiveCompanyOwner(companyId,profileId,language);
-        List<OrderInvoice> issuedByCompanyId = orderInvoiceRepository.findIssuedByCompanyId(companyId);
-        Map<Long, Costumers> byCustomer = new LinkedHashMap<>();
+        requireActiveCompanyOwner(companyId, profileId, language);
+        List<OrderInvoice> issuedInvoices = orderInvoiceRepository.findIssuedByCompanyId(companyId);
+        Map<Long, Costumers> debtsByCustomer = new LinkedHashMap<>();
 
-        for (OrderInvoice row : issuedByCompanyId) {
-            InvoiceResponse invoice = readInvoice(row.getPayload());
+        for (OrderInvoice issuedInvoice : issuedInvoices) {
+            InvoiceResponse invoice = readInvoice(issuedInvoice.getPayload());
 
             if (invoice.paymentMethod() != SaleRequest.PaymentMethod.CREDIT
                     || !"UNPAID".equals(invoice.paymentStatus())
@@ -228,7 +228,7 @@ public class OrderServiceImpl implements OrderService {
 
             Currency currency = Currency.valueOf(invoice.currency());
 
-            Costumers debt = byCustomer.computeIfAbsent(invoice.customerId(), customerId -> {
+            Costumers debt = debtsByCustomer.computeIfAbsent(invoice.customerId(), customerId -> {
                 Costumers customer = new Costumers();
                 customer.setCustomerId(customerId);
                 customer.setAmountByCurrency(new EnumMap<>(Currency.class));
@@ -246,18 +246,18 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        return new OrderCostumerDebitResponse(companyId, new ArrayList<>(byCustomer.values()));
+        return new OrderCostumerDebitResponse(companyId, new ArrayList<>(debtsByCustomer.values()));
     }
 
-        private InvoiceResponse readInvoice(String payload) {
-            try {
-                return objectMapper.readValue(payload, InvoiceResponse.class);
-            } catch (JsonProcessingException exception) {
-                throw new AppServiceUnavailableException(
-                        "order.dependency.unavailable",
-                        "operation=customer-debts failure=invalid_invoice_payload"
-                );
-            }
+    private InvoiceResponse readInvoice(String payload) {
+        try {
+            return objectMapper.readValue(payload, InvoiceResponse.class);
+        } catch (JsonProcessingException exception) {
+            throw new AppServiceUnavailableException(
+                    "order.dependency.unavailable",
+                    "operation=customer-debts failure=invalid_invoice_payload"
+            );
+        }
     }
 
     private Long findOrCreateOrder(

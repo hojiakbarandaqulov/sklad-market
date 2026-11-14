@@ -12,7 +12,8 @@ public interface CustomerService {
 
     CustomerResponse create(CustomerCreateRequest request, MultipartFile file, AppLanguage language);
 
-    CustomerListResponse list(Long companyId, String search, Boolean hasFile, int page, int perPage, AppLanguage language);
+    CustomerListResponse list(Long companyId, String search, Boolean hasFile, boolean hasDebt,
+                              int page, int perPage, AppLanguage language);
 
     CustomerResponse get(Long id, AppLanguage language);
 
