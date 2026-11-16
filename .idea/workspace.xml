@@ -8,17 +8,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
+      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/dto/auth/GoogleLoginResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/controller/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/dto/customer/CustomerSummary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CustomerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/repository/CustomerRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/CustomerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/main/java/org/example/service/impl/CustomerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerControllerTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/company-service/src/test/java/org/example/customer/CustomerServiceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/order-service/src/main/java/org/example/service/impl/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_en.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,10 +126,10 @@
       <list>
         <option value="HTTP Request" />
         <option value="Dockerfile" />
-        <option value="Record" />
         <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="Record" />
       </list>
     </option>
   </component>
@@ -177,61 +178,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0" />
-      <entry key="S2" value="1.0" />
-      <entry key="S5" value="1.0" />
-      <entry key="S10" value="1.0" />
-      <entry key="S30" value="1.0" />
-      <entry key="S60" value="1.0" />
-      <entry key="M2" value="1.0" />
-      <entry key="M5" value="1.0000005819542521" />
-      <entry key="M10" value="1.0025166814306357" />
-      <entry key="M15" value="1.049195264028149" />
-      <entry key="M30" value="2.206704439701646" />
-      <entry key="H1" value="8.152344675024665" />
-      <entry key="H2" value="20.540433166145686" />
-      <entry key="H4" value="36.565160486468855" />
-      <entry key="D1" value="95.56641727974937" />
-      <entry key="W1" value="133.2881122347976" />
+      <entry key="MS100" value="1.004944361695301" />
+      <entry key="MS500" value="1.3483323032819192" />
+      <entry key="S2" value="1.9912188425033612" />
+      <entry key="S5" value="2.4492904214434654" />
+      <entry key="S10" value="2.6899344964724468" />
+      <entry key="S30" value="2.887631097111231" />
+      <entry key="S60" value="2.942596060613086" />
+      <entry key="M2" value="2.9709857181343873" />
+      <entry key="M5" value="2.9883183599606116" />
+      <entry key="M10" value="2.9942552576354955" />
+      <entry key="M15" value="3.001279081640616" />
+      <entry key="M30" value="3.2651355408808818" />
+      <entry key="H1" value="4.986024643742567" />
+      <entry key="H2" value="9.176082152608528" />
+      <entry key="H4" value="20.67901134317379" />
+      <entry key="D1" value="113.80841668539846" />
+      <entry key="W1" value="187.67508599899006" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.3315784190521358E-12" />
-      <entry key="MS500" value="0.004404835374970326" />
-      <entry key="S2" value="0.4033283048632377" />
-      <entry key="S5" value="1.2554281334912505" />
-      <entry key="S10" value="2.0022441962444284" />
-      <entry key="S30" value="3.69536069593345" />
-      <entry key="S60" value="4.894163760024063" />
-      <entry key="M2" value="5.795514734364517" />
-      <entry key="M5" value="6.475411366250912" />
-      <entry key="M10" value="6.735387318664414" />
-      <entry key="M15" value="6.933042195502259" />
-      <entry key="M30" value="9.97835121856098" />
-      <entry key="H1" value="26.197169152607863" />
-      <entry key="H2" value="60.84688880750351" />
-      <entry key="H4" value="105.78047874446766" />
-      <entry key="D1" value="264.94268763686085" />
-      <entry key="W1" value="359.6155941276401" />
+      <entry key="MS100" value="1.5799315494513453E-38" />
+      <entry key="MS500" value="3.6865348705180146E-8" />
+      <entry key="S2" value="0.022714981804763234" />
+      <entry key="S5" value="0.33281481981227407" />
+      <entry key="S10" value="0.8157944685155417" />
+      <entry key="S30" value="1.5441478642630293" />
+      <entry key="S60" value="1.9694870045633284" />
+      <entry key="M2" value="2.353191743943753" />
+      <entry key="M5" value="2.6972770260955508" />
+      <entry key="M10" value="2.840346356682503" />
+      <entry key="M15" value="2.911891078256709" />
+      <entry key="M30" value="3.9999847601744327" />
+      <entry key="H1" value="10.692233252465906" />
+      <entry key="H2" value="25.680328451308608" />
+      <entry key="H4" value="58.97844632786309" />
+      <entry key="D1" value="305.41527224590806" />
+      <entry key="W1" value="494.7315148586427" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.674228758538923E-7" />
-      <entry key="MS500" value="0.0444653851731333" />
-      <entry key="S2" value="0.6537869576440625" />
-      <entry key="S5" value="1.6736593858563695" />
-      <entry key="S10" value="2.5991735393918023" />
-      <entry key="S30" value="4.502012407756372" />
-      <entry key="S60" value="5.780668733434919" />
-      <entry key="M2" value="6.732792591371514" />
-      <entry key="M5" value="7.448566530642639" />
-      <entry key="M10" value="7.724140670376786" />
-      <entry key="M15" value="7.9727722637598095" />
-      <entry key="M30" value="12.17740583867229" />
-      <entry key="H1" value="34.33829800002245" />
-      <entry key="H2" value="81.37433261737273" />
-      <entry key="H4" value="142.334417436344" />
-      <entry key="D1" value="360.50418656581854" />
-      <entry key="W1" value="492.9027381127215" />
+      <entry key="MS100" value="0.005448217446795746" />
+      <entry key="MS500" value="0.35515531737584954" />
+      <entry key="S2" value="1.0308846333440391" />
+      <entry key="S5" value="1.9519727931499273" />
+      <entry key="S10" value="2.914257741070848" />
+      <entry key="S30" value="4.1703034396305485" />
+      <entry key="S60" value="4.767830962994886" />
+      <entry key="M2" value="5.246915298603722" />
+      <entry key="M5" value="5.6529947070382125" />
+      <entry key="M10" value="5.817961304496486" />
+      <entry key="M15" value="5.901977095938773" />
+      <entry key="M30" value="7.258997976302122" />
+      <entry key="H1" value="15.673621716042716" />
+      <entry key="H2" value="34.85220388739095" />
+      <entry key="H4" value="79.65263953300165" />
+      <entry key="D1" value="419.21868821576146" />
+      <entry key="W1" value="682.4053901451902" />
     </decayedShown>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">

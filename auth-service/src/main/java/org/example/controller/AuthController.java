@@ -11,6 +11,8 @@ import org.example.enums.AppLanguage;
 import org.example.enums.RegistrationSelectRoles;
 import org.example.service.AuthService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -27,6 +29,17 @@ public class AuthController {
         return authService.registration(dto, roles, language);
     }
 
+    @PostMapping("/google/complete")
+    public ApiResponse<GoogleLoginResponse> completeGoogleLogin(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(value = "roles", required = false)
+            RegistrationSelectRoles roles,
+            @RequestHeader(value = "Accept-Language", defaultValue = "UZ")
+            AppLanguage language) {
+
+        GoogleLoginResponse complete = authService.complete(jwt, roles, language);
+        return ApiResponse.successResponse(complete);
+    }
    /* @GetMapping("/verification/{token}")
     public ApiResponse<String> registrationVerification(@PathVariable("token") String token,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage lang) {

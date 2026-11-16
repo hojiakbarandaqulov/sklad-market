@@ -23,11 +23,13 @@ import org.example.utils.JwtUtil;
 import org.example.utils.PhoneUtil;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -96,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
                 .build());
 
         if (EmailUtil.isEmail(dto.getUsername())) {
-            emailSendingService.sendRegistrationEmail(dto.getUsername(),language);
+            emailSendingService.sendRegistrationEmail(dto.getUsername(), language);
         } else if (PhoneUtil.isPhone(dto.getUsername())) {
             // phone sending sms
         }
@@ -137,6 +139,78 @@ public class AuthServiceImpl implements AuthService {
         }
         throw new AppBadException(messageService.getMessage("verification.wrong", lang));
     }
+
+    @Override
+    public GoogleLoginResponse complete(Jwt jwt, RegistrationSelectRoles roles, AppLanguage language) {
+
+        validateGoogleToken(jwt, language);
+
+        String keycloakId = jwt.getSubject();
+        String email = jwt.getClaimAsString("email");
+
+        Users users =  userRepository.findByKeycloakId(jwt.getSubject())
+                .orElse(null);
+
+
+        if (users != null) {
+            if (Boolean.TRUE.equals(users.getDeleted())
+                    || users.getStatus() != GeneralStatus.ACTIVE) {
+                throw new AppBadException(
+                        messageService.getMessage("wrong.status", language));
+            }
+            synchronizeKeycloakProfile(users);
+            return new GoogleLoginResponse(users.getId(), users.getUsername(), users.getRole(), false, false);
+        }
+
+
+        if (roles == null) {
+            return new GoogleLoginResponse(null, email, null, false, true);
+        }
+        Users newUser = createGoogleUser(jwt, mapToRole(roles), language);
+        synchronizeKeycloakProfile(newUser);
+
+
+        return new GoogleLoginResponse(newUser.getId(), newUser.getUsername(), newUser.getRole(), true, false);
+
+    }
+
+    private Users createGoogleUser(Jwt jwt, Roles role, AppLanguage language) {
+        // complete() bu metoddan oldin JWT'dagi sub, email, email_verified
+        // va Google provayderi claimini tekshirgan bo‘lishi kerak.
+        String email = jwt.getClaimAsString("email").strip().toLowerCase(Locale.ROOT);
+
+        // Shu email boshqa profilga biriktirilgan bo‘lsa,
+        // foydalanuvchi Google akkauntini Keycloak orqali bog‘lashi kerak.
+        if (userRepository.existsByUsernameIgnoreCase(email)) {
+            throw new AppBadException(
+                    messageService.getMessage("email.phone.exists", language));
+        }
+
+        Users user = new Users();
+        user.setKeycloakId(jwt.getSubject());
+        user.setUsername(email);
+        user.setFirstName(jwt.getClaimAsString("given_name"));
+        user.setLastName(jwt.getClaimAsString("family_name"));
+        user.setRole(role); // complete()dagi mapToRole() BUYER yoki SELLER beradi.
+        user.setStatus(GeneralStatus.ACTIVE);
+
+        // Google orqali kiradigan profil uchun password null qoladi.
+        Users saved = userRepository.saveAndFlush(user);
+
+        // user-service shu event orqali o‘z bazasida profil yaratadi.
+        kafkaProducerService.sendUserRegistered(UserRegisteredEvent.builder()
+                .userId(saved.getId())
+                .keycloakId(saved.getKeycloakId())
+                .username(saved.getUsername())
+                .firstName(saved.getFirstName())
+                .lastName(saved.getLastName())
+                .roles(saved.getRole())
+                .status(saved.getStatus())
+                .build());
+
+        return saved;
+    }
+
 
     @Override
     public ApiResponse<ProfileDTO> login(LoginDTO dto, AppLanguage language) {
@@ -227,6 +301,39 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
+    private void synchronizeKeycloakProfile(Users user) {
+        // Sklad Market bazasidagi ID'ni Keycloak user atributiga yozamiz.
+        keycloakService.addProfileIdAttribute(
+                user.getKeycloakId(),
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                null
+        );
+
+        // Rol requestdan emas, bazada saqlangan profildan olinadi.
+        // Google onboarding orqali faqat BUYER va SELLER rollarini biriktiramiz.
+        if (user.getRole() == Roles.BUYER || user.getRole() == Roles.SELLER) {
+            keycloakService.assignRoleToUser(user.getKeycloakId(), user.getRole());
+        }
+    }
+
+    private void validateGoogleToken(Jwt jwt, AppLanguage language) {
+        String email = jwt == null ? null : jwt.getClaimAsString("email");
+
+        if (jwt == null
+                || jwt.getSubject() == null || jwt.getSubject().isBlank()
+                || email == null || email.isBlank()
+                || !Boolean.TRUE.equals(jwt.getClaimAsBoolean("email_verified"))
+                || !"google".equals(jwt.getClaimAsString("identity_provider"))
+                || !"market-web".equals(jwt.getClaimAsString("azp"))
+                || jwt.getAudience() == null
+                || !jwt.getAudience().contains("auth-service")) {
+            throw new AppBadException(
+                    messageService.getMessage("google.login.invalid", language));
+        }
+    }
 
     private Roles mapToRole(RegistrationSelectRoles roles) {
         return switch (roles) {

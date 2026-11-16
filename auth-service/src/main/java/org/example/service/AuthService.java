@@ -9,6 +9,7 @@ import org.example.dto.auth.*;
 import org.example.entity.Users;
 import org.example.enums.AppLanguage;
 import org.example.enums.RegistrationSelectRoles;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,4 +28,6 @@ public interface AuthService {
      ApiResponse<TokenResponseDTO> refresh(RefreshTokenDTO dto,AppLanguage language);
 
     ApiResponse<String> registrationVerification(RegistrationVerificationDTO dto, AppLanguage lang);
+
+    GoogleLoginResponse complete(Jwt jwt, RegistrationSelectRoles roles, AppLanguage language);
 }

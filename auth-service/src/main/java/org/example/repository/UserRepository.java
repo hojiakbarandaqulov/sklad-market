@@ -25,4 +25,9 @@ public interface UserRepository extends JpaRepository<Users,Long> {
     void updatePassword(Long id, String password);
 
 
+    Users findByKeycloakIdAndDeletedFalse(String keycloakId);
+
+    boolean existsByUsernameIgnoreCase(String email);
+
+    Optional<Users> findByKeycloakId(String subject);
 }

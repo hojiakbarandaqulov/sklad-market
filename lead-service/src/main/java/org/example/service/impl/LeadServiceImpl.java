@@ -141,7 +141,7 @@ public class LeadServiceImpl implements LeadService {
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public LeadResponse updateStatus(Long id, LeadStatusUpdateRequest request, AppLanguage language) {
         Lead lead = leadRepository.lockPresent(id).orElseThrow(() -> new AppBadException(messageService.getMessage("lead.not.found",language)));
         if (lead.getStatus()==LeadStatus.ACCEPTED || request.getStatus()==LeadStatus.ACCEPTED)

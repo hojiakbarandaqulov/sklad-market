@@ -39,9 +39,14 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
             log.warn("Profil allaqachon bor: {}", event.getUserId());
             return;
         }
-        Optional<UsersProfile> profile = profileRepository.findByUsernameAndDeletedFalse(event.getUsername());
-        profile.ifPresent(profileRepository::delete);
+        Optional<UsersProfile> existingProfile =
+                profileRepository.findByUsernameAndDeletedFalse(event.getUsername());
 
+        if (existingProfile.isPresent()) {
+            log.error("user.registered conflict, incomingUserId={}, existingUserId={}",
+                    event.getUserId(), existingProfile.get().getUserId());
+            return;
+        }
         UsersProfile profileMap = UsersProfile.builder()
                 .userId(event.getUserId())
                 .username(event.getUsername())
