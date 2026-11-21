@@ -58,14 +58,7 @@ public class SuperAdminInitializer {
             adminKeycloakId.setUserId(users.getId());
             kafkaProducerService.sendKeycloakId(adminKeycloakId);
 
-            keycloakService.addProfileIdAttribute(
-                    keycloakId,
-                    users.getId(),
-                    users.getFirstName(),
-                    users.getLastName(),
-                    users.getUsername(),
-                    "super-admin"
-            );
+            keycloakService.addProfileIdAttribute(keycloakId, users.getId());
 
             log.info("Super admin Keycloak ga muvaffaqiyatli qo'shildi");
         } catch (Exception e) {

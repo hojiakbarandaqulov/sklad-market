@@ -8,23 +8,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/dto/auth/GoogleLoginResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/initializer/SuperAdminInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/initializer/SuperAdminInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/KeycloakService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/KeycloakService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_en.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/KeycloakServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/KeycloakServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$USER_HOME$/Documents/sklad-market-ai/backend/ai-service">
@@ -178,61 +176,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.004944361695301" />
-      <entry key="MS500" value="1.3483323032819192" />
-      <entry key="S2" value="1.9912188425033612" />
-      <entry key="S5" value="2.4492904214434654" />
-      <entry key="S10" value="2.6899344964724468" />
-      <entry key="S30" value="2.887631097111231" />
-      <entry key="S60" value="2.942596060613086" />
-      <entry key="M2" value="2.9709857181343873" />
-      <entry key="M5" value="2.9883183599606116" />
-      <entry key="M10" value="2.9942552576354955" />
-      <entry key="M15" value="3.001279081640616" />
-      <entry key="M30" value="3.2651355408808818" />
-      <entry key="H1" value="4.986024643742567" />
-      <entry key="H2" value="9.176082152608528" />
-      <entry key="H4" value="20.67901134317379" />
-      <entry key="D1" value="113.80841668539846" />
-      <entry key="W1" value="187.67508599899006" />
+      <entry key="MS100" value="6.684291435549594E-116" />
+      <entry key="MS500" value="1.2427380944624862E-23" />
+      <entry key="S2" value="3.469482180067989E-6" />
+      <entry key="S5" value="0.012175829311805258" />
+      <entry key="S10" value="0.1896578565790433" />
+      <entry key="S30" value="1.1929385908537373" />
+      <entry key="S60" value="1.8913366492759265" />
+      <entry key="M2" value="2.3818787977538083" />
+      <entry key="M5" value="2.7354860279954534" />
+      <entry key="M10" value="2.864788995159812" />
+      <entry key="M15" value="2.914130036081818" />
+      <entry key="M30" value="3.2173809584953292" />
+      <entry key="H1" value="4.94942852753856" />
+      <entry key="H2" value="9.14234511237737" />
+      <entry key="H4" value="20.640961821811274" />
+      <entry key="D1" value="113.77348852079986" />
+      <entry key="W1" value="187.66685661936674" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.5799315494513453E-38" />
-      <entry key="MS500" value="3.6865348705180146E-8" />
-      <entry key="S2" value="0.022714981804763234" />
-      <entry key="S5" value="0.33281481981227407" />
-      <entry key="S10" value="0.8157944685155417" />
-      <entry key="S30" value="1.5441478642630293" />
-      <entry key="S60" value="1.9694870045633284" />
-      <entry key="M2" value="2.353191743943753" />
-      <entry key="M5" value="2.6972770260955508" />
-      <entry key="M10" value="2.840346356682503" />
-      <entry key="M15" value="2.911891078256709" />
-      <entry key="M30" value="3.9999847601744327" />
-      <entry key="H1" value="10.692233252465906" />
-      <entry key="H2" value="25.680328451308608" />
-      <entry key="H4" value="58.97844632786309" />
-      <entry key="D1" value="305.41527224590806" />
-      <entry key="W1" value="494.7315148586427" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0000216965423592" />
+      <entry key="S2" value="1.0811979688445186" />
+      <entry key="S5" value="1.5507765769654642" />
+      <entry key="S10" value="2.3039284515640475" />
+      <entry key="S30" value="4.203037045621301" />
+      <entry key="S60" value="5.444040664590432" />
+      <entry key="M2" value="6.444928432304448" />
+      <entry key="M5" value="7.284331957583877" />
+      <entry key="M10" value="7.623757727766521" />
+      <entry key="M15" value="7.764501645395253" />
+      <entry key="M30" value="8.909904394810223" />
+      <entry key="H1" value="15.597925695540173" />
+      <entry key="H2" value="30.57798665744187" />
+      <entry key="H4" value="63.865960667448896" />
+      <entry key="D1" value="310.3208781574673" />
+      <entry key="W1" value="499.7097268758496" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.005448217446795746" />
-      <entry key="MS500" value="0.35515531737584954" />
-      <entry key="S2" value="1.0308846333440391" />
-      <entry key="S5" value="1.9519727931499273" />
-      <entry key="S10" value="2.914257741070848" />
-      <entry key="S30" value="4.1703034396305485" />
-      <entry key="S60" value="4.767830962994886" />
-      <entry key="M2" value="5.246915298603722" />
-      <entry key="M5" value="5.6529947070382125" />
-      <entry key="M10" value="5.817961304496486" />
-      <entry key="M15" value="5.901977095938773" />
-      <entry key="M30" value="7.258997976302122" />
-      <entry key="H1" value="15.673621716042716" />
-      <entry key="H2" value="34.85220388739095" />
-      <entry key="H4" value="79.65263953300165" />
-      <entry key="D1" value="419.21868821576146" />
-      <entry key="W1" value="682.4053901451902" />
+      <entry key="MS100" value="9.577442601278689E-5" />
+      <entry key="MS500" value="0.15712729027221753" />
+      <entry key="S2" value="0.6655702683755454" />
+      <entry key="S5" value="1.2495020298627804" />
+      <entry key="S10" value="2.1987749394263862" />
+      <entry key="S30" value="5.139627949070922" />
+      <entry key="S60" value="7.153023955986769" />
+      <entry key="M2" value="8.715164545624587" />
+      <entry key="M5" value="9.968762093235096" />
+      <entry key="M10" value="10.4617819467974" />
+      <entry key="M15" value="10.660480430478586" />
+      <entry key="M30" value="12.117583722374082" />
+      <entry key="H1" value="20.5409107781806" />
+      <entry key="H2" value="39.715218148965256" />
+      <entry key="H4" value="84.50165159922423" />
+      <entry key="D1" value="424.0892905011498" />
+      <entry key="W1" value="687.3753618349177" />
     </decayedShown>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -679,7 +677,6 @@
     <attachedChunks>
       <set>
         <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
       </set>
     </attachedChunks>
   </component>

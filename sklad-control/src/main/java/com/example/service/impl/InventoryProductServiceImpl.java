@@ -214,10 +214,13 @@ public class InventoryProductServiceImpl implements InventoryProductService {
     @Transactional
     public InventoryProductDTO update(Long id, InventoryProductUpdateRequest request, AppLanguage language) {
         InventoryProduct product = owned(id, true, language);
+
         if (product.getStatus() != InventoryProductStatus.ACTIVE)
             throw new AppConflictException(messages.getMessage("control.product.archived", language));
+
         if (request.getProduct() == null && request.getShowInMarket() == null)
             throw new AppBadException(messages.getMessage("warehouse.patch.empty", language));
+
         JsonNode card = card(product, language);
         if (request.getProduct() != null) {
             if (!product.getCompanyId().equals(request.getProduct().getCompanyId()))

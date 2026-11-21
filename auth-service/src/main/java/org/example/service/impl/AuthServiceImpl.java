@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
         }
         Users user = userRepository.save(users);
 
-        keycloakService.addProfileIdAttribute(user.getKeycloakId(), user.getId(), dto.getFirstName(), dto.getLastName(), dto.getUsername(), dto.getPassword());
+        keycloakService.addProfileIdAttribute(user.getKeycloakId(), user.getId());
         kafkaProducerService.sendUserRegistered(UserRegisteredEvent.builder()
                 .userId(user.getId())
                 .username(user.getUsername())
@@ -148,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
         String keycloakId = jwt.getSubject();
         String email = jwt.getClaimAsString("email");
 
-        Users users =  userRepository.findByKeycloakId(jwt.getSubject())
+        Users users = userRepository.findByKeycloakId(keycloakId)
                 .orElse(null);
 
 
@@ -168,6 +168,7 @@ public class AuthServiceImpl implements AuthService {
         }
         Users newUser = createGoogleUser(jwt, mapToRole(roles), language);
         synchronizeKeycloakProfile(newUser);
+
 
 
         return new GoogleLoginResponse(newUser.getId(), newUser.getUsername(), newUser.getRole(), true, false);
@@ -303,14 +304,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void synchronizeKeycloakProfile(Users user) {
         // Sklad Market bazasidagi ID'ni Keycloak user atributiga yozamiz.
-        keycloakService.addProfileIdAttribute(
-                user.getKeycloakId(),
-                user.getId(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getUsername(),
-                null
-        );
+        keycloakService.addProfileIdAttribute(user.getKeycloakId(), user.getId());
 
         // Rol requestdan emas, bazada saqlangan profildan olinadi.
         // Google onboarding orqali faqat BUYER va SELLER rollarini biriktiramiz.
@@ -326,7 +320,7 @@ public class AuthServiceImpl implements AuthService {
                 || jwt.getSubject() == null || jwt.getSubject().isBlank()
                 || email == null || email.isBlank()
                 || !Boolean.TRUE.equals(jwt.getClaimAsBoolean("email_verified"))
-                || !"google".equals(jwt.getClaimAsString("identity_provider"))
+                || !"google-login".equals(jwt.getClaimAsString("identity_provider"))
                 || !"market-web".equals(jwt.getClaimAsString("azp"))
                 || jwt.getAudience() == null
                 || !jwt.getAudience().contains("auth-service")) {

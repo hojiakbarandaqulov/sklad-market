@@ -2,9 +2,6 @@ package org.example.service;
 
 import org.example.dto.TokenResponseDTO;
 import org.example.enums.Roles;
-import org.springframework.http.HttpHeaders;
-
-import javax.management.relation.Role;
 
 public interface KeycloakService {
     TokenResponseDTO getToken(String username, String password);
@@ -15,8 +12,7 @@ public interface KeycloakService {
 
     void deleteUser(String username);
 
-    void addProfileIdAttribute(String keycloakId, Long profileId,
-                               String firstName, String lastName, String email, String password);
+    void addProfileIdAttribute(String keycloakId, Long profileId);
 
     void assignRoleToUser(String keycloakId, Roles roleName);
 

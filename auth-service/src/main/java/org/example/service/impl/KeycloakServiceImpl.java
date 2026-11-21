@@ -18,7 +18,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import javax.management.relation.Role;
 import java.util.*;
 
 @Slf4j
@@ -252,64 +251,43 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public void addProfileIdAttribute(String keycloakId, Long profileId,
-                                      String firstName, String lastName, String email, String password) {
-        String adminToken = getAdminToken();
-
+    public void addProfileIdAttribute(String keycloakId, Long profileId) {
+        String userUrl = adminUrl + "/users/" + keycloakId;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(adminToken);
+        headers.setBearerAuth(getAdminToken());
 
         HttpEntity<Void> getRequest = new HttpEntity<>(headers);
-        ResponseEntity<Map> getResponse = restTemplate.exchange(
-                adminUrl + "/users/" + keycloakId,
-                HttpMethod.GET,
-                getRequest,
-                Map.class
-        );
-
-        Map<String, Object> user = getResponse.getBody();
+        Map<?, ?> user = restTemplate.exchange(userUrl, HttpMethod.GET, getRequest, Map.class).getBody();
         if (user == null) {
-            throw new AppBadException("Keycloak user topilmadi: " + keycloakId);
+            throw new IllegalStateException("Keycloak user response is empty");
         }
 
-        Map<String, Object> attributes;
-        Object rawAttributes = user.get("attributes");
-
-        if (rawAttributes instanceof Map<?, ?> rawMap) {
-            attributes = new HashMap<>();
-            rawMap.forEach((k, v) -> attributes.put(String.valueOf(k), v));
-        } else {
-            attributes = new HashMap<>();
+        List<String> expected = List.of(profileId.toString());
+        Map<?, ?> currentAttributes = attributesOf(user);
+        if (expected.equals(currentAttributes.get("profileId"))) {
+            return;
         }
 
-        attributes.put("profileId", List.of(String.valueOf(profileId)));
-
+        Map<Object, Object> attributes = new HashMap<>(currentAttributes);
+        attributes.put("profileId", expected);
         Map<String, Object> userUpdate = new HashMap<>();
         userUpdate.put("username", user.get("username"));
         userUpdate.put("email", user.get("email"));
         userUpdate.put("firstName", user.get("firstName"));
         userUpdate.put("lastName", user.get("lastName"));
-        userUpdate.put("enabled", user.get("enabled"));
-        userUpdate.put("emailVerified", user.get("emailVerified"));
         userUpdate.put("attributes", attributes);
 
-        HttpEntity<Map<String, Object>> putRequest = new HttpEntity<>(userUpdate, headers);
-        restTemplate.exchange(
-                adminUrl + "/users/" + keycloakId,
-                HttpMethod.PUT,
-                putRequest,
-                Void.class
-        );
+        restTemplate.exchange(userUrl, HttpMethod.PUT, new HttpEntity<>(userUpdate, headers), Void.class);
 
-        ResponseEntity<Map> verifyResponse = restTemplate.exchange(
-                adminUrl + "/users/" + keycloakId,
-                HttpMethod.GET,
-                getRequest,
-                Map.class
-        );
+        Map<?, ?> updated = restTemplate.exchange(userUrl, HttpMethod.GET, getRequest, Map.class).getBody();
+        if (!expected.equals(attributesOf(updated).get("profileId"))) {
+            throw new IllegalStateException("Keycloak did not persist profileId. Check the realm User Profile permissions.");
+        }
+    }
 
-        log.info("Keycloak user attributes after update: {}", verifyResponse.getBody().get("attributes"));
+    private Map<?, ?> attributesOf(Map<?, ?> user) {
+        return user != null && user.get("attributes") instanceof Map<?, ?> attributes ? attributes : Map.of();
     }
 //    @Override
 //    public void verifyUserEmail(String username) {
