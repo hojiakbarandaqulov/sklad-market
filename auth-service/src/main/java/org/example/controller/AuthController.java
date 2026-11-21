@@ -40,6 +40,7 @@ public class AuthController {
         GoogleLoginResponse complete = authService.complete(jwt, roles, language);
         return ApiResponse.successResponse(complete);
     }
+
    /* @GetMapping("/verification/{token}")
     public ApiResponse<String> registrationVerification(@PathVariable("token") String token,
                                                         @RequestHeader(value = "Accept-Language", defaultValue = "UZ") AppLanguage lang) {

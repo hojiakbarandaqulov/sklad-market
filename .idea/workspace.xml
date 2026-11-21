@@ -8,23 +8,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
-      <change afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/dto/auth/GoogleLoginResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/java/org/example/service/impl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_en.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_en.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_uz.properties" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/src/main/resources/messages/message_uz.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/lead-service/src/main/java/org/example/service/impl/LeadServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/org/example/service/impl/KafkaConsumerServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-control/src/main/java/com/example/service/impl/InventoryProductServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$USER_HOME$/Documents/sklad-market-ai/backend/ai-service">
@@ -679,7 +675,6 @@
     <attachedChunks>
       <set>
         <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
       </set>
     </attachedChunks>
   </component>
