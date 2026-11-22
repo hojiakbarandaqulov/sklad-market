@@ -59,7 +59,7 @@ public class LeadAcceptanceService {
 
     private LeadAcceptanceException remoteFailure(FeignException ex, AppLanguage language) {
         int status = switch (ex.status()) {
-            case 400, 403, 404, 409, 422 -> ex.status();
+            case 400,401, 403, 404, 409, 422 -> ex.status();
             default -> 503;
         };
         String message = messages.getMessage("lead.accept.failed", language);
