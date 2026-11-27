@@ -18,5 +18,11 @@ public record StructuredGenerationRequest(
         List<ImagePart> images,
         Map<String, Object> responseSchema,
         float temperature,
-        int maxOutputTokens) {
+        int maxOutputTokens,
+        Integer reasoningBudgetTokens) {
+    /** Existing callers retain the provider's normal reasoning behavior. */
+    public StructuredGenerationRequest(String model, String systemInstruction, String userText, List<ImagePart> images,
+            Map<String, Object> responseSchema, float temperature, int maxOutputTokens) {
+        this(model, systemInstruction, userText, images, responseSchema, temperature, maxOutputTokens, null);
+    }
 }

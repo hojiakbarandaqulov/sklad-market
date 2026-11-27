@@ -273,6 +273,7 @@ public class AiChatServiceImpl implements AiChatService {
             int iteration = 0;
             int toolCallsUsed = 0;
             Set<String> assistantRequiredRoles = new LinkedHashSet<>();
+            var jobsBudget = new org.example.ai.jobs.JobsTurnResultBudget();
 
             while (true) {
                 if (disconnected.get()) {
@@ -352,7 +353,7 @@ public class AiChatServiceImpl implements AiChatService {
                     Set<String> callRequiredRoles = requiredRolesForCall(availableTools, callerRoles, call.name());
                     assistantRequiredRoles.addAll(callRequiredRoles);
                     outcomes.add(executeToolCall(conversation.getId(), userSub, availableTools, callerRoles,
-                            call, toolContext, publisher, disconnected, callRequiredRoles));
+                            call, toolContext, publisher, disconnected, callRequiredRoles, jobsBudget));
                 }
                 pendingExchange.add(new ToolResultEntry(outcomes));
                 iteration++;
@@ -404,7 +405,7 @@ public class AiChatServiceImpl implements AiChatService {
             ToolExecutionContext toolContext,
             SseEventPublisher publisher,
             AtomicBoolean disconnected,
-            Set<String> requiredRoles) {
+            Set<String> requiredRoles, org.example.ai.jobs.JobsTurnResultBudget jobsBudget) {
         String summary = summarizeArgs(call.args());
         String durableToolName = toolRegistry.findRegistered(call.name())
                 .map(AgentTool::name)
@@ -416,7 +417,7 @@ public class AiChatServiceImpl implements AiChatService {
                 .map(tool -> safeExecute(tool, call.args(), toolContext))
                 .orElseGet(() -> new ValidatedToolResult(
                         ToolResult.error("Unknown or unavailable tool: " + call.name(), null), false));
-        ToolResult result = execution.result();
+        ToolResult result = jobsBudget.apply(execution.result());
         long latencyMs = System.currentTimeMillis() - startedAt;
         aiMetrics.recordToolCall(durableToolName, result.success() ? "ok" : "error", latencyMs);
 
@@ -428,7 +429,8 @@ public class AiChatServiceImpl implements AiChatService {
                     result.data().get("draftPayload")), disconnected);
         }
         if (result.success() && result.data() != null
-                && result.data().containsKey("kind") && result.data().containsKey("items")) {
+                && result.data().containsKey("kind") && result.data().containsKey("items")
+                && !Boolean.TRUE.equals(result.data().get("alreadyShown"))) {
             trySend(() -> publisher.sendResultSet(result.data()), disconnected);
         }
 
@@ -439,7 +441,12 @@ public class AiChatServiceImpl implements AiChatService {
         toolAuditService.record(conversationId, toolMessage.getId(), userSub, durableToolName, call.args(), result,
                 latencyMs, execution.argumentsValidated());
 
-        return new ToolCallOutcome(call.callId(), call.name(), UntrustedDataWrapper.wrap(result));
+        // The UI gets fresh professional cards, but neither model context nor durable history
+        // receives a candidate's professional snapshot that could outlive discoverability consent.
+        ToolResult modelResult = result.success() && result.data() != null
+                && "candidate_search".equals(result.data().get("kind"))
+                ? ToolResult.ok(org.example.ai.jobs.CandidateResultPrivacy.references(result.data())) : result;
+        return new ToolCallOutcome(call.callId(), call.name(), UntrustedDataWrapper.wrap(modelResult));
     }
 
     private ValidatedToolResult safeExecute(

@@ -54,6 +54,8 @@ public final class ToolAuditSanitizer {
     public static Map<String, Object> sanitizeResultSetForPersistence(
             ObjectMapper objectMapper, Map<String, Object> resultSet) {
         if (resultSet == null || resultSet.isEmpty()) return Map.of();
+        if ("candidate_search".equals(resultSet.get("kind")))
+            return org.example.ai.jobs.CandidateResultPrivacy.references(resultSet);
         Map<String, Object> jsonShape = objectMapper.convertValue(
                 resultSet, new TypeReference<Map<String, Object>>() {});
         return stripPublicContacts(jsonShape);

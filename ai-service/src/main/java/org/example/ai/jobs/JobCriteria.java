@@ -13,7 +13,7 @@ public record JobCriteria(String query, Long regionId, Long categoryId, BigDecim
         JobPreferences.positive(categoryId, "categoryId", false);
         JobPreferences.money(salaryMin);
         if (experienceLevel != null && !JobPreferences.EXPERIENCE_LEVELS.contains(experienceLevel)) throw new IllegalArgumentException("Invalid experienceLevel");
-        if (limit < 1 || limit > 6) throw new IllegalArgumentException("limit must be between 1 and 6");
+        if (limit < 1 || limit > 5) throw new IllegalArgumentException("limit must be between 1 and 5");
         return new JobCriteria(safeQuery, regionId, categoryId, salaryMin, experienceLevel,
                 JobPreferences.text(employmentType, 80, "employmentType"), JobPreferences.text(workSchedule, 80, "workSchedule"), limit);
     }

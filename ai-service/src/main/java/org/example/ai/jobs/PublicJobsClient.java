@@ -36,6 +36,8 @@ public class PublicJobsClient {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Category(Long id, String name, String nameUz, String nameRu, String nameEn) {}
     @JsonIgnoreProperties(ignoreUnknown = true)
+    public record Region(Long id, String name, String nameUz, String nameRu, String nameEn, String type) {}
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public record Candidate(Long id, String positionName, String companyName, String companyLogo,
             BigDecimal price, Long regionId, String address, String employmentType, String workSchedule,
             String experienceLevel, Long categoryId, Instant publishedAt, String shortDescription, String requirements) {}
@@ -67,6 +69,20 @@ public class PublicJobsClient {
             if (data.content().size() < 100) break;
         }
         return List.copyOf(items);
+    }
+
+    public List<Region> regions(String language) {
+        var regions = new ArrayList<Region>();
+        for (int page = 0; page < 5; page++) {
+            var params = new LinkedMultiValueMap<String, String>();
+            params.add("page", Integer.toString(page)); params.add("size", "100");
+            var data = get("/api/v1/regions", params, language,
+                    new ParameterizedTypeReference<GatewayEnvelope<RemoteSpringPage<Region>>>() {}).data();
+            if (data == null || data.content() == null || data.content().size() > 100) throw unavailable();
+            regions.addAll(data.content());
+            if (data.content().size() < 100) break;
+        }
+        return List.copyOf(regions);
     }
 
     public void validateCategory(Long id, String language) {

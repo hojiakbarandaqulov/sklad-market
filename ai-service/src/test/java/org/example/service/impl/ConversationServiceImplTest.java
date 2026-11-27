@@ -52,7 +52,8 @@ class ConversationServiceImplTest {
     @BeforeEach
     void setUp() {
         service = new ConversationServiceImpl(conversationRepository, messageRepository, toolRegistry,
-                org.mockito.Mockito.mock(org.springframework.jdbc.core.JdbcTemplate.class));
+                org.mockito.Mockito.mock(org.springframework.jdbc.core.JdbcTemplate.class),
+                org.mockito.Mockito.mock(org.example.ai.jobs.CandidateResultPrivacy.class));
     }
 
     @Test

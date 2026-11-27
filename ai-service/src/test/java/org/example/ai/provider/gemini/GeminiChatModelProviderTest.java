@@ -55,6 +55,19 @@ class GeminiChatModelProviderTest {
     }
 
     @Test
+    void jobsStructuredInterpretationCanDisableThinkingWithoutChangingExistingCallers() {
+        wireMock.stubFor(post(urlPathMatching(".*:generateContent"))
+                .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
+                        .withBody("{\"candidates\":[{\"content\":{\"role\":\"model\",\"parts\":[{\"text\":\"{}\"}]}}],\"usageMetadata\":{\"promptTokenCount\":5,\"candidatesTokenCount\":2,\"totalTokenCount\":7}}")));
+        provider("test-key").generateStructured(new StructuredGenerationRequest("gemini-2.5-flash", "Extract filters", "driver",
+                List.of(), Map.of("type", "OBJECT", "properties", Map.of()), 0f, 400, 0));
+        wireMock.verify(postRequestedFor(urlPathMatching(".*:generateContent"))
+                .withRequestBody(com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath(
+                        "$.generationConfig.thinkingConfig.thinkingBudget", com.github.tomakehurst.wiremock.client.WireMock.equalTo("0"))));
+        assertThat(new StructuredGenerationRequest("model", "existing", "input", List.of(), Map.of(), 0f, 200).reasoningBudgetTokens()).isNull();
+    }
+
+    @Test
     void streamGenerate_success_emitsTokensAndFinalUsage() {
         wireMock.stubFor(post(urlPathMatching(".*:streamGenerateContent"))
                 .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "text/event-stream")
