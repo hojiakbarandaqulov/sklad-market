@@ -32,6 +32,9 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka/
 
 ai:
+  warehouse:
+    # Private read-only Control calls, isolated from the long-lived chat/gateway HTTP client.
+    timeout-ms: ${AI_WAREHOUSE_TIMEOUT_MS:3000}
   jobs:
     # Dedicated bounded credential-free public Jobs client. REST recommendations never call a model.
     timeout-ms: ${AI_JOBS_TIMEOUT_MS:3000}

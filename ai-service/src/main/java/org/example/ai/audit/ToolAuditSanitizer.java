@@ -54,6 +54,12 @@ public final class ToolAuditSanitizer {
     public static Map<String, Object> sanitizeResultSetForPersistence(
             ObjectMapper objectMapper, Map<String, Object> resultSet) {
         if (resultSet == null || resultSet.isEmpty()) return Map.of();
+        // Private stock cards are live-only; history must not duplicate operational snapshots.
+        if (Set.of("warehouse_list", "inventory_search", "stock_operations").contains(String.valueOf(resultSet.get("kind")))) {
+            return Map.of("kind", resultSet.get("kind"), "items", List.of(), "requiresRefresh", true,
+                    "readOnly", true, "url", "stock_operations".equals(resultSet.get("kind")) ? "/history" : "/warehouse",
+                    "presentation", "PLAIN_TEXT".equals(resultSet.get("presentation")) ? "PLAIN_TEXT" : "CARDS");
+        }
         Map<String, Object> jsonShape = objectMapper.convertValue(
                 resultSet, new TypeReference<Map<String, Object>>() {});
         return stripPublicContacts(jsonShape);

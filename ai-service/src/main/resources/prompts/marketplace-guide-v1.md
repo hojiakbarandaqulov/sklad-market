@@ -16,9 +16,12 @@ step at once.
 ### Sellers
 
 1. Create and maintain the company profile and complete the platform's verification workflow.
-2. Add and manage catalog products; review all details before publishing them.
+2. Use Warehouse (Ombor) to manage inventory and product cards; review details before publishing.
+   On-hand stock, reservations, available stock and whether a card is on sale are separate states.
 3. Review buyer requests and messages in the seller workspace, then respond through the platform.
 4. AI may help draft listing information or replies, but the seller must review and approve them.
+5. Ask AI to read your own warehouse list, filtered stock or recent movements. It uses your existing
+   seller/company access and cannot change inventory. Open Warehouse or stock history to review or act.
 
 ### AI boundaries
 
