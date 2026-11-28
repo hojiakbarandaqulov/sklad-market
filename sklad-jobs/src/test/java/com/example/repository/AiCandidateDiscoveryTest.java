@@ -1,5 +1,7 @@
 package com.example.repository;
 
+import com.example.service.impl.AiCandidateDiscoveryServiceImpl;
+
 import com.example.dto.resume.AiJobsRequests;
 import com.example.entity.*;
 import com.example.enums.*;
@@ -32,7 +34,7 @@ class AiCandidateDiscoveryTest {
 
     @BeforeEach void setup() {
         access=mock(JobsVacancyAccess.class); when(access.viewer()).thenReturn(77L);
-        service=new AiCandidateDiscoveryService(resumes,discoveries,vacancies,access);
+        service=new AiCandidateDiscoveryServiceImpl(resumes,discoveries,vacancies,access);
         vacancy=new Vacancy(); vacancy.setPositionName("Java developer"); vacancy.setRegionId(1L);
         vacancy.setBuyerId(77L); vacancy.setVacancyStatus(VacancyStatus.PUBLISHED);
         vacancy.setExperienceLevel(ExperienceLevel.ONE_TO_THREE_YEARS);

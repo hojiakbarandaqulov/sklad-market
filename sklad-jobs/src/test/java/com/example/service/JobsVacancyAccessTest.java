@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.example.service.impl.JobsVacancyAccessImpl;
+
 import com.example.config.clent.CompanyClient;
 import com.example.entity.Vacancy;
 import com.example.enums.VacancyStatus;
@@ -16,7 +18,7 @@ import static org.mockito.Mockito.*;
 class JobsVacancyAccessTest {
     VacancyRepository repository=mock(VacancyRepository.class);
     CompanyClient companies=mock(CompanyClient.class);
-    JobsVacancyAccess service=new JobsVacancyAccess(repository,companies);
+    JobsVacancyAccess service=new JobsVacancyAccessImpl(repository,companies);
     MockedStatic<SpringSecurityUtil> security;
     Vacancy vacancy;
     @BeforeEach void setup() {

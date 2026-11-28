@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.example.service.impl.JobInvitationServiceImpl;
+
 import com.example.dto.resume.AiJobsRequests;
 import com.example.entity.*;
 import com.example.entity.JobInvitation.Status;
@@ -21,7 +23,7 @@ class JobInvitationServiceTest {
     JobApplicationRepository applications=mock(JobApplicationRepository.class);
     JobsVacancyAccess access=mock(JobsVacancyAccess.class);
     AiCandidateDiscoveryService discovery=mock(AiCandidateDiscoveryService.class);
-    JobInvitationService service=new JobInvitationService(invitations,vacancies,resumes,discoveries,applications,access,discovery);
+    JobInvitationService service=new JobInvitationServiceImpl(invitations,vacancies,resumes,discoveries,applications,access,discovery);
     Vacancy vacancy;
     AiJobsRequests.Invitation request;
     JobInvitation pending;

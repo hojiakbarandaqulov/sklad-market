@@ -1,12 +1,13 @@
 package com.example.service.impl;
 
+import com.example.service.AiVacancyCandidatesService;
+
 import com.example.config.clent.AiCompanySummaryClient;
 import com.example.dto.vacancy.CompanySummaryDTO;
 import com.example.dto.vacancy.VacancyFilter;
 import com.example.entity.Vacancy;
 import com.example.repository.VacancyRepository;
 import com.example.repository.specification.VacancySpecifications;
-import com.example.service.AiVacancyCandidatesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

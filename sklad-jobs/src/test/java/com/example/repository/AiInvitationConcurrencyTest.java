@@ -1,5 +1,8 @@
 package com.example.repository;
 
+import com.example.service.impl.AiCandidateDiscoveryServiceImpl;
+import com.example.service.impl.JobInvitationServiceImpl;
+
 import com.example.dto.resume.AiJobsRequests;
 import com.example.entity.*;
 import com.example.enums.*;
@@ -45,8 +48,8 @@ class AiInvitationConcurrencyTest {
         });
         JobsVacancyAccess access=mock(JobsVacancyAccess.class);when(access.viewer()).thenReturn(77L);
         when(access.owned(ids[0],true,true)).thenAnswer(i -> vacancies.findForApplication(ids[0]).orElseThrow());
-        AiCandidateDiscoveryService discovery=new AiCandidateDiscoveryService(resumes,discoveries,vacancies,access);
-        JobInvitationService service=new JobInvitationService(invitations,vacancies,resumes,discoveries,applications,access,discovery);
+        AiCandidateDiscoveryService discovery=new AiCandidateDiscoveryServiceImpl(resumes,discoveries,vacancies,access);
+        JobInvitationService service=new JobInvitationServiceImpl(invitations,vacancies,resumes,discoveries,applications,access,discovery);
         ExecutorService workers=Executors.newFixedThreadPool(2);
         CountDownLatch ready=new CountDownLatch(2),start=new CountDownLatch(1);
         Callable<String> send=()->{

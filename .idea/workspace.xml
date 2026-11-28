@@ -7,14 +7,18 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="bug fix">
-      <change afterPath="$PROJECT_DIR$/chat-service/src/main/resources/db/migration/001-merge-market-chat-threads.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chat-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/resources/application.yml" afterDir="false" />
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="chat dublicat create bug fix">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/AiCandidateDiscoveryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/AiCandidateDiscoveryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/AiVacancyCandidatesService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/AiVacancyCandidatesService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/JobInvitationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/JobInvitationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/JobsVacancyAccess.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/JobsVacancyAccess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/AiVacancyCandidatesServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/main/java/com/example/service/impl/AiVacancyCandidatesServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/AiCandidateDiscoveryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/AiCandidateDiscoveryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/AiInvitationConcurrencyTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/AiInvitationConcurrencyTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/PublicVacancyRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/repository/PublicVacancyRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/service/JobInvitationServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/service/JobInvitationServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/service/JobsVacancyAccessTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sklad-jobs/src/test/java/com/example/service/JobsVacancyAccessTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -178,61 +182,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="4.311927255471159E-51" />
-      <entry key="MS500" value="8.451509521714731E-11" />
-      <entry key="S2" value="0.0030320305393755106" />
-      <entry key="S5" value="0.09834664013130771" />
-      <entry key="S10" value="0.3205086903912735" />
-      <entry key="S30" value="1.2099056615457806" />
-      <entry key="S60" value="2.755904855115006" />
-      <entry key="M2" value="5.457285886324693" />
-      <entry key="M5" value="10.037780797154577" />
-      <entry key="M10" value="12.894862533951335" />
-      <entry key="M15" value="14.10635228389282" />
-      <entry key="M30" value="15.65386494285307" />
-      <entry key="H1" value="17.48508366505597" />
-      <entry key="H2" value="21.300525092466362" />
-      <entry key="H4" value="31.534866133127508" />
-      <entry key="D1" value="124.62139569256472" />
-      <entry key="W1" value="203.94424034518755" />
+      <entry key="MS100" value="1.0000986568337058" />
+      <entry key="MS500" value="1.2232621256711778" />
+      <entry key="S2" value="2.896192304238647" />
+      <entry key="S5" value="4.789905297700644" />
+      <entry key="S10" value="6.053145611295729" />
+      <entry key="S30" value="7.250654679630809" />
+      <entry key="S60" value="7.610802795763125" />
+      <entry key="M2" value="7.802431987373542" />
+      <entry key="M5" value="8.21803509256404" />
+      <entry key="M10" value="10.182728272090477" />
+      <entry key="M15" value="12.342619696213271" />
+      <entry key="M30" value="16.698799792803296" />
+      <entry key="H1" value="21.037614787963385" />
+      <entry key="H2" value="26.394507596003038" />
+      <entry key="H4" value="37.305877456202545" />
+      <entry key="D1" value="131.1089817474819" />
+      <entry key="W1" value="211.58883052792322" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0000000079959284" />
-      <entry key="S2" value="1.011257185061057" />
-      <entry key="S5" value="1.234926488957209" />
-      <entry key="S10" value="1.6897576202648579" />
-      <entry key="S30" value="3.0733570371894903" />
-      <entry key="S60" value="5.072446376832313" />
-      <entry key="M2" value="8.248677746369747" />
-      <entry key="M5" value="12.886970112774042" />
-      <entry key="M10" value="15.49280476334634" />
-      <entry key="M15" value="16.56378125550845" />
-      <entry key="M30" value="18.168460803519846" />
-      <entry key="H1" value="21.909108243020476" />
-      <entry key="H2" value="33.3113236958698" />
-      <entry key="H4" value="63.007495809255985" />
-      <entry key="D1" value="310.98528886468404" />
-      <entry key="W1" value="515.1469288553619" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="9.196671297133468E-230" />
+      <entry key="S5" value="2.9864051366217623E-92" />
+      <entry key="S10" value="2.62771477177532E-46" />
+      <entry key="S30" value="1.652713668486359E-15" />
+      <entry key="S60" value="1.1762774355884611E-7" />
+      <entry key="M2" value="0.0012561181414859966" />
+      <entry key="M5" value="0.3830092666930099" />
+      <entry key="M10" value="2.670910148009651" />
+      <entry key="M15" value="5.1307277831326275" />
+      <entry key="M30" value="10.111786227975095" />
+      <entry key="H1" value="16.34479856694809" />
+      <entry key="H2" value="28.771951959549035" />
+      <entry key="H4" value="58.557285623036634" />
+      <entry key="D1" value="307.21185091433017" />
+      <entry key="W1" value="514.2492933234964" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.00480915786462858" />
-      <entry key="MS500" value="0.34388545724779224" />
-      <entry key="S2" value="0.7770892421129052" />
-      <entry key="S5" value="1.2031218204369938" />
-      <entry key="S10" value="1.9125563698829537" />
-      <entry key="S30" value="4.196194821356413" />
-      <entry key="S60" value="7.734455442938654" />
-      <entry key="M2" value="13.615332297927498" />
-      <entry key="M5" value="22.85956314672618" />
-      <entry key="M10" value="28.346223681808933" />
-      <entry key="M15" value="30.639997045284886" />
-      <entry key="M30" value="33.80537378249696" />
-      <entry key="H1" value="39.38404610296972" />
-      <entry key="H2" value="54.60490298517146" />
-      <entry key="H4" value="94.53641838611001" />
-      <entry key="D1" value="435.601519120809" />
-      <entry key="W1" value="719.0899006095889" />
+      <entry key="MS100" value="0.9593448340773937" />
+      <entry key="MS500" value="1.2063091297246462" />
+      <entry key="S2" value="2.833280113163254" />
+      <entry key="S5" value="4.729173010897401" />
+      <entry key="S10" value="6.011912190185724" />
+      <entry key="S30" value="7.233751487895201" />
+      <entry key="S60" value="7.601899558018304" />
+      <entry key="M2" value="7.799104956443761" />
+      <entry key="M5" value="8.597250328953223" />
+      <entry key="M10" value="12.845560505011735" />
+      <entry key="M15" value="17.463389327751965" />
+      <entry key="M30" value="26.800839142654812" />
+      <entry key="H1" value="37.374688097665285" />
+      <entry key="H2" value="55.160382127290596" />
+      <entry key="H4" value="95.85760023818827" />
+      <entry key="D1" value="438.3157233877589" />
+      <entry key="W1" value="725.8368565403499" />
     </decayedShown>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -1213,7 +1217,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="saleType response bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="location service create" />
     <MESSAGE value="product and company service filter location product" />
@@ -1238,7 +1241,8 @@
     <MESSAGE value="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;" />
     <MESSAGE value="Merge branch 'feature/ai-chat-memory'&#10;&#10;# Conflicts:&#10;#&#9;ai-service/AI-JOBS-HANDOFF.md&#10;#&#9;ai-service/src/main/java/org/example/ai/guest/GuestAnswerService.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/JobCriteria.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/JobMatchingService.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/JobPreferences.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/PublicJobsClient.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/RecommendJobsTool.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/SearchJobsTool.java&#10;#&#9;ai-service/src/main/java/org/example/controller/AiJobsController.java&#10;#&#9;ai-service/src/main/resources/prompts/system-agent-v5.md&#10;#&#9;ai-service/src/test/java/org/example/ai/guest/GuestAnswerServiceTest.java&#10;#&#9;ai-service/src/test/java/org/example/controller/AiJobsControllerTest.java&#10;#&#9;sklad-jobs/src/main/java/com/example/service/AiVacancyCandidatesService.java&#10;#&#9;sklad-jobs/src/test/java/com/example/repository/PublicVacancyRepositoryTest.java" />
     <MESSAGE value="bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="bug fix" />
+    <MESSAGE value="chat dublicat create bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="chat dublicat create bug fix" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
