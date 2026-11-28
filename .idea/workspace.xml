@@ -7,8 +7,14 @@
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;">
+    <list default="true" id="db21a683-eacb-49fd-afa4-a62f94ff9031" name="Changes" comment="bug fix">
+      <change afterPath="$PROJECT_DIR$/chat-service/src/main/resources/db/migration/001-merge-market-chat-threads.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/entity/ChatThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/repository/ChatThreadRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/java/org/example/service/impl/ChatServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chat-service/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/chat-service/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,61 +178,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="6.684291435549594E-116" />
-      <entry key="MS500" value="1.2427380944624862E-23" />
-      <entry key="S2" value="3.469482180067989E-6" />
-      <entry key="S5" value="0.012175829311805258" />
-      <entry key="S10" value="0.1896578565790433" />
-      <entry key="S30" value="1.1929385908537373" />
-      <entry key="S60" value="1.8913366492759265" />
-      <entry key="M2" value="2.3818787977538083" />
-      <entry key="M5" value="2.7354860279954534" />
-      <entry key="M10" value="2.864788995159812" />
-      <entry key="M15" value="2.914130036081818" />
-      <entry key="M30" value="3.2173809584953292" />
-      <entry key="H1" value="4.94942852753856" />
-      <entry key="H2" value="9.14234511237737" />
-      <entry key="H4" value="20.640961821811274" />
-      <entry key="D1" value="113.77348852079986" />
-      <entry key="W1" value="187.66685661936674" />
+      <entry key="MS100" value="4.311927255471159E-51" />
+      <entry key="MS500" value="8.451509521714731E-11" />
+      <entry key="S2" value="0.0030320305393755106" />
+      <entry key="S5" value="0.09834664013130771" />
+      <entry key="S10" value="0.3205086903912735" />
+      <entry key="S30" value="1.2099056615457806" />
+      <entry key="S60" value="2.755904855115006" />
+      <entry key="M2" value="5.457285886324693" />
+      <entry key="M5" value="10.037780797154577" />
+      <entry key="M10" value="12.894862533951335" />
+      <entry key="M15" value="14.10635228389282" />
+      <entry key="M30" value="15.65386494285307" />
+      <entry key="H1" value="17.48508366505597" />
+      <entry key="H2" value="21.300525092466362" />
+      <entry key="H4" value="31.534866133127508" />
+      <entry key="D1" value="124.62139569256472" />
+      <entry key="W1" value="203.94424034518755" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0000216965423592" />
-      <entry key="S2" value="1.0811979688445186" />
-      <entry key="S5" value="1.5507765769654642" />
-      <entry key="S10" value="2.3039284515640475" />
-      <entry key="S30" value="4.203037045621301" />
-      <entry key="S60" value="5.444040664590432" />
-      <entry key="M2" value="6.444928432304448" />
-      <entry key="M5" value="7.284331957583877" />
-      <entry key="M10" value="7.623757727766521" />
-      <entry key="M15" value="7.764501645395253" />
-      <entry key="M30" value="8.909904394810223" />
-      <entry key="H1" value="15.597925695540173" />
-      <entry key="H2" value="30.57798665744187" />
-      <entry key="H4" value="63.865960667448896" />
-      <entry key="D1" value="310.3208781574673" />
-      <entry key="W1" value="499.7097268758496" />
+      <entry key="MS500" value="1.0000000079959284" />
+      <entry key="S2" value="1.011257185061057" />
+      <entry key="S5" value="1.234926488957209" />
+      <entry key="S10" value="1.6897576202648579" />
+      <entry key="S30" value="3.0733570371894903" />
+      <entry key="S60" value="5.072446376832313" />
+      <entry key="M2" value="8.248677746369747" />
+      <entry key="M5" value="12.886970112774042" />
+      <entry key="M10" value="15.49280476334634" />
+      <entry key="M15" value="16.56378125550845" />
+      <entry key="M30" value="18.168460803519846" />
+      <entry key="H1" value="21.909108243020476" />
+      <entry key="H2" value="33.3113236958698" />
+      <entry key="H4" value="63.007495809255985" />
+      <entry key="D1" value="310.98528886468404" />
+      <entry key="W1" value="515.1469288553619" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="9.577442601278689E-5" />
-      <entry key="MS500" value="0.15712729027221753" />
-      <entry key="S2" value="0.6655702683755454" />
-      <entry key="S5" value="1.2495020298627804" />
-      <entry key="S10" value="2.1987749394263862" />
-      <entry key="S30" value="5.139627949070922" />
-      <entry key="S60" value="7.153023955986769" />
-      <entry key="M2" value="8.715164545624587" />
-      <entry key="M5" value="9.968762093235096" />
-      <entry key="M10" value="10.4617819467974" />
-      <entry key="M15" value="10.660480430478586" />
-      <entry key="M30" value="12.117583722374082" />
-      <entry key="H1" value="20.5409107781806" />
-      <entry key="H2" value="39.715218148965256" />
-      <entry key="H4" value="84.50165159922423" />
-      <entry key="D1" value="424.0892905011498" />
-      <entry key="W1" value="687.3753618349177" />
+      <entry key="MS100" value="0.00480915786462858" />
+      <entry key="MS500" value="0.34388545724779224" />
+      <entry key="S2" value="0.7770892421129052" />
+      <entry key="S5" value="1.2031218204369938" />
+      <entry key="S10" value="1.9125563698829537" />
+      <entry key="S30" value="4.196194821356413" />
+      <entry key="S60" value="7.734455442938654" />
+      <entry key="M2" value="13.615332297927498" />
+      <entry key="M5" value="22.85956314672618" />
+      <entry key="M10" value="28.346223681808933" />
+      <entry key="M15" value="30.639997045284886" />
+      <entry key="M30" value="33.80537378249696" />
+      <entry key="H1" value="39.38404610296972" />
+      <entry key="H2" value="54.60490298517146" />
+      <entry key="H4" value="94.53641838611001" />
+      <entry key="D1" value="435.601519120809" />
+      <entry key="W1" value="719.0899006095889" />
     </decayedShown>
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -240,108 +246,110 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;CidrDebugProfileConversion&quot;: &quot;true&quot;,
-    &quot;Docker.docker-compose.yml.minio: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.docker-compouse.yml: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build api-gateway.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build auth-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build category-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build chat-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build company-servcie.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build company-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build discovery-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build file-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build lead-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build notification-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build product-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build report-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build reposrt-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Build user-service.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ai-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ai-service [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.ai-service [jar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.auth-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.category-service [bootJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.category-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.category-service [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.category-service [jar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.company-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.company-service [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.product-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.sklad-jobs [bootJar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.sklad-jobs [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.sklad-jobs [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.sklad-jobs [dependencies].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.sklad-jobs [jar].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.user-service [buildDependents].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.user-service [build].executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.attach | #2.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.attach | attach upload.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.auth | #1.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.auth | #2.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.auth | #3.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #47.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #48.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.generated-requests | #49.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;SHELLCHECK.PATH&quot;: &quot;C:\\Users\\User\\AppData\\Roaming\\JetBrains\\IntelliJIdea2026.2\\plugins\\Shell Script\\shellcheck.exe&quot;,
-    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.AuthServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.CategoryServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ChatServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.CompanyServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.DiscoveryServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.FileServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.LeadServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.NotificationServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ProductServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ReportServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/JavaProject/Microservice/Skalad-market/company-service/src/main/java/org/example/dto/orderInternal&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.jshint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.jshint&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "CidrDebugProfileConversion": "true",
+    "Docker.docker-compose.yml.minio: Compose Deployment.executor": "Run",
+    "Docker.docker-compouse.yml.skalad-market-user-db: Compose Deployment.executor": "Run",
+    "Docker.docker-compouse.yml: Compose Deployment.executor": "Run",
+    "Gradle.Build api-gateway.executor": "Run",
+    "Gradle.Build auth-service.executor": "Run",
+    "Gradle.Build category-service.executor": "Run",
+    "Gradle.Build chat-service.executor": "Run",
+    "Gradle.Build company-servcie.executor": "Run",
+    "Gradle.Build company-service.executor": "Run",
+    "Gradle.Build discovery-service.executor": "Run",
+    "Gradle.Build file-service.executor": "Run",
+    "Gradle.Build lead-service.executor": "Run",
+    "Gradle.Build notification-service.executor": "Run",
+    "Gradle.Build product-service.executor": "Run",
+    "Gradle.Build report-service.executor": "Run",
+    "Gradle.Build reposrt-service.executor": "Run",
+    "Gradle.Build user-service.executor": "Run",
+    "Gradle.ChatCompanyOwnershipTest.executor": "Run",
+    "Gradle.ChatCompanyOwnershipTest.sellerReopeningHiddenChatRestoresItInSellerList.executor": "Run",
+    "Gradle.ai-service [build].executor": "Run",
+    "Gradle.ai-service [clean].executor": "Run",
+    "Gradle.ai-service [jar].executor": "Run",
+    "Gradle.auth-service [build].executor": "Run",
+    "Gradle.category-service [bootJar].executor": "Run",
+    "Gradle.category-service [build].executor": "Run",
+    "Gradle.category-service [clean].executor": "Run",
+    "Gradle.category-service [jar].executor": "Run",
+    "Gradle.company-service [build].executor": "Run",
+    "Gradle.company-service [clean].executor": "Run",
+    "Gradle.product-service [build].executor": "Run",
+    "Gradle.sklad-jobs [bootJar].executor": "Run",
+    "Gradle.sklad-jobs [build].executor": "Run",
+    "Gradle.sklad-jobs [clean].executor": "Run",
+    "Gradle.sklad-jobs [dependencies].executor": "Run",
+    "Gradle.sklad-jobs [jar].executor": "Run",
+    "Gradle.user-service [buildDependents].executor": "Run",
+    "Gradle.user-service [build].executor": "Run",
+    "HTTP Request.attach | #2.executor": "Run",
+    "HTTP Request.attach | attach upload.executor": "Run",
+    "HTTP Request.auth | #1.executor": "Run",
+    "HTTP Request.auth | #2.executor": "Run",
+    "HTTP Request.auth | #3.executor": "Run",
+    "HTTP Request.generated-requests | #47.executor": "Run",
+    "HTTP Request.generated-requests | #48.executor": "Run",
+    "HTTP Request.generated-requests | #49.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHELLCHECK.PATH": "C:\\Users\\User\\AppData\\Roaming\\JetBrains\\IntelliJIdea2026.2\\plugins\\Shell Script\\shellcheck.exe",
+    "Spring Boot.ApiGatewayApplication.executor": "Run",
+    "Spring Boot.AuthServiceApplication.executor": "Run",
+    "Spring Boot.CategoryServiceApplication.executor": "Run",
+    "Spring Boot.ChatServiceApplication.executor": "Run",
+    "Spring Boot.CompanyServiceApplication.executor": "Run",
+    "Spring Boot.DiscoveryServiceApplication.executor": "Run",
+    "Spring Boot.FileServiceApplication.executor": "Run",
+    "Spring Boot.LeadServiceApplication.executor": "Run",
+    "Spring Boot.NotificationServiceApplication.executor": "Run",
+    "Spring Boot.ProductServiceApplication.executor": "Run",
+    "Spring Boot.ReportServiceApplication.executor": "Run",
+    "Spring Boot.UserServiceApplication.executor": "Run",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "main",
+    "go.import.settings.migrated": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "17",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/JavaProject/Microservice/Skalad-market/company-service/src/main/java/org/example/dto/orderInternal",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.configurations.included.in.services": "true",
+    "settings.editor.selected.configurable": "vcs.Git",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -374,59 +382,63 @@
       <recent name="org.example.dto" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.sklad-jobs [build]">
+  <component name="RunManager" selected="Gradle.ChatCompanyOwnershipTest">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="category-service [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ChatCompanyOwnershipTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/category-service" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/chat-service" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="bootJar" />
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;org.example.service.impl.ChatCompanyOwnershipTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+      <RunAsTest>true</RunAsTest>
       <GradleProfilingDisabled>false</GradleProfilingDisabled>
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="category-service [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="ChatCompanyOwnershipTest.sellerReopeningHiddenChatRestoresItInSellerList" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/category-service" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/chat-service" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="build" />
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;org.example.service.impl.ChatCompanyOwnershipTest.sellerReopeningHiddenChatRestoresItInSellerList&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <ExternalSystemDebugDisabled>false</ExternalSystemDebugDisabled>
       <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>false</RunAsTest>
+      <RunAsTest>true</RunAsTest>
       <GradleProfilingDisabled>false</GradleProfilingDisabled>
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
@@ -661,11 +673,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ChatCompanyOwnershipTest" />
+        <item itemvalue="Gradle.ChatCompanyOwnershipTest.sellerReopeningHiddenChatRestoresItInSellerList" />
         <item itemvalue="Gradle.sklad-jobs [dependencies]" />
         <item itemvalue="Gradle.sklad-jobs [build]" />
         <item itemvalue="Gradle.sklad-jobs [bootJar]" />
-        <item itemvalue="Gradle.category-service [build]" />
-        <item itemvalue="Gradle.category-service [bootJar]" />
       </list>
     </recent_temporary>
   </component>
@@ -1182,15 +1194,25 @@
         </entry>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="product service bug" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;product-service/src/main/java/org/example/service/impl/ProductServiceImpl.java" />
     <MESSAGE value="saleType response bug fix" />
     <MESSAGE value="Merge remote-tracking branch 'origin/main'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
     <MESSAGE value="location service create" />
@@ -1214,7 +1236,9 @@
     <MESSAGE value="notification service yml config fix" />
     <MESSAGE value="category top api" />
     <MESSAGE value="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="category top api&#10;&#10;Signed-off-by: Xojiakbar Andaqulov &lt;hojiakbarandaqulov5@gmail.com&gt;" />
+    <MESSAGE value="Merge branch 'feature/ai-chat-memory'&#10;&#10;# Conflicts:&#10;#&#9;ai-service/AI-JOBS-HANDOFF.md&#10;#&#9;ai-service/src/main/java/org/example/ai/guest/GuestAnswerService.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/JobCriteria.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/JobMatchingService.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/JobPreferences.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/PublicJobsClient.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/RecommendJobsTool.java&#10;#&#9;ai-service/src/main/java/org/example/ai/jobs/SearchJobsTool.java&#10;#&#9;ai-service/src/main/java/org/example/controller/AiJobsController.java&#10;#&#9;ai-service/src/main/resources/prompts/system-agent-v5.md&#10;#&#9;ai-service/src/test/java/org/example/ai/guest/GuestAnswerServiceTest.java&#10;#&#9;ai-service/src/test/java/org/example/controller/AiJobsControllerTest.java&#10;#&#9;sklad-jobs/src/main/java/com/example/service/AiVacancyCandidatesService.java&#10;#&#9;sklad-jobs/src/test/java/com/example/repository/PublicVacancyRepositoryTest.java" />
+    <MESSAGE value="bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fix" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

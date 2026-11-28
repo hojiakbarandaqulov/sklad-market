@@ -31,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -97,11 +98,11 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public ChatCreateResponse createThread(CreateChatRequest request, AppLanguage language) {
         Long buyerId = requireCurrentUserId();
 
-        // Company-service orqali kompaniya mavjudligi va buyer uning egasi emasligini tekshiramiz.
+        // Xaridor o'z kompaniyasiga savdo chati ocha olmaydi.
         CompanyOwnershipResponse company = companyClient.checkOwnership(request.getSellerCompanyId(), buyerId);
 
         if (!company.isExists() || !company.isActive()) {
@@ -119,34 +120,11 @@ public class ChatServiceImpl implements ChatService {
                 throw new AppBadException(messageService.getMessage("chat.product.company.mismatch", language));
             }
         }
-        Optional<ChatThread> existingThreadOptional = chatThreadRepository.findUnique(
-                buyerId,
-                request.getSellerCompanyId(),
-                request.getProductId()
-        );
-
-// Avval yaratilgan chat mavjud bo‘lsa, uni qayta ochamiz.
-        if (existingThreadOptional.isPresent()) {
-            ChatThread existingThread = existingThreadOptional.get();
-
-            existingThread.setBuyerHidden(Boolean.FALSE);
-            ChatThread reopenedThread = chatThreadRepository.save(existingThread);
-
-            return chatMapper.toCreateResponse(reopenedThread, false);
-        }
-
-// Chat mavjud bo‘lmasa, yangi chat yaratamiz.
-        ChatThread newThread = new ChatThread();
-        newThread.setBuyerId(buyerId);
-        newThread.setSellerCompanyId(request.getSellerCompanyId());
-        newThread.setProductId(request.getProductId());
-
-        ChatThread savedThread = chatThreadRepository.save(newThread);
-
-        return chatMapper.toCreateResponse(savedThread, true);
+        return openMarketThread(buyerId, request.getSellerCompanyId(), request.getProductId(), false, language);
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public ChatCreateResponse createThreadSeller(CreateChatSeller request, AppLanguage language) {
         Long sellerId = requireCurrentUserId();
         Long buyerId = request.getBuyerId();
@@ -168,33 +146,28 @@ public class ChatServiceImpl implements ChatService {
                 throw new AppBadException(messageService.getMessage("chat.product.company.mismatch", language));
             }
         }
-        Optional<ChatThread> existingThreadOptional = chatThreadRepository.findUnique(
-                buyerId,
-                request.getSellerCompanyId(),
-                request.getProductId()
-        );
+        return openMarketThread(buyerId, request.getSellerCompanyId(), request.getProductId(), true, language);
+    }
 
-        if (existingThreadOptional.isPresent()) {
-            ChatThread existingThread = existingThreadOptional.get();
-
-            existingThread.setBuyerHidden(Boolean.FALSE);
-            existingThread.setSellerHidden(Boolean.FALSE);
-            ChatThread reopenedThread = chatThreadRepository.save(existingThread);
-
-            return chatMapper.toCreateResponse(reopenedThread, false);
+    private ChatCreateResponse openMarketThread(Long buyerId, Long companyId, Long productId,
+                                                boolean openedBySeller, AppLanguage language) {
+        Optional<ChatThread> existing = chatThreadRepository.findUnique(buyerId, companyId);
+        boolean created = false;
+        if (existing.isEmpty()) {
+            created = chatThreadRepository.insertMarketThread(buyerId, companyId, productId) == 1;
+            // Separate read: READ COMMITTED also sees the winning transaction after an insert conflict.
+            existing = chatThreadRepository.findUnique(buyerId, companyId);
         }
 
-// Chat mavjud bo‘lmasa, yangi chat yaratamiz.
-        ChatThread newThread = new ChatThread();
-        newThread.setBuyerId(buyerId);
-        newThread.setSellerCompanyId(request.getSellerCompanyId());
-        newThread.setProductId(request.getProductId());
-        newThread.setBuyerHidden(false);
-        newThread.setSellerHidden(false);
-
-        ChatThread savedThread = chatThreadRepository.save(newThread);
-
-        return chatMapper.toCreateResponse(savedThread, true);
+        ChatThread thread = existing.orElseThrow(() ->
+                new AppBadException(messageService.getMessage("chat.thread.not.found", language)));
+        if (!created) {
+            thread.setBuyerHidden(Boolean.FALSE);
+            if (openedBySeller) {
+                thread.setSellerHidden(Boolean.FALSE);
+            }
+        }
+        return chatMapper.toCreateResponse(thread, created);
     }
 
     @Override

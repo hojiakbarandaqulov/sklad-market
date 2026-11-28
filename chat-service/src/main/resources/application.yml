@@ -6,6 +6,8 @@ spring:
     name: chat-service
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:prod}
+  liquibase:
+    change-log: classpath:db/migration/001-merge-market-chat-threads.sql
 
 eureka:
   client:

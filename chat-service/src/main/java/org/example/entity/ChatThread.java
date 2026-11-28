@@ -1,8 +1,8 @@
 package org.example.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.entity.base.BaseEntity;
@@ -14,7 +14,11 @@ import java.time.LocalDateTime;
 @Setter
 @Table(
         name = "chat_threads",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"buyerId", "sellerCompanyId", "productId"})
+        indexes = {
+                @Index(name = "buyerId", columnList = "buyerId"),
+                @Index(name = "sellerCompanyId", columnList = "sellerCompanyId")
+        }
+
 )
 public class ChatThread extends BaseEntity {
     private Long buyerId;
@@ -22,7 +26,7 @@ public class ChatThread extends BaseEntity {
     private Long sellerCompanyId;
 
     private Long productId;
-    @jakarta.persistence.Column(name="application_id", unique=true)
+    @jakarta.persistence.Column(name = "application_id", unique = true)
     private Long applicationId;
     private Long vacancyId;
 

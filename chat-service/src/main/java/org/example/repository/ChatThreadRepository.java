@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.entity.ChatThread;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -28,15 +29,27 @@ public interface ChatThreadRepository extends JpaRepository<ChatThread, Long> {
     List<ChatThread> findSellerJobThreadsWithMessages(@Param("companyIds") List<Long> companyIds, Sort sort);
     Optional<ChatThread> findByApplicationId(Long applicationId);
 
-    @org.springframework.data.jpa.repository.Modifying
+    @Modifying
     @Query(value = """
             insert into chat_threads (application_id,vacancy_id,buyer_id,seller_company_id,
                 buyer_hidden,seller_hidden,deleted,created_date,modified_date)
             values (:applicationId,:vacancyId,:candidateId,:companyId,false,false,false,current_timestamp,current_timestamp)
             on conflict (application_id) do nothing
             """, nativeQuery = true)
-    int insertJobThread(@Param("applicationId") Long applicationId, @Param("vacancyId") Long vacancyId,
+    void insertJobThread(@Param("applicationId") Long applicationId, @Param("vacancyId") Long vacancyId,
                         @Param("candidateId") Long candidateId, @Param("companyId") Long companyId);
+
+    @Modifying
+    @Query(value = """
+            insert into chat_threads (buyer_id, seller_company_id, product_id,
+                buyer_hidden, seller_hidden, deleted, created_date, modified_date)
+            values (:buyerId, :companyId, :productId, false, false, false, current_timestamp, current_timestamp)
+            on conflict (buyer_id, seller_company_id)
+                where application_id is null and deleted = false
+            do nothing
+            """, nativeQuery = true)
+    int insertMarketThread(@Param("buyerId") Long buyerId, @Param("companyId") Long companyId,
+                           @Param("productId") Long productId);
 
     @Query("""
             select t from ChatThread t
@@ -44,11 +57,9 @@ public interface ChatThreadRepository extends JpaRepository<ChatThread, Long> {
               and t.applicationId is null
               and t.buyerId = :buyerId
               and t.sellerCompanyId = :sellerCompanyId
-              and ((:productId is null and t.productId is null) or t.productId = :productId)
             """)
     Optional<ChatThread> findUnique(@Param("buyerId") Long buyerId,
-                                    @Param("sellerCompanyId") Long sellerCompanyId,
-                                    @Param("productId") Long productId);
+                                    @Param("sellerCompanyId") Long sellerCompanyId);
 
     List<ChatThread> findByBuyerIdAndBuyerHiddenFalseAndDeletedFalse(Long buyerId, Sort sort);
 
