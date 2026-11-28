@@ -12,10 +12,13 @@ import org.example.dto.map.CompanySlugMapResponse;
 import org.example.entity.Company;
 import org.example.entity.CompanyDocument;
 import org.example.enums.AppLanguage;
+import org.example.enums.CompanyMemberRole;
 import org.example.enums.CompanyType;
 import org.example.enums.VerificationStatus;
 import org.example.exp.AppBadException;
+import org.example.mapper.CompanyMemberMapper;
 import org.example.repository.CompanyDocumentRepository;
+import org.example.repository.CompanyMemberRepository;
 import org.example.repository.CompanyRepository;
 import org.example.service.CompanyService;
 import org.example.service.KafkaProducerService;
@@ -29,6 +32,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,6 +53,8 @@ public class CompanyServiceImpl implements CompanyService {
     private final ProductClient productClient;
     private final org.example.service.CompanyProductCountService productCounts;
     private final ResourceBundleService messageService;
+    private final CompanyMemberRepository companyMemberRepository;
+    private final CompanyMemberMapper companyMemberMapper;
 
     private static final int MAX_COMPANIES_PER_SELLER = 1;
 
@@ -62,6 +69,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 
     @Override
+    @Transactional
     public ApiResponse<CompanyResponseDTO> create(CompanyRequestDTO requestDTO, CompanyType companyType, AppLanguage language) {
         Long userId = SpringSecurityUtil.getProfileId();
         long count = companyRepository.countByOwnerUserIdAndDeletedAtIsNull(userId);
@@ -86,6 +94,8 @@ public class CompanyServiceImpl implements CompanyService {
 
         companyMap.setIsBlocked(false);
         Company saved = companyRepository.save(companyMap);
+        // Kompaniya va uni yaratgan administrator bitta tranzaksiyada saqlanadi.
+        companyMemberRepository.save(companyMemberMapper.toEntity(saved.getId(), userId, CompanyMemberRole.ADMIN, userId));
         CompanyCreateEvent companyCreateEvent = new CompanyCreateEvent();
         companyCreateEvent.setCompanyId(companyMap.getId());
         companyCreateEvent.setCompanyName(companyMap.getName());
@@ -93,7 +103,12 @@ public class CompanyServiceImpl implements CompanyService {
         companyCreateEvent.setOwnerUserId(companyMap.getOwnerUserId());
         companyCreateEvent.setVerificationStatus(companyMap.getVerificationStatus());
         companyCreateEvent.setCreatedDate(companyMap.getCreatedDate());
-        kafkaProducerService.onCompanyCreated(companyCreateEvent);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                kafkaProducerService.onCompanyCreated(companyCreateEvent);
+            }
+        });
         return ApiResponse.successResponse(toResponse(saved));
     }
 

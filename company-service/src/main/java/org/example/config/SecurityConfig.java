@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/companies/search").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/companies/*/reviews").permitAll()
                         .requestMatchers("/api/v1/companies/*/products").permitAll()
+                        .requestMatchers("/api/v1/companies/*/members", "/api/v1/companies/*/members/**").authenticated()
                         .requestMatchers("/api/v1/companies/**").permitAll()
                         .requestMatchers("/api/v1/companies/branches/*").permitAll()
                         .requestMatchers("/api/v1/favorites/**").hasRole("BUYER")
